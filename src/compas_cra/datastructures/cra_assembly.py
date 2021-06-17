@@ -20,8 +20,6 @@ __all__ = ['CRA_Assembly']
 class CRA_Assembly(Assembly):
     """Extended data structure for concave assemblies."""
 
-    __module__ = 'compas_cra.datastructures'
-
     def __init__(self):
         super(CRA_Assembly, self).__init__()
         self.attributes.update({'name': 'CRA_Assembly'})

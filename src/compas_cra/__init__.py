@@ -9,6 +9,9 @@ compas_cra
 .. toctree::
     :maxdepth: 1
 
+    compas_cra.datastructures
+    compas_cra.equilibrium
+    compas_cra.viewers
 
 """
 

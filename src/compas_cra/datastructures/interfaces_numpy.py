@@ -21,7 +21,7 @@ __email__ = "kao@arch.ethz.ch"
 __all__ = ['assembly_interfaces_numpy']
 
 
-def _find_nearest_neighbours(cloud, nmax):
+def find_nearest_neighbours(cloud, nmax):
     tree = cKDTree(cloud)
     nnbrs = [tree.query(root, nmax) for root in cloud]
     nnbrs = [(d.flatten().tolist(), n.flatten().tolist()) for d, n in nnbrs]
@@ -70,7 +70,7 @@ def assembly_interfaces_numpy(assembly,
     nmax = min(nmax, len(blocks))
 
     block_cloud = assembly.nodes_attributes('xyz')
-    block_nnbrs = _find_nearest_neighbours(block_cloud, nmax)
+    block_nnbrs = find_nearest_neighbours(block_cloud, nmax)
 
     # k:      key of the base block
     # i:      index of the base block

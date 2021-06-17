@@ -18,6 +18,7 @@ __all__ = ['make_aeq', 'make_afr', 'unit_basis']
 
 
 def make_aeq(assembly, return_vcount=True, flip=False):
+    """Create equilibrium matrix Aeq. """
     rows = []
     cols = []
     data = []
@@ -40,7 +41,7 @@ def make_aeq(assembly, return_vcount=True, flip=False):
             center = U.center()
             # B_j
             block_rows, block_cols, block_data = \
-                __aeq_block(interface, center, not flip)
+                aeq_block(interface, center, not flip)
             # shift rows and cols
             rows += [row + 6 * i for row in block_rows]
             cols += [col + 3 * vcount for col in block_cols]
@@ -50,7 +51,7 @@ def make_aeq(assembly, return_vcount=True, flip=False):
             center = V.center()
             # B_k
             block_rows, block_cols, block_data = \
-                __aeq_block(interface, center, flip)
+                aeq_block(interface, center, flip)
             # shift rows and cols
             rows += [row + 6 * j for row in block_rows]
             cols += [col + 3 * vcount for col in block_cols]
@@ -63,7 +64,7 @@ def make_aeq(assembly, return_vcount=True, flip=False):
     return csr_matrix((data, (rows, cols)))
 
 
-def __aeq_block(interface, center, reverse):
+def aeq_block(interface, center, reverse):
     rows, cols, data = [], [], []
     u = interface.frame.xaxis
     v = interface.frame.yaxis
@@ -122,6 +123,7 @@ def __aeq_block(interface, center, reverse):
 
 
 def unit_basis(assembly):
+    """Create interface reference system as unit basis"""
     data = []
     for edge in assembly.edges():
         interfaces = assembly.edge_attribute(edge, 'interfaces')
@@ -137,6 +139,7 @@ def unit_basis(assembly):
 
 
 def make_afr(total_vcount, fcon_number=8, mu=0.8):
+    """Create friction matrix Afr"""
     rows = []
     cols = []
     data = []

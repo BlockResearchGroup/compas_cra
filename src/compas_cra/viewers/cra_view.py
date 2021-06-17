@@ -389,6 +389,7 @@ def cra_view(assembly, scale=1., density=1., dispscale=1., tol=0.,
              blocks=True, interfaces=True, forces=True,
              forcesdirect=True, forcesline=False,
              weights=True, displacements=True):
+    """CRA Viewer"""
 
     viewer = app.App(width=1600, height=1000,
                      viewmode='shaded', show_grid=grid)

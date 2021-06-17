@@ -21,6 +21,7 @@ __all__ = ['cra_solve']
 
 def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=0.,
               verbose=False, timer=False):
+    """CRA solver using Pyomo + IPOPT. """
 
     n = assembly.number_of_nodes()
     key_index = {key: index for index, key in enumerate(assembly.nodes())}

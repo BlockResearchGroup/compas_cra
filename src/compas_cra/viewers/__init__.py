@@ -1,7 +1,24 @@
+"""
+********************************************************************************
+viewers
+********************************************************************************
+
+.. currentmodule:: compas_cra.viewers
+
+
+CRA Viewer
+=======
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    cra_view
+
+
+"""
 
 from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 from .cra_view import *  # noqa: F401 F403
 

@@ -4,7 +4,8 @@ compas_cra
 
 .. rst-class:: lead
 
-Coupled Rigid-Block Analysis
+Coupled Rigid-Block Analysis:
+Static Equilibrium of Complex Discrete-Element Assemblies
 
 .. .. figure:: /_images/
      :figclass: figure
