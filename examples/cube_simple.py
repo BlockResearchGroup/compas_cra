@@ -18,8 +18,8 @@ if __name__ == '__main__':
     from compas.geometry import Translation
     from compas_assembly.datastructures import Block
     from compas_cra.datastructures import CRA_Assembly
-    from compas_cra.viewers import cra_view
     from compas_cra.equilibrium import cra_solve
+    from compas_cra.viewers import cra_view
 
     support = Box(Frame.worldXY(), 1, 1, 1)
     free1 = Box(Frame.worldXY().transformed(
