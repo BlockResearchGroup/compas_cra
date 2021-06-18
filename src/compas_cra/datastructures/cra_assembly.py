@@ -55,7 +55,6 @@ class CRA_Assembly(Assembly):
                                       iframe=Frame.from_points(pt[0],
                                                                pt[1], pt[2]))
                 self.add_interface_to_interfaces(u, v, interface)
-                # self.edge_attribute((u, v), "interface", interface)
 
     def set_boundary_conditions(self, keys):
         for key in keys:

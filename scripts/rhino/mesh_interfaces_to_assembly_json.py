@@ -12,6 +12,7 @@ __email__ = "kao@arch.ethz.ch"
 if __name__ == '__main__':
 
     import os
+    import compas
     import rhinoscriptsyntax as rs
 
     from compas_cra.datastructures import CRA_Assembly
@@ -55,7 +56,10 @@ if __name__ == '__main__':
                                     (False))[0]
 
     rs.DeleteObjects(node_labels)
+
     filename = rs.GetString("file name (xxx.json):")
-    print(os.path.join(DATA + '/' + filename))
-    assembly.to_json(os.path.join(DATA + '/' + filename))
+    file_o = os.path.join(DATA + '/' + filename)
+    compas.json_dump(assembly, file_o)
+    print("file save to: ", file_o)
+
 

@@ -15,6 +15,7 @@ from shapely.geometry import Polygon
 from compas.geometry import Frame
 from compas.geometry import local_to_world_coordinates_numpy
 from compas.geometry import dot_vectors
+from compas_assembly.datastructures import Interface
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -157,8 +158,6 @@ def assembly_interfaces_numpy(assembly,
                     if p0.intersects(p1):
                         intersection = p0.intersection(p1)
                         area = intersection.area
-                        if not concave and count >= 1:
-                            break
 
                         if area >= amin:
                             coords = [
@@ -177,14 +176,13 @@ def assembly_interfaces_numpy(assembly,
                                     ipoints=coords.tolist()[:-1],
                                     iframe=Frame(origin, uvw[0], uvw[1]))
                             else:
-                                assembly.add_interface(
-                                    node, n,
+                                interface = Interface(
                                     itype='face_face',
                                     isize=area,
                                     ipoints=coords.tolist()[:-1],
                                     iframe=Frame(origin, uvw[0], uvw[1]))
+                                assembly.add_interface((node, n), interface)
 
-                            count += 1
     return assembly
 
 

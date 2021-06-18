@@ -32,7 +32,10 @@ Functions
 
 from __future__ import absolute_import
 
+import compas
+
 from .cra_assembly import *  # noqa: F401 F403
-from .interfaces_numpy import *  # noqa: F401 F403
+if not compas.IPY:
+    from .interfaces_numpy import *  # noqa: F401 F403
 
 __all__ = [name for name in dir() if not name.startswith('_')]
