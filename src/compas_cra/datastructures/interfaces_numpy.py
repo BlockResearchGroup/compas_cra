@@ -98,7 +98,6 @@ def assembly_interfaces_numpy(assembly,
     # rst1: local coordinates of the nodes of f1, with respect to the frame f0
     # p1:   2D polygon of f1 in local coordinates
 
-    count = 0
     for node in assembly.nodes():
 
         i = node_index[node]
