@@ -384,7 +384,7 @@ def draw_weights(assembly, viewer, scale=1., density=1.):
                    facecolor=hextorgb("#59cd90"), show_edges=False)
 
 
-def cra_view(assembly, scale=1., density=1., dispscale=1., tol=0.,
+def cra_view(assembly, scale=1., density=1., dispscale=1., tol=1e-5,
              grid=False, resultant=True, nodal=False, edge=True,
              blocks=True, interfaces=True, forces=True,
              forcesdirect=True, forcesline=False,
