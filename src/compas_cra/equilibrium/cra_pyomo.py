@@ -19,7 +19,7 @@ __email__ = "kao@arch.ethz.ch"
 __all__ = ['cra_solve']
 
 
-def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=0.,
+def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
               verbose=False, timer=False):
     """CRA solver using Pyomo + IPOPT. """
 
@@ -60,11 +60,10 @@ def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=0.,
 
     v_num = vcount  # number of vertices
     free_num = len(free)  # number of free blocks
+    v_index = [i for i in range(v_num)]  # vertex indices
     f_index = [i for i in range(v_num * 3)]  # force indices
     d_index = f_index  # displacement indices
-    eq_index = [i for i in range(free_num * 6)]  # equilibrium indices
-    q_index = eq_index  # q is the global transformation
-    v_index = [i for i in range(v_num)]  # vertex indices
+    q_index = [i for i in range(free_num * 6)]  # q indices
 
     def f_bnds(m, i):
         if i % 3 == 0:
@@ -82,6 +81,12 @@ def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=0.,
 
     forces = basis * f[:, np.newaxis]  # force x in global coordinate
     displs = basis * d[:, np.newaxis]  # displacement d in global coordinate
+
+    def fr_cone(m, t):
+        fn = m.f[t * 3]
+        fu = m.f[t * 3 + 1]
+        fv = m.f[t * 3 + 2]
+        return (None, fu ** 2 + fv ** 2 - mu ** 2 * fn ** 2, 0)
 
     def d_bnds(m, t):
         return (-d_bnd, d[t], d_bnd)
@@ -113,6 +118,7 @@ def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=0.,
     model.cfr = MatrixConstraint(afrcsr.data, afrcsr.indices, afrcsr.indptr,
                                  [None for i in range(afr.shape[0])],
                                  np.zeros(afr.shape[0]), f)
+    # model.fcon = pyo.Constraint(v_index, rule=fr_cone)
     model.dbnd = pyo.Constraint(d_index, rule=d_bnds)
     model.ccon = pyo.Constraint(v_index, rule=contact_con)
     model.pcon = pyo.Constraint(v_index, rule=nonpen_con)

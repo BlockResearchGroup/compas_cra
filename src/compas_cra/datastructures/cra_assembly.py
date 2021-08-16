@@ -20,6 +20,8 @@ __all__ = ['CRA_Assembly']
 class CRA_Assembly(Assembly):
     """Extended data structure for concave assemblies."""
 
+    # TODO: make density as default attribute for the assembly class member
+
     def __init__(self):
         super(CRA_Assembly, self).__init__()
         self.attributes.update({'name': 'CRA_Assembly'})

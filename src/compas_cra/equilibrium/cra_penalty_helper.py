@@ -15,8 +15,9 @@ __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
 
 
-__all__ = ['make_aeq_b', 'unit_basis_penalty', 'make_aiq_b']
+__all__ = ['make_aeq_b', 'make_afr_b', 'unit_basis_penalty']
 
+# TODO: merge these function with standard solve helper function
 
 def make_aeq_b(assembly, return_vcount=True, flip=False):
     """Create equilibrium matrix for penalty formulation Aeq@B. """
@@ -145,7 +146,7 @@ def unit_basis_penalty(assembly):
     return np.array(data)
 
 
-def make_aiq_b(total_vcount, fcon_number=8, mu=0.8, friction_net=False):
+def make_afr_b(total_vcount, fcon_number=8, mu=0.8, friction_net=True):
     rows = []
     cols = []
     data = []
