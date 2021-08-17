@@ -136,7 +136,7 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         f_sum = 0
         for i in f_index:
             if i % 4 == 1:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+5)  # tension
+                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+4)  # tension
             elif i % 4 == 0:
                 f_sum = f_sum + (m.f[i] * m.f[i] * 1e+0)  # compression
             # else:
@@ -157,6 +157,7 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
 
     model.fncon = pyo.Constraint(v_index, rule=fnc_con)
     # model.ncon = pyo.Constraint(v_index, rule=fnn_con)
+
     model.cftdt = pyo.Constraint(v_index, [i for i in range(3)], rule=ftdt_con)
 
     if timer:
@@ -185,7 +186,9 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         dn = d_star[v * 3]
         # print("fn: ", fnp)
         # print("dn: ", dn)
-        print("fn: ", fnp, ", dn: ", dn, ", fn * dn: ", (fnp-fnn) * dn)
+        print("fn: ", fnp, ", dn: ", dn, ", fn * dn: ", (fnp - fnn) * dn)
+        # if fnn > 1e-6:
+        #     print("fnp: ", fnp, "fnn: ", fnn, ", dn: ", dn)
 
         # if not (fu ** 2 + fv ** 2 <= mu ** 2 * (fnp - fnn) ** 2):
         #     print("vertex ", v, "not satisfy cone.")

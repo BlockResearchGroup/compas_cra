@@ -34,10 +34,10 @@ if __name__ == '__main__':
     print("blocks: ", assembly.number_of_nodes())
     print("interfaces: ", assembly.number_of_edges())
 
-    dispbnd = 1e+1
+    dispbnd = 1e-1
     overlap = 1e-4 * 0
     d = 1
-    # cra_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap)
+    # cra_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=0.9)
     cra_penalty_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=0.9)
     cra_view(assembly, resultant=True, nodal=True, grid=True, weights=False,
              displacements=True, dispscale=.01, scale=10/d)
