@@ -43,8 +43,6 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         block = assembly.node_attribute(node, 'block')
         index = key_index[node]
         p[index][2] = -1 * block.volume() * density
-        p[index][0] = 1 * block.volume() * density
-        p[index][1] = 1 * block.volume() * density
 
     p = np.array(p, dtype=float)
     p = p[free, :].reshape((-1, 1), order='C')
@@ -64,7 +62,7 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
     v_index = [i for i in range(v_num)]  # vertex indices
     f_index = [i for i in range(v_num * 4)]  # force indices
     d_index = [i for i in range(v_num * 3)]  # displacement indices
-    q_index = [i for i in range(6 * free_num)]  # q indices
+    q_index = [i for i in range(free_num * 6)]  # q indices
 
     def f_bnds(m, i):
         if i % 4 == 0 or i % 4 == 1:
@@ -73,13 +71,13 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
             return pyo.Reals
 
     def f_init(m, i):
-        if i % 4 == 0:
-            return 1.0
-        else:
+        if i % 4 == 1:
             return 0.0
+        else:
+            return 1.0
 
-    model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
-    # model.f = pyo.Var(f_index, initialize=0, domain=f_bnds)
+    # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
+    model.f = pyo.Var(f_index, initialize=0, domain=f_bnds)
     model.q = pyo.Var(q_index, initialize=0)
     model.alpha = pyo.Var(v_index, initialize=0, within=pyo.NonNegativeReals)
 
@@ -98,14 +96,28 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         fu = m.f[t * 4 + 2]
         fv = m.f[t * 4 + 3]
         return fu ** 2 + fv ** 2 <= mu ** 2 * (fnp - fnn) ** 2
+        # return (None, fu ** 2 + fv ** 2 - mu ** 2 * (fnp - fnn) ** 2, 0)
+        # return abs(fu + fv) <= mu * abs(fnp - fnn)
 
     def bnd_d(m, t):
         return (-d_bnd, d[t], d_bnd)
 
+    tt = 1e-5
     def contact_con(m, t):
         dn = d[t * 3]
-        fn = m.f[t * 4] - m.f[t * 4 + 1]
+        # fn = m.f[t * 4] - m.f[t * 4 + 1]
+        fn = m.f[t * 4]
         return ((dn + ep) * fn, 0)
+        # return (-tt, (dn + ep) * fn, tt)
+
+    def fnc_con(m, t):  # fn+ and fn- cannot coexist
+        # return (None, m.f[t * 4] * m.f[t * 4 + 1], tt)
+        return (m.f[t * 4] * m.f[t * 4 + 1], 0)
+
+    def fnn_con(m, t):
+        dn = d[t * 3]
+        fnn = m.f[t * 4 + 1]
+        return (0, (dn + ep) * fnn, None)
 
     def nonpen_con(m, t):
         return(0, d[t * 3] + ep, None)
@@ -115,27 +127,36 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         ft = forces[t * 4 + 2] + forces[t * 4 + 3]
         return (ft[xyz], -dt[xyz] * m.alpha[t])
 
+    def tensile_zero(m, t):
+        return (m.f[t * 4 + 1], 0)
+
     def obj(m):
         alpha_sum = pyo.dot_product(m.alpha, m.alpha) * 1e+0  # alpha
         # d_sum = pyo.dot_product(m.q, m.q)  # d.T @ d * 1e+0
         f_sum = 0
         for i in f_index:
             if i % 4 == 1:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+2)  # tension
+                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+5)  # tension
             elif i % 4 == 0:
                 f_sum = f_sum + (m.f[i] * m.f[i] * 1e+0)  # compression
+            # else:
+            #     f_sum = f_sum + (m.f[i] * m.f[i] * 1e+5)  # friction
         return alpha_sum + f_sum #+ d_sum
 
     model.obj = pyo.Objective(rule=obj, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
                                  -p.flatten(), -p.flatten(), f)
-    # model.cfr = MatrixConstraint(afr_b_csr.data, afr_b_csr.indices, afr_b_csr.indptr,
-    #                              [None for i in range(afr_b.shape[0])],
-    #                              np.zeros(afr_b.shape[0]), f)
+    model.cfr = MatrixConstraint(afr_b_csr.data, afr_b_csr.indices, afr_b_csr.indptr,
+                                 [None for i in range(afr_b.shape[0])],
+                                 np.zeros(afr_b.shape[0]), f)
     # model.fcon = pyo.Constraint(v_index, rule=fr_cone)
+    # model.tensile = pyo.Constraint(v_index, rule=tensile_zero)
     model.dbnd = pyo.Constraint(d_index, rule=bnd_d)
     model.ccon = pyo.Constraint(v_index, rule=contact_con)
     model.pcon = pyo.Constraint(v_index, rule=nonpen_con)
+
+    model.fncon = pyo.Constraint(v_index, rule=fnc_con)
+    # model.ncon = pyo.Constraint(v_index, rule=fnn_con)
     model.cftdt = pyo.Constraint(v_index, [i for i in range(3)], rule=ftdt_con)
 
     if timer:
@@ -145,15 +166,40 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         start_time = time.time()
 
     solver = pyo.SolverFactory('ipopt')
+    solver.options['tol'] = 1e-10
     results = solver.solve(model, tee=verbose)
 
     if timer:
         print("--- solving time: %s seconds ---" % (time.time() - start_time))
 
-    if verbose:
-        model.f.display()
-        model.q.display()
-        model.alpha.display()
+    f_star = np.array([model.f[i].value for i in f_index])
+    q_star = np.array([model.q[i].value for i in q_index])
+    d_star = aeq.T @ q_star
+
+    for v in v_index:
+        fnp = f_star[v * 4]
+        fnn = f_star[v * 4 + 1]
+        fu = f_star[v * 4 + 2]
+        fv = f_star[v * 4 + 3]
+
+        dn = d_star[v * 3]
+        # print("fn: ", fnp)
+        # print("dn: ", dn)
+        print("fn: ", fnp, ", dn: ", dn, ", fn * dn: ", (fnp-fnn) * dn)
+
+        # if not (fu ** 2 + fv ** 2 <= mu ** 2 * (fnp - fnn) ** 2):
+        #     print("vertex ", v, "not satisfy cone.")
+        #     print("fu ** 2 + fv ** 2: ", fu ** 2 + fv ** 2)
+        #     print("mu ** 2 * (fnp - fnn) ** 2", mu ** 2 * (fnp - fnn) ** 2)
+        # if fnp != 0 and fnn != 0:
+        #     print("vertex ", v, " coexist. ")
+        #     print("fnp: ", fnp)
+        #     print("fnn: ", fnn)
+
+    # if verbose:
+    #     model.f.display()
+    #     model.q.display()
+    #     model.alpha.display()
 
     if results.solver.termination_condition is not \
        pyo.TerminationCondition.optimal and \
