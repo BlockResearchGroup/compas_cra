@@ -21,24 +21,24 @@ if __name__ == '__main__':
     from compas_cra.viewers import cra_view
 
     assembly = compas.json_load(
-            os.path.join(compas_cra.DATA, './shelf.json'))
+            os.path.join(compas_cra.DATA, './snake.json'))
     assembly = assembly.copy(cls=CRA_Assembly)
+
     assembly.set_boundary_conditions([0])
-    # assembly.set_boundary_conditions([i for i in range(9)])
-    # assembly.delete_node(10)
+    # assembly.delete_node(1)
+    # assembly.delete_node(2)
+    # assembly.delete_node(3)
 
-
-    assembly_interfaces_numpy(assembly, amin=1e-6, tmax=1e-4)
-
+    assembly_interfaces_numpy(assembly, amin=1e-4, tmax=1e-2)
 
     print("blocks: ", assembly.number_of_nodes())
     print("interfaces: ", assembly.number_of_edges())
 
-    mu = 0.9
+    mu = 0.5
     dispbnd = 1e-1
     overlap = 1e-4 * 0
     d = 1
     # cra_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)
     cra_penalty_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)
     cra_view(assembly, resultant=True, nodal=True, grid=True, weights=False,
-             displacements=True, dispscale=1, scale=10/d)
+             displacements=True, dispscale=1, scale=.1/d)
