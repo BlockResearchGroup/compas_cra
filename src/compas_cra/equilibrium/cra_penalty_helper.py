@@ -19,6 +19,7 @@ __all__ = ['make_aeq_b', 'make_afr_b', 'unit_basis_penalty']
 
 # TODO: merge these function with standard solve helper function
 
+
 def make_aeq_b(assembly, return_vcount=True, flip=False):
     """Create equilibrium matrix for penalty formulation Aeq@B. """
     rows = []

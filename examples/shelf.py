@@ -27,9 +27,7 @@ if __name__ == '__main__':
     # assembly.set_boundary_conditions([i for i in range(9)])
     # assembly.delete_node(10)
 
-
     assembly_interfaces_numpy(assembly, amin=1e-6, tmax=1e-4)
-
 
     print("blocks: ", assembly.number_of_nodes())
     print("interfaces: ", assembly.number_of_edges())
