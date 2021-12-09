@@ -117,7 +117,7 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         f_sum = 0
         for i in f_index:
             if i % 4 == 1:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+4)  # tension
+                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
             elif i % 4 == 0:
                 f_sum = f_sum + (m.f[i] * m.f[i] * 1e+0)  # compression
         return alpha_sum + f_sum
