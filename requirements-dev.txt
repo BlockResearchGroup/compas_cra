@@ -18,7 +18,7 @@ sphinx >=3.4
 twine
 wheel
 compas
-git+https://github.com/compas-dev/compas_view2.git#egg=compas_view2
-git+https://github.com/compas-dev/compas_assembly.git#egg=compas_assembly
+compas_view2
+compas_assembly
 pyomo
 -e .
