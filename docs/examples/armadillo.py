@@ -45,6 +45,6 @@ if __name__ == '__main__':
     print("blocks: ", assembly.number_of_nodes())
     print("interfaces: ", assembly.number_of_edges())
 
-    cra_view(assembly, resultant=True, nodal=False, weights=False, grid=True,
+    cra_view(assembly, resultant=True, nodal=False, weights=False, grid=False,
              interfaces=not load_from_result,
              displacements=False, dispscale=0, scale=300)

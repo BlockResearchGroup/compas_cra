@@ -40,5 +40,5 @@ if __name__ == '__main__':
     # rotate around xy30-axis
 
     cra_solve(assembly, verbose=True, timer=True, d_bnd=1e-2)
-    cra_view(assembly, resultant=False, nodal=True, grid=False,
+    cra_view(assembly, resultant=False, nodal=True, grid=True,
              displacements=False, dispscale=0, scale=0.5)
