@@ -16,8 +16,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../src'))
 
 # -- General configuration ------------------------------------------------
 
-project = "compas_cra"
-copyright = "Gene Ting-Chun Kao"
+project = "COMPAS CRA"
+copyright = "Gene Ting-Chun Kao, Block Research Group"
 author = "Gene Ting-Chun Kao"
 release = "0.1.0"
 version = ".".join(release.split(".")[0:2])

@@ -4,8 +4,7 @@ compas_cra
 
 .. rst-class:: lead
 
-Coupled Rigid-Block Analysis:
-Static Equilibrium of Complex Discrete-Element Assemblies
+Coupled Rigid-Block Analysis implementation using COMPAS framework
 
 .. .. figure:: /_images/
      :figclass: figure
@@ -20,8 +19,9 @@ Table of Contents
    :titlesonly:
 
    Introduction <self>
-   gettingstarted
+   installation
    tutorial
+   examples
    api
    license
 
