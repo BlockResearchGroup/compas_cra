@@ -78,6 +78,13 @@ class CRA_Assembly(Assembly):
                                         R)]
                 interface.frame.transform(R)
 
+    def move_block(self, key, vector=(0, 0, 0)):
+        """move block with vector"""
+        from compas.geometry import Translation
+
+        self.node_attribute(key, "block").transform(
+            Translation.from_vector(vector))
+
     def get_weight_total(self, density=1):
         weight = 0
         for node in self.nodes():
