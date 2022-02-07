@@ -35,11 +35,13 @@ class CRA_Assembly(Assembly):
         })
 
     def add_to_interfaces(self, u, v, itype, isize, ipoints, iframe):
+        """Add interface from attributes to edge (u, v) interfaces"""
         interface = Interface(itype=itype, isize=isize, ipoints=ipoints,
                               iframe=iframe)
         self.add_interface_to_interfaces(u, v, interface)
 
     def add_interface_to_interfaces(self, u, v, interface):
+        """Add interface to edge (u, v) interfaces"""
         if not self.has_edge(u, v):
             self.add_edge(u, v, interfaces=[interface])
         else:
@@ -48,6 +50,7 @@ class CRA_Assembly(Assembly):
             self.edge_attribute((u, v), "interfaces", interfaces)
 
     def add_interfaces_from_meshes(self, meshes, u, v):
+        """Add interfaces from meshes to edge (u, v) interfaces"""
         for mesh in meshes:
             for f in mesh.faces():
                 pt = mesh.face_coordinates(f)
@@ -59,16 +62,20 @@ class CRA_Assembly(Assembly):
                 self.add_interface_to_interfaces(u, v, interface)
 
     def set_boundary_conditions(self, keys):
+        """Set blocks as boundary conditions"""
         for key in keys:
             self.set_boundary_condition(key)
 
     def set_boundary_condition(self, key):
+        """Set block as boundary condition"""
         self.node_attribute(key, "is_support", True)
 
     def is_block_support(self, key):
+        """Check if the block is a support"""
         return self.node_attribute(key, "is_support")
 
     def rotate_assembly(self, o, axis, rad):
+        """Rotate the entire assembly"""
         R = Rotation().from_axis_and_angle(axis, angle=rad, point=o)
         self.transform(R)
         for edge in self.edges():
@@ -79,13 +86,14 @@ class CRA_Assembly(Assembly):
                 interface.frame.transform(R)
 
     def move_block(self, key, vector=(0, 0, 0)):
-        """move block with vector"""
+        """Move block with vector"""
         from compas.geometry import Translation
 
         self.node_attribute(key, "block").transform(
             Translation.from_vector(vector))
 
     def get_weight_total(self, density=1):
+        """Get total assembly weight"""
         weight = 0
         for node in self.nodes():
             block = self.node_attribute(node, 'block')
@@ -93,6 +101,7 @@ class CRA_Assembly(Assembly):
         return weight
 
     def get_weight_mean(self, density=1):
+        """Get assembly mean weight"""
         n = self.number_of_nodes()
         w = self.get_weight_total(density)
         return w / n
