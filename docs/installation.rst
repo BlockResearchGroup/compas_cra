@@ -32,3 +32,8 @@ Install ipopt solvers for pyomo:
 .. code-block:: bash
 
     conda install -c conda-forge ipopt
+
+Known issue (Windows)
+
+pyomo cannot find ipopt location: ``pyomo.common.errors.ApplicationError: No executable found for solver 'ipopt'``.
+Please refer this thread for solution: https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1
