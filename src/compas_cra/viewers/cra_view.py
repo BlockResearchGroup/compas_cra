@@ -412,5 +412,28 @@ def cra_view(assembly, scale=1., density=1., dispscale=1., tol=1e-5,
     viewer.run()
 
 
+def cra_view(viewer, assembly, scale=1., density=1., dispscale=1., tol=1e-5,
+             resultant=True, nodal=False, edge=True,
+             blocks=True, interfaces=True, forces=True,
+             forcesdirect=True, forcesline=False,
+             weights=True, displacements=True):
+    """CRA Viewer"""
+
+    if blocks:
+        draw_blocks(assembly, viewer, edge, tol)
+    if interfaces:
+        draw_interfaces(assembly, viewer)
+    if forces:
+        draw_forces(assembly, viewer, scale, resultant, nodal)
+    if forcesdirect:
+        draw_forcesdirect(assembly, viewer, scale, resultant, nodal)
+    if forcesline:
+        draw_forcesline(assembly, viewer, scale, resultant, nodal)
+    if weights:
+        draw_weights(assembly, viewer, scale, density)
+    if displacements:
+        draw_displacements(assembly, viewer, dispscale, tol)
+
+
 if __name__ == '__main__':
     pass
