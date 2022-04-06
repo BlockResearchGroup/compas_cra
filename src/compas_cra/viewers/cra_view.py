@@ -20,7 +20,7 @@ from math import sqrt
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
 
-__all__ = ['cra_view']
+__all__ = ['cra_view', 'cra_view_ex']
 
 
 def hextorgb(hex):
@@ -412,11 +412,11 @@ def cra_view(assembly, scale=1., density=1., dispscale=1., tol=1e-5,
     viewer.run()
 
 
-def cra_view(viewer, assembly, scale=1., density=1., dispscale=1., tol=1e-5,
-             resultant=True, nodal=False, edge=True,
-             blocks=True, interfaces=True, forces=True,
-             forcesdirect=True, forcesline=False,
-             weights=True, displacements=True):
+def cra_view_ex(viewer, assembly, scale=1., density=1., dispscale=1., tol=1e-5,
+                resultant=True, nodal=False, edge=True,
+                blocks=True, interfaces=True, forces=True,
+                forcesdirect=True, forcesline=False,
+                weights=True, displacements=True):
     """CRA Viewer"""
 
     if blocks:
