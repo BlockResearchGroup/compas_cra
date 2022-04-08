@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_cra - CRA_Assembly.edge_attributes</title>
+  <title>compas_cra - CRA_Assembly.from_pointcloud</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="CRA_Assembly.edge_coordinates" href="compas_cra.datastructures.CRA_Assembly.edge_coordinates.html" />
+  <link rel="next" title="CRA_Assembly.get_any_edge" href="compas_cra.datastructures.CRA_Assembly.get_any_edge.html" />
   
 
   
-  <link rel="prev" title="CRA_Assembly.edge_attribute" href="compas_cra.datastructures.CRA_Assembly.edge_attribute.html" />
+  <link rel="prev" title="CRA_Assembly.from_obj" href="compas_cra.datastructures.CRA_Assembly.from_obj.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -90,34 +90,28 @@
             
             <li class="breadcrumb-item"><a href="compas_cra.datastructures.CRA_Assembly.html">CRA_Assembly</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">CRA_Assembly.edge_attributes</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">CRA_Assembly.from_pointcloud</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="cra-assembly-edge-attributes">
-<h1>CRA_Assembly.edge_attributes</h1>
+        <section class="detail" id="cra-assembly-from-pointcloud">
+<h1>CRA_Assembly.from_pointcloud</h1>
 <dl class="py method">
-<dt class="sig sig-object py" id="compas_cra.datastructures.CRA_Assembly.edge_attributes">
-<span class="sig-prename descclassname"><span class="pre">CRA_Assembly.</span></span><span class="sig-name descname"><span class="pre">edge_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Block Research Group/compas_cra/blob/master/src/compas_cra/datastructures/cra_assembly.py#L1133"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Get or set multiple attributes of an edge.</p>
+<dt class="sig sig-object py" id="compas_cra.datastructures.CRA_Assembly.from_pointcloud">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CRA_Assembly.</span></span><span class="sig-name descname"><span class="pre">from_pointcloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cloud</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Construct a network from random connections between the points of a pointcloud.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<em>tuple[hashable, hashable]</em>) – The identifier of the edge.</p></li>
-<li><p><strong>names</strong> (<em>list[str], optional</em>) – A list of attribute names.</p></li>
-<li><p><strong>values</strong> (<em>list[Any], optional</em>) – A list of attribute values.</p></li>
+<li><p><strong>cloud</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Pointcloud.html#compas.geometry.Pointcloud" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pointcloud</span></code></a>) – A pointcloud object.</p></li>
+<li><p><strong>degree</strong> (<em>int, optional</em>) – The number of connections per node.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>dict[str, Any] | list[Any] | None</em> – If the parameter <cite>names</cite> is empty, a dictionary of all attribute name-value pairs of the edge.
-If the parameter <cite>names</cite> is not empty, a list of the values corresponding to the provided names.
-None if the function is used as a “setter”.</p>
-</dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.10)"><strong>KeyError</strong></a> – If the edge does not exist.</p>
+<dd class="field-even"><p><a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.datastructures.Network.html#compas.datastructures.Network" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -173,7 +167,7 @@ None if the function is used as a “setter”.</p>
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">CRA_Assembly.edge_attributes</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">CRA_Assembly.from_pointcloud</a></li>
 </ul>
 
       </div>
@@ -185,20 +179,20 @@ None if the function is used as a “setter”.</p>
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_cra.datastructures.CRA_Assembly.edge_attribute.html" title="CRA_Assembly.edge_attribute" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_cra.datastructures.CRA_Assembly.from_obj.html" title="CRA_Assembly.from_obj" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          CRA_Assembly.edge_attribute
+          CRA_Assembly.from_obj
         </div>
       </a>
       
 
       
-      <a href="compas_cra.datastructures.CRA_Assembly.edge_coordinates.html" title="CRA_Assembly.edge_coordinates" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_cra.datastructures.CRA_Assembly.get_any_edge.html" title="CRA_Assembly.get_any_edge" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          CRA_Assembly.edge_coordinates
+          CRA_Assembly.get_any_edge
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
