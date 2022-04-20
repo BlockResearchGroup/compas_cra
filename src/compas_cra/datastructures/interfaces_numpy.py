@@ -64,14 +64,14 @@ def assembly_interfaces_numpy(assembly,
         pass
 
     """
-    node_index = assembly.key_index()
-    index_node = assembly.index_key()
+    node_index = assembly.graph.key_index()
+    index_node = assembly.graph.index_key()
 
-    blocks = assembly.nodes_attribute('block')
+    blocks = assembly.graph.nodes_attribute('block')
 
     nmax = min(nmax, len(blocks))
 
-    block_cloud = assembly.nodes_attributes('xyz')
+    block_cloud = assembly.graph.nodes_attributes('xyz')
     block_nnbrs = find_nearest_neighbours(block_cloud, nmax)
 
     # k:      key of the base block
@@ -121,11 +121,11 @@ def assembly_interfaces_numpy(assembly,
                 if n == node:
                     continue
 
-                if n in assembly.edge and node in assembly.edge[n]:
+                if n in assembly.graph.edge and node in assembly.graph.edge[n]:
                     continue
 
-                if assembly.node_attribute(node, 'is_support') and \
-                   assembly.node_attribute(n, 'is_support'):
+                if assembly.graph.node_attribute(node, 'is_support') and \
+                   assembly.graph.node_attribute(n, 'is_support'):
                     continue
 
                 nbr = blocks[j]
@@ -168,7 +168,7 @@ def assembly_interfaces_numpy(assembly,
                                 Frame(o, A[0], A[1]), coords)
 
                             if concave:
-                                assembly.add_to_interfaces(
+                                assembly.graph.add_to_interfaces(
                                     node, n,
                                     itype='face_face',
                                     isize=area,
@@ -180,7 +180,7 @@ def assembly_interfaces_numpy(assembly,
                                     isize=area,
                                     ipoints=coords.tolist()[:-1],
                                     iframe=Frame(origin, uvw[0], uvw[1]))
-                                assembly.add_interface((node, n), interface)
+                                assembly.graph.add_interface((node, n), interface)
 
     return assembly
 
