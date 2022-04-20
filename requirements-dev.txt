@@ -20,6 +20,6 @@ wheel
 jinja2 >= 3.0
 compas
 compas_view2
-compas_assembly
+compas_assembly ==0.4.1
 pyomo
 -e .
