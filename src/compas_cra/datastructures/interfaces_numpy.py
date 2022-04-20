@@ -64,14 +64,14 @@ def assembly_interfaces_numpy(assembly,
         pass
 
     """
-    node_index = assembly.graph.key_index()
-    index_node = assembly.graph.index_key()
+    node_index = {node: index for index, node in enumerate(assembly.nodes())}
+    index_node = {index: node for index, node in enumerate(assembly.nodes())}
 
-    blocks = assembly.graph.nodes_attribute('block')
+    blocks = list(assembly.blocks())
 
     nmax = min(nmax, len(blocks))
 
-    block_cloud = assembly.graph.nodes_attributes('xyz')
+    block_cloud = [block.centroid() for block in blocks]
     block_nnbrs = find_nearest_neighbours(block_cloud, nmax)
 
     # k:      key of the base block
@@ -107,7 +107,10 @@ def assembly_interfaces_numpy(assembly,
 
         frames = block.frames()
 
-        for f0, (origin, uvw) in frames.items():
+        for f0, frame in frames.items():
+            origin = frame.point
+            uvw = [frame.xaxis, frame.yaxis, frame.zaxis]
+
             A = array(uvw, dtype=float64)
             o = array(origin, dtype=float64).reshape((-1, 1))
             xyz0 = array(block.face_coordinates(f0),
@@ -168,19 +171,19 @@ def assembly_interfaces_numpy(assembly,
                                 Frame(o, A[0], A[1]), coords)
 
                             if concave:
-                                assembly.graph.add_to_interfaces(
+                                assembly.add_to_interfaces(
                                     node, n,
-                                    itype='face_face',
-                                    isize=area,
-                                    ipoints=coords.tolist()[:-1],
-                                    iframe=Frame(origin, uvw[0], uvw[1]))
+                                    type='face_face',
+                                    size=area,
+                                    points=coords.tolist()[:-1],
+                                    frame=Frame(origin, uvw[0], uvw[1]))
                             else:
                                 interface = Interface(
-                                    itype='face_face',
-                                    isize=area,
-                                    ipoints=coords.tolist()[:-1],
-                                    iframe=Frame(origin, uvw[0], uvw[1]))
-                                assembly.graph.add_interface((node, n), interface)
+                                    type='face_face',
+                                    size=area,
+                                    points=coords.tolist()[:-1],
+                                    frame=Frame(origin, uvw[0], uvw[1]))
+                                assembly.add_interface((node, n), interface)
 
     return assembly
 

@@ -34,10 +34,10 @@ class CRA_Assembly(Assembly):
             'interfaces': []
         })
 
-    def add_to_interfaces(self, u, v, itype, isize, ipoints, iframe):
+    def add_to_interfaces(self, u, v, type, size, points, frame):
         """Add interface from attributes to edge (u, v) interfaces"""
-        interface = Interface(itype=itype, isize=isize, ipoints=ipoints,
-                              iframe=iframe)
+        interface = Interface(type=type, size=size, points=points,
+                              frame=frame)
         self.add_interface_to_interfaces(u, v, interface)
 
     def add_interface_to_interfaces(self, u, v, interface):
