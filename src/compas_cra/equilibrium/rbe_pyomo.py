@@ -2,28 +2,25 @@
 # -*- coding: utf-8 -*-
 
 """
-Nonlinear formulation with penalty to solve Coupled Rigid-block Equilibrium
-Using Pyomo + IPOPT
+Rigid-block Equilibrium
+Using Pyomo + MOSEK
 """
 
 import numpy as np
 import pyomo.environ as pyo
 import time
 
-from compas_cra.equilibrium.cra_helper import make_aeq, unit_basis
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
-from compas_cra.equilibrium.cra_penalty_helper import unit_basis_penalty
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
 
-__all__ = ['cra_penalty_solve']
+__all__ = ['rbe_solve']
 
 
-def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
-                      timer=False, verbose=False):
-    """CRA solver with penalty formulation using Pyomo + IPOPT. """
+def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
+    """RBE solver with penalty formulation using Pyomo + MOSEK. """
 
     n = assembly.graph.number_of_nodes()
     key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
@@ -32,11 +29,7 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
     fixed = [key_index[key] for key in fixed]
     free = list(set(range(n)) - set(fixed))
 
-    aeq_csr, vcount = make_aeq(assembly)
-    aeq_csr = aeq_csr[[index * 6 + i for index in free for i in range(6)], :]
-    aeq = aeq_csr.toarray()
-
-    aeq_b_csr, _ = make_aeq_b(assembly)
+    aeq_b_csr, vcount = make_aeq_b(assembly)
     aeq_b_csr = aeq_b_csr[[index * 6 + i
                            for index in free for i in range(6)], :]
 
@@ -52,19 +45,15 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
     afr_b_csr = make_afr_b(vcount, mu=mu, friction_net=False)
     afr_b = afr_b_csr.toarray()
 
-    f_basis = unit_basis_penalty(assembly)
-    d_basis = unit_basis(assembly)
-
     model = pyo.ConcreteModel()
     if timer:
         start_time = time.time()
 
     v_num = vcount  # number of vertices
-    free_num = len(free)  # number of free blocks
-    v_index = [i for i in range(v_num)]  # vertex indices
     f_index = [i for i in range(v_num * 4)]  # force indices
-    d_index = [i for i in range(v_num * 3)]  # displacement indices
-    q_index = [i for i in range(free_num * 6)]  # q indices
+    # free_num = len(free)  # number
+    # eq_index = [i for i in range(6 * free_num)]
+    fr_index = [i for i in range(v_num * 8)]  # friction constraint indices
 
     def f_bnds(m, i):
         if i % 4 == 0 or i % 4 == 1:
@@ -72,55 +61,31 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         else:
             return pyo.Reals
 
-    def f_init(m, i):
-        if i % 4 == 1:
-            return 0.0
-        else:
-            return 1.0
+    # def f_init(m, i):
+    #     if i % 4 == 1:
+    #         return 1.0
+    #     else:
+    #         return 0.0
 
-    # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
     model.f = pyo.Var(f_index, initialize=0, domain=f_bnds)
-    model.q = pyo.Var(q_index, initialize=0)
-    model.alpha = pyo.Var(v_index, initialize=0, within=pyo.NonNegativeReals)
+    # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
 
     f = np.array([model.f[i] for i in f_index])
-    q = np.array([model.q[i] for i in q_index])
-    d = aeq.T @ q
-
-    forces = f_basis * f[:, np.newaxis]  # force x in global coordinate
-    displs = d_basis * d[:, np.newaxis]  # displacement d in global coordinate
-
-    ep = eps
-
-    def bnd_d(m, t):
-        return (-d_bnd, d[t], d_bnd)
-
-    def contact_con(m, t):
-        dn = d[t * 3]
-        # fn = m.f[t * 4] - m.f[t * 4 + 1]
-        fn = m.f[t * 4]
-        return ((dn + ep) * fn, 0)
-
-    def fnc_con(m, t):  # fn+ and fn- cannot coexist
-        return (m.f[t * 4] * m.f[t * 4 + 1], 0)
-
-    def nonpen_con(m, t):
-        return(0, d[t * 3] + ep, None)
-
-    def ftdt_con(m, t, xyz):
-        dt = displs[t * 3 + 1] + displs[t * 3 + 2]
-        ft = forces[t * 4 + 2] + forces[t * 4 + 3]
-        return (ft[xyz], -dt[xyz] * m.alpha[t])
 
     def obj(m):
-        alpha_sum = pyo.dot_product(m.alpha, m.alpha) * 1e+0  # alpha
         f_sum = 0
         for i in f_index:
             if i % 4 == 1:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
+                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+1)  # tension
             elif i % 4 == 0:
                 f_sum = f_sum + (m.f[i] * m.f[i] * 1e+0)  # compression
-        return alpha_sum + f_sum
+        return f_sum
+
+    # def eq_con(m, t):
+    #     return (sum(aeq_b_csr[t, i] * m.f[i] for i in f_index), -p[t][0])
+    #
+    # def fr_con(m, t):
+    #     return (None, sum(afr_b[t, i] * m.f[i] for i in f_index), 0)
 
     model.obj = pyo.Objective(rule=obj, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
@@ -128,13 +93,8 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
     model.cfr = MatrixConstraint(afr_b_csr.data, afr_b_csr.indices, afr_b_csr.indptr,
                                  [None for i in range(afr_b.shape[0])],
                                  np.zeros(afr_b.shape[0]), f)
-    model.dbnd = pyo.Constraint(d_index, rule=bnd_d)
-    model.ccon = pyo.Constraint(v_index, rule=contact_con)
-    model.pcon = pyo.Constraint(v_index, rule=nonpen_con)
-
-    model.fncon = pyo.Constraint(v_index, rule=fnc_con)
-
-    model.cftdt = pyo.Constraint(v_index, [i for i in range(3)], rule=ftdt_con)
+    # model.ceq = pyo.Constraint(eq_index, rule=eq_con)
+    # model.cfr = pyo.Constraint(fr_index, rule=fr_con)
 
     if timer:
         print("--- set up time: %s seconds ---" % (time.time() - start_time))
@@ -142,26 +102,14 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
     if timer:
         start_time = time.time()
 
-    solver = pyo.SolverFactory('ipopt')
-    solver.options['tol'] = 1e-10
+    solver = pyo.SolverFactory('mosek')
     results = solver.solve(model, tee=verbose)
 
     if timer:
         print("--- solving time: %s seconds ---" % (time.time() - start_time))
 
-    # f_star = np.array([model.f[i].value for i in f_index])
-    # q_star = np.array([model.q[i].value for i in q_index])
-    # d_star = aeq.T @ q_star
-    # for v in v_index:
-    #     fnp = f_star[v * 4]
-    #     fnn = f_star[v * 4 + 1]
-    #     dn = d_star[v * 3]
-    #     print("fn: ", fnp, ", dn: ", dn, ", fn * dn: ", (fnp - fnn) * dn)
-
     if verbose:
         model.f.display()
-        model.q.display()
-        model.alpha.display()
 
     if results.solver.termination_condition is not \
        pyo.TerminationCondition.optimal and \
@@ -171,6 +119,8 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
 
     print("result: ", results.solver.termination_condition)
     print("obj", model.obj.display())
+
+    model.f.display()
 
     # =========================================================================
     # assign forces and object displacement y
@@ -189,16 +139,62 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
                 })
 
             offset += 4 * n
-
-    q = [model.q[i].value * 1 for i in range(6 * free_num)]
-    if verbose:
-        print("q:", q)
-
-    offset = 0
-    for node in assembly.graph.nodes():
-        if assembly.graph.node_attribute(node, 'is_support'):
-            continue
-        displacement = q[offset:offset+6]
-        assembly.graph.node_attribute(node, 'displacement', displacement)
-        offset += 6
     # =========================================================================
+
+
+if __name__ == '__main__':
+
+    # import compas
+    # import compas_cra
+    # import os
+    from compas_cra.datastructures import CRA_Assembly
+    # from compas_cra.datastructures import assembly_interfaces_numpy
+    from compas_cra.viewers import cra_view
+
+    # assembly = compas.json_load(
+    #     os.path.join(compas_cra.DATA, './cubes.json'))
+    # assembly = assembly.copy(cls=CRA_Assembly)
+    # assembly.set_boundary_conditions([0])
+    # assembly.move_block(2, (0, .5, 0))
+    #
+    # assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
+    #
+    # print("blocks: ", assembly.number_of_nodes())
+    # print("interfaces: ", assembly.number_of_edges())
+    #
+    # rbe_solve(assembly, verbose=True, timer=True)
+    # cra_view(assembly, resultant=False, nodal=True, grid=True,
+    #          displacements=True, dispscale=0, scale=0.5)
+
+    import math as mt
+    from compas.datastructures import Mesh
+    from compas.geometry import Box
+    from compas.geometry import Frame
+    from compas.geometry import Translation
+    from compas_assembly.datastructures import Block
+
+    support = Box(Frame.worldXY(), 1, 1, 1)  # supporting block
+    free1 = Box(Frame.worldXY().transformed(
+        Translation.from_vector([0, 0, 1])), 1, 1, 1)  # block to analyse
+
+    assembly = CRA_Assembly()
+    assembly.add_block(Block.from_shape(support))
+    assembly.add_block(Block.from_shape(free1))
+    assembly.set_boundary_conditions([0])
+
+    interface1 = Mesh()
+    # interface corners
+    corners = [[.5, .5, .5], [-.5, .5, .5], [-.5, -.5, .5], [.5, -.5, .5]]
+    for i, c in enumerate(corners):
+        interface1.add_vertex(key=i, x=c[0], y=c[1], z=c[2])
+    interface1.add_face([0, 1, 2, 3])
+
+    assembly.add_interfaces_from_meshes([interface1], 0, 1)
+
+    deg = 8.00  # rotation in degree
+    rad = deg * mt.pi / 180
+    assembly.rotate_assembly([0, 0, 0], [0, 1, 0], rad)  # around y-axis
+
+    rbe_solve(assembly, mu=0.1, verbose=True, timer=True)
+    cra_view(assembly, resultant=False, nodal=True, grid=True,
+             displacements=True, dispscale=10)

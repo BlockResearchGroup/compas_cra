@@ -54,10 +54,10 @@ class CRA_Assembly(Assembly):
         for mesh in meshes:
             for f in mesh.faces():
                 pt = mesh.face_coordinates(f)
-                interface = Interface(itype='face_face',
-                                      isize=mesh.face_area(f),
-                                      ipoints=pt,
-                                      iframe=Frame.from_points(pt[0], pt[1], pt[2]))
+                interface = Interface(type='face_face',
+                                      size=mesh.face_area(f),
+                                      points=pt,
+                                      frame=Frame.from_points(pt[0], pt[1], pt[2]))
                 self.add_interface_to_interfaces(u, v, interface)
 
     def set_boundary_conditions(self, keys):

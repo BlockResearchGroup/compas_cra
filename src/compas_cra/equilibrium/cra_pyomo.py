@@ -33,8 +33,8 @@ def cra_solve(
 
     n = assembly.graph.number_of_nodes()
     key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
-
-    assembly.graph.node_attribute(0, "is_support", True)
+    #
+    # assembly.graph.node_attribute(0, "is_support", True)
 
     fixed = [key for key in assembly.graph.nodes_where({'is_support': True})]
     fixed = [key_index[key] for key in fixed]
@@ -156,18 +156,18 @@ def cra_solve(
     # save forces to assembly
     offset = 0
     for edge in assembly.graph.edges():
-        # interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
-        # for interface in interfaces:
-        #     interface.forces = []
-        #     n = len(interface.points)
-        #     for i in range(n):
-        #         interface.forces.append({
-        #             'c_np': model.f[offset + 3 * i + 0].value,
-        #             'c_nn': 0,
-        #             'c_u': model.f[offset + 3 * i + 1].value,
-        #             'c_v': model.f[offset + 3 * i + 2].value
-        #         })
-        #     offset += 3 * n
+        interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
+        for interface in interfaces:
+            interface.forces = []
+            n = len(interface.points)
+            for i in range(n):
+                interface.forces.append({
+                    'c_np': model.f[offset + 3 * i + 0].value,
+                    'c_nn': 0,
+                    'c_u': model.f[offset + 3 * i + 1].value,
+                    'c_v': model.f[offset + 3 * i + 2].value
+                })
+            offset += 3 * n
 
         interface = assembly.graph.edge_attribute(edge, 'interface')
         interface.forces = []

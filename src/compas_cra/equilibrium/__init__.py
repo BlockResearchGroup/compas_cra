@@ -36,5 +36,6 @@ from .cra_pyomo import *  # noqa: F401 F403
 from .cra_helper import *  # noqa: F401 F403
 from .cra_penalty_pyomo import *   # noqa: F401 F403
 from .cra_penalty_helper import *   # noqa: F401 F403
+from .rbe_pyomo import *   # noqa: F401 F403
 
 __all__ = [name for name in dir() if not name.startswith('_')]
