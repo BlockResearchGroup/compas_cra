@@ -19,6 +19,10 @@ twine
 wheel
 jinja2 >= 3.0
 compas
+pyside2
+pyopengl
+qtpy
+ryvencore_qt
 compas_view2
 compas_assembly ==0.4.1
 pyomo
