@@ -19,6 +19,8 @@ twine
 wheel
 jinja2 >= 3.0
 compas
+freetype-py
+textdistance
 pyside2
 pyopengl
 qtpy
