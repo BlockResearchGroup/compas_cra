@@ -14,6 +14,7 @@ Solvers
     :nosignatures:
 
     cra_solve
+    cra_penalty_solve
 
 
 Helper Functions
