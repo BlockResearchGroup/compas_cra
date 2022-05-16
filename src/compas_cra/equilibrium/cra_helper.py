@@ -33,8 +33,8 @@ def make_aeq(assembly, return_vcount=True, flip=False):
 
         U = assembly.graph.node_attribute(u, 'block')
         V = assembly.graph.node_attribute(v, 'block')
-        # interfaces = assembly.graph.edge_attribute((u, v), 'interfaces')
-        interfaces = [assembly.graph.edge_attribute((u, v), 'interface')]
+        interfaces = assembly.graph.edge_attribute((u, v), 'interfaces')
+        # interfaces = [assembly.graph.edge_attribute((u, v), 'interface')]
 
         # if len(interfaces) == 0 and assembly.graph.edge_attribute((u, v), 'interface') is None:
         #     continue
@@ -133,7 +133,7 @@ def unit_basis(assembly):
     """Create interface reference system as unit basis"""
     data = []
     for edge in assembly.graph.edges():
-        # interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
+        interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
         #
         # if len(interfaces) == 0 and assembly.graph.edge_attribute(edge, 'interface') is None:
         #     continue
@@ -141,7 +141,7 @@ def unit_basis(assembly):
         #     interfaces = [assembly.graph.edge_attribute(edge, 'interface')]
         #     assembly.graph.edge_attribute(edge, 'interfaces', interfaces)
 
-        interfaces = [assembly.graph.edge_attribute(edge, 'interface')]
+        # interfaces = [assembly.graph.edge_attribute(edge, 'interface')]
 
         for interface in interfaces:
             u = interface.frame.xaxis

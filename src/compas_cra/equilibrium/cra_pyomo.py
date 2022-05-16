@@ -169,17 +169,17 @@ def cra_solve(
                 })
             offset += 3 * n
 
-        interface = assembly.graph.edge_attribute(edge, 'interface')
-        interface.forces = []
-        n = len(interface.points)
-        for i in range(n):
-            interface.forces.append({
-                'c_np': model.f[offset + 3 * i + 0].value,
-                'c_nn': 0,
-                'c_u': model.f[offset + 3 * i + 1].value,
-                'c_v': model.f[offset + 3 * i + 2].value
-            })
-        offset += 3 * n
+        # interface = assembly.graph.edge_attribute(edge, 'interface')
+        # interface.forces = []
+        # n = len(interface.points)
+        # for i in range(n):
+        #     interface.forces.append({
+        #         'c_np': model.f[offset + 3 * i + 0].value,
+        #         'c_nn': 0,
+        #         'c_u': model.f[offset + 3 * i + 1].value,
+        #         'c_v': model.f[offset + 3 * i + 2].value
+        #     })
+        # offset += 3 * n
 
     # save displacements to assembly
     q = [model.q[i].value * 1 for i in range(6 * free_num)]
