@@ -28,9 +28,9 @@ if __name__ == '__main__':
         Translation.from_vector([0, 0, 2])), 1, 1, 1)
 
     assembly = CRA_Assembly()
-    assembly.add_block(Block.from_shape(support), key=0)
-    assembly.add_block(Block.from_shape(free1), key=1)
-    assembly.add_block(Block.from_shape(free2), key=2)
+    assembly.add_block(Block.from_shape(support), node=0)
+    assembly.add_block(Block.from_shape(free1), node=1)
+    assembly.add_block(Block.from_shape(free2), node=2)
     assembly.set_boundary_conditions([0])
 
     interface1 = Mesh()
