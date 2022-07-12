@@ -187,13 +187,12 @@ def cra_solve(
 
     # save displacements to assembly
     q = [model.q[i].value * 1 for i in range(6 * free_num)]
-    d = aeq.T @ q
-    f = [model.f[i].value for i in f_index]
-
-    for v in v_index:
-        dn = d[v * 3]
-        fn = f[v * 3]
-        print("contact_con ", (dn + eps) * fn)
+    # d = aeq.T @ q
+    # f = [model.f[i].value for i in f_index]
+    # for v in v_index:
+    #     dn = d[v * 3]
+    #     fn = f[v * 3]
+    #     print("contact_con ", (dn + eps) * fn)
 
     if verbose:
         print("q:", q)
