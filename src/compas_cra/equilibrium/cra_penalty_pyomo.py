@@ -143,7 +143,8 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         start_time = time.time()
 
     solver = pyo.SolverFactory('ipopt')
-    solver.options['tol'] = 1e-10
+    solver.options['tol'] = 1e-8
+    solver.options['constr_viol_tol'] = 1e-7
     results = solver.solve(model, tee=verbose)
 
     if timer:

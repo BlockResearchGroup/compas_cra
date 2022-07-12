@@ -134,6 +134,10 @@ def cra_solve(
         start_time = time.time()
 
     solver = pyo.SolverFactory('ipopt')
+    solver.options['tol'] = 1e-8  # same as default tolerance
+    solver.options['constr_viol_tol'] = 1e-7  # constraint tolerance
+    # https://coin-or.github.io/Ipopt/OPTIONS.html
+
     results = solver.solve(model, tee=verbose)
 
     if timer:
@@ -183,6 +187,14 @@ def cra_solve(
 
     # save displacements to assembly
     q = [model.q[i].value * 1 for i in range(6 * free_num)]
+    d = aeq.T @ q
+    f = [model.f[i].value for i in f_index]
+
+    for v in v_index:
+        dn = d[v * 3]
+        fn = f[v * 3]
+        print("contact_con ", (dn + eps) * fn)
+
     if verbose:
         print("q:", q)
     offset = 0

@@ -76,7 +76,7 @@ def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
         f_sum = 0
         for i in f_index:
             if i % 4 == 1:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+1)  # tension
+                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
             elif i % 4 == 0:
                 f_sum = f_sum + (m.f[i] * m.f[i] * 1e+0)  # compression
         return f_sum
