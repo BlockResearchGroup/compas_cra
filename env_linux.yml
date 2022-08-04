@@ -11,6 +11,5 @@ dependencies:
   - pyopengl
   - qtpy
   - compas_view2
-  - compas_assembly
   - pip:
     - -r requirements-dev.txt
