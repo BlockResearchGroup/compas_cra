@@ -126,9 +126,9 @@
         <span class="n">Translation</span><span class="o">.</span><span class="n">from_vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">assembly</span> <span class="o">=</span> <span class="n">CRA_Assembly</span><span class="p">()</span>
-    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">support</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">free1</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">free2</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">support</span><span class="p">),</span> <span class="n">node</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">free1</span><span class="p">),</span> <span class="n">node</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">free2</span><span class="p">),</span> <span class="n">node</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="n">interface1</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">()</span>
@@ -191,7 +191,6 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.html">compas_cra</a><ul class="nav flex-column collapse">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.datastructures.html">datastructures</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.equilibrium.html">equilibrium</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.viewers.html">viewers</a></li>
 </ul>
 </li>
 </ul>
