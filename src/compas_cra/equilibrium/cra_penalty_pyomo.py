@@ -105,7 +105,7 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         return (m.f[t * 4] * m.f[t * 4 + 1], 0)
 
     def nonpen_con(m, t):
-        return(0, d[t * 3] + ep, None)
+        return (0, d[t * 3] + ep, None)
 
     def ftdt_con(m, t, xyz):
         dt = displs[t * 3 + 1] + displs[t * 3 + 2]
