@@ -18,13 +18,6 @@ sphinx >=3.4
 twine
 wheel
 jinja2 >= 3.0
-compas
-freetype-py
-textdistance
-pyside2
-pyopengl
-qtpy
-ryvencore_qt
 compas_view2
 compas_assembly
 pyomo

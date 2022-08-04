@@ -1,0 +1,16 @@
+name: view2
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - cython
+  - git
+  - freeglut
+  - freetype-py
+  - textdistance
+  - compas
+  - pyside2
+  - pyopengl
+  - qtpy
+  - pip:
+    - -r requirements-dev.txt

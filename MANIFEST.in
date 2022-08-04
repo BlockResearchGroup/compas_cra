@@ -3,9 +3,9 @@ graft src
 prune .github
 prune data
 prune docs
-prune scripts
 prune tests
 prune temp
+prune scripts
 
 include LICENSE
 include README.md
@@ -17,6 +17,6 @@ exclude requirements-dev.txt
 exclude pytest.ini .bumpversion.cfg .editorconfig
 exclude tasks.py
 exclude CONTRIBUTING.md
-exclude conftest.py
+exclude env_linux.yml env_osx.yml env_win.yml
 
 global-exclude *.py[cod] __pycache__ *.dylib *.nb[ic] .DS_Store
