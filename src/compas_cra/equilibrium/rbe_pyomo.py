@@ -53,7 +53,7 @@ def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
     f_index = [i for i in range(v_num * 4)]  # force indices
     # free_num = len(free)  # number
     # eq_index = [i for i in range(6 * free_num)]
-    fr_index = [i for i in range(v_num * 8)]  # friction constraint indices
+    # fr_index = [i for i in range(v_num * 8)]  # friction constraint indices
 
     def f_bnds(m, i):
         if i % 4 == 0 or i % 4 == 1:

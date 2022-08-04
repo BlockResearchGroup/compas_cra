@@ -14,8 +14,6 @@ from shapely.geometry import Polygon
 
 from compas.geometry import Frame
 from compas.geometry import local_to_world_coordinates_numpy
-from compas.geometry import dot_vectors
-from compas_assembly.datastructures import Interface
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"

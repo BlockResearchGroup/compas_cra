@@ -215,7 +215,7 @@ def draw_forcesline(assembly, viewer, scale=1., resultant=True, nodal=False):
 
                 # if assembly.graph.node_attribute(edge[0], 'is_support') or assembly.graph.node_attribute(edge[1], 'is_support'):
                 #     print((w * sum_n + u * sum_u + v * sum_v).z)
-                    # total_reaction += abs((w * sum_n + u * sum_u + v * sum_v).z * 100000)
+                # total_reaction += abs((w * sum_n + u * sum_u + v * sum_v).z * 100000)
 
                 p1 = resultant_pos + resultant_f
                 p2 = resultant_pos - resultant_f

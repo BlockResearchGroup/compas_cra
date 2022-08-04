@@ -26,6 +26,6 @@ pyopengl
 qtpy
 ryvencore_qt
 compas_view2
-compas_assembly ==0.4.1
+compas_assembly
 pyomo
 -e .
