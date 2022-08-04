@@ -7,9 +7,6 @@ dependencies:
   - freetype-py
   - textdistance
   - compas
-  - pyside2
-  - pyopengl
-  - qtpy
   - compas_view2
   - pip:
     - -r requirements-dev.txt
