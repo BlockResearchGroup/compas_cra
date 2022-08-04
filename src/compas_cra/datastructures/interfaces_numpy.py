@@ -33,8 +33,7 @@ def find_nearest_neighbours(cloud, nmax):
 def assembly_interfaces_numpy(assembly,
                               nmax=10,
                               tmax=1e-6,
-                              amin=1e-1,
-                              concave=True):
+                              amin=1e-1):
     """Identify the interfaces between the blocks of an assembly.
 
     Parameters
@@ -139,12 +138,7 @@ def assembly_interfaces_numpy(assembly,
                 rst = solve(A.T, xyz - o).T.tolist()
                 rst = {key: rst[k_i[key]] for key in nbr.vertices()}
 
-                if concave:
-                    faces = nbr.faces()
-                else:
-                    faces = sorted(nbr.faces(),
-                                   key=lambda face: dot_vectors(
-                                       nbr.face_normal(face), uvw[2]))[:2]
+                faces = nbr.faces()
 
                 for f1 in faces:
 
@@ -170,20 +164,12 @@ def assembly_interfaces_numpy(assembly,
                             coords = local_to_world_coordinates_numpy(
                                 Frame(o, A[0], A[1]), coords)
 
-                            if concave:
-                                assembly.add_to_interfaces(
-                                    node, n,
-                                    type='face_face',
-                                    size=area,
-                                    points=coords.tolist()[:-1],
-                                    frame=Frame(origin, uvw[0], uvw[1]))
-                            else:
-                                interface = Interface(
-                                    type='face_face',
-                                    size=area,
-                                    points=coords.tolist()[:-1],
-                                    frame=Frame(origin, uvw[0], uvw[1]))
-                                assembly.add_interface((node, n), interface)
+                            assembly.add_to_interfaces(
+                                node, n,
+                                type='face_face',
+                                size=area,
+                                points=coords.tolist()[:-1],
+                                frame=Frame(origin, uvw[0], uvw[1]))
 
     return assembly
 

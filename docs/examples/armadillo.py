@@ -20,7 +20,7 @@ def identify_interfaces():
     assembly = compas.json_load(
         os.path.join(compas_cra.DATA, './armadillo.json'))
     assembly = assembly.copy(cls=CRA_Assembly)
-    assembly_interfaces_numpy(assembly, tmax=0.05, amin=0.0001, concave=False)
+    assembly_interfaces_numpy(assembly, tmax=0.05, amin=0.0001)
     return assembly
 
 
@@ -42,9 +42,8 @@ if __name__ == '__main__':
     else:
         assembly = identify_interfaces()
 
-    print("blocks: ", assembly.number_of_nodes())
-    print("interfaces: ", assembly.number_of_edges())
+    print(assembly)
 
     cra_view(assembly, resultant=True, nodal=False, weights=False, grid=False,
-             interfaces=not load_from_result,
+             interfaces=not load_from_result, forcesline=True, forcesdirect=False,
              displacements=False, dispscale=0, scale=300)
