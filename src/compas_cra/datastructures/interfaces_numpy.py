@@ -33,8 +33,7 @@ def find_nearest_neighbours(cloud, nmax):
 def assembly_interfaces_numpy(assembly,
                               nmax=10,
                               tmax=1e-6,
-                              amin=1e-1,
-                              concave=True):
+                              amin=1e-1):
     """Identify the interfaces between the blocks of an assembly.
 
     Parameters
@@ -64,14 +63,14 @@ def assembly_interfaces_numpy(assembly,
         pass
 
     """
-    node_index = assembly.key_index()
-    index_node = assembly.index_key()
+    node_index = {node: index for index, node in enumerate(assembly.nodes())}
+    index_node = {index: node for index, node in enumerate(assembly.nodes())}
 
-    blocks = assembly.nodes_attribute('block')
+    blocks = list(assembly.blocks())
 
     nmax = min(nmax, len(blocks))
 
-    block_cloud = assembly.nodes_attributes('xyz')
+    block_cloud = [block.centroid() for block in blocks]
     block_nnbrs = find_nearest_neighbours(block_cloud, nmax)
 
     # k:      key of the base block
@@ -107,7 +106,10 @@ def assembly_interfaces_numpy(assembly,
 
         frames = block.frames()
 
-        for f0, (origin, uvw) in frames.items():
+        for f0, frame in frames.items():
+            origin = frame.point
+            uvw = [frame.xaxis, frame.yaxis, frame.zaxis]
+
             A = array(uvw, dtype=float64)
             o = array(origin, dtype=float64).reshape((-1, 1))
             xyz0 = array(block.face_coordinates(f0),
@@ -121,11 +123,11 @@ def assembly_interfaces_numpy(assembly,
                 if n == node:
                     continue
 
-                if n in assembly.edge and node in assembly.edge[n]:
+                if n in assembly.graph.edge and node in assembly.graph.edge[n]:
                     continue
 
-                if assembly.node_attribute(node, 'is_support') and \
-                   assembly.node_attribute(n, 'is_support'):
+                if assembly.graph.node_attribute(node, 'is_support') and \
+                   assembly.graph.node_attribute(n, 'is_support'):
                     continue
 
                 nbr = blocks[j]
@@ -136,12 +138,7 @@ def assembly_interfaces_numpy(assembly,
                 rst = solve(A.T, xyz - o).T.tolist()
                 rst = {key: rst[k_i[key]] for key in nbr.vertices()}
 
-                if concave:
-                    faces = nbr.faces()
-                else:
-                    faces = sorted(nbr.faces(),
-                                   key=lambda face: dot_vectors(
-                                       nbr.face_normal(face), uvw[2]))[:2]
+                faces = nbr.faces()
 
                 for f1 in faces:
 
@@ -167,20 +164,12 @@ def assembly_interfaces_numpy(assembly,
                             coords = local_to_world_coordinates_numpy(
                                 Frame(o, A[0], A[1]), coords)
 
-                            if concave:
-                                assembly.add_to_interfaces(
-                                    node, n,
-                                    itype='face_face',
-                                    isize=area,
-                                    ipoints=coords.tolist()[:-1],
-                                    iframe=Frame(origin, uvw[0], uvw[1]))
-                            else:
-                                interface = Interface(
-                                    itype='face_face',
-                                    isize=area,
-                                    ipoints=coords.tolist()[:-1],
-                                    iframe=Frame(origin, uvw[0], uvw[1]))
-                                assembly.add_interface((node, n), interface)
+                            assembly.add_to_interfaces(
+                                node, n,
+                                type='face_face',
+                                size=area,
+                                points=coords.tolist()[:-1],
+                                frame=Frame(origin, uvw[0], uvw[1]))
 
     return assembly
 

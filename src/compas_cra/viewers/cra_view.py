@@ -32,9 +32,9 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.):
     blocks = []
     supportedges = []
     blockedges = []
-    for node in assembly.nodes():
-        block = assembly.node_attribute(node, 'block')
-        if assembly.node_attribute(node, 'is_support'):
+    for node in assembly.graph.nodes():
+        block = assembly.graph.node_attribute(node, 'block')
+        if assembly.graph.node_attribute(node, 'is_support'):
             supports.append(block)
         else:
             blocks.append(block)
@@ -49,7 +49,7 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.):
 
                 if is_coplanar(ps, tol=tol):
                     continue
-            if assembly.node_attribute(node, 'is_support'):
+            if assembly.graph.node_attribute(node, 'is_support'):
                 supportedges.append(Line(*block.edge_coordinates(*edge)))
             else:
                 blockedges.append(Line(*block.edge_coordinates(*edge)))
@@ -69,19 +69,19 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.):
 def draw_interfaces(assembly, viewer):
     interfaces = []
     faces = []
-    for edge in assembly.edges():
-        interface = assembly.edge_attribute(edge, 'interface')
+    for edge in assembly.graph.edges():
+        interface = assembly.graph.edge_attribute(edge, 'interface')
         if interface is not None:
             corners = np.array(interface.points)
             faces.append(Polyline(np.vstack((corners, corners[0]))))
-            if assembly.node_attribute(edge[0], 'is_support') or \
-               assembly.node_attribute(edge[1], 'is_support'):
+            if assembly.graph.node_attribute(edge[0], 'is_support') or \
+               assembly.graph.node_attribute(edge[1], 'is_support'):
                 continue
             polygon = Polygon(interface.points)
             interfaces.append(Mesh.from_polygons([polygon]))
-        if assembly.edge_attribute(edge, 'interfaces') is None:
+        if assembly.graph.edge_attribute(edge, 'interfaces') is None:
             continue
-        for subinterface in assembly.edge_attribute(edge, 'interfaces'):
+        for subinterface in assembly.graph.edge_attribute(edge, 'interfaces'):
             corners = np.array(subinterface.points)
             faces.append(Polyline(np.vstack((corners, corners[0]))))
             polygon = Polygon(subinterface.points)
@@ -104,8 +104,8 @@ def draw_forces(assembly, viewer, scale=1.,
     fnp = []
     fnn = []
     ft = []
-    for edge in assembly.edges():
-        interface = assembly.edge_attribute(edge, 'interface')
+    for edge in assembly.graph.edges():
+        interface = assembly.graph.edge_attribute(edge, 'interface')
         if interface is None:
             break
         forces = interface.forces
@@ -169,8 +169,9 @@ def draw_forcesline(assembly, viewer, scale=1., resultant=True, nodal=False):
     fnp = []
     fnn = []
     ft = []
-    for edge in assembly.edges():
-        for interface in assembly.edge_attribute(edge, 'interfaces'):
+    # total_reaction = 0
+    for edge in assembly.graph.edges():
+        for interface in assembly.graph.edge_attribute(edge, 'interfaces'):
             forces = interface.forces
             if forces is None:
                 continue
@@ -193,6 +194,11 @@ def draw_forcesline(assembly, viewer, scale=1., resultant=True, nodal=False):
                     p2 = pt - ft_uv
                     ft.append(Line(p1, p2))
             if resultant:
+                is_tension = False
+                for force in forces:
+                    if force['c_np'] - force['c_nn'] <= -1e-5:
+                        is_tension = True
+
                 sum_n = sum(force['c_np'] - force['c_nn'] for force in forces)
                 sum_u = sum(force['c_u'] for force in forces)
                 sum_v = sum(force['c_v'] for force in forces)
@@ -205,9 +211,16 @@ def draw_forcesline(assembly, viewer, scale=1., resultant=True, nodal=False):
                 locs.append(Point(*resultant_pos))
                 # resultant
                 resultant_f = (w * sum_n + u * sum_u + v * sum_v) * 0.5 * scale
+                # print((w * sum_n + u * sum_u + v * sum_v).length * 100000, "edge: ", edge)
+
+                # if assembly.graph.node_attribute(edge[0], 'is_support') or assembly.graph.node_attribute(edge[1], 'is_support'):
+                #     print((w * sum_n + u * sum_u + v * sum_v).z)
+                    # total_reaction += abs((w * sum_n + u * sum_u + v * sum_v).z * 100000)
+
                 p1 = resultant_pos + resultant_f
                 p2 = resultant_pos - resultant_f
-                if sum_n >= 0:
+
+                if not is_tension:
                     res_np.append(Line(p1, p2))
                 else:
                     res_nn.append(Line(p1, p2))
@@ -223,6 +236,7 @@ def draw_forcesline(assembly, viewer, scale=1., resultant=True, nodal=False):
         viewer.add(Collection(fnp), linewidth=5, linecolor=(1, 0, 0))
     if len(ft) != 0:
         viewer.add(Collection(ft), linewidth=5, linecolor=(1.0, 0.5, 0.0))
+    # print("total reaction: ", total_reaction)
 
 
 def draw_forcesdirect(assembly, viewer, scale=1., resultant=True, nodal=False):
@@ -232,16 +246,16 @@ def draw_forcesdirect(assembly, viewer, scale=1., resultant=True, nodal=False):
     fnp = []
     fnn = []
     ft = []
-    for edge in assembly.edges():
+    for edge in assembly.graph.edges():
         thres = 1e-6
-        if assembly.node_attribute(edge[0], 'is_support') and \
-           not assembly.node_attribute(edge[1], 'is_support'):
+        if assembly.graph.node_attribute(edge[0], 'is_support') and \
+           not assembly.graph.node_attribute(edge[1], 'is_support'):
             flip = False
         else:
             flip = True
-        if assembly.edge_attribute(edge, 'interfaces') is None:
+        if assembly.graph.edge_attribute(edge, 'interfaces') is None:
             continue
-        for interface in assembly.edge_attribute(edge, 'interfaces'):
+        for interface in assembly.graph.edge_attribute(edge, 'interfaces'):
             forces = interface.forces
             if forces is None:
                 continue
@@ -276,6 +290,12 @@ def draw_forcesdirect(assembly, viewer, scale=1., resultant=True, nodal=False):
                                   head_width=0.07, body_width=0.02)
                     ft.append(f)
             if resultant:
+                is_tension = False
+
+                for force in forces:
+                    if force['c_np'] - force['c_nn'] <= -1e-5:
+                        is_tension = True
+
                 sum_n = sum(force['c_np'] - force['c_nn'] for force in forces)
                 sum_u = sum(force['c_u'] for force in forces)
                 sum_v = sum(force['c_v'] for force in forces)
@@ -305,7 +325,7 @@ def draw_forcesdirect(assembly, viewer, scale=1., resultant=True, nodal=False):
                 if friction:
                     viewer.add(f, facecolor=(1.0, 0.5, 0.0),
                                show_edges=False)
-                elif sum_n >= 0:
+                if not is_tension:
                     res_np.append(f)
                 else:
                     res_nn.append(f)
@@ -331,11 +351,11 @@ def draw_forcesdirect(assembly, viewer, scale=1., resultant=True, nodal=False):
 def draw_displacements(assembly, viewer, dispscale=1., tol=0.):
     blocks = []
     nodes = []
-    for node in assembly.nodes():
-        if assembly.node_attribute(node, 'is_support'):
+    for node in assembly.graph.nodes():
+        if assembly.graph.node_attribute(node, 'is_support'):
             continue
-        block = assembly.node_attribute(node, 'block')
-        displacement = assembly.node_attribute(node, 'displacement')
+        block = assembly.graph.node_attribute(node, 'block')
+        displacement = assembly.graph.node_attribute(node, 'displacement')
         if displacement is None:
             continue
         displacement = np.array(displacement) * dispscale
@@ -365,16 +385,22 @@ def draw_weights(assembly, viewer, scale=1., density=1.):
     weights = []
     blocks = []
     supports = []
-    for node in assembly.nodes():
-        block = assembly.node_attribute(node, 'block')
-        if assembly.node_attribute(node, 'is_support'):
+    # total_weights = 0
+    for node in assembly.graph.nodes():
+        block = assembly.graph.node_attribute(node, 'block')
+        if assembly.graph.node_attribute(node, 'is_support'):
             supports.append(Point(*block.center()))
             continue
         weights.append(Arrow(block.center(),
                              [0, 0, -block.volume() * density * scale],
                              head_portion=0.2, head_width=0.07,
                              body_width=0.02))
+        # print("self-weight", -block.volume() * density)
+        # total_weights += block.volume() * 2500 * 9.8
         blocks.append(Point(*block.center()))
+
+    # print("total self-weight: ", total_weights)
+
     if len(supports) != 0:
         viewer.add(Collection(supports), size=20, color=hextorgb("#ee6352"))
     if len(blocks) != 0:

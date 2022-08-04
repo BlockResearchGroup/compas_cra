@@ -25,40 +25,39 @@ class CRA_Assembly(Assembly):
     def __init__(self):
         super(CRA_Assembly, self).__init__()
         self.attributes.update({'name': 'CRA_Assembly'})
-        self.default_node_attributes.update({
+        self.graph.default_node_attributes.update({
             'block': None,
             'displacement': [0, 0, 0, 0, 0, 0]
         })
-        self.default_edge_attributes.update({
+        self.graph.default_edge_attributes.update({
             'interface': None,
             'interfaces': []
         })
 
-    def add_to_interfaces(self, u, v, itype, isize, ipoints, iframe):
+    def add_to_interfaces(self, u, v, type, size, points, frame):
         """Add interface from attributes to edge (u, v) interfaces"""
-        interface = Interface(itype=itype, isize=isize, ipoints=ipoints,
-                              iframe=iframe)
+        interface = Interface(type=type, size=size, points=points,
+                              frame=frame)
         self.add_interface_to_interfaces(u, v, interface)
 
     def add_interface_to_interfaces(self, u, v, interface):
         """Add interface to edge (u, v) interfaces"""
-        if not self.has_edge(u, v):
-            self.add_edge(u, v, interfaces=[interface])
+        if not self.graph.has_edge(u, v):
+            self.graph.add_edge(u, v, interfaces=[interface])
         else:
-            interfaces = self.edge_attribute((u, v), "interfaces")
+            interfaces = self.graph.edge_attribute((u, v), "interfaces")
             interfaces.append(interface)
-            self.edge_attribute((u, v), "interfaces", interfaces)
+            self.graph.edge_attribute((u, v), "interfaces", interfaces)
 
     def add_interfaces_from_meshes(self, meshes, u, v):
         """Add interfaces from meshes to edge (u, v) interfaces"""
         for mesh in meshes:
             for f in mesh.faces():
                 pt = mesh.face_coordinates(f)
-                interface = Interface(itype='face_face',
-                                      isize=mesh.face_area(f),
-                                      ipoints=pt,
-                                      iframe=Frame.from_points(pt[0],
-                                                               pt[1], pt[2]))
+                interface = Interface(type='face_face',
+                                      size=mesh.face_area(f),
+                                      points=pt,
+                                      frame=Frame.from_points(pt[0], pt[1], pt[2]))
                 self.add_interface_to_interfaces(u, v, interface)
 
     def set_boundary_conditions(self, keys):
@@ -68,18 +67,18 @@ class CRA_Assembly(Assembly):
 
     def set_boundary_condition(self, key):
         """Set block as boundary condition"""
-        self.node_attribute(key, "is_support", True)
+        self.graph.node_attribute(key, "is_support", True)
 
     def is_block_support(self, key):
         """Check if the block is a support"""
-        return self.node_attribute(key, "is_support")
+        return self.graph.node_attribute(key, "is_support")
 
     def rotate_assembly(self, o, axis, rad):
         """Rotate the entire assembly"""
         R = Rotation().from_axis_and_angle(axis, angle=rad, point=o)
         self.transform(R)
         for edge in self.edges():
-            for interface in self.edge_attribute(edge, "interfaces"):
+            for interface in self.graph.edge_attribute(edge, "interfaces"):
                 interface.points = [list(c) for c in
                                     Pointcloud(interface.points).transformed(
                                         R)]
@@ -89,20 +88,20 @@ class CRA_Assembly(Assembly):
         """Move block with vector"""
         from compas.geometry import Translation
 
-        self.node_attribute(key, "block").transform(
+        self.graph.node_attribute(key, "block").transform(
             Translation.from_vector(vector))
 
     def get_weight_total(self, density=1):
         """Get total assembly weight"""
         weight = 0
         for node in self.nodes():
-            block = self.node_attribute(node, 'block')
+            block = self.graph.node_attribute(node, 'block')
             weight += block.volume() * density
         return weight
 
     def get_weight_mean(self, density=1):
         """Get assembly mean weight"""
-        n = self.number_of_nodes()
+        n = self.graph.number_of_nodes()
         w = self.get_weight_total(density)
         return w / n
 

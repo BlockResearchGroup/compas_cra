@@ -31,8 +31,7 @@ if __name__ == '__main__':
 
     assembly_interfaces_numpy(assembly, amin=1e-4, tmax=1e-2)
 
-    print("blocks: ", assembly.number_of_nodes())
-    print("interfaces: ", assembly.number_of_edges())
+    print(assembly)
 
     mu = 0.7
     dispbnd = 1e-1

@@ -12,6 +12,7 @@ import time
 
 from compas_cra.equilibrium.cra_helper import make_aeq, make_afr, unit_basis
 from pyomo.core.base.matrix_constraint import MatrixConstraint
+from compas_assembly.datastructures import Assembly
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -19,14 +20,23 @@ __email__ = "kao@arch.ethz.ch"
 __all__ = ['cra_solve']
 
 
-def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
-              verbose=False, timer=False):
+def cra_solve(
+    assembly: Assembly,
+    mu: float = 0.84,
+    density: float = 1.,
+    d_bnd: float = 1e-3,
+    eps: float = 1e-4,
+    verbose: bool = False,
+    timer: bool = False
+):
     """CRA solver using Pyomo + IPOPT. """
 
-    n = assembly.number_of_nodes()
-    key_index = {key: index for index, key in enumerate(assembly.nodes())}
+    n = assembly.graph.number_of_nodes()
+    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
+    #
+    # assembly.graph.node_attribute(0, "is_support", True)
 
-    fixed = [key for key in assembly.nodes_where({'is_support': True})]
+    fixed = [key for key in assembly.graph.nodes_where({'is_support': True})]
     fixed = [key_index[key] for key in fixed]
     free = list(set(range(n)) - set(fixed))
 
@@ -37,8 +47,8 @@ def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         print("Aeq: ", aeq.shape)
 
     p = [[0, 0, 0, 0, 0, 0] for i in range(n)]
-    for node in assembly.nodes():
-        block = assembly.node_attribute(node, 'block')
+    for node in assembly.graph.nodes():
+        block = assembly.graph.node_attribute(node, 'block')
         index = key_index[node]
         p[index][2] = -block.volume() * density
 
@@ -124,6 +134,10 @@ def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         start_time = time.time()
 
     solver = pyo.SolverFactory('ipopt')
+    solver.options['tol'] = 1e-8  # same as default tolerance
+    solver.options['constr_viol_tol'] = 1e-7  # constraint tolerance
+    # https://coin-or.github.io/Ipopt/OPTIONS.html
+
     results = solver.solve(model, tee=verbose)
 
     if timer:
@@ -145,8 +159,8 @@ def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
     # =========================================================================
     # save forces to assembly
     offset = 0
-    for edge in assembly.edges():
-        interfaces = assembly.edge_attribute(edge, 'interfaces')
+    for edge in assembly.graph.edges():
+        interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
         for interface in interfaces:
             interface.forces = []
             n = len(interface.points)
@@ -159,17 +173,38 @@ def cra_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
                 })
             offset += 3 * n
 
+        # interface = assembly.graph.edge_attribute(edge, 'interface')
+        # interface.forces = []
+        # n = len(interface.points)
+        # for i in range(n):
+        #     interface.forces.append({
+        #         'c_np': model.f[offset + 3 * i + 0].value,
+        #         'c_nn': 0,
+        #         'c_u': model.f[offset + 3 * i + 1].value,
+        #         'c_v': model.f[offset + 3 * i + 2].value
+        #     })
+        # offset += 3 * n
+
     # save displacements to assembly
     q = [model.q[i].value * 1 for i in range(6 * free_num)]
+    # d = aeq.T @ q
+    # f = [model.f[i].value for i in f_index]
+    # for v in v_index:
+    #     dn = d[v * 3]
+    #     fn = f[v * 3]
+    #     print("contact_con ", (dn + eps) * fn)
+
     if verbose:
         print("q:", q)
     offset = 0
-    for node in assembly.nodes():
-        if assembly.node_attribute(node, 'is_support'):
+    for node in assembly.graph.nodes():
+        if assembly.graph.node_attribute(node, 'is_support'):
             continue
         displacement = q[offset:offset + 6]
-        assembly.node_attribute(node, 'displacement', displacement)
+        assembly.graph.node_attribute(node, 'displacement', displacement)
         offset += 6
+
+    return assembly
 
 
 if __name__ == '__main__':

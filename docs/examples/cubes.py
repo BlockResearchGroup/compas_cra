@@ -21,14 +21,13 @@ if __name__ == '__main__':
     from compas_cra.viewers import cra_view
 
     assembly = compas.json_load(
-            os.path.join(compas_cra.DATA, './cubes.json'))
+            os.path.join(compas_cra.DATA, './boxes.json'))
     assembly = assembly.copy(cls=CRA_Assembly)
     assembly.set_boundary_conditions([0])
 
     assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
 
-    print("blocks: ", assembly.number_of_nodes())
-    print("interfaces: ", assembly.number_of_edges())
+    print(assembly)
 
     cra_solve(assembly, verbose=True, timer=True)
     cra_view(assembly, resultant=False, nodal=True, grid=True,

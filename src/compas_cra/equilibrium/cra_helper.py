@@ -25,15 +25,22 @@ def make_aeq(assembly, return_vcount=True, flip=False):
 
     vcount = 0
 
-    key_index = {key: index for index, key in enumerate(assembly.nodes())}
+    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
 
-    for (u, v), attr in assembly.edges(True):
+    for (u, v), attr in assembly.graph.edges(True):
         i = key_index[u]
         j = key_index[v]
 
-        U = assembly.node_attribute(u, 'block')
-        V = assembly.node_attribute(v, 'block')
-        interfaces = assembly.edge_attribute((u, v), 'interfaces')
+        U = assembly.graph.node_attribute(u, 'block')
+        V = assembly.graph.node_attribute(v, 'block')
+        interfaces = assembly.graph.edge_attribute((u, v), 'interfaces')
+        # interfaces = [assembly.graph.edge_attribute((u, v), 'interface')]
+
+        # if len(interfaces) == 0 and assembly.graph.edge_attribute((u, v), 'interface') is None:
+        #     continue
+        # elif len(interfaces) == 0 and assembly.graph.edge_attribute((u, v), 'interface') is not None:
+        #     interfaces = [assembly.graph.edge_attribute((u, v), 'interface')]
+        #     assembly.graph.edge_attribute((u, v), 'interfaces', interfaces)
 
         for interface in interfaces:
             n = len(interface.points)
@@ -125,8 +132,17 @@ def aeq_block(interface, center, reverse):
 def unit_basis(assembly):
     """Create interface reference system as unit basis"""
     data = []
-    for edge in assembly.edges():
-        interfaces = assembly.edge_attribute(edge, 'interfaces')
+    for edge in assembly.graph.edges():
+        interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
+        #
+        # if len(interfaces) == 0 and assembly.graph.edge_attribute(edge, 'interface') is None:
+        #     continue
+        # elif len(interfaces) == 0 and assembly.graph.edge_attribute(edge, 'interface') is not None:
+        #     interfaces = [assembly.graph.edge_attribute(edge, 'interface')]
+        #     assembly.graph.edge_attribute(edge, 'interfaces', interfaces)
+
+        # interfaces = [assembly.graph.edge_attribute(edge, 'interface')]
+
         for interface in interfaces:
             u = interface.frame.xaxis
             v = interface.frame.yaxis
