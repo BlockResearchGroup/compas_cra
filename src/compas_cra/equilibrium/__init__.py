@@ -18,7 +18,7 @@ Solvers
     rbe_solve
 
 
-Helper Functions
+Equilibrium Helper Functions
 =======
 
 .. autosummary::
@@ -28,9 +28,19 @@ Helper Functions
     make_aeq
     make_afr
     unit_basis
+
+
+Pyomo Helper Functions
+=======
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
     f_bnds
     f_tilde_bnds
     f_tilde_init
+
 
 
 """

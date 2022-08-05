@@ -19,6 +19,7 @@ __email__ = "kao@arch.ethz.ch"
 
 __all__ = ['rbe_solve']
 
+
 def obj(m):
     f_sum = 0
     for i in m.fid:
@@ -40,6 +41,7 @@ def pyomo_obj(m, f_index):
         return f_sum
 
     return obj
+
 
 def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
     """RBE solver with penalty formulation using Pyomo + MOSEK. """
