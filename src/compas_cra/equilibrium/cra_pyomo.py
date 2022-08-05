@@ -11,6 +11,7 @@ import pyomo.environ as pyo
 import time
 
 from compas_cra.equilibrium.cra_helper import make_aeq, make_afr, unit_basis
+from compas_cra.equilibrium.pyomo_helper import f_bnds
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 
@@ -75,12 +76,6 @@ def cra_solve(
     d_index = f_index  # displacement indices
     q_index = [i for i in range(free_num * 6)]  # q indices
 
-    def f_bnds(m, i):
-        if i % 3 == 0:
-            return pyo.NonNegativeReals
-        else:
-            return pyo.Reals
-
     model.f = pyo.Var(f_index, initialize=1, domain=f_bnds)
     model.q = pyo.Var(q_index, initialize=0)
     model.alpha = pyo.Var(v_index, initialize=0, within=pyo.NonNegativeReals)
@@ -92,16 +87,18 @@ def cra_solve(
     forces = basis * f[:, np.newaxis]  # force x in global coordinate
     displs = basis * d[:, np.newaxis]  # displacement d in global coordinate
 
+    model.d = d
+
     def d_bnds(m, t):
         return (-d_bnd, d[t], d_bnd)
 
     def contact_con(m, t):
-        dn = d[t * 3]
+        dn = m.d[t * 3]
         fn = m.f[t * 3]
         return ((dn + eps) * fn, 0)
 
     def nonpen_con(m, t):
-        return (0, d[t * 3] + eps, None)
+        return (0, m.d[t * 3] + eps, None)
 
     def ftdt_con(m, t, xyz):
         dt = displs[t * 3 + 1] + displs[t * 3 + 2]

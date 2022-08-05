@@ -15,6 +15,7 @@ Solvers
 
     cra_solve
     cra_penalty_solve
+    rbe_solve
 
 
 Helper Functions
@@ -27,6 +28,9 @@ Helper Functions
     make_aeq
     make_afr
     unit_basis
+    f_bnds
+    f_tilde_bnds
+    f_tilde_init
 
 
 """
@@ -38,5 +42,6 @@ from .cra_helper import *  # noqa: F401 F403
 from .cra_penalty_pyomo import *   # noqa: F401 F403
 from .cra_penalty_helper import *   # noqa: F401 F403
 from .rbe_pyomo import *   # noqa: F401 F403
+from .pyomo_helper import *   # noqa: F401 F403
 
 __all__ = [name for name in dir() if not name.startswith('_')]

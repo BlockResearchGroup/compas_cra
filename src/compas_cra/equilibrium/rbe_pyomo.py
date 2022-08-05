@@ -11,6 +11,7 @@ import pyomo.environ as pyo
 import time
 
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
+from compas_cra.equilibrium.pyomo_helper import f_tilde_bnds
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 
 __author__ = "Gene Ting-Chun Kao"
@@ -18,6 +19,27 @@ __email__ = "kao@arch.ethz.ch"
 
 __all__ = ['rbe_solve']
 
+def obj(m):
+    f_sum = 0
+    for i in m.fid:
+        if i % 4 == 1:
+            f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
+        elif i % 4 == 0:
+            f_sum = f_sum + (m.f[i] * m.f[i] * 0)  # compression
+    return f_sum
+
+
+def pyomo_obj(m, f_index):
+    def obj(m):
+        f_sum = 0
+        for i in f_index:
+            if i % 4 == 1:
+                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
+            elif i % 4 == 0:
+                f_sum = f_sum + (m.f[i] * m.f[i] * 0)  # compression
+        return f_sum
+
+    return obj
 
 def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
     """RBE solver with penalty formulation using Pyomo + MOSEK. """
@@ -51,15 +73,11 @@ def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
 
     v_num = vcount  # number of vertices
     f_index = [i for i in range(v_num * 4)]  # force indices
+
+    model.fid = pyo.Set(initialize=f_index)
     # free_num = len(free)  # number
     # eq_index = [i for i in range(6 * free_num)]
     # fr_index = [i for i in range(v_num * 8)]  # friction constraint indices
-
-    def f_bnds(m, i):
-        if i % 4 == 0 or i % 4 == 1:
-            return pyo.NonNegativeReals
-        else:
-            return pyo.Reals
 
     # def f_init(m, i):
     #     if i % 4 == 1:
@@ -67,25 +85,27 @@ def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
     #     else:
     #         return 0.0
 
-    model.f = pyo.Var(f_index, initialize=0, domain=f_bnds)
-    # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
+    # model.f = pyo.Var(f_index, initialize=0, domain=f_tilde_bnds)
+    model.f = pyo.Var(model.fid, initialize=0, domain=f_tilde_bnds)
+    # model.f = pyo.Var(f_index, initialize=f_init, domain=f_tilde_bnds)
 
     f = np.array([model.f[i] for i in f_index])
 
-    def obj(m):
-        f_sum = 0
-        for i in f_index:
-            if i % 4 == 1:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
-            elif i % 4 == 0:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+0)  # compression
-        return f_sum
+    # def obj(m):
+    #     f_sum = 0
+    #     for i in f_index:
+    #         if i % 4 == 1:
+    #             f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
+    #         elif i % 4 == 0:
+    #             f_sum = f_sum + (m.f[i] * m.f[i] * 0)  # compression
+    #     return f_sum
 
     # def eq_con(m, t):
     #     return (sum(aeq_b_csr[t, i] * m.f[i] for i in f_index), -p[t][0])
     #
     # def fr_con(m, t):
     #     return (None, sum(afr_b[t, i] * m.f[i] for i in f_index), 0)
+    # obj = pyomo_obj(model, f_index)
 
     model.obj = pyo.Objective(rule=obj, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
@@ -102,7 +122,7 @@ def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
     if timer:
         start_time = time.time()
 
-    solver = pyo.SolverFactory('mosek')
+    solver = pyo.SolverFactory('ipopt')
     results = solver.solve(model, tee=verbose)
 
     if timer:
