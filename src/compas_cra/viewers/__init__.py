@@ -14,6 +14,7 @@ CRA Viewer
     :nosignatures:
 
     cra_view
+    cra_view_ex
 
 
 """
