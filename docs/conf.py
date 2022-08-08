@@ -51,6 +51,13 @@ extensions = [
 
 # autodoc options
 
+autodoc_type_aliases = {}
+
+# this does not work properly yet
+autodoc_typehints = "none"
+autodoc_typehints_format = "short"
+autodoc_typehints_description_target = "documented"
+
 autodoc_default_options = {
     "undoc-members": True,
     "show-inheritance": True,
@@ -145,7 +152,7 @@ def linkcode_resolve(domain, info):
     else:
         return None
 
-    return f"https://github.com/Block Research Group/compas_cra/blob/master/src/{filename}.py#L{lineno}"
+    return f"https://github.com/BlockResearchGroup/compas_cra/blob/main/src/{filename}.py#L{lineno}"
 
 # extlinks
 
@@ -161,9 +168,9 @@ html_theme_options = {
     "package_title"   : project,
     "package_version" : release,
     "package_author"  : "Gene Ting-Chun Kao",
-    "package_docs"    : "https://Block Research Group.github.io/compas_cra/",
-    "package_repo"    : "https://github.com/Block Research Group/compas_cra",
-    "package_old_versions_txt": "https://Block Research Group.github.io/compas_cra/doc_versions.txt"
+    "package_docs"    : "https://BlockResearchGroup.github.io/compas_cra/",
+    "package_repo"    : "https://github.com/BlockResearchGroup/compas_cra",
+    "package_old_versions_txt": "https://BlockResearchGroup.github.io/compas_cra/doc_versions.txt"
 }
 
 html_context = {}

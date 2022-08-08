@@ -1,4 +1,4 @@
-name: view2
+name: cra
 channels:
   - conda-forge
 dependencies:
@@ -9,5 +9,6 @@ dependencies:
   - textdistance
   - compas
   - compas_view2
+  - ipopt
   - pip:
     - -r requirements-dev.txt

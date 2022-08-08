@@ -32,7 +32,7 @@ setup(
     description="Coupled Rigid-Block Analysis implementation using COMPAS framework",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Block Research Group/compas_cra",
+    url="https://github.com/BlockResearchGroup/compas_cra",
     author="Gene Ting-Chun Kao",
     author_email="kao@arch.ethz.ch",
     license="MIT license",
@@ -60,7 +60,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=requirements,
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     extras_require=optional_requirements,
     entry_points={
         "console_scripts": [],

@@ -18,6 +18,6 @@ sphinx == 4.5
 twine
 wheel
 matplotlib
-compas_assembly
 pyomo
+git+https://github.com/BlockResearchGroup/compas_assembly.git@main#egg=compas_assembly
 -e .

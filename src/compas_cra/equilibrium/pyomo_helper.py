@@ -23,7 +23,7 @@ def f_tilde_bnds(model, i):
 
 
 def f_bnds(model, i):
-    """bounds of f̃, f̃ include [fn, fu, fv]"""
+    """bounds of f, f include [fn, fu, fv]"""
     if i % 3 == 0:
         return pyo.NonNegativeReals
     return pyo.Reals
