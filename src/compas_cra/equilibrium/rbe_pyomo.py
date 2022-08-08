@@ -14,7 +14,7 @@ from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
 from compas_cra.equilibrium.pyomo_helper import f_tilde_bnds
-from compas_cra.equilibrium.pyomo_helper import obj_rbe
+from compas_cra.equilibrium.pyomo_helper import objs
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -76,7 +76,8 @@ def rbe_solve(
     #
     # def fr_con(m, t):
     #     return (None, sum(afr_b[t, i] * m.f[i] for i in f_index), 0)
-    # obj = pyomo_obj(model, f_index)
+
+    obj_rbe = objs(solver='rbe')
 
     model.obj = pyo.Objective(rule=obj_rbe, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,

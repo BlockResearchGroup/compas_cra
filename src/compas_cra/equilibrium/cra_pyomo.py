@@ -14,7 +14,7 @@ from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, make_afr, unit_basis
 from compas_cra.equilibrium.pyomo_helper import f_bnds
-from compas_cra.equilibrium.pyomo_helper import obj_cra
+from compas_cra.equilibrium.pyomo_helper import objs
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -35,8 +35,6 @@ def cra_solve(
 
     n = assembly.graph.number_of_nodes()
     key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
-    #
-    # assembly.graph.node_attribute(0, "is_support", True)
 
     fixed = [key for key in assembly.graph.nodes_where({'is_support': True})]
     fixed = [key_index[key] for key in fixed]
@@ -106,6 +104,8 @@ def cra_solve(
         dt = displs[t * 3 + 1] + displs[t * 3 + 2]
         ft = forces[t * 3 + 1] + forces[t * 3 + 2]
         return (ft[xyz], -dt[xyz] * m.alpha[t])
+
+    obj_cra = objs(solver='cra')
 
     model.obj = pyo.Objective(rule=obj_cra, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeqcsr.data, aeqcsr.indices, aeqcsr.indptr,

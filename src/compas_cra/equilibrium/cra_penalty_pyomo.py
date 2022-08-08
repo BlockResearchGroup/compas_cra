@@ -15,7 +15,7 @@ from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, unit_basis
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
 from compas_cra.equilibrium.pyomo_helper import f_tilde_bnds
-from compas_cra.equilibrium.pyomo_helper import obj_cra_penalty
+from compas_cra.equilibrium.pyomo_helper import objs
 from compas_cra.equilibrium.cra_penalty_helper import unit_basis_penalty
 
 
@@ -89,27 +89,28 @@ def cra_penalty_solve(
     forces = f_basis * f[:, np.newaxis]  # force x in global coordinate
     displs = d_basis * d[:, np.newaxis]  # displacement d in global coordinate
 
-    ep = eps
+    model.d = d
 
     def bnd_d(m, t):
         return (-d_bnd, d[t], d_bnd)
 
     def contact_con(m, t):
-        dn = d[t * 3]
-        # fn = m.f[t * 4] - m.f[t * 4 + 1]
+        dn = m.d[t * 3]
         fn = m.f[t * 4]
-        return ((dn + ep) * fn, 0)
+        return ((dn + eps) * fn, 0)
 
     def fnc_con(m, t):  # fn+ and fn- cannot coexist
         return (m.f[t * 4] * m.f[t * 4 + 1], 0)
 
     def nonpen_con(m, t):
-        return (0, d[t * 3] + ep, None)
+        return (0, m.d[t * 3] + eps, None)
 
     def ftdt_con(m, t, xyz):
         dt = displs[t * 3 + 1] + displs[t * 3 + 2]
         ft = forces[t * 4 + 2] + forces[t * 4 + 3]
         return (ft[xyz], -dt[xyz] * m.alpha[t])
+
+    obj_cra_penalty = objs(solver='cra_penalty')
 
     model.obj = pyo.Objective(rule=obj_cra_penalty, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
