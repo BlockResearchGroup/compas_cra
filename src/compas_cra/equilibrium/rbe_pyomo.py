@@ -12,35 +12,13 @@ import time
 
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
 from compas_cra.equilibrium.pyomo_helper import f_tilde_bnds
+from compas_cra.equilibrium.pyomo_helper import obj_rbe
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
 
 __all__ = ['rbe_solve']
-
-
-def obj(m):
-    f_sum = 0
-    for i in m.fid:
-        if i % 4 == 1:
-            f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
-        elif i % 4 == 0:
-            f_sum = f_sum + (m.f[i] * m.f[i] * 0)  # compression
-    return f_sum
-
-
-def pyomo_obj(m, f_index):
-    def obj(m):
-        f_sum = 0
-        for i in f_index:
-            if i % 4 == 1:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
-            elif i % 4 == 0:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 0)  # compression
-        return f_sum
-
-    return obj
 
 
 def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
@@ -93,15 +71,6 @@ def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
 
     f = np.array([model.f[i] for i in f_index])
 
-    # def obj(m):
-    #     f_sum = 0
-    #     for i in f_index:
-    #         if i % 4 == 1:
-    #             f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
-    #         elif i % 4 == 0:
-    #             f_sum = f_sum + (m.f[i] * m.f[i] * 0)  # compression
-    #     return f_sum
-
     # def eq_con(m, t):
     #     return (sum(aeq_b_csr[t, i] * m.f[i] for i in f_index), -p[t][0])
     #
@@ -109,7 +78,7 @@ def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
     #     return (None, sum(afr_b[t, i] * m.f[i] for i in f_index), 0)
     # obj = pyomo_obj(model, f_index)
 
-    model.obj = pyo.Objective(rule=obj, sense=pyo.minimize)
+    model.obj = pyo.Objective(rule=obj_rbe, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
                                  -p.flatten(), -p.flatten(), f)
     model.cfr = MatrixConstraint(afr_b_csr.data, afr_b_csr.indices, afr_b_csr.indptr,

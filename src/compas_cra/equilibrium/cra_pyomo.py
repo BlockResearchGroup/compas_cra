@@ -12,6 +12,7 @@ import time
 
 from compas_cra.equilibrium.cra_helper import make_aeq, make_afr, unit_basis
 from compas_cra.equilibrium.pyomo_helper import f_bnds
+from compas_cra.equilibrium.pyomo_helper import obj_cra
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 
@@ -76,7 +77,8 @@ def cra_solve(
     d_index = f_index  # displacement indices
     q_index = [i for i in range(free_num * 6)]  # q indices
 
-    model.f = pyo.Var(f_index, initialize=1, domain=f_bnds)
+    model.fid = pyo.Set(initialize=f_index)
+    model.f = pyo.Var(model.fid, initialize=1, domain=f_bnds)
     model.q = pyo.Var(q_index, initialize=0)
     model.alpha = pyo.Var(v_index, initialize=0, within=pyo.NonNegativeReals)
 
@@ -105,15 +107,7 @@ def cra_solve(
         ft = forces[t * 3 + 1] + forces[t * 3 + 2]
         return (ft[xyz], -dt[xyz] * m.alpha[t])
 
-    def obj(m):
-        alpha_sum = pyo.dot_product(m.alpha, m.alpha)
-        f_sum = 0
-        for i in f_index:
-            if i % 3 == 0:
-                f_sum = f_sum + (m.f[i] * m.f[i])
-        return f_sum + alpha_sum
-
-    model.obj = pyo.Objective(rule=obj, sense=pyo.minimize)
+    model.obj = pyo.Objective(rule=obj_cra, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeqcsr.data, aeqcsr.indices, aeqcsr.indptr,
                                  -p.flatten(), -p.flatten(), f)
     model.cfr = MatrixConstraint(afrcsr.data, afrcsr.indices, afrcsr.indptr,

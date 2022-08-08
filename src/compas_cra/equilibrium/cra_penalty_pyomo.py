@@ -13,6 +13,7 @@ import time
 from compas_cra.equilibrium.cra_helper import make_aeq, unit_basis
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
 from compas_cra.equilibrium.pyomo_helper import f_tilde_bnds
+from compas_cra.equilibrium.pyomo_helper import obj_cra_penalty
 from compas_cra.equilibrium.cra_penalty_helper import unit_basis_penalty
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 
@@ -74,7 +75,8 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
             return 1.0
 
     # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
-    model.f = pyo.Var(f_index, initialize=0, domain=f_tilde_bnds)
+    model.fid = pyo.Set(initialize=f_index)
+    model.f = pyo.Var(model.fid, initialize=0, domain=f_tilde_bnds)
     model.q = pyo.Var(q_index, initialize=0)
     model.alpha = pyo.Var(v_index, initialize=0, within=pyo.NonNegativeReals)
 
@@ -107,17 +109,7 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
         ft = forces[t * 4 + 2] + forces[t * 4 + 3]
         return (ft[xyz], -dt[xyz] * m.alpha[t])
 
-    def obj(m):
-        alpha_sum = pyo.dot_product(m.alpha, m.alpha) * 1e+0  # alpha
-        f_sum = 0
-        for i in f_index:
-            if i % 4 == 1:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
-            elif i % 4 == 0:
-                f_sum = f_sum + (m.f[i] * m.f[i] * 1e+0)  # compression
-        return alpha_sum + f_sum
-
-    model.obj = pyo.Objective(rule=obj, sense=pyo.minimize)
+    model.obj = pyo.Objective(rule=obj_cra_penalty, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
                                  -p.flatten(), -p.flatten(), f)
     model.cfr = MatrixConstraint(afr_b_csr.data, afr_b_csr.indices, afr_b_csr.indptr,

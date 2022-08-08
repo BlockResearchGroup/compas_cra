@@ -34,3 +34,33 @@ def f_tilde_init(model, i):
     if i % 4 == 1:
         return 0.0
     return 1.0
+
+
+def obj_rbe(m):
+    f_sum = 0
+    for i in m.fid:
+        if i % 4 == 1:
+            f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
+        elif i % 4 == 0:
+            f_sum = f_sum + (m.f[i] * m.f[i] * 0)  # compression
+    return f_sum
+
+
+def obj_cra(m):
+    alpha_sum = pyo.dot_product(m.alpha, m.alpha)
+    f_sum = 0
+    for i in m.fid:
+        if i % 3 == 0:
+            f_sum = f_sum + (m.f[i] * m.f[i])
+    return f_sum + alpha_sum
+
+
+def obj_cra_penalty(m):
+    alpha_sum = pyo.dot_product(m.alpha, m.alpha) * 1e+0  # alpha
+    f_sum = 0
+    for i in m.fid:
+        if i % 4 == 1:
+            f_sum = f_sum + (m.f[i] * m.f[i] * 1e+6)  # tension
+        elif i % 4 == 0:
+            f_sum = f_sum + (m.f[i] * m.f[i] * 0)  # compression
+    return alpha_sum + f_sum

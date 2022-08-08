@@ -415,7 +415,7 @@ def cra_view(assembly, scale=1., density=1., dispscale=1., tol=1e-5,
              blocks=True, interfaces=True, forces=True,
              forcesdirect=True, forcesline=False,
              weights=True, displacements=True):
-    """CRA Viewer"""
+    """CRA Viewer, creating new viewer"""
 
     viewer = app.App(width=1600, height=1000,
                      viewmode='shaded', show_grid=grid)
@@ -443,7 +443,7 @@ def cra_view_ex(viewer, assembly, scale=1., density=1., dispscale=1., tol=1e-5,
                 blocks=True, interfaces=True, forces=True,
                 forcesdirect=True, forcesline=False,
                 weights=True, displacements=True):
-    """CRA Viewer"""
+    """CRA Viewer using existing view"""
 
     if blocks:
         draw_blocks(assembly, viewer, edge, tol)
