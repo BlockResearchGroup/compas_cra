@@ -35,19 +35,19 @@
   <header id="header" class="compas-header d-flex align-items-center">
     <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
       <!-- brand -->
-      <a class="navbar-brand" href="https://Block Research Group.github.io/compas_cra/">
+      <a class="navbar-brand" href="https://BlockResearchGroup.github.io/compas_cra/">
         <img src="_static/images/compas_icon_white.png" alt="COMPAS CRA" width="48px" height="48px" />
       </a>
       <!-- brand -->
       <!-- primary -->
       <ul class="navbar-nav">
-        <li class="nav-item active"><a class="nav-link" href="https://Block Research Group.github.io/compas_cra/">COMPAS CRA</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://BlockResearchGroup.github.io/compas_cra/">COMPAS CRA</a></li>
       </ul>
       <!-- primary -->
       <ul class="navbar-nav d-none d-md-flex ml-md-auto">
         <!-- version -->
         
-        <meta id="doc_versions" data-url="https://Block Research Group.github.io/compas_cra/doc_versions.txt" data-docs="https://Block Research Group.github.io/compas_cra/">
+        <meta id="doc_versions" data-url="https://BlockResearchGroup.github.io/compas_cra/doc_versions.txt" data-docs="https://BlockResearchGroup.github.io/compas_cra/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             0.1.0
@@ -58,7 +58,7 @@
         <!-- version -->
         <!-- social -->
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/Block Research Group/compas_cra" target="_blank">
+          <a class="nav-link" href="https://github.com/BlockResearchGroup/compas_cra" target="_blank">
             <span class="fab fa-github fa-1x"></span>
           </a>
         </li>
@@ -93,28 +93,34 @@
 <h1>Installation</h1>
 <section id="install-with-conda">
 <h2>Install with conda</h2>
-<p>Create a new conda environment</p>
-<div class="language-bash: notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda config --add channels conda-forge
-conda create -n cra
-conda activate cra
+<p>Set up conda channels</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda config --add channels conda-forge
 </code></pre></div>
 </div>
-<p>Clone compas_cra:</p>
+<p>Clone <cite>compas_cra</cite>:</p>
 <div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>git clone git@github.com:BlockResearchGroup/compas_cra.git
 <span class="nb">cd</span> compas_cra
 </code></pre></div>
 </div>
-<p>Install compas_cra with all dependencies:</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip install -r requirements-dev.txt
+<p>Install compas_cra with all dependencies in a new conda environment:</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda env create -f env_osx.yml  <span class="c1"># (Mac)</span>
+conda env create -f env_win.yml  <span class="c1"># (Windows)</span>
+conda env create -f env_linux.yml  <span class="c1"># (Linux)</span>
+
+conda activate cra
 </code></pre></div>
 </div>
-<p>Install ipopt solvers for pyomo:</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda install -c conda-forge ipopt
+<p>Update conda packages</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda env update cra --file env_osx.yml --prune  <span class="c1"># (Mac)</span>
+conda env update cra --file env_win.yml --prune  <span class="c1"># (Windows)</span>
+conda env update cra --file env_linux.yml --prune  <span class="c1"># (Linux)</span>
 </code></pre></div>
 </div>
-<p>Known issue (Windows)</p>
-<p>pyomo cannot find ipopt location: <code class="docutils literal notranslate"><span class="pre">pyomo.common.errors.ApplicationError:</span> <span class="pre">No</span> <span class="pre">executable</span> <span class="pre">found</span> <span class="pre">for</span> <span class="pre">solver</span> <span class="pre">'ipopt'</span></code>.
-Please refer this thread for solution: <a class="reference external" href="https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1">https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1</a></p>
+<p>Known issues (Windows)</p>
+<ul class="simple">
+<li><p>pyomo cannot find ipopt location: <code class="docutils literal notranslate"><span class="pre">pyomo.common.errors.ApplicationError:</span> <span class="pre">No</span> <span class="pre">executable</span> <span class="pre">found</span> <span class="pre">for</span> <span class="pre">solver</span> <span class="pre">'ipopt'</span></code>. Please refer this thread for solution: <a class="reference external" href="https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1">https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1</a></p></li>
+<li><p><cite>compas_cra</cite> uses IPOPT solver, so it might not work for PC with AMD processor.</p></li>
+</ul>
 </section>
 </section>
 

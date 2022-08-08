@@ -35,19 +35,19 @@
   <header id="header" class="compas-header d-flex align-items-center">
     <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
       <!-- brand -->
-      <a class="navbar-brand" href="https://Block Research Group.github.io/compas_cra/">
+      <a class="navbar-brand" href="https://BlockResearchGroup.github.io/compas_cra/">
         <img src="../../_static/images/compas_icon_white.png" alt="COMPAS CRA" width="48px" height="48px" />
       </a>
       <!-- brand -->
       <!-- primary -->
       <ul class="navbar-nav">
-        <li class="nav-item active"><a class="nav-link" href="https://Block Research Group.github.io/compas_cra/">COMPAS CRA</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://BlockResearchGroup.github.io/compas_cra/">COMPAS CRA</a></li>
       </ul>
       <!-- primary -->
       <ul class="navbar-nav d-none d-md-flex ml-md-auto">
         <!-- version -->
         
-        <meta id="doc_versions" data-url="https://Block Research Group.github.io/compas_cra/doc_versions.txt" data-docs="https://Block Research Group.github.io/compas_cra/">
+        <meta id="doc_versions" data-url="https://BlockResearchGroup.github.io/compas_cra/doc_versions.txt" data-docs="https://BlockResearchGroup.github.io/compas_cra/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             0.1.0
@@ -58,7 +58,7 @@
         <!-- version -->
         <!-- social -->
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/Block Research Group/compas_cra" target="_blank">
+          <a class="nav-link" href="https://github.com/BlockResearchGroup/compas_cra" target="_blank">
             <span class="fab fa-github fa-1x"></span>
           </a>
         </li>
@@ -99,8 +99,8 @@
 <h1>CRA_Assembly</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_cra.datastructures.CRA_Assembly">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_cra.datastructures.</span></span><span class="sig-name descname"><span class="pre">CRA_Assembly</span></span><a class="reference external" href="https://github.com/Block Research Group/compas_cra/blob/master/src/compas_cra/datastructures/cra_assembly.py#L20"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">compas_assembly.datastructures.assembly.Assembly</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_cra.datastructures.</span></span><span class="sig-name descname"><span class="pre">CRA_Assembly</span></span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/datastructures/cra_assembly.py#L20"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Assembly</span></code></p>
 <p>Extended data structure for concave assemblies.</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
@@ -154,323 +154,77 @@
 <tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_block.html#compas_cra.datastructures.CRA_Assembly.add_block" title="compas_cra.datastructures.CRA_Assembly.add_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_block</span></code></a></p></td>
 <td><p>Add a block to the assembly.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_blocks_from_polysurfaces.html#compas_cra.datastructures.CRA_Assembly.add_blocks_from_polysurfaces" title="compas_cra.datastructures.CRA_Assembly.add_blocks_from_polysurfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_blocks_from_polysurfaces</span></code></a></p></td>
-<td><p>Add multiple blocks from their representation as Rhino poly surfaces.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_block_block_interfaces.html#compas_cra.datastructures.CRA_Assembly.add_block_block_interfaces" title="compas_cra.datastructures.CRA_Assembly.add_block_block_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_block_block_interfaces</span></code></a></p></td>
+<td><p>Add an interface between two blocks.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_blocks_from_rhinomeshes.html#compas_cra.datastructures.CRA_Assembly.add_blocks_from_rhinomeshes" title="compas_cra.datastructures.CRA_Assembly.add_blocks_from_rhinomeshes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_blocks_from_rhinomeshes</span></code></a></p></td>
-<td><p>Add multiple blocks from their representation as as Rhino meshes.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.block_node.html#compas_cra.datastructures.CRA_Assembly.block_node" title="compas_cra.datastructures.CRA_Assembly.block_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_node</span></code></a></p></td>
+<td><p>Retrieve the graph node corresponding to a block.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_edge.html#compas_cra.datastructures.CRA_Assembly.add_edge" title="compas_cra.datastructures.CRA_Assembly.add_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_edge</span></code></a></p></td>
-<td><p>Add an edge and specify its attributes.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.blocks.html#compas_cra.datastructures.CRA_Assembly.blocks" title="compas_cra.datastructures.CRA_Assembly.blocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">blocks</span></code></a></p></td>
+<td><p>Iterate over the blocks of the assembly.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_interface.html#compas_cra.datastructures.CRA_Assembly.add_interface" title="compas_cra.datastructures.CRA_Assembly.add_interface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_interface</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_node.html#compas_cra.datastructures.CRA_Assembly.add_node" title="compas_cra.datastructures.CRA_Assembly.add_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_node</span></code></a></p></td>
-<td><p>Add a node and specify its attributes (optional).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.adjacency_matrix.html#compas_cra.datastructures.CRA_Assembly.adjacency_matrix" title="compas_cra.datastructures.CRA_Assembly.adjacency_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adjacency_matrix</span></code></a></p></td>
-<td><p>Creates a node adjacency matrix from a Network datastructure.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.clear.html#compas_cra.datastructures.CRA_Assembly.clear" title="compas_cra.datastructures.CRA_Assembly.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a></p></td>
-<td><p>Clear all the network data.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.complement.html#compas_cra.datastructures.CRA_Assembly.complement" title="compas_cra.datastructures.CRA_Assembly.complement"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complement</span></code></a></p></td>
-<td><p>Generate the complement network of a network.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.connected_edges.html#compas_cra.datastructures.CRA_Assembly.connected_edges" title="compas_cra.datastructures.CRA_Assembly.connected_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_edges</span></code></a></p></td>
-<td><p>Return the edges connected to a node.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.connectivity_matrix.html#compas_cra.datastructures.CRA_Assembly.connectivity_matrix" title="compas_cra.datastructures.CRA_Assembly.connectivity_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connectivity_matrix</span></code></a></p></td>
-<td><p>Creates a connectivity matrix from a Network datastructure.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.copy.html#compas_cra.datastructures.CRA_Assembly.copy" title="compas_cra.datastructures.CRA_Assembly.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.copy.html#compas_cra.datastructures.CRA_Assembly.copy" title="compas_cra.datastructures.CRA_Assembly.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
 <td><p>Make an independent copy of the data object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.count_crossings.html#compas_cra.datastructures.CRA_Assembly.count_crossings" title="compas_cra.datastructures.CRA_Assembly.count_crossings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count_crossings</span></code></a></p></td>
-<td><p>Count the number of crossings (pairs of crossing edges) in the network.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_blocks.html#compas_cra.datastructures.CRA_Assembly.edge_blocks" title="compas_cra.datastructures.CRA_Assembly.edge_blocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_blocks</span></code></a></p></td>
+<td><p>Retrieve the two blocks corresponding to a graph edge.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.degree.html#compas_cra.datastructures.CRA_Assembly.degree" title="compas_cra.datastructures.CRA_Assembly.degree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree</span></code></a></p></td>
-<td><p>Return the number of neighbors of a node.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_interfaces.html#compas_cra.datastructures.CRA_Assembly.edge_interfaces" title="compas_cra.datastructures.CRA_Assembly.edge_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_interfaces</span></code></a></p></td>
+<td><p>Retrieve the interface corresponding to a graph edge.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.degree_in.html#compas_cra.datastructures.CRA_Assembly.degree_in" title="compas_cra.datastructures.CRA_Assembly.degree_in"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_in</span></code></a></p></td>
-<td><p>Return the numer of incoming neighbors of a node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.degree_matrix.html#compas_cra.datastructures.CRA_Assembly.degree_matrix" title="compas_cra.datastructures.CRA_Assembly.degree_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_matrix</span></code></a></p></td>
-<td><p>Creates a node degree matrix from a Network datastructure.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.degree_out.html#compas_cra.datastructures.CRA_Assembly.degree_out" title="compas_cra.datastructures.CRA_Assembly.degree_out"><code class="xref py py-obj docutils literal notranslate"><span class="pre">degree_out</span></code></a></p></td>
-<td><p>Return the number of outgoing neighbors of a node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.delete_edge.html#compas_cra.datastructures.CRA_Assembly.delete_edge" title="compas_cra.datastructures.CRA_Assembly.delete_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_edge</span></code></a></p></td>
-<td><p>Delete an edge from the network.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.delete_node.html#compas_cra.datastructures.CRA_Assembly.delete_node" title="compas_cra.datastructures.CRA_Assembly.delete_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_node</span></code></a></p></td>
-<td><p>Delete a node from the graph.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_attribute.html#compas_cra.datastructures.CRA_Assembly.edge_attribute" title="compas_cra.datastructures.CRA_Assembly.edge_attribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_attribute</span></code></a></p></td>
-<td><p>Get or set an attribute of an edge.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_attributes.html#compas_cra.datastructures.CRA_Assembly.edge_attributes" title="compas_cra.datastructures.CRA_Assembly.edge_attributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_attributes</span></code></a></p></td>
-<td><p>Get or set multiple attributes of an edge.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_coordinates.html#compas_cra.datastructures.CRA_Assembly.edge_coordinates" title="compas_cra.datastructures.CRA_Assembly.edge_coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_coordinates</span></code></a></p></td>
-<td><p>Return the coordinates of the start and end point of an edge.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_direction.html#compas_cra.datastructures.CRA_Assembly.edge_direction" title="compas_cra.datastructures.CRA_Assembly.edge_direction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_direction</span></code></a></p></td>
-<td><p>Return the direction vector of an edge.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_length.html#compas_cra.datastructures.CRA_Assembly.edge_length" title="compas_cra.datastructures.CRA_Assembly.edge_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_length</span></code></a></p></td>
-<td><p>Return the length of an edge.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_midpoint.html#compas_cra.datastructures.CRA_Assembly.edge_midpoint" title="compas_cra.datastructures.CRA_Assembly.edge_midpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_midpoint</span></code></a></p></td>
-<td><p>Return the location of the midpoint of an edge.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_point.html#compas_cra.datastructures.CRA_Assembly.edge_point" title="compas_cra.datastructures.CRA_Assembly.edge_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_point</span></code></a></p></td>
-<td><p>Return the location of a point along an edge.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_sample.html#compas_cra.datastructures.CRA_Assembly.edge_sample" title="compas_cra.datastructures.CRA_Assembly.edge_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_sample</span></code></a></p></td>
-<td><p>Get the identifiers of a set of random edges.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_vector.html#compas_cra.datastructures.CRA_Assembly.edge_vector" title="compas_cra.datastructures.CRA_Assembly.edge_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_vector</span></code></a></p></td>
-<td><p>Return the vector of an edge.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_line.html#compas_cra.datastructures.CRA_Assembly.edge_line" title="compas_cra.datastructures.CRA_Assembly.edge_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_line</span></code></a></p></td>
+<td><p>Retrieve the line segment between the nodes of the edge.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edges.html#compas_cra.datastructures.CRA_Assembly.edges" title="compas_cra.datastructures.CRA_Assembly.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a></p></td>
-<td><p>Iterate over the edges of the network.</p></td>
+<td><p>Iterate over the edges of the graph of the assembly.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edges_attribute.html#compas_cra.datastructures.CRA_Assembly.edges_attribute" title="compas_cra.datastructures.CRA_Assembly.edges_attribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges_attribute</span></code></a></p></td>
-<td><p>Get or set an attribute of multiple edges.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edges_attributes.html#compas_cra.datastructures.CRA_Assembly.edges_attributes" title="compas_cra.datastructures.CRA_Assembly.edges_attributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges_attributes</span></code></a></p></td>
-<td><p>Get or set multiple attributes of multiple edges.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edges_where.html#compas_cra.datastructures.CRA_Assembly.edges_where" title="compas_cra.datastructures.CRA_Assembly.edges_where"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges_where</span></code></a></p></td>
-<td><p>Get edges for which a certain condition or set of conditions is true.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edges_where_predicate.html#compas_cra.datastructures.CRA_Assembly.edges_where_predicate" title="compas_cra.datastructures.CRA_Assembly.edges_where_predicate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges_where_predicate</span></code></a></p></td>
-<td><p>Get edges for which a certain condition or set of conditions is true using a lambda function.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.embed_in_plane.html#compas_cra.datastructures.CRA_Assembly.embed_in_plane" title="compas_cra.datastructures.CRA_Assembly.embed_in_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">embed_in_plane</span></code></a></p></td>
-<td><p>Embed the network in the plane.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.find_crossings.html#compas_cra.datastructures.CRA_Assembly.find_crossings" title="compas_cra.datastructures.CRA_Assembly.find_crossings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_crossings</span></code></a></p></td>
-<td><p>Identify all pairs of crossing edges in a network.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.find_cycles.html#compas_cra.datastructures.CRA_Assembly.find_cycles" title="compas_cra.datastructures.CRA_Assembly.find_cycles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_cycles</span></code></a></p></td>
-<td><p>Find the faces of a network.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_data.html#compas_cra.datastructures.CRA_Assembly.from_data" title="compas_cra.datastructures.CRA_Assembly.from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_data</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_data.html#compas_cra.datastructures.CRA_Assembly.from_data" title="compas_cra.datastructures.CRA_Assembly.from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_data</span></code></a></p></td>
 <td><p>Construct an object of this type from the provided data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_edges.html#compas_cra.datastructures.CRA_Assembly.from_edges" title="compas_cra.datastructures.CRA_Assembly.from_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_edges</span></code></a></p></td>
-<td><p>Create a new graph instance from information about the edges.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_geometry.html#compas_cra.datastructures.CRA_Assembly.from_geometry" title="compas_cra.datastructures.CRA_Assembly.from_geometry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_geometry</span></code></a></p></td>
-<td><p>Construct an assembly of blocks from a particular type of assembly geometry.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_json.html#compas_cra.datastructures.CRA_Assembly.from_json" title="compas_cra.datastructures.CRA_Assembly.from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_json</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_json.html#compas_cra.datastructures.CRA_Assembly.from_json" title="compas_cra.datastructures.CRA_Assembly.from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_json</span></code></a></p></td>
 <td><p>Construct an object from serialized data contained in a JSON file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_jsonstring.html#compas_cra.datastructures.CRA_Assembly.from_jsonstring" title="compas_cra.datastructures.CRA_Assembly.from_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_jsonstring</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_jsonstring.html#compas_cra.datastructures.CRA_Assembly.from_jsonstring" title="compas_cra.datastructures.CRA_Assembly.from_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_jsonstring</span></code></a></p></td>
 <td><p>Construct an object from serialized data contained in a JSON string.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_lines.html#compas_cra.datastructures.CRA_Assembly.from_lines" title="compas_cra.datastructures.CRA_Assembly.from_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_lines</span></code></a></p></td>
-<td><p>Construct a network from a set of lines represented by their start and end point coordinates.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_polysurfaces.html#compas_cra.datastructures.CRA_Assembly.from_polysurfaces" title="compas_cra.datastructures.CRA_Assembly.from_polysurfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_polysurfaces</span></code></a></p></td>
+<td><p>Construct an assembly from Rhino polysurfaces.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_networkx.html#compas_cra.datastructures.CRA_Assembly.from_networkx" title="compas_cra.datastructures.CRA_Assembly.from_networkx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_networkx</span></code></a></p></td>
-<td><p>Create a new graph instance from a NetworkX DiGraph instance.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_rhinomeshes.html#compas_cra.datastructures.CRA_Assembly.from_rhinomeshes" title="compas_cra.datastructures.CRA_Assembly.from_rhinomeshes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_rhinomeshes</span></code></a></p></td>
+<td><p>Construct an assembly from Rhino meshes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_nodes_and_edges.html#compas_cra.datastructures.CRA_Assembly.from_nodes_and_edges" title="compas_cra.datastructures.CRA_Assembly.from_nodes_and_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_nodes_and_edges</span></code></a></p></td>
-<td><p>Construct a network from nodes and edges.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_template.html#compas_cra.datastructures.CRA_Assembly.from_template" title="compas_cra.datastructures.CRA_Assembly.from_template"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_template</span></code></a></p></td>
+<td><p>Construct an assembly from a parameteric template.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_obj.html#compas_cra.datastructures.CRA_Assembly.from_obj" title="compas_cra.datastructures.CRA_Assembly.from_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_obj</span></code></a></p></td>
-<td><p>Construct a network from the data contained in an OBJ file.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.has_block.html#compas_cra.datastructures.CRA_Assembly.has_block" title="compas_cra.datastructures.CRA_Assembly.has_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_block</span></code></a></p></td>
+<td><p>Verify that the assembly contains a given block.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_pointcloud.html#compas_cra.datastructures.CRA_Assembly.from_pointcloud" title="compas_cra.datastructures.CRA_Assembly.from_pointcloud"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_pointcloud</span></code></a></p></td>
-<td><p>Construct a network from random connections between the points of a pointcloud.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.has_interface.html#compas_cra.datastructures.CRA_Assembly.has_interface" title="compas_cra.datastructures.CRA_Assembly.has_interface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_interface</span></code></a></p></td>
+<td><p>Verify that the assembly contains a given interface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.get_any_edge.html#compas_cra.datastructures.CRA_Assembly.get_any_edge" title="compas_cra.datastructures.CRA_Assembly.get_any_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_any_edge</span></code></a></p></td>
-<td><p>Get the identifier of a random edge.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.interfaces.html#compas_cra.datastructures.CRA_Assembly.interfaces" title="compas_cra.datastructures.CRA_Assembly.interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interfaces</span></code></a></p></td>
+<td><p>Yield the interfaces of the assembly.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.get_any_edges.html#compas_cra.datastructures.CRA_Assembly.get_any_edges" title="compas_cra.datastructures.CRA_Assembly.get_any_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_any_edges</span></code></a></p></td>
-<td><p>Get the identifiers of a set of random edges.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_block.html#compas_cra.datastructures.CRA_Assembly.node_block" title="compas_cra.datastructures.CRA_Assembly.node_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_block</span></code></a></p></td>
+<td><p>Retrieve the block corresponding to a graph node.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.get_any_node.html#compas_cra.datastructures.CRA_Assembly.get_any_node" title="compas_cra.datastructures.CRA_Assembly.get_any_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_any_node</span></code></a></p></td>
-<td><p>Get the identifier of a random node.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_point.html#compas_cra.datastructures.CRA_Assembly.node_point" title="compas_cra.datastructures.CRA_Assembly.node_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_point</span></code></a></p></td>
+<td><p>Retrieve a point representing the location of the node.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.get_any_nodes.html#compas_cra.datastructures.CRA_Assembly.get_any_nodes" title="compas_cra.datastructures.CRA_Assembly.get_any_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_any_nodes</span></code></a></p></td>
-<td><p>Get a list of identifiers of a random set of n nodes.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.gkey_key.html#compas_cra.datastructures.CRA_Assembly.gkey_key" title="compas_cra.datastructures.CRA_Assembly.gkey_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gkey_key</span></code></a></p></td>
-<td><p>Returns a dictionary that maps <em>geometric keys</em> of a certain precision to the keys of the corresponding nodes.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.gkey_node.html#compas_cra.datastructures.CRA_Assembly.gkey_node" title="compas_cra.datastructures.CRA_Assembly.gkey_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gkey_node</span></code></a></p></td>
-<td><p>Returns a dictionary that maps <em>geometric keys</em> of a certain precision to the keys of the corresponding nodes.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.has_edge.html#compas_cra.datastructures.CRA_Assembly.has_edge" title="compas_cra.datastructures.CRA_Assembly.has_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_edge</span></code></a></p></td>
-<td><p>Verify if the network contains a specific edge.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.has_node.html#compas_cra.datastructures.CRA_Assembly.has_node" title="compas_cra.datastructures.CRA_Assembly.has_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_node</span></code></a></p></td>
-<td><p>Verify if a specific node is present in the network.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.index_key.html#compas_cra.datastructures.CRA_Assembly.index_key" title="compas_cra.datastructures.CRA_Assembly.index_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index_key</span></code></a></p></td>
-<td><p>Returns a dictionary that maps the indices of a node list to keys in a node dictionary.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.index_uv.html#compas_cra.datastructures.CRA_Assembly.index_uv" title="compas_cra.datastructures.CRA_Assembly.index_uv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">index_uv</span></code></a></p></td>
-<td><p>Returns a dictionary that maps edges in a list to the corresponding vertex key pairs.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.is_connected.html#compas_cra.datastructures.CRA_Assembly.is_connected" title="compas_cra.datastructures.CRA_Assembly.is_connected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_connected</span></code></a></p></td>
-<td><p>Verify that the network is connected.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.is_crossed.html#compas_cra.datastructures.CRA_Assembly.is_crossed" title="compas_cra.datastructures.CRA_Assembly.is_crossed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_crossed</span></code></a></p></td>
-<td><p>Verify if a network has crossing edges.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.is_leaf.html#compas_cra.datastructures.CRA_Assembly.is_leaf" title="compas_cra.datastructures.CRA_Assembly.is_leaf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_leaf</span></code></a></p></td>
-<td><p>Verify if a node is a leaf.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.is_node_connected.html#compas_cra.datastructures.CRA_Assembly.is_node_connected" title="compas_cra.datastructures.CRA_Assembly.is_node_connected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_node_connected</span></code></a></p></td>
-<td><p>Verify if a specific node is connected.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.is_planar.html#compas_cra.datastructures.CRA_Assembly.is_planar" title="compas_cra.datastructures.CRA_Assembly.is_planar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_planar</span></code></a></p></td>
-<td><p>Check if the network is planar.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.is_planar_embedding.html#compas_cra.datastructures.CRA_Assembly.is_planar_embedding" title="compas_cra.datastructures.CRA_Assembly.is_planar_embedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_planar_embedding</span></code></a></p></td>
-<td><p>Verify that a network is embedded in the plane without crossing edges.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.is_xy.html#compas_cra.datastructures.CRA_Assembly.is_xy" title="compas_cra.datastructures.CRA_Assembly.is_xy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_xy</span></code></a></p></td>
-<td><p>Verify that a network lies in the XY plane.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.key_gkey.html#compas_cra.datastructures.CRA_Assembly.key_gkey" title="compas_cra.datastructures.CRA_Assembly.key_gkey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">key_gkey</span></code></a></p></td>
-<td><p>Returns a dictionary that maps node dictionary keys to the corresponding <em>geometric key</em> up to a certain precision.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.key_index.html#compas_cra.datastructures.CRA_Assembly.key_index" title="compas_cra.datastructures.CRA_Assembly.key_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">key_index</span></code></a></p></td>
-<td><p>Returns a dictionary that maps node identifiers to their corresponding index in a node list or array.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.laplacian_matrix.html#compas_cra.datastructures.CRA_Assembly.laplacian_matrix" title="compas_cra.datastructures.CRA_Assembly.laplacian_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">laplacian_matrix</span></code></a></p></td>
-<td><p>Construct a Laplacian matrix from a Network datastructure.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.leaves.html#compas_cra.datastructures.CRA_Assembly.leaves" title="compas_cra.datastructures.CRA_Assembly.leaves"><code class="xref py py-obj docutils literal notranslate"><span class="pre">leaves</span></code></a></p></td>
-<td><p>Return all leaves of the network.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.neighborhood.html#compas_cra.datastructures.CRA_Assembly.neighborhood" title="compas_cra.datastructures.CRA_Assembly.neighborhood"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighborhood</span></code></a></p></td>
-<td><p>Return the nodes in the neighborhood of a node.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.neighbors.html#compas_cra.datastructures.CRA_Assembly.neighbors" title="compas_cra.datastructures.CRA_Assembly.neighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighbors</span></code></a></p></td>
-<td><p>Return the neighbors of a node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.neighbors_in.html#compas_cra.datastructures.CRA_Assembly.neighbors_in" title="compas_cra.datastructures.CRA_Assembly.neighbors_in"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighbors_in</span></code></a></p></td>
-<td><p>Return the incoming neighbors of a node.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.neighbors_out.html#compas_cra.datastructures.CRA_Assembly.neighbors_out" title="compas_cra.datastructures.CRA_Assembly.neighbors_out"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighbors_out</span></code></a></p></td>
-<td><p>Return the outgoing neighbors of a node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.network_adjacency_matrix.html#compas_cra.datastructures.CRA_Assembly.network_adjacency_matrix" title="compas_cra.datastructures.CRA_Assembly.network_adjacency_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">network_adjacency_matrix</span></code></a></p></td>
-<td><p>Creates a node adjacency matrix from a Network datastructure.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.network_connectivity_matrix.html#compas_cra.datastructures.CRA_Assembly.network_connectivity_matrix" title="compas_cra.datastructures.CRA_Assembly.network_connectivity_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">network_connectivity_matrix</span></code></a></p></td>
-<td><p>Creates a connectivity matrix from a Network datastructure.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.network_degree_matrix.html#compas_cra.datastructures.CRA_Assembly.network_degree_matrix" title="compas_cra.datastructures.CRA_Assembly.network_degree_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">network_degree_matrix</span></code></a></p></td>
-<td><p>Creates a node degree matrix from a Network datastructure.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.network_embed_in_plane.html#compas_cra.datastructures.CRA_Assembly.network_embed_in_plane" title="compas_cra.datastructures.CRA_Assembly.network_embed_in_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">network_embed_in_plane</span></code></a></p></td>
-<td><p>Embed the network in the plane.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.network_is_planar.html#compas_cra.datastructures.CRA_Assembly.network_is_planar" title="compas_cra.datastructures.CRA_Assembly.network_is_planar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">network_is_planar</span></code></a></p></td>
-<td><p>Check if the network is planar.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.network_is_planar_embedding.html#compas_cra.datastructures.CRA_Assembly.network_is_planar_embedding" title="compas_cra.datastructures.CRA_Assembly.network_is_planar_embedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">network_is_planar_embedding</span></code></a></p></td>
-<td><p>Verify that a network is embedded in the plane without crossing edges.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.network_laplacian_matrix.html#compas_cra.datastructures.CRA_Assembly.network_laplacian_matrix" title="compas_cra.datastructures.CRA_Assembly.network_laplacian_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">network_laplacian_matrix</span></code></a></p></td>
-<td><p>Construct a Laplacian matrix from a Network datastructure.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_attribute.html#compas_cra.datastructures.CRA_Assembly.node_attribute" title="compas_cra.datastructures.CRA_Assembly.node_attribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_attribute</span></code></a></p></td>
-<td><p>Get or set an attribute of a node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_attributes.html#compas_cra.datastructures.CRA_Assembly.node_attributes" title="compas_cra.datastructures.CRA_Assembly.node_attributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_attributes</span></code></a></p></td>
-<td><p>Get or set multiple attributes of a node.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_coordinates.html#compas_cra.datastructures.CRA_Assembly.node_coordinates" title="compas_cra.datastructures.CRA_Assembly.node_coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_coordinates</span></code></a></p></td>
-<td><p>Return the coordinates of a node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_gkey.html#compas_cra.datastructures.CRA_Assembly.node_gkey" title="compas_cra.datastructures.CRA_Assembly.node_gkey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_gkey</span></code></a></p></td>
-<td><p>Returns a dictionary that maps node dictionary keys to the corresponding <em>geometric key</em> up to a certain precision.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_laplacian.html#compas_cra.datastructures.CRA_Assembly.node_laplacian" title="compas_cra.datastructures.CRA_Assembly.node_laplacian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_laplacian</span></code></a></p></td>
-<td><p>Return the vector from the node to the centroid of its 1-ring neighborhood.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_neighborhood_centroid.html#compas_cra.datastructures.CRA_Assembly.node_neighborhood_centroid" title="compas_cra.datastructures.CRA_Assembly.node_neighborhood_centroid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_neighborhood_centroid</span></code></a></p></td>
-<td><p>Compute the centroid of the neighboring nodes.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_sample.html#compas_cra.datastructures.CRA_Assembly.node_sample" title="compas_cra.datastructures.CRA_Assembly.node_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_sample</span></code></a></p></td>
-<td><p>Get a list of identifiers of a random set of n nodes.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.nodes.html#compas_cra.datastructures.CRA_Assembly.nodes" title="compas_cra.datastructures.CRA_Assembly.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a></p></td>
-<td><p>Iterate over the nodes of the network.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.nodes_attribute.html#compas_cra.datastructures.CRA_Assembly.nodes_attribute" title="compas_cra.datastructures.CRA_Assembly.nodes_attribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes_attribute</span></code></a></p></td>
-<td><p>Get or set an attribute of multiple nodes.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.nodes_attributes.html#compas_cra.datastructures.CRA_Assembly.nodes_attributes" title="compas_cra.datastructures.CRA_Assembly.nodes_attributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes_attributes</span></code></a></p></td>
-<td><p>Get or set multiple attributes of multiple nodes.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.nodes_where.html#compas_cra.datastructures.CRA_Assembly.nodes_where" title="compas_cra.datastructures.CRA_Assembly.nodes_where"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes_where</span></code></a></p></td>
-<td><p>Get nodes for which a certain condition or set of conditions is true.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.nodes_where_predicate.html#compas_cra.datastructures.CRA_Assembly.nodes_where_predicate" title="compas_cra.datastructures.CRA_Assembly.nodes_where_predicate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes_where_predicate</span></code></a></p></td>
-<td><p>Get nodes for which a certain condition or set of conditions is true using a lambda function.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.number_of_edges.html#compas_cra.datastructures.CRA_Assembly.number_of_edges" title="compas_cra.datastructures.CRA_Assembly.number_of_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_edges</span></code></a></p></td>
-<td><p>Compute the number of edges of the graph.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.number_of_interface_nodes.html#compas_cra.datastructures.CRA_Assembly.number_of_interface_nodes" title="compas_cra.datastructures.CRA_Assembly.number_of_interface_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_interface_nodes</span></code></a></p></td>
-<td><p>Compute the total number of interface nodes.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.number_of_nodes.html#compas_cra.datastructures.CRA_Assembly.number_of_nodes" title="compas_cra.datastructures.CRA_Assembly.number_of_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">number_of_nodes</span></code></a></p></td>
-<td><p>Compute the number of nodes of the graph.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.nodes.html#compas_cra.datastructures.CRA_Assembly.nodes" title="compas_cra.datastructures.CRA_Assembly.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a></p></td>
+<td><p>Iterate over the nodes of the graph of the assembly.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.sha256.html#compas_cra.datastructures.CRA_Assembly.sha256" title="compas_cra.datastructures.CRA_Assembly.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
 <td><p>Compute a hash of the data for comparison during version control using the sha256 algorithm.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.shortest_path.html#compas_cra.datastructures.CRA_Assembly.shortest_path" title="compas_cra.datastructures.CRA_Assembly.shortest_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shortest_path</span></code></a></p></td>
-<td><p>Find the shortest path between two nodes of the network.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.smooth.html#compas_cra.datastructures.CRA_Assembly.smooth" title="compas_cra.datastructures.CRA_Assembly.smooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth</span></code></a></p></td>
-<td><p>Smooth a network by moving every free node to the centroid of its neighbors.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.split_edge.html#compas_cra.datastructures.CRA_Assembly.split_edge" title="compas_cra.datastructures.CRA_Assembly.split_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_edge</span></code></a></p></td>
-<td><p>Split and edge by inserting a node along its length.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.subset.html#compas_cra.datastructures.CRA_Assembly.subset" title="compas_cra.datastructures.CRA_Assembly.subset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subset</span></code></a></p></td>
-<td><p>Create an assembly that is a subset of the current assembly.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.summary.html#compas_cra.datastructures.CRA_Assembly.summary" title="compas_cra.datastructures.CRA_Assembly.summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code></a></p></td>
-<td><p>Return a summary of the graph.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_data.html#compas_cra.datastructures.CRA_Assembly.to_data" title="compas_cra.datastructures.CRA_Assembly.to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_data</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_data.html#compas_cra.datastructures.CRA_Assembly.to_data" title="compas_cra.datastructures.CRA_Assembly.to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_data</span></code></a></p></td>
 <td><p>Convert an object to its native data representation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_json.html#compas_cra.datastructures.CRA_Assembly.to_json" title="compas_cra.datastructures.CRA_Assembly.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_json.html#compas_cra.datastructures.CRA_Assembly.to_json" title="compas_cra.datastructures.CRA_Assembly.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
 <td><p>Serialize the data representation of an object to a JSON file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_jsonstring.html#compas_cra.datastructures.CRA_Assembly.to_jsonstring" title="compas_cra.datastructures.CRA_Assembly.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_jsonstring.html#compas_cra.datastructures.CRA_Assembly.to_jsonstring" title="compas_cra.datastructures.CRA_Assembly.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
 <td><p>Serialize the data representation of an object to a JSON string.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_lines.html#compas_cra.datastructures.CRA_Assembly.to_lines" title="compas_cra.datastructures.CRA_Assembly.to_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_lines</span></code></a></p></td>
-<td><p>Return the lines of the network as pairs of start and end point coordinates.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_networkx.html#compas_cra.datastructures.CRA_Assembly.to_networkx" title="compas_cra.datastructures.CRA_Assembly.to_networkx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_networkx</span></code></a></p></td>
-<td><p>Create a new NetworkX graph instance from a graph.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_nodes_and_edges.html#compas_cra.datastructures.CRA_Assembly.to_nodes_and_edges" title="compas_cra.datastructures.CRA_Assembly.to_nodes_and_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_nodes_and_edges</span></code></a></p></td>
-<td><p>Return the nodes and edges of a network.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_obj.html#compas_cra.datastructures.CRA_Assembly.to_obj" title="compas_cra.datastructures.CRA_Assembly.to_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_obj</span></code></a></p></td>
-<td><p>Write the network to an OBJ file.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_points.html#compas_cra.datastructures.CRA_Assembly.to_points" title="compas_cra.datastructures.CRA_Assembly.to_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_points</span></code></a></p></td>
-<td><p>Return the coordinates of the network.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.transform.html#compas_cra.datastructures.CRA_Assembly.transform" title="compas_cra.datastructures.CRA_Assembly.transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code></a></p></td>
 <td><p>Transform this assembly by the given transformation matrix.</p></td>
@@ -478,31 +232,10 @@
 <tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.transformed.html#compas_cra.datastructures.CRA_Assembly.transformed" title="compas_cra.datastructures.CRA_Assembly.transformed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transformed</span></code></a></p></td>
 <td><p>Transform a copy of this assembly by the given transformation matrix.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.unset_edge_attribute.html#compas_cra.datastructures.CRA_Assembly.unset_edge_attribute" title="compas_cra.datastructures.CRA_Assembly.unset_edge_attribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unset_edge_attribute</span></code></a></p></td>
-<td><p>Unset the attribute of an edge.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.unset_node_attribute.html#compas_cra.datastructures.CRA_Assembly.unset_node_attribute" title="compas_cra.datastructures.CRA_Assembly.unset_node_attribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unset_node_attribute</span></code></a></p></td>
-<td><p>Unset the attribute of a node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.update_dea.html#compas_cra.datastructures.CRA_Assembly.update_dea" title="compas_cra.datastructures.CRA_Assembly.update_dea"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_dea</span></code></a></p></td>
-<td><p>Update the default edge attributes.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.update_default_edge_attributes.html#compas_cra.datastructures.CRA_Assembly.update_default_edge_attributes" title="compas_cra.datastructures.CRA_Assembly.update_default_edge_attributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_default_edge_attributes</span></code></a></p></td>
-<td><p>Update the default edge attributes.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.update_default_node_attributes.html#compas_cra.datastructures.CRA_Assembly.update_default_node_attributes" title="compas_cra.datastructures.CRA_Assembly.update_default_node_attributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_default_node_attributes</span></code></a></p></td>
-<td><p>Update the default node attributes.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.update_dna.html#compas_cra.datastructures.CRA_Assembly.update_dna" title="compas_cra.datastructures.CRA_Assembly.update_dna"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_dna</span></code></a></p></td>
-<td><p>Update the default node attributes.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.uv_index.html#compas_cra.datastructures.CRA_Assembly.uv_index" title="compas_cra.datastructures.CRA_Assembly.uv_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uv_index</span></code></a></p></td>
-<td><p>Returns a dictionary that maps edge keys (i.e.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.validate_data.html#compas_cra.datastructures.CRA_Assembly.validate_data" title="compas_cra.datastructures.CRA_Assembly.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.validate_data.html#compas_cra.datastructures.CRA_Assembly.validate_data" title="compas_cra.datastructures.CRA_Assembly.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
 <td><p>Validate the object's data against its data schema.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.validate_json.html#compas_cra.datastructures.CRA_Assembly.validate_json" title="compas_cra.datastructures.CRA_Assembly.validate_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_json</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.validate_json.html#compas_cra.datastructures.CRA_Assembly.validate_json" title="compas_cra.datastructures.CRA_Assembly.validate_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_json</span></code></a></p></td>
 <td><p>Validate the object's data against its json schema.</p></td>
 </tr>
 </tbody>

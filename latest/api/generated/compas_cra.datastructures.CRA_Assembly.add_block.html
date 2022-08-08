@@ -20,7 +20,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="CRA_Assembly.add_blocks_from_polysurfaces" href="compas_cra.datastructures.CRA_Assembly.add_blocks_from_polysurfaces.html" />
+  <link rel="next" title="CRA_Assembly.add_block_block_interfaces" href="compas_cra.datastructures.CRA_Assembly.add_block_block_interfaces.html" />
   
 
   
@@ -35,19 +35,19 @@
   <header id="header" class="compas-header d-flex align-items-center">
     <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
       <!-- brand -->
-      <a class="navbar-brand" href="https://Block Research Group.github.io/compas_cra/">
+      <a class="navbar-brand" href="https://BlockResearchGroup.github.io/compas_cra/">
         <img src="../../_static/images/compas_icon_white.png" alt="COMPAS CRA" width="48px" height="48px" />
       </a>
       <!-- brand -->
       <!-- primary -->
       <ul class="navbar-nav">
-        <li class="nav-item active"><a class="nav-link" href="https://Block Research Group.github.io/compas_cra/">COMPAS CRA</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://BlockResearchGroup.github.io/compas_cra/">COMPAS CRA</a></li>
       </ul>
       <!-- primary -->
       <ul class="navbar-nav d-none d-md-flex ml-md-auto">
         <!-- version -->
         
-        <meta id="doc_versions" data-url="https://Block Research Group.github.io/compas_cra/doc_versions.txt" data-docs="https://Block Research Group.github.io/compas_cra/">
+        <meta id="doc_versions" data-url="https://BlockResearchGroup.github.io/compas_cra/doc_versions.txt" data-docs="https://BlockResearchGroup.github.io/compas_cra/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             0.1.0
@@ -58,7 +58,7 @@
         <!-- version -->
         <!-- social -->
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/Block Research Group/compas_cra" target="_blank">
+          <a class="nav-link" href="https://github.com/BlockResearchGroup/compas_cra" target="_blank">
             <span class="fab fa-github fa-1x"></span>
           </a>
         </li>
@@ -101,23 +101,22 @@
 <h1>CRA_Assembly.add_block</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_cra.datastructures.CRA_Assembly.add_block">
-<span class="sig-prename descclassname"><span class="pre">CRA_Assembly.</span></span><span class="sig-name descname"><span class="pre">add_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwattr</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Block Research Group/compas_cra/blob/master/src/compas_cra/datastructures/cra_assembly.py#L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">CRA_Assembly.</span></span><span class="sig-name descname"><span class="pre">add_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwattr</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/datastructures/cra_assembly.py#L197"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Add a block to the assembly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>block</strong> (<em>compas_assembly.datastructures.Block</em>) – The block to add.</p></li>
-<li><p><strong>attr_dict</strong> (<em>dict, optional</em>) – A dictionary of block attributes.
-Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>block</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">compas_assembly.datastructures.Block</span></code>) – The block to add.</p></li>
+<li><p><strong>node</strong> (<em>hashable, optional</em>) – The identifier of the corresponding node in the connectivity graph.
+If no value is provided, the identifier will be generated automatically by the graph.</p></li>
+<li><p><strong>attr_dict</strong> (<em>dict, optional</em>) – A dictionary of block attributes.</p></li>
+<li><p><strong>**kwatr</strong> (<em>dict, optional</em>) – Additional attributes in the form of named function parameters.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>hashable</em> – The identifier of the block.</p>
+<dd class="field-even"><p><em>hashable</em> – The identifier of the node in the graph corresponding to the block.</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The block is added as a node in the assembly data structure.
-The XYZ coordinates of the node are the coordinates of the centroid of the block.</p>
 </dd></dl>
 
 </section>
@@ -193,10 +192,10 @@ The XYZ coordinates of the node are the coordinates of the centroid of the block
       
 
       
-      <a href="compas_cra.datastructures.CRA_Assembly.add_blocks_from_polysurfaces.html" title="CRA_Assembly.add_blocks_from_polysurfaces" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_cra.datastructures.CRA_Assembly.add_block_block_interfaces.html" title="CRA_Assembly.add_block_block_interfaces" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          CRA_Assembly.add_blocks_from_polysurfaces
+          CRA_Assembly.add_block_block_interfaces
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
