@@ -40,7 +40,9 @@ Pyomo Helper Functions
     f_bnds
     f_tilde_bnds
     f_tilde_init
-
+    obj_rbe
+    obj_cra
+    obj_cra_penalty
 
 
 """

@@ -10,11 +10,11 @@ import numpy as np
 import pyomo.environ as pyo
 import time
 
+from pyomo.core.base.matrix_constraint import MatrixConstraint
+from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, make_afr, unit_basis
 from compas_cra.equilibrium.pyomo_helper import f_bnds
 from compas_cra.equilibrium.pyomo_helper import obj_cra
-from pyomo.core.base.matrix_constraint import MatrixConstraint
-from compas_assembly.datastructures import Assembly
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -72,10 +72,10 @@ def cra_solve(
 
     v_num = vcount  # number of vertices
     free_num = len(free)  # number of free blocks
-    v_index = [i for i in range(v_num)]  # vertex indices
-    f_index = [i for i in range(v_num * 3)]  # force indices
+    v_index = list(range(v_num))  # vertex indices
+    f_index = list(range(v_num * 3))  # force indices
     d_index = f_index  # displacement indices
-    q_index = [i for i in range(free_num * 6)]  # q indices
+    q_index = list(range(free_num * 6))  # q indices
 
     model.fid = pyo.Set(initialize=f_index)
     model.f = pyo.Var(model.fid, initialize=1, domain=f_bnds)

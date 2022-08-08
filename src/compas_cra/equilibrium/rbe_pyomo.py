@@ -10,10 +10,11 @@ import numpy as np
 import pyomo.environ as pyo
 import time
 
+from pyomo.core.base.matrix_constraint import MatrixConstraint
+from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
 from compas_cra.equilibrium.pyomo_helper import f_tilde_bnds
 from compas_cra.equilibrium.pyomo_helper import obj_rbe
-from pyomo.core.base.matrix_constraint import MatrixConstraint
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -21,7 +22,13 @@ __email__ = "kao@arch.ethz.ch"
 __all__ = ['rbe_solve']
 
 
-def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
+def rbe_solve(
+    assembly: Assembly,
+    mu: float = 0.84,
+    density: float = 1.,
+    verbose: bool = False,
+    timer: bool = False
+):
     """RBE solver with penalty formulation using Pyomo + MOSEK. """
 
     n = assembly.graph.number_of_nodes()
@@ -32,8 +39,7 @@ def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
     free = list(set(range(n)) - set(fixed))
 
     aeq_b_csr, vcount = make_aeq_b(assembly)
-    aeq_b_csr = aeq_b_csr[[index * 6 + i
-                           for index in free for i in range(6)], :]
+    aeq_b_csr = aeq_b_csr[[index * 6 + i for index in free for i in range(6)], :]
 
     p = [[0, 0, 0, 0, 0, 0] for i in range(n)]
     for node in assembly.graph.nodes():
@@ -52,18 +58,12 @@ def rbe_solve(assembly, mu=0.84, density=1., timer=False, verbose=False):
         start_time = time.time()
 
     v_num = vcount  # number of vertices
-    f_index = [i for i in range(v_num * 4)]  # force indices
+    f_index = list(range(v_num * 4))  # force indices
 
     model.fid = pyo.Set(initialize=f_index)
     # free_num = len(free)  # number
     # eq_index = [i for i in range(6 * free_num)]
     # fr_index = [i for i in range(v_num * 8)]  # friction constraint indices
-
-    # def f_init(m, i):
-    #     if i % 4 == 1:
-    #         return 1.0
-    #     else:
-    #         return 0.0
 
     # model.f = pyo.Var(f_index, initialize=0, domain=f_tilde_bnds)
     model.f = pyo.Var(model.fid, initialize=0, domain=f_tilde_bnds)

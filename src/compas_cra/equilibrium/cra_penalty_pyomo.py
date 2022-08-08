@@ -10,12 +10,14 @@ import numpy as np
 import pyomo.environ as pyo
 import time
 
+from pyomo.core.base.matrix_constraint import MatrixConstraint
+from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, unit_basis
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
 from compas_cra.equilibrium.pyomo_helper import f_tilde_bnds
 from compas_cra.equilibrium.pyomo_helper import obj_cra_penalty
 from compas_cra.equilibrium.cra_penalty_helper import unit_basis_penalty
-from pyomo.core.base.matrix_constraint import MatrixConstraint
+
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -23,8 +25,15 @@ __email__ = "kao@arch.ethz.ch"
 __all__ = ['cra_penalty_solve']
 
 
-def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
-                      timer=False, verbose=False):
+def cra_penalty_solve(
+    assembly: Assembly,
+    mu: float = 0.84,
+    density: float = 1.,
+    d_bnd: float = 1e-3,
+    eps: float = 1e-4,
+    verbose: bool = False,
+    timer: bool = False
+):
     """CRA solver with penalty formulation using Pyomo + IPOPT. """
 
     n = assembly.graph.number_of_nodes()
@@ -39,8 +48,7 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
     aeq = aeq_csr.toarray()
 
     aeq_b_csr, _ = make_aeq_b(assembly)
-    aeq_b_csr = aeq_b_csr[[index * 6 + i
-                           for index in free for i in range(6)], :]
+    aeq_b_csr = aeq_b_csr[[index * 6 + i for index in free for i in range(6)], :]
 
     p = [[0, 0, 0, 0, 0, 0] for i in range(n)]
     for node in assembly.graph.nodes():
@@ -63,16 +71,10 @@ def cra_penalty_solve(assembly, mu=0.84, density=1., d_bnd=1e-3, eps=1e-4,
 
     v_num = vcount  # number of vertices
     free_num = len(free)  # number of free blocks
-    v_index = [i for i in range(v_num)]  # vertex indices
-    f_index = [i for i in range(v_num * 4)]  # force indices
-    d_index = [i for i in range(v_num * 3)]  # displacement indices
-    q_index = [i for i in range(free_num * 6)]  # q indices
-
-    def f_init(m, i):
-        if i % 4 == 1:
-            return 0.0
-        else:
-            return 1.0
+    v_index = list(range(v_num))  # vertex indices
+    f_index = list(range(v_num * 4))  # force indices
+    d_index = list(range(v_num * 3))  # displacement indices
+    q_index = list(range(free_num * 6))  # q indices
 
     # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
     model.fid = pyo.Set(initialize=f_index)
