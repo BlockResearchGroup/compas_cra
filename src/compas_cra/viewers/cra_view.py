@@ -7,15 +7,18 @@ CRA view style using compas_view2
 
 import numpy as np
 
+from math import sqrt
 from compas.datastructures import Mesh
 from compas.geometry import Polyline, Point, Line, Polygon
 from compas.geometry import Rotation, Translation
 from compas.geometry import is_coplanar
 from compas.utilities import hex_to_rgb
-from compas_view2 import app
-from compas_view2.collections import Collection
-from compas_view2.shapes import Arrow
-from math import sqrt
+try:
+    from compas_view2 import app
+    from compas_view2.collections import Collection
+    from compas_view2.shapes import Arrow
+except ImportError:
+    pass
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
