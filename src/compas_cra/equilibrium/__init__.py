@@ -37,11 +37,9 @@ Pyomo Helper Functions
     :toctree: generated/
     :nosignatures:
 
-    f_bnds
-    f_tilde_bnds
-    f_tilde_init
-    objs
-
+    initialisations
+    bounds
+    objectives
 
 """
 

@@ -13,8 +13,7 @@ import time
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, make_afr, unit_basis
-from compas_cra.equilibrium.pyomo_helper import f_bnds
-from compas_cra.equilibrium.pyomo_helper import objs
+from compas_cra.equilibrium.pyomo_helper import bounds, objectives
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -75,8 +74,10 @@ def cra_solve(
     d_index = f_index  # displacement indices
     q_index = list(range(free_num * 6))  # q indices
 
+    bound_f = bounds('f')
+
     model.fid = pyo.Set(initialize=f_index)
-    model.f = pyo.Var(model.fid, initialize=1, domain=f_bnds)
+    model.f = pyo.Var(model.fid, initialize=1, domain=bound_f)
     model.q = pyo.Var(q_index, initialize=0)
     model.alpha = pyo.Var(v_index, initialize=0, within=pyo.NonNegativeReals)
 
@@ -88,9 +89,6 @@ def cra_solve(
     displs = basis * d[:, np.newaxis]  # displacement d in global coordinate
 
     model.d = d
-
-    def d_bnds(m, t):
-        return (-d_bnd, d[t], d_bnd)
 
     def contact_con(m, t):
         dn = m.d[t * 3]
@@ -105,7 +103,8 @@ def cra_solve(
         ft = forces[t * 3 + 1] + forces[t * 3 + 2]
         return (ft[xyz], -dt[xyz] * m.alpha[t])
 
-    obj_cra = objs(solver='cra')
+    obj_cra = objectives(solver='cra')
+    bound_d = bounds(variable='d', d_bnd=d_bnd)
 
     model.obj = pyo.Objective(rule=obj_cra, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeqcsr.data, aeqcsr.indices, aeqcsr.indptr,
@@ -113,7 +112,7 @@ def cra_solve(
     model.cfr = MatrixConstraint(afrcsr.data, afrcsr.indices, afrcsr.indptr,
                                  [None for i in range(afr.shape[0])],
                                  np.zeros(afr.shape[0]), f)
-    model.dbnd = pyo.Constraint(d_index, rule=d_bnds)
+    model.dbnd = pyo.Constraint(d_index, rule=bound_d)
     model.ccon = pyo.Constraint(v_index, rule=contact_con)
     model.pcon = pyo.Constraint(v_index, rule=nonpen_con)
     model.cftdt = pyo.Constraint(v_index, [i for i in range(3)], rule=ftdt_con)

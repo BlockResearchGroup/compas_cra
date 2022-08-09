@@ -13,10 +13,8 @@ import time
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, unit_basis
-from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
-from compas_cra.equilibrium.pyomo_helper import f_tilde_bnds
-from compas_cra.equilibrium.pyomo_helper import objs
-from compas_cra.equilibrium.cra_penalty_helper import unit_basis_penalty
+from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b, unit_basis_penalty
+from compas_cra.equilibrium.pyomo_helper import bounds, objectives
 
 
 __author__ = "Gene Ting-Chun Kao"
@@ -76,9 +74,11 @@ def cra_penalty_solve(
     d_index = list(range(v_num * 3))  # displacement indices
     q_index = list(range(free_num * 6))  # q indices
 
-    # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
+    bound_f_tilde = bounds('f_tilde')
+
     model.fid = pyo.Set(initialize=f_index)
-    model.f = pyo.Var(model.fid, initialize=0, domain=f_tilde_bnds)
+    # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
+    model.f = pyo.Var(model.fid, initialize=0, domain=bound_f_tilde)
     model.q = pyo.Var(q_index, initialize=0)
     model.alpha = pyo.Var(v_index, initialize=0, within=pyo.NonNegativeReals)
 
@@ -90,9 +90,6 @@ def cra_penalty_solve(
     displs = d_basis * d[:, np.newaxis]  # displacement d in global coordinate
 
     model.d = d
-
-    def bnd_d(m, t):
-        return (-d_bnd, d[t], d_bnd)
 
     def contact_con(m, t):
         dn = m.d[t * 3]
@@ -110,7 +107,8 @@ def cra_penalty_solve(
         ft = forces[t * 4 + 2] + forces[t * 4 + 3]
         return (ft[xyz], -dt[xyz] * m.alpha[t])
 
-    obj_cra_penalty = objs(solver='cra_penalty')
+    obj_cra_penalty = objectives(solver='cra_penalty')
+    bound_d = bounds(variable='d', d_bnd=d_bnd)
 
     model.obj = pyo.Objective(rule=obj_cra_penalty, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
@@ -118,7 +116,7 @@ def cra_penalty_solve(
     model.cfr = MatrixConstraint(afr_b_csr.data, afr_b_csr.indices, afr_b_csr.indptr,
                                  [None for i in range(afr_b.shape[0])],
                                  np.zeros(afr_b.shape[0]), f)
-    model.dbnd = pyo.Constraint(d_index, rule=bnd_d)
+    model.dbnd = pyo.Constraint(d_index, rule=bound_d)
     model.ccon = pyo.Constraint(v_index, rule=contact_con)
     model.pcon = pyo.Constraint(v_index, rule=nonpen_con)
 

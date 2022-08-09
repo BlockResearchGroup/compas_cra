@@ -13,8 +13,7 @@ import time
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
-from compas_cra.equilibrium.pyomo_helper import f_tilde_bnds
-from compas_cra.equilibrium.pyomo_helper import objs
+from compas_cra.equilibrium.pyomo_helper import bounds, objectives
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -65,8 +64,9 @@ def rbe_solve(
     # eq_index = [i for i in range(6 * free_num)]
     # fr_index = [i for i in range(v_num * 8)]  # friction constraint indices
 
+    bound_f_tilde = bounds('f_tilde')
     # model.f = pyo.Var(f_index, initialize=0, domain=f_tilde_bnds)
-    model.f = pyo.Var(model.fid, initialize=0, domain=f_tilde_bnds)
+    model.f = pyo.Var(model.fid, initialize=0, domain=bound_f_tilde)
     # model.f = pyo.Var(f_index, initialize=f_init, domain=f_tilde_bnds)
 
     f = np.array([model.f[i] for i in f_index])
@@ -77,7 +77,7 @@ def rbe_solve(
     # def fr_con(m, t):
     #     return (None, sum(afr_b[t, i] * m.f[i] for i in f_index), 0)
 
-    obj_rbe = objs(solver='rbe')
+    obj_rbe = objectives(solver='rbe')
 
     model.obj = pyo.Objective(rule=obj_rbe, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
