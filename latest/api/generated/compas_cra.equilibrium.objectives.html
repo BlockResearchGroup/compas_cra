@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_cra - cra_penalty_solve</title>
+  <title>compas_cra - objectives</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="rbe_solve" href="compas_cra.equilibrium.rbe_solve.html" />
+  <link rel="next" title="viewers" href="../compas_cra.viewers.html" />
   
 
   
-  <link rel="prev" title="cra_solve" href="compas_cra.equilibrium.cra_solve.html" />
+  <link rel="prev" title="bounds" href="compas_cra.equilibrium.bounds.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -88,19 +88,36 @@
             
             <li class="breadcrumb-item"><a href="../compas_cra.equilibrium.html">equilibrium</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">cra_penalty_solve</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">objectives</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="cra-penalty-solve">
-<h1>cra_penalty_solve</h1>
+        <section class="detail" id="objectives">
+<h1>objectives</h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="compas_cra.equilibrium.cra_penalty_solve">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">cra_penalty_solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.84</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_bnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_penalty_pyomo.py#L26"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>CRA solver with penalty formulation using Pyomo + IPOPT.</p>
+<dt class="sig sig-object py" id="compas_cra.equilibrium.objectives">
+<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">objectives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cra'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1000000.0)</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L86"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>objective functions for pyomo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>solver</strong> (<em>str, optional</em>) –</p>
+<ul>
+<li><p>cra: CRA objective, <span class="math notranslate nohighlight">\(W_{compression} * ||fn||_2^2 + W_{alpha} * ||alpha||_2^2\)</span></p></li>
+<li><p>cra_penalty: CRA penalty objective, <span class="math notranslate nohighlight">\(W_{compression} * ||fn^+||_2^2 + W_{tension} * ||fn^-||_2^2 + W_{alpha} * ||alpha||_2^2\)</span></p></li>
+<li><p>rbe: RBE objective, <span class="math notranslate nohighlight">\(W_{compression} * ||fn^+||_2^2 + W_{tension} * ||fn^-||_2^2\)</span></p></li>
+</ul>
+</li>
+<li><p><strong>weights</strong> (<em>tuple, optional</em>) – weighting factors, <span class="math notranslate nohighlight">\((W_{alpha}, W_{compression}, W_{tension})\)</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>objective function for pyomo</em></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -155,7 +172,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">cra_penalty_solve</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">objectives</a></li>
 </ul>
 
       </div>
@@ -167,20 +184,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_cra.equilibrium.cra_solve.html" title="cra_solve" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_cra.equilibrium.bounds.html" title="bounds" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          cra_solve
+          bounds
         </div>
       </a>
       
 
       
-      <a href="compas_cra.equilibrium.rbe_solve.html" title="rbe_solve" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="../compas_cra.viewers.html" title="viewers" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          rbe_solve
+          viewers
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
