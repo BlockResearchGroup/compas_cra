@@ -45,7 +45,7 @@ def bounds(
     variable: str = 'd',
     d_bnd: float = 1e-3
 ):
-    """Variable bounds for pyomo
+    r"""Variable bounds for pyomo
 
         Parameters
         ----------
@@ -145,7 +145,7 @@ def constraints(
     name: str = 'contact',
     eps: float = 1e-4
 ):
-    """Constraint functions for pyomo
+    r"""Constraint functions for pyomo
 
         Parameters
         ----------
