@@ -12,18 +12,19 @@ __email__ = "kao@arch.ethz.ch"
 
 __all__ = ['bounds',
            'initialisations',
-           'objectives']
+           'objectives',
+           'constraints']
 
 
 def initialisations(
     variable: str = 'f_tilde',
 ):
-    """variable initialisations for pyomo
+    """Variable initialisations for pyomo
 
         Parameters
         ----------
         variable : str, optional
-            * f_tilde: force, [fn+, fn-, fu, fv]
+            * f_tilde: force, :math:`f ̃ = ({f_n}^+, {f_n}^-, f_u, f_v)`
 
         Returns
         -------
@@ -44,20 +45,20 @@ def bounds(
     variable: str = 'd',
     d_bnd: float = 1e-3
 ):
-    """variable bounds for pyomo
+    """Variable bounds for pyomo
 
         Parameters
         ----------
         variable : str, optional
-            * d: displacement
-            * f: force, :math:`(fn, fu, fv)`
-            * f_tilde: force, :math:`(fn^+, fn^-, fu, fv)`
+            * d: virtual displacement :math:`\delta d`
+            * f: force, :math:`f = (f_n, f_u, f_v)`
+            * f_tilde: force, :math:`f ̃ = ({f_n}^+, {f_n}^-, f_u, f_v)`
         d_bnd : float, optional
             displacement bounds, -d_bnd <= d <= d_bnd
 
         Returns
         -------
-        bounds function for pyomo
+        bounds constraint/domain function for pyomo
 
     """
     def f_tilde_bnds(model, i):
@@ -87,16 +88,16 @@ def objectives(
     solver: str = 'cra',
     weights: tuple = (1e+0, 1e+0, 1e+6)
 ):
-    """objective functions for pyomo
+    """Objective functions for pyomo
 
         Parameters
         ----------
         solver : str, optional
-            * cra: CRA objective, :math:`W_{compression} * ||fn||_2^2 + W_{alpha} * ||alpha||_2^2`
-            * cra_penalty: CRA penalty objective, :math:`W_{compression} * ||fn^+||_2^2 + W_{tension} * ||fn^-||_2^2 + W_{alpha} * ||alpha||_2^2`
-            * rbe: RBE objective, :math:`W_{compression} * ||fn^+||_2^2 + W_{tension} * ||fn^-||_2^2`
+            * cra: CRA objective, :math:`W_{compression} * ||f_n||_2^2 + W_{α} * ||α||_2^2`
+            * cra_penalty: CRA penalty objective, :math:`W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{α} * ||α||_2^2`
+            * rbe: RBE objective, :math:`W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2`
         weights : tuple, optional
-            weighting factors, :math:`(W_{alpha}, W_{compression}, W_{tension})`
+            weighting factors, :math:`(W_{α}, W_{compression}, W_{tension})`
 
         Returns
         -------
@@ -141,10 +142,28 @@ def objectives(
 
 
 def constraints(
-    solver: str = 'cra',
+    name: str = 'contact',
     eps: float = 1e-4
 ):
-    """constraint functions for pyomo"""
+    """Constraint functions for pyomo
+
+        Parameters
+        ----------
+        name : str, optional
+            * contact: contact constraint, :math:`{f_{jkn}^i}\: ({\delta d_{jkn}^i} + eps) = 0`
+            * penalty_contact: penalty formulation contact constraint, :math:`{f_{jkn}^{i+}}\:({\delta d_{jkn}^i} + eps) = 0`
+            * fn_np: fn+ and fn- cannot coexist, :math:`{f_{jkn}^{i+}} \: {f_{jkn}^{i-}} = 0`
+            * no_penetration: no penetration constraint, :math:`{f_{jkn}^{i+}}\:({\delta d_{jkn}^i} + eps) = 0`
+            * ft_dt: friction and virtual sliding alignment, :math:`f_{jkt}^{i} = -{α_{jk}^i} \: \delta{d}_{jkt}^{i}`
+            * penalty_ft_dt: penalty formulation friction and virtual sliding alignment, :math:`f_{jkt}^{i} = -{α_{jk}^i} \: \delta{d}_{jkt}^{i}`
+        eps : float, optional
+            epsilon, overlapping parameter
+
+        Returns
+        -------
+        constraint function for pyomo
+
+    """
 
     def contact_con(model, i):
         """contact constraint"""
@@ -152,16 +171,41 @@ def constraints(
         fn = model.f[i * 3]
         return ((dn + eps) * fn, 0)
 
-    def contact_con_penalty(model, i):
-        """penalty contact constraint"""
+    def penalty_contact_con(model, i):
+        """penalty formulation contact constraint"""
         dn = model.d[i * 3]
         fn = model.f[i * 4]
         return ((dn + eps) * fn, 0)
 
-    def fnp_con(model, i):
+    def fn_np_con(model, i):
         """fn+ and fn- cannot coexist constraints"""
         return (model.f[i * 4] * model.f[i * 4 + 1], 0)
 
-    def nonpen_con(m, t):
-        """non penetration constraint"""
+    def no_penetration_con(m, t):
+        """no penetration constraint"""
         return (0, m.d[t * 3] + eps, None)
+
+    def ft_dt_con(model, i, xyz):
+        """friction and virtual sliding alignment"""
+        d_t = model.displs[i * 3 + 1] + model.displs[i * 3 + 2]
+        f_t = model.forces[i * 3 + 1] + model.forces[i * 3 + 2]
+        return (f_t[xyz], -d_t[xyz] * model.alpha[i])
+
+    def penalty_ft_dt_con(model, i, xyz):
+        """penalty formulation friction and virtual sliding alignment"""
+        d_t = model.displs[i * 3 + 1] + model.displs[i * 3 + 2]
+        f_t = model.forces[i * 4 + 2] + model.forces[i * 4 + 3]
+        return (f_t[xyz], -d_t[xyz] * model.alpha[i])
+
+    if name == 'contact':
+        return contact_con
+    if name == 'penalty_contact':
+        return penalty_contact_con
+    if name == 'fn_np':
+        return fn_np_con
+    if name == 'no_penetration':
+        return no_penetration_con
+    if name == 'ft_dt':
+        return ft_dt_con
+    if name == 'penalty_ft_dt':
+        return penalty_ft_dt_con

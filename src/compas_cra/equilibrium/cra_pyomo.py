@@ -13,7 +13,7 @@ import time
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, make_afr, unit_basis
-from compas_cra.equilibrium.pyomo_helper import bounds, objectives
+from compas_cra.equilibrium.pyomo_helper import bounds, objectives, constraints
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -85,26 +85,15 @@ def cra_solve(
     q = np.array([model.q[i] for i in q_index])
     d = aeq.T @ q
 
-    forces = basis * f[:, np.newaxis]  # force x in global coordinate
-    displs = basis * d[:, np.newaxis]  # displacement d in global coordinate
-
     model.d = d
+    model.forces = basis * f[:, np.newaxis]  # force x in global coordinate
+    model.displs = basis * d[:, np.newaxis]  # displacement d in global coordinate
 
-    def contact_con(m, t):
-        dn = m.d[t * 3]
-        fn = m.f[t * 3]
-        return ((dn + eps) * fn, 0)
-
-    def nonpen_con(m, t):
-        return (0, m.d[t * 3] + eps, None)
-
-    def ftdt_con(m, t, xyz):
-        dt = displs[t * 3 + 1] + displs[t * 3 + 2]
-        ft = forces[t * 3 + 1] + forces[t * 3 + 2]
-        return (ft[xyz], -dt[xyz] * m.alpha[t])
-
-    obj_cra = objectives(solver='cra')
-    bound_d = bounds(variable='d', d_bnd=d_bnd)
+    obj_cra = objectives('cra')
+    bound_d = bounds('d', d_bnd)
+    constraint_contact = constraints('contact', eps)
+    constraint_no_penetration = constraints('no_penetration', eps)
+    constraint_ft_dt = constraints('ft_dt')
 
     model.obj = pyo.Objective(rule=obj_cra, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeqcsr.data, aeqcsr.indices, aeqcsr.indptr,
@@ -112,10 +101,10 @@ def cra_solve(
     model.cfr = MatrixConstraint(afrcsr.data, afrcsr.indices, afrcsr.indptr,
                                  [None for i in range(afr.shape[0])],
                                  np.zeros(afr.shape[0]), f)
-    model.dbnd = pyo.Constraint(d_index, rule=bound_d)
-    model.ccon = pyo.Constraint(v_index, rule=contact_con)
-    model.pcon = pyo.Constraint(v_index, rule=nonpen_con)
-    model.cftdt = pyo.Constraint(v_index, [i for i in range(3)], rule=ftdt_con)
+    model.d_bnd = pyo.Constraint(d_index, rule=bound_d)
+    model.c_con = pyo.Constraint(v_index, rule=constraint_contact)
+    model.p_con = pyo.Constraint(v_index, rule=constraint_no_penetration)
+    model.ft_dt = pyo.Constraint(v_index, [i for i in range(3)], rule=constraint_ft_dt)
 
     if timer:
         print("--- set up time: %s seconds ---" % (time.time() - start_time))

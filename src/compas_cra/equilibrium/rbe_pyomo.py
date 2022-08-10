@@ -77,7 +77,7 @@ def rbe_solve(
     # def fr_con(m, t):
     #     return (None, sum(afr_b[t, i] * m.f[i] for i in f_index), 0)
 
-    obj_rbe = objectives(solver='rbe')
+    obj_rbe = objectives('rbe')
 
     model.obj = pyo.Objective(rule=obj_rbe, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,

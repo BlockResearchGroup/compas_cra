@@ -40,6 +40,7 @@ Pyomo Helper Functions
     initialisations
     bounds
     objectives
+    constraints
 
 """
 

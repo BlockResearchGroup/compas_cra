@@ -14,7 +14,7 @@ from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, unit_basis
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b, unit_basis_penalty
-from compas_cra.equilibrium.pyomo_helper import bounds, objectives
+from compas_cra.equilibrium.pyomo_helper import bounds, objectives, constraints
 
 
 __author__ = "Gene Ting-Chun Kao"
@@ -86,29 +86,16 @@ def cra_penalty_solve(
     q = np.array([model.q[i] for i in q_index])
     d = aeq.T @ q
 
-    forces = f_basis * f[:, np.newaxis]  # force x in global coordinate
-    displs = d_basis * d[:, np.newaxis]  # displacement d in global coordinate
-
     model.d = d
+    model.forces = f_basis * f[:, np.newaxis]  # force x in global coordinate
+    model.displs = d_basis * d[:, np.newaxis]  # displacement d in global coordinate
 
-    def contact_con(m, t):
-        dn = m.d[t * 3]
-        fn = m.f[t * 4]
-        return ((dn + eps) * fn, 0)
-
-    def fnc_con(m, t):  # fn+ and fn- cannot coexist
-        return (m.f[t * 4] * m.f[t * 4 + 1], 0)
-
-    def nonpen_con(m, t):
-        return (0, m.d[t * 3] + eps, None)
-
-    def ftdt_con(m, t, xyz):
-        dt = displs[t * 3 + 1] + displs[t * 3 + 2]
-        ft = forces[t * 4 + 2] + forces[t * 4 + 3]
-        return (ft[xyz], -dt[xyz] * m.alpha[t])
-
-    obj_cra_penalty = objectives(solver='cra_penalty')
-    bound_d = bounds(variable='d', d_bnd=d_bnd)
+    obj_cra_penalty = objectives('cra_penalty')
+    bound_d = bounds('d', d_bnd)
+    constraint_contact = constraints('penalty_contact', eps)
+    constraint_no_penetration = constraints('no_penetration', eps)
+    constraint_penalty_ft_dt = constraints('penalty_ft_dt')
+    constraint_fn_np = constraints('fn_np')
 
     model.obj = pyo.Objective(rule=obj_cra_penalty, sense=pyo.minimize)
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
@@ -116,13 +103,11 @@ def cra_penalty_solve(
     model.cfr = MatrixConstraint(afr_b_csr.data, afr_b_csr.indices, afr_b_csr.indptr,
                                  [None for i in range(afr_b.shape[0])],
                                  np.zeros(afr_b.shape[0]), f)
-    model.dbnd = pyo.Constraint(d_index, rule=bound_d)
-    model.ccon = pyo.Constraint(v_index, rule=contact_con)
-    model.pcon = pyo.Constraint(v_index, rule=nonpen_con)
-
-    model.fncon = pyo.Constraint(v_index, rule=fnc_con)
-
-    model.cftdt = pyo.Constraint(v_index, [i for i in range(3)], rule=ftdt_con)
+    model.d_bnd = pyo.Constraint(d_index, rule=bound_d)
+    model.c_con = pyo.Constraint(v_index, rule=constraint_contact)
+    model.p_con = pyo.Constraint(v_index, rule=constraint_no_penetration)
+    model.fn_np = pyo.Constraint(v_index, rule=constraint_fn_np)
+    model.ft_dt = pyo.Constraint(v_index, [i for i in range(3)], rule=constraint_penalty_ft_dt)
 
     if timer:
         print("--- set up time: %s seconds ---" % (time.time() - start_time))
