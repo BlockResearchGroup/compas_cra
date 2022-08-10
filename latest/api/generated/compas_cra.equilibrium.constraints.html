@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_cra - bounds</title>
+  <title>compas_cra - constraints</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="objectives" href="compas_cra.equilibrium.objectives.html" />
+  <link rel="next" title="viewers" href="../compas_cra.viewers.html" />
   
 
   
-  <link rel="prev" title="initialisations" href="compas_cra.equilibrium.initialisations.html" />
+  <link rel="prev" title="objectives" href="compas_cra.equilibrium.objectives.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -88,34 +88,37 @@
             
             <li class="breadcrumb-item"><a href="../compas_cra.equilibrium.html">equilibrium</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">bounds</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">constraints</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="bounds">
-<h1>bounds</h1>
+        <section class="detail" id="constraints">
+<h1>constraints</h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="compas_cra.equilibrium.bounds">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_bnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L44"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Variable bounds for pyomo</p>
+<dt class="sig sig-object py" id="compas_cra.equilibrium.constraints">
+<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">constraints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'contact'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L144"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Constraint functions for pyomo</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>variable</strong> (<em>str, optional</em>) –</p>
+<li><p><strong>name</strong> (<em>str, optional</em>) –</p>
 <ul>
-<li><p>d: virtual displacement <span class="math notranslate nohighlight">\(\delta d\)</span></p></li>
-<li><p>f: force, <span class="math notranslate nohighlight">\(f = (f_n, f_u, f_v)\)</span></p></li>
-<li><p>f_tilde: force, <span class="math notranslate nohighlight">\(f ̃ = ({f_n}^+, {f_n}^-, f_u, f_v)\)</span></p></li>
+<li><p>contact: contact constraint, <span class="math notranslate nohighlight">\({f_{jkn}^i}\: ({\delta d_{jkn}^i} + eps) = 0\)</span></p></li>
+<li><p>penalty_contact: penalty formulation contact constraint, <span class="math notranslate nohighlight">\({f_{jkn}^{i+}}\:({\delta d_{jkn}^i} + eps) = 0\)</span></p></li>
+<li><p>fn_np: fn+ and fn- cannot coexist, <span class="math notranslate nohighlight">\({f_{jkn}^{i+}} \: {f_{jkn}^{i-}} = 0\)</span></p></li>
+<li><p>no_penetration: no penetration constraint, <span class="math notranslate nohighlight">\({f_{jkn}^{i+}}\:({\delta d_{jkn}^i} + eps) = 0\)</span></p></li>
+<li><p>ft_dt: friction and virtual sliding alignment, <span class="math notranslate nohighlight">\(f_{jkt}^{i} = -{α_{jk}^i} \: \delta{d}_{jkt}^{i}\)</span></p></li>
+<li><p>penalty_ft_dt: penalty formulation friction and virtual sliding alignment, <span class="math notranslate nohighlight">\(f_{jkt}^{i} = -{α_{jk}^i} \: \delta{d}_{jkt}^{i}\)</span></p></li>
 </ul>
 </li>
-<li><p><strong>d_bnd</strong> (<em>float, optional</em>) – displacement bounds, -d_bnd &lt;= d &lt;= d_bnd</p></li>
+<li><p><strong>eps</strong> (<em>float, optional</em>) – epsilon, overlapping parameter</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>bounds constraint/domain function for pyomo</em></p>
+<dd class="field-even"><p><em>constraint function for pyomo</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -172,7 +175,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">bounds</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">constraints</a></li>
 </ul>
 
       </div>
@@ -184,20 +187,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_cra.equilibrium.initialisations.html" title="initialisations" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_cra.equilibrium.objectives.html" title="objectives" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          initialisations
+          objectives
         </div>
       </a>
       
 
       
-      <a href="compas_cra.equilibrium.objectives.html" title="objectives" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="../compas_cra.viewers.html" title="viewers" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          objectives
+          viewers
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

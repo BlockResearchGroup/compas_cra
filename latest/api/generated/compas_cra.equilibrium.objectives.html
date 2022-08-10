@@ -20,7 +20,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="viewers" href="../compas_cra.viewers.html" />
+  <link rel="next" title="constraints" href="compas_cra.equilibrium.constraints.html" />
   
 
   
@@ -99,19 +99,19 @@
 <h1>objectives</h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_cra.equilibrium.objectives">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">objectives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cra'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1000000.0)</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L86"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>objective functions for pyomo</p>
+<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">objectives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cra'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1000000.0)</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L87"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Objective functions for pyomo</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>solver</strong> (<em>str, optional</em>) –</p>
 <ul>
-<li><p>cra: CRA objective, <span class="math notranslate nohighlight">\(W_{compression} * ||fn||_2^2 + W_{alpha} * ||alpha||_2^2\)</span></p></li>
-<li><p>cra_penalty: CRA penalty objective, <span class="math notranslate nohighlight">\(W_{compression} * ||fn^+||_2^2 + W_{tension} * ||fn^-||_2^2 + W_{alpha} * ||alpha||_2^2\)</span></p></li>
-<li><p>rbe: RBE objective, <span class="math notranslate nohighlight">\(W_{compression} * ||fn^+||_2^2 + W_{tension} * ||fn^-||_2^2\)</span></p></li>
+<li><p>cra: CRA objective, <span class="math notranslate nohighlight">\(W_{compression} * ||f_n||_2^2 + W_{α} * ||α||_2^2\)</span></p></li>
+<li><p>cra_penalty: CRA penalty objective, <span class="math notranslate nohighlight">\(W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{α} * ||α||_2^2\)</span></p></li>
+<li><p>rbe: RBE objective, <span class="math notranslate nohighlight">\(W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2\)</span></p></li>
 </ul>
 </li>
-<li><p><strong>weights</strong> (<em>tuple, optional</em>) – weighting factors, <span class="math notranslate nohighlight">\((W_{alpha}, W_{compression}, W_{tension})\)</span></p></li>
+<li><p><strong>weights</strong> (<em>tuple, optional</em>) – weighting factors, <span class="math notranslate nohighlight">\((W_{α}, W_{compression}, W_{tension})\)</span></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -194,10 +194,10 @@
       
 
       
-      <a href="../compas_cra.viewers.html" title="viewers" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_cra.equilibrium.constraints.html" title="constraints" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          viewers
+          constraints
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
