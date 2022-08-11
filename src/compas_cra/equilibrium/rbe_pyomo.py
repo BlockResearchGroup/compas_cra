@@ -14,6 +14,7 @@ from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b
 from compas_cra.equilibrium.pyomo_helper import bounds, objectives
+from compas_cra.equilibrium.pyomo_helper import pyomo_result_assembly
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -114,79 +115,6 @@ def rbe_solve(
 
     model.f.display()
 
-    # =========================================================================
-    # assign forces and object displacement y
-    offset = 0
-    for edge in assembly.graph.edges():
-        interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
-        for interface in interfaces:
-            interface.forces = []
-            n = len(interface.points)
-            for i in range(n):
-                interface.forces.append({
-                    'c_np': model.f[offset + 4 * i + 0].value,
-                    'c_nn': model.f[offset + 4 * i + 1].value,
-                    'c_u': model.f[offset + 4 * i + 2].value,
-                    'c_v': model.f[offset + 4 * i + 3].value
-                })
+    pyomo_result_assembly(model, assembly, penalty=True, verbose=verbose)
 
-            offset += 4 * n
-    # =========================================================================
-
-
-if __name__ == '__main__':
-
-    # import compas
-    # import compas_cra
-    # import os
-    from compas_cra.datastructures import CRA_Assembly
-    # from compas_cra.datastructures import assembly_interfaces_numpy
-    from compas_cra.viewers import cra_view
-
-    # assembly = compas.json_load(
-    #     os.path.join(compas_cra.DATA, './cubes.json'))
-    # assembly = assembly.copy(cls=CRA_Assembly)
-    # assembly.set_boundary_conditions([0])
-    # assembly.move_block(2, (0, .5, 0))
-    #
-    # assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
-    #
-    # print("blocks: ", assembly.number_of_nodes())
-    # print("interfaces: ", assembly.number_of_edges())
-    #
-    # rbe_solve(assembly, verbose=True, timer=True)
-    # cra_view(assembly, resultant=False, nodal=True, grid=True,
-    #          displacements=True, dispscale=0, scale=0.5)
-
-    import math as mt
-    from compas.datastructures import Mesh
-    from compas.geometry import Box
-    from compas.geometry import Frame
-    from compas.geometry import Translation
-    from compas_assembly.datastructures import Block
-
-    support = Box(Frame.worldXY(), 1, 1, 1)  # supporting block
-    free1 = Box(Frame.worldXY().transformed(
-        Translation.from_vector([0, 0, 1])), 1, 1, 1)  # block to analyse
-
-    assembly = CRA_Assembly()
-    assembly.add_block(Block.from_shape(support))
-    assembly.add_block(Block.from_shape(free1))
-    assembly.set_boundary_conditions([0])
-
-    interface1 = Mesh()
-    # interface corners
-    corners = [[.5, .5, .5], [-.5, .5, .5], [-.5, -.5, .5], [.5, -.5, .5]]
-    for i, c in enumerate(corners):
-        interface1.add_vertex(key=i, x=c[0], y=c[1], z=c[2])
-    interface1.add_face([0, 1, 2, 3])
-
-    assembly.add_interfaces_from_meshes([interface1], 0, 1)
-
-    deg = 8.00  # rotation in degree
-    rad = deg * mt.pi / 180
-    assembly.rotate_assembly([0, 0, 0], [0, 1, 0], rad)  # around y-axis
-
-    rbe_solve(assembly, mu=0.1, verbose=True, timer=True)
-    cra_view(assembly, resultant=False, nodal=True, grid=True,
-             displacements=True, dispscale=10)
+    return assembly

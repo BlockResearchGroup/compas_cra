@@ -15,6 +15,7 @@ from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, unit_basis
 from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b, unit_basis_penalty
 from compas_cra.equilibrium.pyomo_helper import bounds, objectives, constraints
+from compas_cra.equilibrium.pyomo_helper import pyomo_result_assembly
 
 
 __author__ = "Gene Ting-Chun Kao"
@@ -123,15 +124,6 @@ def cra_penalty_solve(
     if timer:
         print("--- solving time: %s seconds ---" % (time.time() - start_time))
 
-    # f_star = np.array([model.f[i].value for i in f_index])
-    # q_star = np.array([model.q[i].value for i in q_index])
-    # d_star = aeq.T @ q_star
-    # for v in v_index:
-    #     fnp = f_star[v * 4]
-    #     fnn = f_star[v * 4 + 1]
-    #     dn = d_star[v * 3]
-    #     print("fn: ", fnp, ", dn: ", dn, ", fn * dn: ", (fnp - fnn) * dn)
-
     if verbose:
         model.f.display()
         model.q.display()
@@ -146,33 +138,6 @@ def cra_penalty_solve(
     print("result: ", results.solver.termination_condition)
     print("obj", model.obj.display())
 
-    # =========================================================================
-    # assign forces and object displacement y
-    offset = 0
-    for edge in assembly.graph.edges():
-        interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
-        for interface in interfaces:
-            interface.forces = []
-            n = len(interface.points)
-            for i in range(n):
-                interface.forces.append({
-                    'c_np': model.f[offset + 4 * i + 0].value,
-                    'c_nn': model.f[offset + 4 * i + 1].value,
-                    'c_u': model.f[offset + 4 * i + 2].value,
-                    'c_v': model.f[offset + 4 * i + 3].value
-                })
+    pyomo_result_assembly(model, assembly, penalty=True, verbose=verbose)
 
-            offset += 4 * n
-
-    q = [model.q[i].value * 1 for i in range(6 * free_num)]
-    if verbose:
-        print("q:", q)
-
-    offset = 0
-    for node in assembly.graph.nodes():
-        if assembly.graph.node_attribute(node, 'is_support'):
-            continue
-        displacement = q[offset:offset+6]
-        assembly.graph.node_attribute(node, 'displacement', displacement)
-        offset += 6
-    # =========================================================================
+    return assembly

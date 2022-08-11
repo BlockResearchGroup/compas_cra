@@ -130,7 +130,7 @@ def aeq_block(interface, center, reverse):
 
 
 def unit_basis(assembly):
-    """Create interface reference system as unit basis"""
+    """Create interface reference system as unit basis."""
     data = []
     for edge in assembly.graph.edges():
         interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
@@ -155,7 +155,7 @@ def unit_basis(assembly):
 
 
 def make_afr(total_vcount, fcon_number=8, mu=0.8):
-    """Create friction matrix Afr"""
+    """Create friction matrix Afr."""
     rows = []
     cols = []
     data = []

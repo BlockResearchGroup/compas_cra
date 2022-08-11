@@ -14,6 +14,7 @@ from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
 from compas_cra.equilibrium.cra_helper import make_aeq, make_afr, unit_basis
 from compas_cra.equilibrium.pyomo_helper import bounds, objectives, constraints
+from compas_cra.equilibrium.pyomo_helper import pyomo_result_assembly
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -135,53 +136,7 @@ def cra_solve(
 
     print("result: ", results.solver.termination_condition)
 
-    # =========================================================================
-    # save forces to assembly
-    offset = 0
-    for edge in assembly.graph.edges():
-        interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
-        for interface in interfaces:
-            interface.forces = []
-            n = len(interface.points)
-            for i in range(n):
-                interface.forces.append({
-                    'c_np': model.f[offset + 3 * i + 0].value,
-                    'c_nn': 0,
-                    'c_u': model.f[offset + 3 * i + 1].value,
-                    'c_v': model.f[offset + 3 * i + 2].value
-                })
-            offset += 3 * n
-
-        # interface = assembly.graph.edge_attribute(edge, 'interface')
-        # interface.forces = []
-        # n = len(interface.points)
-        # for i in range(n):
-        #     interface.forces.append({
-        #         'c_np': model.f[offset + 3 * i + 0].value,
-        #         'c_nn': 0,
-        #         'c_u': model.f[offset + 3 * i + 1].value,
-        #         'c_v': model.f[offset + 3 * i + 2].value
-        #     })
-        # offset += 3 * n
-
-    # save displacements to assembly
-    q = [model.q[i].value * 1 for i in range(6 * free_num)]
-    # d = aeq.T @ q
-    # f = [model.f[i].value for i in f_index]
-    # for v in v_index:
-    #     dn = d[v * 3]
-    #     fn = f[v * 3]
-    #     print("contact_con ", (dn + eps) * fn)
-
-    if verbose:
-        print("q:", q)
-    offset = 0
-    for node in assembly.graph.nodes():
-        if assembly.graph.node_attribute(node, 'is_support'):
-            continue
-        displacement = q[offset:offset + 6]
-        assembly.graph.node_attribute(node, 'displacement', displacement)
-        offset += 6
+    pyomo_result_assembly(model, assembly, penalty=False, verbose=verbose)
 
     return assembly
 

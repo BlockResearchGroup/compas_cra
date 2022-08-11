@@ -11,32 +11,32 @@ __email__ = "kao@arch.ethz.ch"
 
 if __name__ == '__main__':
 
-    from compas.datastructures import Mesh
+    import math as mt
+
     from compas.geometry import Box
     from compas.geometry import Frame
     from compas.geometry import Translation
     from compas_assembly.datastructures import Block
     from compas_cra.datastructures import CRA_Assembly
-    from compas_cra.equilibrium import cra_solve
+    from compas_cra.datastructures import assembly_interfaces_numpy
+    from compas_cra.equilibrium import cra_penalty_solve
     from compas_cra.viewers import cra_view
+
 
     support = Box(Frame.worldXY(), 1, 1, 1)  # supporting block
     free1 = Box(Frame.worldXY().transformed(
-        Translation.from_vector([0, 0, 1])), 1, 1, 1)  # block to analyse
+        Translation.from_vector([0.75, 0, 1])), 1, 1, 1)  # block to analyse
 
     assembly = CRA_Assembly()
     assembly.add_block(Block.from_shape(support), node=0)
     assembly.add_block(Block.from_shape(free1), node=1)
     assembly.set_boundary_conditions([0])
 
-    interface1 = Mesh()
-    # interface corners
-    corners = [[.5, .5, .5], [-.5, .5, .5], [-.5, -.5, .5], [.5, -.5, .5]]
-    for i, c in enumerate(corners):
-        interface1.add_vertex(key=i, x=c[0], y=c[1], z=c[2])
-    interface1.add_face([0, 1, 2, 3])
+    deg = 40  # rotation in degree
+    rad = deg * mt.pi / 180
+    assembly.rotate_assembly([0, 0, 0], [0, 1, 0], rad)  # around y-axis
 
-    assembly.add_interfaces_from_meshes([interface1], 0, 1)
+    assembly_interfaces_numpy(assembly, amin=1e-6, tmax=1e-4)
 
-    cra_solve(assembly, verbose=True, timer=True, density=2300*9.8)
-    cra_view(assembly, resultant=True, nodal=True, grid=True, forcesline=True, scale=0.00001)
+    cra_penalty_solve(assembly, verbose=True, timer=True, density=1)
+    cra_view(assembly, resultant=False, nodal=True, grid=True, scale=1)

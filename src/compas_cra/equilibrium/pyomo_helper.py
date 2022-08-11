@@ -10,16 +10,17 @@ import pyomo.environ as pyo
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
 
-__all__ = ['bounds',
-           'initialisations',
+__all__ = ['initialisations',
+           'bounds',
            'objectives',
-           'constraints']
+           'constraints',
+           'pyomo_result_assembly']
 
 
 def initialisations(
     variable: str = 'f_tilde',
 ):
-    """Variable initialisations for pyomo
+    """Variable initialisations for pyomo.
 
         Parameters
         ----------
@@ -45,7 +46,7 @@ def bounds(
     variable: str = 'd',
     d_bnd: float = 1e-3
 ):
-    r"""Variable bounds for pyomo
+    r"""Variable bounds for pyomo.
 
         Parameters
         ----------
@@ -88,7 +89,7 @@ def objectives(
     solver: str = 'cra',
     weights: tuple = (1e+0, 1e+0, 1e+6)
 ):
-    """Objective functions for pyomo
+    """Objective functions for pyomo.
 
         Parameters
         ----------
@@ -145,7 +146,7 @@ def constraints(
     name: str = 'contact',
     eps: float = 1e-4
 ):
-    r"""Constraint functions for pyomo
+    r"""Constraint functions for pyomo.
 
         Parameters
         ----------
@@ -209,3 +210,40 @@ def constraints(
         return ft_dt_con
     if name == 'penalty_ft_dt':
         return penalty_ft_dt_con
+
+
+def pyomo_result_assembly(model, assembly, penalty=False, verbose=False):
+    """Save pyomo optimisation results to assembly"""
+
+    shift = 4  # for cra_penalty and rbe shift number is 4
+    if not penalty:
+        shift = 3
+
+    # save force to assembly
+    offset = 0
+    for edge in assembly.graph.edges():
+        interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
+        for interface in interfaces:
+            interface.forces = []
+            n = len(interface.points)
+            for i in range(n):
+                interface.forces.append({
+                    'c_np': model.f[offset + shift * i + 0].value,
+                    'c_nn': model.f[offset + shift * i + 1].value if shift == 4 else 0,
+                    'c_u': model.f[offset + shift * i + 1 + (1 if shift == 4 else 0)].value,
+                    'c_v': model.f[offset + shift * i + 2 + (1 if shift == 4 else 0)].value
+                })
+            offset += shift * n
+
+    # save displacement to assembly
+    if model.find_component('q') is not None:
+        q = [model.q[i].value for i in range(len(model.q))]
+        if verbose:
+            print("q:", q)
+        offset = 0
+        for node in assembly.graph.nodes():
+            if assembly.graph.node_attribute(node, 'is_support'):
+                continue
+            displacement = q[offset:offset + 6]
+            assembly.graph.node_attribute(node, 'displacement', displacement)
+            offset += 6
