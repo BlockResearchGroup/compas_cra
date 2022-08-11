@@ -10,10 +10,10 @@ import numpy as np
 import pyomo.environ as pyo
 import time
 
-from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
-from compas_cra.equilibrium.cra_helper import make_aeq, make_afr, unit_basis
+from compas_cra.equilibrium.cra_helper import unit_basis
 from compas_cra.equilibrium.pyomo_helper import bounds, objectives, constraints
+from compas_cra.equilibrium.pyomo_helper import equilibrium_setup, static_equilibrium_constraints
 from compas_cra.equilibrium.pyomo_helper import pyomo_result_assembly
 
 __author__ = "Gene Ting-Chun Kao"
@@ -33,62 +33,33 @@ def cra_solve(
 ):
     """CRA solver using Pyomo + IPOPT. """
 
-    n = assembly.graph.number_of_nodes()
-    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
-
-    fixed = [key for key in assembly.graph.nodes_where({'is_support': True})]
-    fixed = [key_index[key] for key in fixed]
-    free = list(set(range(n)) - set(fixed))
-
-    aeqcsr, vcount = make_aeq(assembly)
-    aeqcsr = aeqcsr[[index * 6 + i for index in free for i in range(6)], :]
-    aeq = aeqcsr.toarray()
-    if verbose:
-        print("Aeq: ", aeq.shape)
-
-    p = [[0, 0, 0, 0, 0, 0] for i in range(n)]
-    for node in assembly.graph.nodes():
-        block = assembly.graph.node_attribute(node, 'block')
-        index = key_index[node]
-        p[index][2] = -block.volume() * density
-
-    p = np.array(p, dtype=float)
-    p = p[free, :].reshape((-1, 1), order='C')
-
-    afrcsr = make_afr(vcount, fcon_number=8, mu=mu)
-    afr = afrcsr.toarray()
-    if verbose:
-        print("Afr: ", afr.shape)
-
-    basis = unit_basis(assembly)
-    if verbose:
-        print("Unit basis: ", basis.shape)
-
-    model = pyo.ConcreteModel()
     if timer:
         start_time = time.time()
 
+    model = pyo.ConcreteModel()
+    aeq, vcount, free = equilibrium_setup(assembly)
+
     v_num = vcount  # number of vertices
     free_num = len(free)  # number of free blocks
-    v_index = list(range(v_num))  # vertex indices
-    f_index = list(range(v_num * 3))  # force indices
-    d_index = f_index  # displacement indices
-    q_index = list(range(free_num * 6))  # q indices
+    basis = unit_basis(assembly)
 
     bound_f = bounds('f')
 
-    model.fid = pyo.Set(initialize=f_index)
-    model.f = pyo.Var(model.fid, initialize=1, domain=bound_f)
-    model.q = pyo.Var(q_index, initialize=0)
-    model.alpha = pyo.Var(v_index, initialize=0, within=pyo.NonNegativeReals)
+    model.v_id = pyo.Set(initialize=range(v_num))  # vertex indices
+    model.f_id = pyo.Set(initialize=range(v_num * 3))  # force indices
+    model.d_id = pyo.Set(initialize=range(v_num * 3))  # displacement indices
+    model.q_id = pyo.Set(initialize=range(free_num * 6))  # q indices
 
-    f = np.array([model.f[i] for i in f_index])
-    q = np.array([model.q[i] for i in q_index])
-    d = aeq.T @ q
+    model.f = pyo.Var(model.f_id, initialize=1, domain=bound_f)
+    model.q = pyo.Var(model.q_id, initialize=0)
+    model.alpha = pyo.Var(model.v_id, initialize=0, within=pyo.NonNegativeReals)
 
-    model.d = d
-    model.forces = basis * f[:, np.newaxis]  # force x in global coordinate
-    model.displs = basis * d[:, np.newaxis]  # displacement d in global coordinate
+    model.array_f = np.array([model.f[i] for i in model.f_id])
+    model.array_q = np.array([model.q[i] for i in model.q_id])
+
+    model.d = aeq.toarray().T @ model.array_q
+    model.forces = basis * model.array_f[:, np.newaxis]  # force x in global coordinate
+    model.displs = basis * model.d[:, np.newaxis]  # displacement d in global coordinate
 
     obj_cra = objectives('cra')
     bound_d = bounds('d', d_bnd)
@@ -96,16 +67,15 @@ def cra_solve(
     constraint_no_penetration = constraints('no_penetration', eps)
     constraint_ft_dt = constraints('ft_dt')
 
+    eq_con, fr_con = static_equilibrium_constraints(model, assembly, aeq, vcount, free, density, mu)
+
     model.obj = pyo.Objective(rule=obj_cra, sense=pyo.minimize)
-    model.ceq = MatrixConstraint(aeqcsr.data, aeqcsr.indices, aeqcsr.indptr,
-                                 -p.flatten(), -p.flatten(), f)
-    model.cfr = MatrixConstraint(afrcsr.data, afrcsr.indices, afrcsr.indptr,
-                                 [None for i in range(afr.shape[0])],
-                                 np.zeros(afr.shape[0]), f)
-    model.d_bnd = pyo.Constraint(d_index, rule=bound_d)
-    model.c_con = pyo.Constraint(v_index, rule=constraint_contact)
-    model.p_con = pyo.Constraint(v_index, rule=constraint_no_penetration)
-    model.ft_dt = pyo.Constraint(v_index, [i for i in range(3)], rule=constraint_ft_dt)
+    model.ceq = eq_con
+    model.cfr = fr_con
+    model.d_bnd = pyo.Constraint(model.d_id, rule=bound_d)
+    model.c_con = pyo.Constraint(model.v_id, rule=constraint_contact)
+    model.p_con = pyo.Constraint(model.v_id, rule=constraint_no_penetration)
+    model.ft_dt = pyo.Constraint(model.v_id, [i for i in range(3)], rule=constraint_ft_dt)
 
     if timer:
         print("--- set up time: %s seconds ---" % (time.time() - start_time))

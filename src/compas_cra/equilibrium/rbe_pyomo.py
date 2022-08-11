@@ -51,7 +51,7 @@ def rbe_solve(
     p = p[free, :].reshape((-1, 1), order='C')
 
     afr_b_csr = make_afr_b(vcount, mu=mu, friction_net=False)
-    afr_b = afr_b_csr.toarray()
+    # afr_b = afr_b_csr.toarray()
 
     model = pyo.ConcreteModel()
     if timer:
@@ -60,14 +60,14 @@ def rbe_solve(
     v_num = vcount  # number of vertices
     f_index = list(range(v_num * 4))  # force indices
 
-    model.fid = pyo.Set(initialize=f_index)
+    model.f_id = pyo.Set(initialize=f_index)
     # free_num = len(free)  # number
     # eq_index = [i for i in range(6 * free_num)]
     # fr_index = [i for i in range(v_num * 8)]  # friction constraint indices
 
     bound_f_tilde = bounds('f_tilde')
     # model.f = pyo.Var(f_index, initialize=0, domain=f_tilde_bnds)
-    model.f = pyo.Var(model.fid, initialize=0, domain=bound_f_tilde)
+    model.f = pyo.Var(model.f_id, initialize=0, domain=bound_f_tilde)
     # model.f = pyo.Var(f_index, initialize=f_init, domain=f_tilde_bnds)
 
     f = np.array([model.f[i] for i in f_index])
@@ -84,8 +84,8 @@ def rbe_solve(
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
                                  -p.flatten(), -p.flatten(), f)
     model.cfr = MatrixConstraint(afr_b_csr.data, afr_b_csr.indices, afr_b_csr.indptr,
-                                 [None for i in range(afr_b.shape[0])],
-                                 np.zeros(afr_b.shape[0]), f)
+                                 [None for i in range(afr_b_csr.shape[0])],
+                                 np.zeros(afr_b_csr.shape[0]), f)
     # model.ceq = pyo.Constraint(eq_index, rule=eq_con)
     # model.cfr = pyo.Constraint(fr_index, rule=fr_con)
 

@@ -7,6 +7,9 @@ Some functions to help building pyomo optimisation problems
 
 import pyomo.environ as pyo
 
+from pyomo.core.base.matrix_constraint import MatrixConstraint
+
+
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
 
@@ -14,6 +17,8 @@ __all__ = ['initialisations',
            'bounds',
            'objectives',
            'constraints',
+           'equilibrium_setup',
+           'static_equilibrium_constraints',
            'pyomo_result_assembly']
 
 
@@ -114,7 +119,7 @@ def objectives(
         """CRA objective function"""
         alpha_sum = pyo.dot_product(model.alpha, model.alpha)
         f_sum = 0
-        for i in model.fid:
+        for i in model.f_id:
             if i % 3 == 0:
                 f_sum = f_sum + (model.f[i] * model.f[i])
         return f_sum + alpha_sum
@@ -127,7 +132,7 @@ def objectives(
 
     def _obj_weights(model):
         f_sum = 0
-        for i in model.fid:
+        for i in model.f_id:
             if i % 4 == 1:
                 f_sum = f_sum + (model.f[i] * model.f[i] * weights[2])  # tension
             elif i % 4 == 0:
@@ -212,8 +217,55 @@ def constraints(
         return penalty_ft_dt_con
 
 
+def equilibrium_setup(assembly):
+    """set up equilibrium matrix"""
+    from compas_cra.equilibrium.cra_helper import make_aeq
+
+    num_nodes = assembly.graph.number_of_nodes()
+    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
+
+    fixed = [key for key in assembly.graph.nodes_where({'is_support': True})]
+    fixed = [key_index[key] for key in fixed]
+    free = list(set(range(num_nodes)) - set(fixed))
+
+    aeq, vcount = make_aeq(assembly)
+    aeq = aeq[[index * 6 + i for index in free for i in range(6)], :]
+    print("Aeq: ", aeq.shape)
+
+    return aeq, vcount, free
+
+
+def static_equilibrium_constraints(model, assembly, aeq, vcount, free, density, mu):
+    """create equilibrium and friction constraints"""
+    import numpy as np
+    from compas_cra.equilibrium.cra_helper import make_afr
+
+    num_nodes = assembly.graph.number_of_nodes()
+    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
+
+    p = [[0, 0, 0, 0, 0, 0] for i in range(num_nodes)]
+    for node in assembly.graph.nodes():
+        block = assembly.node_block(node)
+        index = key_index[node]
+        p[index][2] = -block.volume() * density
+
+    p = np.array(p, dtype=float)
+    p = p[free, :].reshape((-1, 1), order='C')
+
+    afr = make_afr(vcount, fcon_number=8, mu=mu)
+    print("Afr: ", afr.shape)
+
+    equilibrium_constraints = MatrixConstraint(aeq.data, aeq.indices, aeq.indptr,
+                                               -p.flatten(), -p.flatten(), model.array_f)
+
+    friction_constraint = MatrixConstraint(afr.data, afr.indices, afr.indptr,
+                                           [None for i in range(afr.shape[0])],
+                                           np.zeros(afr.shape[0]), model.array_f)
+    return equilibrium_constraints, friction_constraint
+
+
 def pyomo_result_assembly(model, assembly, penalty=False, verbose=False):
-    """Save pyomo optimisation results to assembly"""
+    """Save pyomo optimisation results to assembly."""
 
     shift = 4  # for cra_penalty and rbe shift number is 4
     if not penalty:

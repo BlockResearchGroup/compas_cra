@@ -59,7 +59,7 @@ def cra_penalty_solve(
     p = p[free, :].reshape((-1, 1), order='C')
 
     afr_b_csr = make_afr_b(vcount, mu=mu, friction_net=False)
-    afr_b = afr_b_csr.toarray()
+    # afr_b = afr_b_csr.toarray()
 
     f_basis = unit_basis_penalty(assembly)
     d_basis = unit_basis(assembly)
@@ -77,9 +77,9 @@ def cra_penalty_solve(
 
     bound_f_tilde = bounds('f_tilde')
 
-    model.fid = pyo.Set(initialize=f_index)
+    model.f_id = pyo.Set(initialize=f_index)
     # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
-    model.f = pyo.Var(model.fid, initialize=0, domain=bound_f_tilde)
+    model.f = pyo.Var(model.f_id, initialize=0, domain=bound_f_tilde)
     model.q = pyo.Var(q_index, initialize=0)
     model.alpha = pyo.Var(v_index, initialize=0, within=pyo.NonNegativeReals)
 
@@ -102,8 +102,8 @@ def cra_penalty_solve(
     model.ceq = MatrixConstraint(aeq_b_csr.data, aeq_b_csr.indices, aeq_b_csr.indptr,
                                  -p.flatten(), -p.flatten(), f)
     model.cfr = MatrixConstraint(afr_b_csr.data, afr_b_csr.indices, afr_b_csr.indptr,
-                                 [None for i in range(afr_b.shape[0])],
-                                 np.zeros(afr_b.shape[0]), f)
+                                 [None for i in range(afr_b_csr.shape[0])],
+                                 np.zeros(afr_b_csr.shape[0]), f)
     model.d_bnd = pyo.Constraint(d_index, rule=bound_d)
     model.c_con = pyo.Constraint(v_index, rule=constraint_contact)
     model.p_con = pyo.Constraint(v_index, rule=constraint_no_penetration)

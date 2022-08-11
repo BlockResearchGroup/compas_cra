@@ -41,6 +41,7 @@ Pyomo Helper Functions
     bounds
     objectives
     constraints
+    pyomo_result_assembly
 
 """
 
