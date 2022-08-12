@@ -28,10 +28,13 @@ __all__ = ['equilibrium_setup',
            'free_nodes']
 
 
-def equilibrium_setup(assembly):
+def equilibrium_setup(assembly, penalty=False):
     """set up equilibrium matrix"""
     free = free_nodes(assembly)
-    aeq, _ = make_aeq(assembly)
+    if penalty:
+        aeq, _ = make_aeq_b(assembly)
+    else:
+        aeq, _ = make_aeq(assembly)
     aeq = aeq[[index * 6 + i for index in free for i in range(6)], :]
     print("Aeq: ", aeq.shape)
 
@@ -57,10 +60,13 @@ def external_force_setup(assembly, density):
     return p
 
 
-def friction_setup(assembly, mu):
+def friction_setup(assembly, mu, penalty=False):
     """set up friction matrix"""
     vcount = num_vertices(assembly)
-    afr = make_afr(vcount, fcon_number=8, mu=mu)
+    if penalty:
+        afr = make_afr_b(vcount, fcon_number=8, mu=mu, friction_net=False)
+    else:
+        afr = make_afr(vcount, fcon_number=8, mu=mu)
     print("Afr: ", afr.shape)
 
     return afr
@@ -286,7 +292,6 @@ def make_afr(total_vcount, fcon_number=8, mu=0.8):
     return csr_matrix((data, (rows, cols)))
 
 
-
 def make_aeq_b(assembly, return_vcount=True, flip=False):
     """Create equilibrium matrix for penalty formulation Aeq@B. """
     rows = []
@@ -414,7 +419,7 @@ def unit_basis_penalty(assembly):
     return np.array(data)
 
 
-def make_afr_b(total_vcount, fcon_number=8, mu=0.8, friction_net=True):
+def make_afr_b(total_vcount, fcon_number=8, mu=0.8, friction_net=False):
     rows = []
     cols = []
     data = []
