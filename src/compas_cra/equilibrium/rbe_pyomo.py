@@ -12,7 +12,7 @@ import time
 
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
-from .cra_penalty_helper import make_aeq_b, make_afr_b
+from .cra_helper import make_aeq_b, make_afr_b
 from .pyomo_helper import bounds, objectives
 from .pyomo_helper import pyomo_result_assembly
 
