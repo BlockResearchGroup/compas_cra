@@ -51,10 +51,7 @@ def cra_penalty_solve(
     model.d_id = pyo.Set(initialize=range(v_num * 3))  # displacement indices
     model.q_id = pyo.Set(initialize=range(free_num * 6))  # q indices
 
-    bound_f_tilde = bounds('f_tilde')
-
-    # model.f = pyo.Var(f_index, initialize=f_init, domain=f_bnds)
-    model.f = pyo.Var(model.f_id, initialize=0, domain=bound_f_tilde)
+    model.f = pyo.Var(model.f_id, initialize=0, domain=bounds('f_tilde'))
     model.q = pyo.Var(model.q_id, initialize=0)
     model.alpha = pyo.Var(model.v_id, initialize=0, within=pyo.NonNegativeReals)
 
@@ -95,8 +92,9 @@ def cra_penalty_solve(
         start_time = time.time()
 
     solver = pyo.SolverFactory('ipopt')
-    solver.options['tol'] = 1e-8
-    solver.options['constr_viol_tol'] = 1e-7
+    solver.options['tol'] = 1e-8  # same as default tolerance
+    solver.options['constr_viol_tol'] = 1e-7  # constraint tolerance
+    # https://coin-or.github.io/Ipopt/OPTIONS.html
     results = solver.solve(model, tee=verbose)
 
     if timer:

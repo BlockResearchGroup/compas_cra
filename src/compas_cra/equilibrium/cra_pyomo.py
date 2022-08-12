@@ -43,14 +43,12 @@ def cra_solve(
     free_num = num_free(assembly)  # number of free blocks
     basis = unit_basis(assembly)
 
-    bound_f = bounds('f')
-
     model.v_id = pyo.Set(initialize=range(v_num))  # vertex indices
     model.f_id = pyo.Set(initialize=range(v_num * 3))  # force indices
     model.d_id = pyo.Set(initialize=range(v_num * 3))  # displacement indices
     model.q_id = pyo.Set(initialize=range(free_num * 6))  # q indices
 
-    model.f = pyo.Var(model.f_id, initialize=1, domain=bound_f)
+    model.f = pyo.Var(model.f_id, initialize=1, domain=bounds('f'))
     model.q = pyo.Var(model.q_id, initialize=0)
     model.alpha = pyo.Var(model.v_id, initialize=0, within=pyo.NonNegativeReals)
 
@@ -91,7 +89,6 @@ def cra_solve(
     solver.options['tol'] = 1e-8  # same as default tolerance
     solver.options['constr_viol_tol'] = 1e-7  # constraint tolerance
     # https://coin-or.github.io/Ipopt/OPTIONS.html
-
     results = solver.solve(model, tee=verbose)
 
     if timer:

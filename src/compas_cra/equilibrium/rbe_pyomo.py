@@ -3,7 +3,7 @@
 
 """
 Rigid-block Equilibrium
-Using Pyomo + MOSEK
+Using Pyomo + IPOPT
 """
 
 import numpy as np
@@ -30,7 +30,7 @@ def rbe_solve(
     verbose: bool = False,
     timer: bool = False
 ):
-    """RBE solver with penalty formulation using Pyomo + MOSEK. """
+    """RBE solver with penalty formulation using Pyomo + IPOPT. """
 
     model = pyo.ConcreteModel()
 
@@ -38,34 +38,21 @@ def rbe_solve(
         start_time = time.time()
 
     v_num = num_vertices(assembly)  # number of vertices
+
     model.f_id = pyo.Set(initialize=range(v_num * 4))  # force indices
-
-    # free_num = len(free)  # number
-    # eq_index = [i for i in range(6 * free_num)]
-    # fr_index = [i for i in range(v_num * 8)]  # friction constraint indices
-
-    bound_f_tilde = bounds('f_tilde')
-    model.f = pyo.Var(model.f_id, initialize=0, domain=bound_f_tilde)
-
+    model.f = pyo.Var(model.f_id, initialize=0, domain=bounds('f_tilde'))
     model.array_f = np.array([model.f[i] for i in model.f_id])
-    # def eq_con(m, t):
-    #     return (sum(aeq_b_csr[t, i] * m.f[i] for i in f_index), -p[t][0])
-    #
-    # def fr_con(m, t):
-    #     return (None, sum(afr_b[t, i] * m.f[i] for i in f_index), 0)
 
     aeq_b = equilibrium_setup(assembly, penalty=True)
     afr_b = friction_setup(assembly, mu, penalty=True)
     p = external_force_setup(assembly, density)
 
-    obj_rbe = objectives('rbe')
+    obj_rbe = objectives('rbe', (0, 0, 1e+6))
     eq_con, fr_con = static_equilibrium_constraints(model, aeq_b, afr_b, p)
 
     model.obj = pyo.Objective(rule=obj_rbe, sense=pyo.minimize)
     model.ceq = eq_con
     model.cfr = fr_con
-    # model.ceq = pyo.Constraint(eq_index, rule=eq_con)
-    # model.cfr = pyo.Constraint(fr_index, rule=fr_con)
 
     if timer:
         print("--- set up time: %s seconds ---" % (time.time() - start_time))
