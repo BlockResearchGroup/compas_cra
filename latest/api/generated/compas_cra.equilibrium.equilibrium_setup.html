@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_cra - objectives</title>
+  <title>compas_cra - equilibrium_setup</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="constraints" href="compas_cra.equilibrium.constraints.html" />
+  <link rel="next" title="friction_setup" href="compas_cra.equilibrium.friction_setup.html" />
   
 
   
-  <link rel="prev" title="bounds" href="compas_cra.equilibrium.bounds.html" />
+  <link rel="prev" title="rbe_solve" href="compas_cra.equilibrium.rbe_solve.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -88,36 +88,19 @@
             
             <li class="breadcrumb-item"><a href="../compas_cra.equilibrium.html">equilibrium</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">objectives</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">equilibrium_setup</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="objectives">
-<h1>objectives</h1>
+        <section class="detail" id="equilibrium-setup">
+<h1>equilibrium_setup</h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="compas_cra.equilibrium.objectives">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">objectives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cra'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1000000.0)</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L92"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Objective functions for pyomo.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>solver</strong> (<em>str, optional</em>) –</p>
-<ul>
-<li><p>cra: CRA objective, <span class="math notranslate nohighlight">\(W_{compression} * ||f_n||_2^2 + W_{α} * ||α||_2^2\)</span></p></li>
-<li><p>cra_penalty: CRA penalty objective, <span class="math notranslate nohighlight">\(W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{α} * ||α||_2^2\)</span></p></li>
-<li><p>rbe: RBE objective, <span class="math notranslate nohighlight">\(W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2\)</span></p></li>
-</ul>
-</li>
-<li><p><strong>weights</strong> (<em>tuple, optional</em>) – weighting factors, <span class="math notranslate nohighlight">\((W_{α}, W_{compression}, W_{tension})\)</span></p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>objective function for pyomo</em></p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="compas_cra.equilibrium.equilibrium_setup">
+<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">equilibrium_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_helper.py#L28"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>set up equilibrium matrix</p>
 </dd></dl>
 
 </section>
@@ -172,7 +155,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">objectives</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">equilibrium_setup</a></li>
 </ul>
 
       </div>
@@ -184,20 +167,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_cra.equilibrium.bounds.html" title="bounds" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_cra.equilibrium.rbe_solve.html" title="rbe_solve" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          bounds
+          rbe_solve
         </div>
       </a>
       
 
       
-      <a href="compas_cra.equilibrium.constraints.html" title="constraints" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_cra.equilibrium.friction_setup.html" title="friction_setup" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          constraints
+          friction_setup
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

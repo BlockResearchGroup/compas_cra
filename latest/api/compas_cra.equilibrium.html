@@ -123,14 +123,32 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.make_aeq.html#compas_cra.equilibrium.make_aeq" title="compas_cra.equilibrium.make_aeq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_aeq</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.equilibrium_setup.html#compas_cra.equilibrium.equilibrium_setup" title="compas_cra.equilibrium.equilibrium_setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equilibrium_setup</span></code></a></p></td>
+<td><p>set up equilibrium matrix</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.friction_setup.html#compas_cra.equilibrium.friction_setup" title="compas_cra.equilibrium.friction_setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">friction_setup</span></code></a></p></td>
+<td><p>set up friction matrix</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.external_force_setup.html#compas_cra.equilibrium.external_force_setup" title="compas_cra.equilibrium.external_force_setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">external_force_setup</span></code></a></p></td>
+<td><p>set up external force vector</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.make_aeq.html#compas_cra.equilibrium.make_aeq" title="compas_cra.equilibrium.make_aeq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_aeq</span></code></a></p></td>
 <td><p>Create equilibrium matrix Aeq.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.make_afr.html#compas_cra.equilibrium.make_afr" title="compas_cra.equilibrium.make_afr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_afr</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.make_afr.html#compas_cra.equilibrium.make_afr" title="compas_cra.equilibrium.make_afr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_afr</span></code></a></p></td>
 <td><p>Create friction matrix Afr.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.unit_basis.html#compas_cra.equilibrium.unit_basis" title="compas_cra.equilibrium.unit_basis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unit_basis</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.unit_basis.html#compas_cra.equilibrium.unit_basis" title="compas_cra.equilibrium.unit_basis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unit_basis</span></code></a></p></td>
 <td><p>Create interface reference system as unit basis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.num_vertices.html#compas_cra.equilibrium.num_vertices" title="compas_cra.equilibrium.num_vertices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_vertices</span></code></a></p></td>
+<td><p>Total number of vertices</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.num_free.html#compas_cra.equilibrium.num_free" title="compas_cra.equilibrium.num_free"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_free</span></code></a></p></td>
+<td><p>return number of free blocks</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.free_nodes.html#compas_cra.equilibrium.free_nodes" title="compas_cra.equilibrium.free_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">free_nodes</span></code></a></p></td>
+<td><p>return free and fixed node list</p></td>
 </tr>
 </tbody>
 </table>
@@ -155,7 +173,10 @@
 <tr class="row-even"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.constraints.html#compas_cra.equilibrium.constraints" title="compas_cra.equilibrium.constraints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">constraints</span></code></a></p></td>
 <td><p>Constraint functions for pyomo.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.pyomo_result_assembly.html#compas_cra.equilibrium.pyomo_result_assembly" title="compas_cra.equilibrium.pyomo_result_assembly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyomo_result_assembly</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.static_equilibrium_constraints.html#compas_cra.equilibrium.static_equilibrium_constraints" title="compas_cra.equilibrium.static_equilibrium_constraints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">static_equilibrium_constraints</span></code></a></p></td>
+<td><p>create equilibrium and friction constraints</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_cra.equilibrium.pyomo_result_assembly.html#compas_cra.equilibrium.pyomo_result_assembly" title="compas_cra.equilibrium.pyomo_result_assembly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pyomo_result_assembly</span></code></a></p></td>
 <td><p>Save pyomo optimisation results to assembly.</p></td>
 </tr>
 </tbody>
