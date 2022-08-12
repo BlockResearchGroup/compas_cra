@@ -14,7 +14,78 @@ from scipy.sparse import csr_matrix
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
 
-__all__ = ['make_aeq', 'make_afr', 'unit_basis']
+__all__ = ['equilibrium_setup',
+           'friction_setup',
+           'external_force_setup',
+           'make_aeq',
+           'make_afr',
+           'unit_basis',
+           'num_vertices',
+           'num_free',
+           'free_nodes']
+
+
+def equilibrium_setup(assembly):
+    """set up equilibrium matrix"""
+    free = free_nodes(assembly)
+    aeq, _ = make_aeq(assembly)
+    aeq = aeq[[index * 6 + i for index in free for i in range(6)], :]
+    print("Aeq: ", aeq.shape)
+
+    return aeq
+
+
+def external_force_setup(assembly, density):
+    """set up external force vector"""
+    free = free_nodes(assembly)
+
+    num_nodes = assembly.graph.number_of_nodes()
+    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
+
+    p = [[0, 0, 0, 0, 0, 0] for i in range(num_nodes)]
+    for node in assembly.graph.nodes():
+        block = assembly.node_block(node)
+        index = key_index[node]
+        p[index][2] = -block.volume() * density
+
+    p = np.array(p, dtype=float)
+    p = p[free, :].reshape((-1, 1), order='C')
+
+    return p
+
+
+def friction_setup(assembly, mu):
+    """set up friction matrix"""
+    vcount = num_vertices(assembly)
+    afr = make_afr(vcount, fcon_number=8, mu=mu)
+    print("Afr: ", afr.shape)
+
+    return afr
+
+
+def num_free(assembly):
+    """return number of free blocks"""
+    return len([key for key in assembly.graph.nodes_where({'is_support': False})])
+
+
+def free_nodes(assembly):
+    """return free and fixed node list"""
+    num_nodes = assembly.graph.number_of_nodes()
+    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
+
+    fixed = [key for key in assembly.graph.nodes_where({'is_support': True})]
+    fixed = [key_index[key] for key in fixed]
+    free = list(set(range(num_nodes)) - set(fixed))
+    return free
+
+
+def num_vertices(assembly):
+    """Total number of vertices"""
+    vcount = 0
+    for (u, v), attr in assembly.graph.edges(True):
+        for interface in assembly.graph.edge_attribute((u, v), 'interfaces'):
+            vcount += len(interface.points)
+    return vcount
 
 
 def make_aeq(assembly, return_vcount=True, flip=False):
@@ -34,13 +105,6 @@ def make_aeq(assembly, return_vcount=True, flip=False):
         U = assembly.graph.node_attribute(u, 'block')
         V = assembly.graph.node_attribute(v, 'block')
         interfaces = assembly.graph.edge_attribute((u, v), 'interfaces')
-        # interfaces = [assembly.graph.edge_attribute((u, v), 'interface')]
-
-        # if len(interfaces) == 0 and assembly.graph.edge_attribute((u, v), 'interface') is None:
-        #     continue
-        # elif len(interfaces) == 0 and assembly.graph.edge_attribute((u, v), 'interface') is not None:
-        #     interfaces = [assembly.graph.edge_attribute((u, v), 'interface')]
-        #     assembly.graph.edge_attribute((u, v), 'interfaces', interfaces)
 
         for interface in interfaces:
             n = len(interface.points)

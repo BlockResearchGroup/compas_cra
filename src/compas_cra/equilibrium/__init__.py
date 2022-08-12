@@ -25,10 +25,15 @@ Equilibrium Helper Functions
     :toctree: generated/
     :nosignatures:
 
+    equilibrium_setup
+    friction_setup
+    external_force_setup
     make_aeq
     make_afr
     unit_basis
-
+    num_vertices
+    num_free
+    free_nodes
 
 Pyomo Helper Functions
 =======
@@ -41,6 +46,7 @@ Pyomo Helper Functions
     bounds
     objectives
     constraints
+    static_equilibrium_constraints
     pyomo_result_assembly
 
 """

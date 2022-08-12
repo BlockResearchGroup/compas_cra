@@ -12,10 +12,10 @@ import time
 
 from pyomo.core.base.matrix_constraint import MatrixConstraint
 from compas_assembly.datastructures import Assembly
-from compas_cra.equilibrium.cra_helper import make_aeq, unit_basis
-from compas_cra.equilibrium.cra_penalty_helper import make_aeq_b, make_afr_b, unit_basis_penalty
-from compas_cra.equilibrium.pyomo_helper import bounds, objectives, constraints
-from compas_cra.equilibrium.pyomo_helper import pyomo_result_assembly
+from .cra_helper import make_aeq, unit_basis
+from .cra_penalty_helper import make_aeq_b, make_afr_b, unit_basis_penalty
+from .pyomo_helper import bounds, objectives, constraints
+from .pyomo_helper import pyomo_result_assembly
 
 
 __author__ = "Gene Ting-Chun Kao"

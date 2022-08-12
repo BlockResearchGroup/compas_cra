@@ -11,10 +11,11 @@ import pyomo.environ as pyo
 import time
 
 from compas_assembly.datastructures import Assembly
-from compas_cra.equilibrium.cra_helper import unit_basis
-from compas_cra.equilibrium.pyomo_helper import bounds, objectives, constraints
-from compas_cra.equilibrium.pyomo_helper import equilibrium_setup, static_equilibrium_constraints
-from compas_cra.equilibrium.pyomo_helper import pyomo_result_assembly
+from .cra_helper import unit_basis, num_vertices, num_free
+from .cra_helper import equilibrium_setup, friction_setup, external_force_setup
+from .pyomo_helper import bounds, objectives, constraints
+from .pyomo_helper import static_equilibrium_constraints
+from .pyomo_helper import pyomo_result_assembly
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -37,10 +38,9 @@ def cra_solve(
         start_time = time.time()
 
     model = pyo.ConcreteModel()
-    aeq, vcount, free = equilibrium_setup(assembly)
 
-    v_num = vcount  # number of vertices
-    free_num = len(free)  # number of free blocks
+    v_num = num_vertices(assembly)  # number of vertices
+    free_num = num_free(assembly)  # number of free blocks
     basis = unit_basis(assembly)
 
     bound_f = bounds('f')
@@ -57,6 +57,10 @@ def cra_solve(
     model.array_f = np.array([model.f[i] for i in model.f_id])
     model.array_q = np.array([model.q[i] for i in model.q_id])
 
+    aeq = equilibrium_setup(assembly)
+    afr = friction_setup(assembly, mu)
+    p = external_force_setup(assembly, density)
+
     model.d = aeq.toarray().T @ model.array_q
     model.forces = basis * model.array_f[:, np.newaxis]  # force x in global coordinate
     model.displs = basis * model.d[:, np.newaxis]  # displacement d in global coordinate
@@ -67,7 +71,7 @@ def cra_solve(
     constraint_no_penetration = constraints('no_penetration', eps)
     constraint_ft_dt = constraints('ft_dt')
 
-    eq_con, fr_con = static_equilibrium_constraints(model, assembly, aeq, vcount, free, density, mu)
+    eq_con, fr_con = static_equilibrium_constraints(model, aeq, afr, p)
 
     model.obj = pyo.Objective(rule=obj_cra, sense=pyo.minimize)
     model.ceq = eq_con

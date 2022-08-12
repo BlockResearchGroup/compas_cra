@@ -17,7 +17,6 @@ __all__ = ['initialisations',
            'bounds',
            'objectives',
            'constraints',
-           'equilibrium_setup',
            'static_equilibrium_constraints',
            'pyomo_result_assembly']
 
@@ -217,50 +216,17 @@ def constraints(
         return penalty_ft_dt_con
 
 
-def equilibrium_setup(assembly):
-    """set up equilibrium matrix"""
-    from compas_cra.equilibrium.cra_helper import make_aeq
-
-    num_nodes = assembly.graph.number_of_nodes()
-    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
-
-    fixed = [key for key in assembly.graph.nodes_where({'is_support': True})]
-    fixed = [key_index[key] for key in fixed]
-    free = list(set(range(num_nodes)) - set(fixed))
-
-    aeq, vcount = make_aeq(assembly)
-    aeq = aeq[[index * 6 + i for index in free for i in range(6)], :]
-    print("Aeq: ", aeq.shape)
-
-    return aeq, vcount, free
-
-
-def static_equilibrium_constraints(model, assembly, aeq, vcount, free, density, mu):
+def static_equilibrium_constraints(model, aeq, afr, p):
     """create equilibrium and friction constraints"""
-    import numpy as np
-    from compas_cra.equilibrium.cra_helper import make_afr
 
-    num_nodes = assembly.graph.number_of_nodes()
-    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
-
-    p = [[0, 0, 0, 0, 0, 0] for i in range(num_nodes)]
-    for node in assembly.graph.nodes():
-        block = assembly.node_block(node)
-        index = key_index[node]
-        p[index][2] = -block.volume() * density
-
-    p = np.array(p, dtype=float)
-    p = p[free, :].reshape((-1, 1), order='C')
-
-    afr = make_afr(vcount, fcon_number=8, mu=mu)
-    print("Afr: ", afr.shape)
+    from numpy import zeros
 
     equilibrium_constraints = MatrixConstraint(aeq.data, aeq.indices, aeq.indptr,
                                                -p.flatten(), -p.flatten(), model.array_f)
 
     friction_constraint = MatrixConstraint(afr.data, afr.indices, afr.indptr,
                                            [None for i in range(afr.shape[0])],
-                                           np.zeros(afr.shape[0]), model.array_f)
+                                           zeros(afr.shape[0]), model.array_f)
     return equilibrium_constraints, friction_constraint
 
 
