@@ -116,6 +116,7 @@
     <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
     <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
     <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_solve</span><span class="p">,</span> <span class="n">cra_penalty_solve</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">density_setup</span>
     <span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
 
     <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
@@ -123,11 +124,13 @@
     <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
     <span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
-    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">assembly</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-        <span class="n">block</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">node_attribute</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s1">&#39;block&#39;</span><span class="p">)</span>
-        <span class="n">block</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">]:</span>
-            <span class="n">block</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.51</span>
+    <span class="n">density</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span><span class="p">:</span> <span class="mf">3.51</span> <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">assembly</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()}</span>
+    <span class="c1"># for node in assembly.graph.nodes():</span>
+    <span class="c1">#     block = assembly.graph.node_attribute(node, &#39;block&#39;)</span>
+    <span class="c1">#     block.attributes[&quot;density&quot;] = 1</span>
+    <span class="c1">#     if node in [11, 12, 13, 14, 15]:</span>
+    <span class="c1">#         block.attributes[&quot;density&quot;] = 3.51</span>
+    <span class="n">density_setup</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">density</span><span class="p">)</span>
     <span class="c1"># assembly.graph.delete_node(2)</span>
     <span class="c1"># assembly.graph.delete_node(3)</span>
     <span class="c1"># assembly.graph.delete_node(4)</span>
@@ -148,12 +151,12 @@
 
     <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.9</span>
     <span class="n">dispbnd</span> <span class="o">=</span> <span class="mf">1e-1</span>
-    <span class="n">overlap</span> <span class="o">=</span> <span class="mf">1e-4</span> <span class="o">*</span> <span class="mi">0</span>
+    <span class="n">overlap</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">cra_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">d_bnd</span><span class="o">=</span><span class="n">dispbnd</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">)</span>
     <span class="c1"># cra_penalty_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)</span>
-    <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-             <span class="n">displacements</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dispscale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">forcesdirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">forcesline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">displacements</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dispscale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">.5</span><span class="o">/</span><span class="n">d</span><span class="p">)</span>
 </code></pre></div>
 </div>
 </section>

@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_cra - num_free</title>
+  <title>compas_cra - density_setup</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="free_nodes" href="compas_cra.equilibrium.free_nodes.html" />
+  <link rel="next" title="make_aeq" href="compas_cra.equilibrium.make_aeq.html" />
   
 
   
-  <link rel="prev" title="num_vertices" href="compas_cra.equilibrium.num_vertices.html" />
+  <link rel="prev" title="external_force_setup" href="compas_cra.equilibrium.external_force_setup.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -88,19 +88,30 @@
             
             <li class="breadcrumb-item"><a href="../compas_cra.equilibrium.html">equilibrium</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">num_free</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">density_setup</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="num-free">
-<h1>num_free</h1>
+        <section class="detail" id="density-setup">
+<h1>density_setup</h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="compas_cra.equilibrium.num_free">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">num_free</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_helper.py#L137"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Return number of free blocks.</p>
+<dt class="sig sig-object py" id="compas_cra.equilibrium.density_setup">
+<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">density_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_helper.py#L115"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Set up material density.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>assembly</strong> (<em>compas_assembly.datastructures.Assembly</em>) – The rigid block assembly.</p></li>
+<li><p><strong>density</strong> (<em>dict of float</em>) – density values, the dict key should match with assembly.graph.nodes()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>None</em></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -155,7 +166,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">num_free</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">density_setup</a></li>
 </ul>
 
       </div>
@@ -167,20 +178,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_cra.equilibrium.num_vertices.html" title="num_vertices" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_cra.equilibrium.external_force_setup.html" title="external_force_setup" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          num_vertices
+          external_force_setup
         </div>
       </a>
       
 
       
-      <a href="compas_cra.equilibrium.free_nodes.html" title="free_nodes" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_cra.equilibrium.make_aeq.html" title="make_aeq" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          free_nodes
+          make_aeq
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

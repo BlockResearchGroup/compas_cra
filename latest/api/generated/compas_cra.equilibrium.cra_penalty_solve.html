@@ -101,6 +101,45 @@
 <dt class="sig sig-object py" id="compas_cra.equilibrium.cra_penalty_solve">
 <span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">cra_penalty_solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.84</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_bnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_penalty_pyomo.py#L28"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>CRA solver with penalty formulation using Pyomo + IPOPT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>assembly</strong> (<em>compas_assembly.datastructures.Assembly</em>) – The rigid block assembly.</p></li>
+<li><p><strong>mu</strong> (<em>float, optional</em>) – Friction coefficient value.</p></li>
+<li><p><strong>density</strong> (<em>float, optional</em>) – Density of the block material.
+Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
+<li><p><strong>d_bnd</strong> (<em>float, optional</em>) – The bound of virtual displacement d.
+Default is <code class="docutils literal notranslate"><span class="pre">1e-3</span></code>.</p></li>
+<li><p><strong>eps</strong> (<em>float, optional</em>) – Epsilon, contact overlapping parameter.
+Default is <code class="docutils literal notranslate"><span class="pre">1e-4</span></code>.</p></li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – Print information during the execution of the algorithm.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>timer</strong> (<em>bool, optional</em>) – Time the solving time.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>assembly</strong> (<em>compas_assembly.datastructures.Assembly</em>) – The assembly is updated in place, also return Assembly for compas.rpc and compas.cloud</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function solves the following optimisation problem:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+    \begin{split}
+        \min_{{\bf{\tilde{f}}},\, \delta{\bf{q}},\, \pmb\alpha} \quad &amp; \left\| {\bf{f}}_n^{+} \right\|_2^2 +
+        \gamma \left\| {\bf{f}}_n^{-} \right\|_2^2 + \left\| \pmb\alpha \right\|_2^2 \\
+        \textrm{s.t.} \quad &amp; {{\bf{A}}_{eq}}\:{\bf{B}}\:{\bf{\tilde{f}}} = -{\bf{p}} \\
+        &amp; {\bf{A}}_{fr}\:{\bf{B}}\:{\bf{\tilde{f}}} \le {\bf{0}} \\
+        &amp; {\bf{A}}_{eq}^\intercal\:{\delta\bf{q}} = \delta{\bf{d}} \\
+        &amp; {f_{jkn}^{i+}}\:({\delta d_{jkn}^i} + \varepsilon) = 0 \\
+        &amp; {f_{jkn}^{i+}} \: {f_{jkn}^{i-}} = 0 \\
+        &amp; {\bf{f}}_{jkt}^{i} = -{\alpha_{jk}^i} \: \delta{\bf{d}}_{jkt}^{i} \\
+        &amp; \left\lvert\, \delta {\bf{d}}_{jk\cdot}^{i} \,\right\lvert \le \eta \\
+        &amp; \gamma \, , \varepsilon \, , \eta  \ge 0 \\
+        &amp; f_{jkn}^{i+}\, ,f_{jkn}^{i-} \, , {\alpha_{jk}^i} \, , ({\delta d_{jkn}^i} + \varepsilon) \ge 0 \;, \quad \forall i,j,k \;,
+    \end{split}
+\end{align}\end{split}\]</div>
 </dd></dl>
 
 </section>
