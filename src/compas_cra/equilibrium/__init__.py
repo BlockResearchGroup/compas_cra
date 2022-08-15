@@ -30,9 +30,8 @@ Equilibrium Helper Functions
     external_force_setup
     make_aeq
     make_afr
-    unit_basis
     make_afr_b
-    unit_basis_penalty
+    unit_basis
     num_vertices
     num_free
     free_nodes

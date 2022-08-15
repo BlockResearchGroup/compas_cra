@@ -12,7 +12,7 @@ import pyomo.environ as pyo
 
 from compas_assembly.datastructures import Assembly
 from .cra_helper import num_vertices, num_free
-from .cra_helper import unit_basis, unit_basis_penalty
+from .cra_helper import unit_basis
 from .cra_helper import equilibrium_setup, friction_setup, external_force_setup
 from .pyomo_helper import bounds, objectives, constraints
 from .pyomo_helper import static_equilibrium_constraints
@@ -43,7 +43,7 @@ def cra_penalty_solve(
 
     v_num = num_vertices(assembly)  # number of vertices
     free_num = num_free(assembly)  # number of free blocks
-    f_basis = unit_basis_penalty(assembly)
+    f_basis = unit_basis(assembly, True)
     d_basis = unit_basis(assembly)
 
     model.v_id = pyo.Set(initialize=range(v_num))  # vertex indices
