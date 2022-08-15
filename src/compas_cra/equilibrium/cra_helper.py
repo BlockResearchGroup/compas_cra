@@ -20,7 +20,6 @@ __all__ = ['equilibrium_setup',
            'make_aeq',
            'make_afr',
            'unit_basis',
-           'make_aeq_b',
            'make_afr_b',
            'unit_basis_penalty',
            'num_vertices',
@@ -31,10 +30,9 @@ __all__ = ['equilibrium_setup',
 def equilibrium_setup(assembly, penalty=False):
     """set up equilibrium matrix"""
     free = free_nodes(assembly)
-    if penalty:
-        aeq, _ = make_aeq_b(assembly)
-    else:
-        aeq, _ = make_aeq(assembly)
+    aeq = make_aeq(assembly, penalty=penalty)
+
+    # TODO: make a function to remove fixed node from matrix
     aeq = aeq[[index * 6 + i for index in free for i in range(6)], :]
     print("Aeq: ", aeq.shape)
 
@@ -97,13 +95,17 @@ def num_vertices(assembly):
     return vcount
 
 
-def make_aeq(assembly, return_vcount=True, flip=False):
-    """Create equilibrium matrix Aeq. """
+def make_aeq(assembly, flip=False, penalty=False):
+    """Create equilibrium matrix Aeq or penalty formulation matrix Aeq@B. """
     rows = []
     cols = []
     data = []
 
     vcount = 0
+
+    shift = 3
+    if penalty:
+        shift = 4
 
     key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
 
@@ -117,34 +119,85 @@ def make_aeq(assembly, return_vcount=True, flip=False):
 
         for interface in interfaces:
             n = len(interface.points)
-
+            # process the u block
             center = U.center()
             # B_j
-            block_rows, block_cols, block_data = \
-                aeq_block(interface, center, not flip)
+            block_rows, block_cols, block_data = aeq_block(interface, center, not flip, penalty)
             # shift rows and cols
             rows += [row + 6 * i for row in block_rows]
-            cols += [col + 3 * vcount for col in block_cols]
+            cols += [col + shift * vcount for col in block_cols]
             data += block_data
-
             # process the v block
             center = V.center()
             # B_k
-            block_rows, block_cols, block_data = \
-                aeq_block(interface, center, flip)
+            block_rows, block_cols, block_data = aeq_block(interface, center, flip, penalty)
             # shift rows and cols
             rows += [row + 6 * j for row in block_rows]
-            cols += [col + 3 * vcount for col in block_cols]
+            cols += [col + shift * vcount for col in block_cols]
             data += block_data
             vcount += n
-
-    if return_vcount:
-        return csr_matrix((data, (rows, cols))), vcount
 
     return csr_matrix((data, (rows, cols)))
 
 
-def aeq_block(interface, center, reverse):
+def aeq_block(interface, center, reverse, penalty=False):
+    # rows, cols, data = [], [], []
+    # u = interface.frame.xaxis
+    # v = interface.frame.yaxis
+    # w = interface.frame.zaxis
+    #
+    # if reverse:
+    #     u = [-1.0 * axis for axis in u]
+    #     v = [-1.0 * axis for axis in v]
+    #     w = [-1.0 * axis for axis in w]
+    #
+    # fx = [w[0], u[0], v[0]]
+    # fy = [w[1], u[1], v[1]]
+    # fz = [w[2], u[2], v[2]]
+    #
+    # for i in range(len(interface.points)):
+    #     xyz = interface.points[i]
+    #     # coordinates of interface point relative to block mass center
+    #     rxyz = [xyz[axis] - center[axis] for axis in range(3)]
+    #     # moments
+    #     mu = cross_vectors(rxyz, u)
+    #     mv = cross_vectors(rxyz, v)
+    #     mw = cross_vectors(rxyz, w)
+    #
+    #     mx = [mw[0], mu[0], mv[0]]
+    #     my = [mw[1], mu[1], mv[1]]
+    #     mz = [mw[2], mu[2], mv[2]]
+    #
+    #     for j in range(3):
+    #         col = j + (i * 3)
+    #         if fx[j]:
+    #             rows.append(0)
+    #             cols.append(col)
+    #             data.append(fx[j])
+    #         if fy[j]:
+    #             rows.append(1)
+    #             cols.append(col)
+    #             data.append(fy[j])
+    #         if fz[j]:
+    #             rows.append(2)
+    #             cols.append(col)
+    #             data.append(fz[j])
+    #         if mx[j]:
+    #             rows.append(3)
+    #             cols.append(col)
+    #             data.append(mx[j])
+    #         if my[j]:
+    #             rows.append(4)
+    #             cols.append(col)
+    #             data.append(my[j])
+    #         if mz[j]:
+    #             rows.append(5)
+    #             cols.append(col)
+    #             data.append(mz[j])
+    shift = 3
+    if penalty:
+        shift = 4
+
     rows, cols, data = [], [], []
     u = interface.frame.xaxis
     v = interface.frame.yaxis
@@ -155,9 +208,9 @@ def aeq_block(interface, center, reverse):
         v = [-1.0 * axis for axis in v]
         w = [-1.0 * axis for axis in w]
 
-    fx = [w[0], u[0], v[0]]
-    fy = [w[1], u[1], v[1]]
-    fz = [w[2], u[2], v[2]]
+    fx = [w[0], -w[0], u[0], v[0]] if penalty else [w[0], u[0], v[0]]
+    fy = [w[1], -w[1], u[1], v[1]] if penalty else [w[1], u[1], v[1]]
+    fz = [w[2], -w[2], u[2], v[2]] if penalty else [w[2], u[2], v[2]]
 
     for i in range(len(interface.points)):
         xyz = interface.points[i]
@@ -168,12 +221,12 @@ def aeq_block(interface, center, reverse):
         mv = cross_vectors(rxyz, v)
         mw = cross_vectors(rxyz, w)
 
-        mx = [mw[0], mu[0], mv[0]]
-        my = [mw[1], mu[1], mv[1]]
-        mz = [mw[2], mu[2], mv[2]]
+        mx = [mw[0], -mw[0], mu[0], mv[0]] if penalty else [mw[0], mu[0], mv[0]]
+        my = [mw[1], -mw[1], mu[1], mv[1]] if penalty else [mw[1], mu[1], mv[1]]
+        mz = [mw[2], -mw[2], mu[2], mv[2]] if penalty else [mw[2], mu[2], mv[2]]
 
-        for j in range(3):
-            col = j + (i * 3)
+        for j in range(shift):
+            col = j + (i * shift)
             if fx[j]:
                 rows.append(0)
                 cols.append(col)
@@ -202,19 +255,11 @@ def aeq_block(interface, center, reverse):
     return rows, cols, data
 
 
-def unit_basis(assembly):
+def unit_basis(assembly, penalty=False):
     """Create interface reference system as unit basis."""
     data = []
     for edge in assembly.graph.edges():
         interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
-        #
-        # if len(interfaces) == 0 and assembly.graph.edge_attribute(edge, 'interface') is None:
-        #     continue
-        # elif len(interfaces) == 0 and assembly.graph.edge_attribute(edge, 'interface') is not None:
-        #     interfaces = [assembly.graph.edge_attribute(edge, 'interface')]
-        #     assembly.graph.edge_attribute(edge, 'interfaces', interfaces)
-
-        # interfaces = [assembly.graph.edge_attribute(edge, 'interface')]
 
         for interface in interfaces:
             u = interface.frame.xaxis
@@ -222,6 +267,8 @@ def unit_basis(assembly):
             w = interface.frame.zaxis
             for i in range(len(interface.points)):
                 data.append([w[0], w[1], w[2]])
+                if penalty:
+                    data.append([-w[0], -w[1], -w[2]])
                 data.append([u[0], u[1], u[2]])
                 data.append([v[0], v[1], v[2]])
     return np.array(data)
@@ -290,116 +337,6 @@ def make_afr(total_vcount, fcon_number=8, mu=0.8):
         j += 3
 
     return csr_matrix((data, (rows, cols)))
-
-
-def make_aeq_b(assembly, return_vcount=True, flip=False):
-    """Create equilibrium matrix for penalty formulation Aeq@B. """
-    rows = []
-    cols = []
-    data = []
-
-    vcount = 0
-
-    key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
-
-    for (u, v), attr in assembly.graph.edges(True):
-        i = key_index[u]
-        j = key_index[v]
-
-        is_flip_interface = flip
-
-        U = assembly.graph.node_attribute(u, 'block')
-        V = assembly.graph.node_attribute(v, 'block')
-
-        interfaces = assembly.graph.edge_attribute((u, v), 'interfaces')
-
-        for interface in interfaces:
-
-            n = len(interface.points)
-
-            center = U.center()
-            # B_j
-            block_rows, block_cols, block_data = \
-                aeq_b_block(interface, center, not is_flip_interface)
-            # shift rows and cols
-            rows += [row + 6 * i for row in block_rows]
-            cols += [col + 4 * vcount for col in block_cols]
-            data += block_data
-
-            # process the v block
-            center = V.center()
-            # B_k
-            block_rows, block_cols, block_data = \
-                aeq_b_block(interface, center, is_flip_interface)
-            # shift rows and cols
-            rows += [row + 6 * j for row in block_rows]
-            cols += [col + 4 * vcount for col in block_cols]
-            data += block_data
-            vcount += n
-
-    if return_vcount:
-        return csr_matrix((data, (rows, cols))), vcount
-
-    return csr_matrix((data, (rows, cols)))
-
-
-def aeq_b_block(interface, center, reverse):
-
-    rows, cols, data = [], [], []
-    u = interface.frame.xaxis
-    v = interface.frame.yaxis
-    w = interface.frame.zaxis
-
-    if reverse:
-        u = [-1.0 * axis for axis in u]
-        v = [-1.0 * axis for axis in v]
-        w = [-1.0 * axis for axis in w]
-
-    fx = [w[0], - w[0], u[0], v[0]]
-    fy = [w[1], - w[1], u[1], v[1]]
-    fz = [w[2], - w[2], u[2], v[2]]
-
-    for i in range(len(interface.points)):
-        xyz = interface.points[i]
-        # coordinates of interface point relative to block mass center
-        rxyz = [xyz[axis] - center[axis] for axis in range(3)]
-        # moments
-        mu = cross_vectors(rxyz, u)
-        mv = cross_vectors(rxyz, v)
-        mw = cross_vectors(rxyz, w)
-
-        mx = [mw[0], - mw[0], mu[0], mv[0]]
-        my = [mw[1], - mw[1], mu[1], mv[1]]
-        mz = [mw[2], - mw[2], mu[2], mv[2]]
-
-        for j in range(4):
-            col = j + (i * 4)
-            if fx[j]:
-                rows.append(0)
-                cols.append(col)
-                data.append(fx[j])
-            if fy[j]:
-                rows.append(1)
-                cols.append(col)
-                data.append(fy[j])
-            if fz[j]:
-                rows.append(2)
-                cols.append(col)
-                data.append(fz[j])
-            if mx[j]:
-                rows.append(3)
-                cols.append(col)
-                data.append(mx[j])
-            if my[j]:
-                rows.append(4)
-                cols.append(col)
-                data.append(my[j])
-            if mz[j]:
-                rows.append(5)
-                cols.append(col)
-                data.append(mz[j])
-
-    return rows, cols, data
 
 
 def unit_basis_penalty(assembly):

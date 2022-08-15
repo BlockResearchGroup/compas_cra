@@ -31,7 +31,6 @@ Equilibrium Helper Functions
     make_aeq
     make_afr
     unit_basis
-    make_aeq_b
     make_afr_b
     unit_basis_penalty
     num_vertices
@@ -50,6 +49,7 @@ Pyomo Helper Functions
     objectives
     constraints
     static_equilibrium_constraints
+    pyomo_result_check
     pyomo_result_assembly
 
 """

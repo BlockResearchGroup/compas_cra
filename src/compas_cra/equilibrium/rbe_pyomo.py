@@ -6,16 +6,16 @@ Rigid-block Equilibrium
 Using Pyomo + IPOPT
 """
 
+import time
 import numpy as np
 import pyomo.environ as pyo
-import time
 
 from compas_assembly.datastructures import Assembly
 from .cra_helper import num_vertices
 from .cra_helper import equilibrium_setup, friction_setup, external_force_setup
 from .pyomo_helper import bounds, objectives
 from .pyomo_helper import static_equilibrium_constraints
-from .pyomo_helper import pyomo_result_assembly
+from .pyomo_helper import pyomo_result_check, pyomo_result_assembly
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -61,25 +61,17 @@ def rbe_solve(
         start_time = time.time()
 
     solver = pyo.SolverFactory('ipopt')
-    results = solver.solve(model, tee=verbose)
+    result = solver.solve(model, tee=verbose)
 
     if timer:
         print("--- solving time: %s seconds ---" % (time.time() - start_time))
 
     if verbose:
         model.f.display()
+        print("objective value: ")
+        model.obj.display()
 
-    if results.solver.termination_condition is not \
-       pyo.TerminationCondition.optimal and \
-       results.solver.termination_condition is not \
-       pyo.TerminationCondition.feasible:
-        raise ValueError(results.solver.termination_condition)
-
-    print("result: ", results.solver.termination_condition)
-    print("obj", model.obj.display())
-
-    model.f.display()
-
+    pyomo_result_check(result)
     pyomo_result_assembly(model, assembly, penalty=True, verbose=verbose)
 
     return assembly

@@ -18,6 +18,7 @@ __all__ = ['initialisations',
            'objectives',
            'constraints',
            'static_equilibrium_constraints',
+           'pyomo_result_check',
            'pyomo_result_assembly']
 
 
@@ -230,12 +231,22 @@ def static_equilibrium_constraints(model, aeq, afr, p):
     return equilibrium_constraints, friction_constraint
 
 
+def pyomo_result_check(result):
+    if result.solver.termination_condition is not \
+       pyo.TerminationCondition.optimal and \
+       result.solver.termination_condition is not \
+       pyo.TerminationCondition.feasible:
+        raise ValueError(result.solver.termination_condition)
+
+    print("result: ", result.solver.termination_condition)
+
+
 def pyomo_result_assembly(model, assembly, penalty=False, verbose=False):
     """Save pyomo optimisation results to assembly."""
 
-    shift = 4  # for cra_penalty and rbe shift number is 4
-    if not penalty:
-        shift = 3
+    shift = 3
+    if penalty:
+        shift = 4  # for cra_penalty and rbe shift number is 4
 
     # save force to assembly
     offset = 0
@@ -247,9 +258,9 @@ def pyomo_result_assembly(model, assembly, penalty=False, verbose=False):
             for i in range(n):
                 interface.forces.append({
                     'c_np': model.f[offset + shift * i + 0].value,
-                    'c_nn': model.f[offset + shift * i + 1].value if shift == 4 else 0,
-                    'c_u': model.f[offset + shift * i + 1 + (1 if shift == 4 else 0)].value,
-                    'c_v': model.f[offset + shift * i + 2 + (1 if shift == 4 else 0)].value
+                    'c_nn': model.f[offset + shift * i + 1].value if penalty else 0,
+                    'c_u': model.f[offset + shift * i + 1 + (1 if penalty else 0)].value,
+                    'c_v': model.f[offset + shift * i + 2 + (1 if penalty else 0)].value
                 })
             offset += shift * n
 
