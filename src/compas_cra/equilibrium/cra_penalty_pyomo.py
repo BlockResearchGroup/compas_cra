@@ -35,6 +35,7 @@ def cra_penalty_solve(
     timer: bool = False
 ):
     """CRA solver with penalty formulation using Pyomo + IPOPT. """
+    # TODO: docs
 
     if timer:
         start_time = time.time()

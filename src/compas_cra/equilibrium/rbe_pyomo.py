@@ -31,6 +31,7 @@ def rbe_solve(
     timer: bool = False
 ):
     """RBE solver with penalty formulation using Pyomo + IPOPT. """
+    # TODO: docs
 
     model = pyo.ConcreteModel()
 

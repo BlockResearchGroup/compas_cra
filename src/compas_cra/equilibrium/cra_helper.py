@@ -19,7 +19,6 @@ __all__ = ['equilibrium_setup',
            'external_force_setup',
            'make_aeq',
            'make_afr',
-           'make_afr_b',
            'unit_basis',
            'num_vertices',
            'num_free',
@@ -27,7 +26,7 @@ __all__ = ['equilibrium_setup',
 
 
 def equilibrium_setup(assembly, penalty=False):
-    """set up equilibrium matrix"""
+    """Set up equilibrium matrix."""
     free = free_nodes(assembly)
     aeq = make_aeq(assembly, penalty=penalty)
 
@@ -39,7 +38,7 @@ def equilibrium_setup(assembly, penalty=False):
 
 
 def external_force_setup(assembly, density):
-    """set up external force vector"""
+    """Set up external force vector."""
     free = free_nodes(assembly)
 
     num_nodes = assembly.graph.number_of_nodes()
@@ -58,24 +57,21 @@ def external_force_setup(assembly, density):
 
 
 def friction_setup(assembly, mu, penalty=False):
-    """set up friction matrix"""
+    """Set up friction matrix."""
     v_count = num_vertices(assembly)
-    if penalty:
-        afr = make_afr_b(v_count, fcon_number=8, mu=mu, friction_net=False)
-    else:
-        afr = make_afr(v_count, fcon_number=8, mu=mu)
+    afr = make_afr(v_count, fcon_number=8, mu=mu, penalty=penalty, friction_net=False)
     print("Afr: ", afr.shape)
 
     return afr
 
 
 def num_free(assembly):
-    """return number of free blocks"""
+    """Return number of free blocks."""
     return len(list(key for key in assembly.graph.nodes_where({'is_support': False})))
 
 
 def free_nodes(assembly):
-    """return free and fixed node list"""
+    """Return free and fixed node list."""
     num_nodes = assembly.graph.number_of_nodes()
     key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
 
@@ -86,7 +82,7 @@ def free_nodes(assembly):
 
 
 def num_vertices(assembly):
-    """Total number of vertices"""
+    """Total number of vertices."""
     v_count = 0
     for b_j, b_k in assembly.graph.edges(False):
         for interface in assembly.graph.edge_attribute((b_j, b_k), 'interfaces'):
@@ -95,7 +91,7 @@ def num_vertices(assembly):
 
 
 def make_aeq(assembly, flip=False, penalty=False):
-    """Create equilibrium matrix Aeq or penalty formulation matrix Aeq@B. """
+    """Create equilibrium matrix Aeq or penalty formulation matrix Aeq@B."""
     rows = []
     cols = []
     data = []
@@ -130,7 +126,7 @@ def make_aeq(assembly, flip=False, penalty=False):
 
 
 def aeq_block(interface, center, reverse, penalty=False):
-    """helper function to create Aeq and Aeq@B."""
+    """Helper function to create Aeq and Aeq@B."""
     shift = 3
     if penalty:
         shift = 4
@@ -149,8 +145,7 @@ def aeq_block(interface, center, reverse, penalty=False):
     fy = [w[1], -w[1], u[1], v[1]] if penalty else [w[1], u[1], v[1]]
     fz = [w[2], -w[2], u[2], v[2]] if penalty else [w[2], u[2], v[2]]
 
-    for i in range(len(interface.points)):
-        xyz = interface.points[i]
+    for i, xyz in enumerate(interface.points):
         # coordinates of interface point relative to block mass center
         rxyz = [xyz[axis] - center[axis] for axis in range(3)]
         # moments
@@ -211,7 +206,14 @@ def unit_basis(assembly, penalty=False):
     return np.array(data)
 
 
-def make_afr(total_vcount, fcon_number=8, mu=0.8):
+def make_afr(total_vcount, fcon_number=8, mu=0.8, penalty=False, friction_net=False):
+    """Create friction matrix Afr and Afr@B."""
+    if penalty:
+        return _make_afr_b(total_vcount, fcon_number=fcon_number, mu=mu, friction_net=friction_net)
+    return make_afr(total_vcount, fcon_number=8, mu=mu)
+
+
+def _make_afr(total_vcount, fcon_number=8, mu=0.8):
     """Create friction matrix Afr."""
     rows = []
     cols = []
@@ -276,7 +278,7 @@ def make_afr(total_vcount, fcon_number=8, mu=0.8):
     return csr_matrix((data, (rows, cols)))
 
 
-def make_afr_b(total_vcount, fcon_number=8, mu=0.8, friction_net=False):
+def _make_afr_b(total_vcount, fcon_number=8, mu=0.8, friction_net=False):
     """Create friction matrix Afr@B."""
     rows = []
     cols = []

@@ -33,6 +33,7 @@ def cra_solve(
     timer: bool = False
 ):
     """CRA solver using Pyomo + IPOPT. """
+    # TODO: docs
 
     if timer:
         start_time = time.time()
