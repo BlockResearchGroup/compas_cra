@@ -34,8 +34,59 @@ def cra_penalty_solve(
     verbose: bool = False,
     timer: bool = False
 ):
-    """CRA solver with penalty formulation using Pyomo + IPOPT. """
-    # TODO: docs
+    r"""CRA solver with penalty formulation using Pyomo + IPOPT.
+
+        Parameters
+        ----------
+        assembly : compas_assembly.datastructures.Assembly
+            The rigid block assembly.
+        mu : float, optional
+            Friction coefficient value.
+        density : float, optional
+            Density of the block material.
+            Default is ``1.0``.
+        d_bnd : float, optional
+            The bound of virtual displacement d.
+            Default is ``1e-3``.
+        eps : float, optional
+            Epsilon, contact overlapping parameter.
+            Default is ``1e-4``.
+        verbose : bool, optional
+            Print information during the execution of the algorithm.
+            Default is ``False``.
+        timer : bool, optional
+            Time the solving time.
+            Default is ``False``.
+
+        Returns
+        -------
+        assembly : compas_assembly.datastructures.Assembly
+            The assembly is updated in place, also return Assembly for compas.rpc and compas.cloud
+
+
+        Notes
+        -----
+        This function solves the following optimisation problem:
+
+        .. math::
+
+            \begin{align}
+                \begin{split}
+                    \min_{{\bf{\tilde{f}}},\, \delta{\bf{q}},\, \pmb\alpha} \quad & \left\| {\bf{f}}_n^{+} \right\|_2^2 +
+                    \gamma \left\| {\bf{f}}_n^{-} \right\|_2^2 + \left\| \pmb\alpha \right\|_2^2 \\
+                    \textrm{s.t.} \quad & {{\bf{A}}_{eq}}\:{\bf{B}}\:{\bf{\tilde{f}}} = -{\bf{p}} \\
+                    & {\bf{A}}_{fr}\:{\bf{B}}\:{\bf{\tilde{f}}} \le {\bf{0}} \\
+                    & {\bf{A}}_{eq}^\intercal\:{\delta\bf{q}} = \delta{\bf{d}} \\
+                    & {f_{jkn}^{i+}}\:({\delta d_{jkn}^i} + \varepsilon) = 0 \\
+                    & {f_{jkn}^{i+}} \: {f_{jkn}^{i-}} = 0 \\
+                    & {\bf{f}}_{jkt}^{i} = -{\alpha_{jk}^i} \: \delta{\bf{d}}_{jkt}^{i} \\
+                    & \left\lvert\, \delta {\bf{d}}_{jk\cdot}^{i} \,\right\lvert \le \eta \\
+                    & \gamma \, , \varepsilon \, , \eta  \ge 0 \\
+                    & f_{jkn}^{i+}\, ,f_{jkn}^{i-} \, , {\alpha_{jk}^i} \, , ({\delta d_{jkn}^i} + \varepsilon) \ge 0 \;, \quad \forall i,j,k \;,
+                \end{split}
+            \end{align}
+
+    """
 
     if timer:
         start_time = time.time()

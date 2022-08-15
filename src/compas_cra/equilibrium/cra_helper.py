@@ -17,6 +17,7 @@ __email__ = "kao@arch.ethz.ch"
 __all__ = ['equilibrium_setup',
            'friction_setup',
            'external_force_setup',
+           'density_setup',
            'make_aeq',
            'make_afr',
            'unit_basis',
@@ -26,11 +27,24 @@ __all__ = ['equilibrium_setup',
 
 
 def equilibrium_setup(assembly, penalty=False):
-    """Set up equilibrium matrix."""
+    """Set up equilibrium matrix.
+
+        Parameters
+        ----------
+        assembly : compas_assembly.datastructures.Assembly
+            The rigid block assembly.
+        penalty : bool, optional
+            if True then return penalty matrix.
+            Default is ``False``.
+
+        Returns
+        -------
+        aeq : scipy.sparse.csr_matrix
+            Equilibrium matrix Aeq (penalty=False) or Equilibrium penalty matrix Aeq@B (penalty=True).
+
+    """
     free = free_nodes(assembly)
     aeq = make_aeq(assembly, penalty=penalty)
-
-    # TODO: make a function to remove fixed node from matrix
     aeq = aeq[[index * 6 + i for index in free for i in range(6)], :]
     print("Aeq: ", aeq.shape)
 
@@ -38,7 +52,22 @@ def equilibrium_setup(assembly, penalty=False):
 
 
 def external_force_setup(assembly, density):
-    """Set up external force vector."""
+    """Set up external force vector.
+
+        Parameters
+        ----------
+        assembly : compas_assembly.datastructures.Assembly
+            The rigid block assembly.
+        density : float
+            Density of the material.
+            If density attribute is not set, optimisation will use this density value.
+
+        Returns
+        -------
+        p : numpy.ndarray
+            External force p.
+
+    """
     free = free_nodes(assembly)
 
     num_nodes = assembly.graph.number_of_nodes()
@@ -48,7 +77,8 @@ def external_force_setup(assembly, density):
     for node in assembly.graph.nodes():
         block = assembly.node_block(node)
         index = key_index[node]
-        p[index][2] = -block.volume() * density
+        p[index][2] = -block.volume() * (block.attributes["density"] if "density" in block.attributes else density)
+        print((block.attributes["density"] if "density" in block.attributes else density))
 
     p = np.array(p, dtype=float)
     p = p[free, :].reshape((-1, 1), order='C')
@@ -57,12 +87,51 @@ def external_force_setup(assembly, density):
 
 
 def friction_setup(assembly, mu, penalty=False):
-    """Set up friction matrix."""
+    """Set up friction matrix.
+
+        Parameters
+        ----------
+        assembly : compas_assembly.datastructures.Assembly
+            The rigid block assembly.
+        mu : float, optional
+            Friction coefficient value.
+        penalty : bool, optional
+            if True then return penalty matrix.
+            Default is ``False``.
+
+        Returns
+        -------
+        afr : scipy.sparse.csr_matrix
+            Afr (penalty=False) or Afr@B (penalty=True)
+
+    """
     v_count = num_vertices(assembly)
     afr = make_afr(v_count, fcon_number=8, mu=mu, penalty=penalty, friction_net=False)
     print("Afr: ", afr.shape)
 
     return afr
+
+
+def density_setup(assembly, density):
+    """Set up material density.
+
+        Parameters
+        ----------
+        assembly : compas_assembly.datastructures.Assembly
+            The rigid block assembly.
+        density : dict of float
+            density values, the dict key should match with assembly.graph.nodes()
+
+        Returns
+        -------
+        None
+
+    """
+
+    for node in assembly.graph.nodes():
+        block = assembly.graph.node_attribute(node, 'block')
+        if node in density:
+            block.attributes["density"] = density[node]
 
 
 def num_free(assembly):
@@ -210,7 +279,7 @@ def make_afr(total_vcount, fcon_number=8, mu=0.8, penalty=False, friction_net=Fa
     """Create friction matrix Afr and Afr@B."""
     if penalty:
         return _make_afr_b(total_vcount, fcon_number=fcon_number, mu=mu, friction_net=friction_net)
-    return make_afr(total_vcount, fcon_number=8, mu=mu)
+    return _make_afr(total_vcount, fcon_number=8, mu=mu)
 
 
 def _make_afr(total_vcount, fcon_number=8, mu=0.8):

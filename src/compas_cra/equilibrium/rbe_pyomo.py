@@ -30,8 +30,46 @@ def rbe_solve(
     verbose: bool = False,
     timer: bool = False
 ):
-    """RBE solver with penalty formulation using Pyomo + IPOPT. """
-    # TODO: docs
+    r"""RBE solver with penalty formulation using Pyomo + IPOPT.
+
+        Parameters
+        ----------
+        assembly : compas_assembly.datastructures.Assembly
+            The rigid block assembly.
+        mu : float, optional
+            Friction coefficient value.
+        density : float, optional
+            Density of the block material.
+            Default is ``1.0``.
+        verbose : bool, optional
+            Print information during the execution of the algorithm.
+            Default is ``False``.
+        timer : bool, optional
+            Time the solving time.
+            Default is ``False``.
+
+        Returns
+        -------
+        assembly : compas_assembly.datastructures.Assembly
+            The assembly is updated in place, also return Assembly for compas.rpc and compas.cloud
+
+
+        Notes
+        -----
+        This function solves the following optimisation problem:
+
+        .. math::
+
+            \begin{align}
+                \begin{split}
+                    \min_{\bf{f}} \quad & \left\| {\bf{f}}_n \right\|_2^2 \\
+                    \textrm{s.t.} \quad & {{\bf{A}}_{eq}}\:{\bf{f}} = -{\bf{p}} \\
+                    & {\bf{A}}_{fr}\:{\bf{f}} \le {\bf{0}} \\
+                    & f_{jkn}^i \ge 0 \;, \quad \forall i,j,k \;,
+                \end{split}
+            \end{align}
+
+    """
 
     model = pyo.ConcreteModel()
 

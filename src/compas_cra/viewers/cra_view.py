@@ -394,8 +394,9 @@ def draw_weights(assembly, viewer, scale=1., density=1.):
         if assembly.graph.node_attribute(node, 'is_support'):
             supports.append(Point(*block.center()))
             continue
+        d = (block.attributes["density"] if "density" in block.attributes else density)
         weights.append(Arrow(block.center(),
-                             [0, 0, -block.volume() * density * scale],
+                             [0, 0, -block.volume() * d * scale],
                              head_portion=0.2, head_width=0.07,
                              body_width=0.02))
         # print("self-weight", -block.volume() * density)
