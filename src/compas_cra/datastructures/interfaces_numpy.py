@@ -36,7 +36,7 @@ def assembly_interfaces_numpy(assembly,
 
     Parameters
     ----------
-    assembly : compas_cra.datastructures.CRA_Assembly
+    assembly : compas_cra.datastructures.CRA_Assembly or compas_assembly.datastructures.Assembly
         An assembly of discrete blocks.
     nmax : int, optional
         Maximum number of neighbours per block.
@@ -47,9 +47,6 @@ def assembly_interfaces_numpy(assembly,
     amin : float, optional
         Minimum area of a "face-face" interface.
         Default is ``1e-1``.
-    concave : bool, optional
-        Identify concave interfaces
-        Default is ``True``
 
     References
     ----------

@@ -218,7 +218,7 @@ def constraints(
 
 
 def static_equilibrium_constraints(model, aeq, afr, p):
-    """create equilibrium and friction constraints"""
+    """Create equilibrium and friction constraints."""
 
     from numpy import zeros
 
@@ -232,6 +232,7 @@ def static_equilibrium_constraints(model, aeq, afr, p):
 
 
 def pyomo_result_check(result):
+    """Check if pyomo optimisation result, raise error if the problem is infeasible."""
     if result.solver.termination_condition is not \
        pyo.TerminationCondition.optimal and \
        result.solver.termination_condition is not \
