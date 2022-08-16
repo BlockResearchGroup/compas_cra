@@ -99,7 +99,7 @@
 <h1>friction_setup</h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_cra.equilibrium.friction_setup">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">friction_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_helper.py#L89"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">friction_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction_net</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_helper.py#L89"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Set up friction matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -107,6 +107,8 @@
 <li><p><strong>assembly</strong> (<em>compas_assembly.datastructures.Assembly</em>) – The rigid block assembly.</p></li>
 <li><p><strong>mu</strong> (<em>float, optional</em>) – Friction coefficient value.</p></li>
 <li><p><strong>penalty</strong> (<em>bool, optional</em>) – if True then return penalty matrix.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>friction_net</strong> (<em>bool, optional</em>) – Friction net formulation if True for the penalty formulation, friction plus formulation if True.
 Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
