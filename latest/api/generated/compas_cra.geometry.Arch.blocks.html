@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_cra - external_force_setup</title>
+  <title>compas_cra - Arch.blocks</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="density_setup" href="compas_cra.equilibrium.density_setup.html" />
+  <link rel="next" title="viewers" href="../compas_cra.viewers.html" />
   
 
   
-  <link rel="prev" title="friction_setup" href="compas_cra.equilibrium.friction_setup.html" />
+  <link rel="prev" title="Arch.assembly" href="compas_cra.geometry.Arch.assembly.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -86,31 +86,26 @@
             
             <li class="breadcrumb-item"><a href="../compas_cra.html">compas_cra</a></li>
             
-            <li class="breadcrumb-item"><a href="../compas_cra.equilibrium.html">equilibrium</a></li>
+            <li class="breadcrumb-item"><a href="../compas_cra.geometry.html">geometry</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">external_force_setup</li> -->
+            <li class="breadcrumb-item"><a href="compas_cra.geometry.Arch.html">Arch</a></li>
+            
+            <!-- <li class="breadcrumb-item active" aria-current="page">Arch.blocks</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="external-force-setup">
-<h1>external_force_setup</h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="compas_cra.equilibrium.external_force_setup">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">external_force_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_helper.py#L54"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Set up external force vector.</p>
+        <section class="detail" id="arch-blocks">
+<h1>Arch.blocks</h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="compas_cra.geometry.Arch.blocks">
+<span class="sig-prename descclassname"><span class="pre">Arch.</span></span><span class="sig-name descname"><span class="pre">blocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/geometry/arch.py#L64"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Create blocks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>assembly</strong> (<em>compas_assembly.datastructures.Assembly</em>) – The rigid block assembly.</p></li>
-<li><p><strong>density</strong> (<em>float</em>) – Density of the material.
-If density attribute is not set, optimisation will use this density value.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>p</strong> (<em>numpy.ndarray</em>) – External force p.</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>list</em> – A list of blocks defined as simple meshes.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -150,8 +145,8 @@ If density attribute is not set, optimisation will use this density value.</p></
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_cra.html">compas_cra</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.datastructures.html">datastructures</a></li>
-<li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_cra.equilibrium.html">equilibrium</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.geometry.html">geometry</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.equilibrium.html">equilibrium</a></li>
+<li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_cra.geometry.html">geometry</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.viewers.html">viewers</a></li>
 </ul>
 </li>
@@ -168,7 +163,7 @@ If density attribute is not set, optimisation will use this density value.</p></
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">external_force_setup</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Arch.blocks</a></li>
 </ul>
 
       </div>
@@ -180,20 +175,20 @@ If density attribute is not set, optimisation will use this density value.</p></
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_cra.equilibrium.friction_setup.html" title="friction_setup" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_cra.geometry.Arch.assembly.html" title="Arch.assembly" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          friction_setup
+          Arch.assembly
         </div>
       </a>
       
 
       
-      <a href="compas_cra.equilibrium.density_setup.html" title="density_setup" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="../compas_cra.viewers.html" title="viewers" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          density_setup
+          viewers
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

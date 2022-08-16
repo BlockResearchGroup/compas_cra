@@ -118,8 +118,7 @@
     <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_solve</span>
     <span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
 
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s1">&#39;./boxes.json&#39;</span><span class="p">))</span>
+    <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s1">&#39;./cubes.json&#39;</span><span class="p">))</span>
     <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
     <span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
 
@@ -168,6 +167,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.html">compas_cra</a><ul class="nav flex-column collapse">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.datastructures.html">datastructures</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.equilibrium.html">equilibrium</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.geometry.html">geometry</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.viewers.html">viewers</a></li>
 </ul>
 </li>
