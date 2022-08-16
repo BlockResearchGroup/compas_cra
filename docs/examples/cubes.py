@@ -20,8 +20,7 @@ if __name__ == '__main__':
     from compas_cra.equilibrium import cra_solve
     from compas_cra.viewers import cra_view
 
-    assembly = compas.json_load(
-            os.path.join(compas_cra.DATA, './boxes.json'))
+    assembly = compas.json_load(os.path.join(compas_cra.DATA, './cubes.json'))
     assembly = assembly.copy(cls=CRA_Assembly)
     assembly.set_boundary_conditions([0])
 

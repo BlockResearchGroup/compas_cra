@@ -21,7 +21,7 @@ class CRA_Assembly(Assembly):
     """Extended data structure for concave assemblies."""
 
     def __init__(self):
-        super(CRA_Assembly, self).__init__()
+        super().__init__()
         self.attributes.update({'name': 'CRA_Assembly'})
         self.graph.default_node_attributes.update({
             'block': None,

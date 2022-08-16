@@ -34,7 +34,7 @@ Finally, the potential of our method for real-world problems are demonstrated
 by designing complex and scaffolding-free physical models.
 
 
-Please cite our work if you use CRA in your research
+##### Please cite our work if you use CRA in your research
 
 ```latex
 @article{kao2022coupled,

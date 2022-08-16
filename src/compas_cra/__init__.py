@@ -11,6 +11,7 @@ compas_cra
 
     compas_cra.datastructures
     compas_cra.equilibrium
+    compas_cra.geometry
     compas_cra.viewers
 
 """

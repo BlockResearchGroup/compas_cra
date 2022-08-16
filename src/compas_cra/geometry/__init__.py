@@ -1,9 +1,9 @@
 """
 ********************************************************************************
-datastructures
+geometry
 ********************************************************************************
 
-.. currentmodule:: compas_cra.datastructures
+.. currentmodule:: compas_cra.geometry
 
 
 Classes
@@ -13,28 +13,12 @@ Classes
     :toctree: generated/
     :nosignatures:
 
-    CRA_Assembly
-
-
-Functions
-============
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    assembly_interfaces_numpy
-
+    Arch
 
 """
 
-
 from __future__ import absolute_import
 
-import compas
-
-from .cra_assembly import *  # noqa: F401 F403
-if not compas.IPY:
-    from .interfaces_numpy import *  # noqa: F401 F403
+from .arch import *  # noqa: F401 F403
 
 __all__ = [name for name in dir() if not name.startswith('_')]
