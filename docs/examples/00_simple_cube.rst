@@ -2,7 +2,7 @@
 Simplest Cube
 ********************************************************************************
 
-.. figure:: /_images/example_cubes_rbe.png
+.. figure:: /_images/example_simple_cube.png
     :figclass: figure
     :class: figure-img img-fluid
 
