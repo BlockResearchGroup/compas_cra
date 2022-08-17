@@ -10,8 +10,6 @@ __email__ = "kao@arch.ethz.ch"
 
 if __name__ == '__main__':
 
-    import math as mt
-
     from compas.datastructures import Mesh
     from compas.geometry import Box
     from compas.geometry import Frame
@@ -20,6 +18,9 @@ if __name__ == '__main__':
     from compas_cra.datastructures import CRA_Assembly
     from compas_cra.equilibrium import cra_solve
     from compas_cra.viewers import cra_view
+
+    deg = 20  # rotation angle in degree
+    rotate_axis = [0, 1, 0]  # around y-axis
 
     support = Box(Frame.worldXY(), 1, 1, 1)
     free1 = Box(Frame.worldXY().transformed(
@@ -48,9 +49,7 @@ if __name__ == '__main__':
     assembly.add_interfaces_from_meshes([interface1], 0, 1)
     assembly.add_interfaces_from_meshes([interface2], 1, 2)
 
-    deg = 20  # rotation in degree
-    rad = deg * mt.pi / 180
-    assembly.rotate_assembly([0, 0, 0], [0, 1, 0], rad)  # around y-axis
+    assembly.rotate_assembly([0, 0, 0], rotate_axis, deg)
 
     cra_solve(assembly, verbose=True, timer=True)
     cra_view(assembly, resultant=False, nodal=True, grid=True,

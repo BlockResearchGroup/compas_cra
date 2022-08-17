@@ -1,11 +1,11 @@
 ********************************************************************************
-Curve 3 Blocks
+Cubes Penalty Solve
 ********************************************************************************
 
-.. figure:: /_images/example_curve-3-blocks.png
+.. figure:: /_images/example_cubes_penalty.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: curve-3-blocks.py
+.. literalinclude:: cubes_penalty.py
     :language: python
 

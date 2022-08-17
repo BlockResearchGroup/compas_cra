@@ -20,6 +20,11 @@ if __name__ == '__main__':
     from compas_cra.equilibrium import cra_solve, cra_penalty_solve
     from compas_cra.viewers import cra_view
 
+    mu = 0.7
+    dispbnd = 1e-1
+    overlap = 1e-4 * 0
+    d = 1
+
     assembly = compas.json_load(
             os.path.join(compas_cra.DATA, './snake.json'))
     assembly = assembly.copy(cls=CRA_Assembly)
@@ -31,12 +36,6 @@ if __name__ == '__main__':
 
     assembly_interfaces_numpy(assembly, amin=1e-4, tmax=1e-2)
 
-    print(assembly)
-
-    mu = 0.7
-    dispbnd = 1e-1
-    overlap = 1e-4 * 0
-    d = 1
     cra_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)
     # cra_penalty_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)
     cra_view(assembly, resultant=True, nodal=True, grid=True, weights=False,

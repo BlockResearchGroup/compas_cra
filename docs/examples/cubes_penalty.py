@@ -11,8 +11,6 @@ __email__ = "kao@arch.ethz.ch"
 
 if __name__ == '__main__':
 
-    import math as mt
-
     from compas.geometry import Box
     from compas.geometry import Frame
     from compas.geometry import Translation
@@ -22,6 +20,8 @@ if __name__ == '__main__':
     from compas_cra.equilibrium import cra_penalty_solve
     from compas_cra.viewers import cra_view
 
+    deg = 40  # rotation in degree
+    rotate_axis = [0, 1, 0]  # around y-axis
 
     support = Box(Frame.worldXY(), 1, 1, 1)  # supporting block
     free1 = Box(Frame.worldXY().transformed(
@@ -32,9 +32,7 @@ if __name__ == '__main__':
     assembly.add_block(Block.from_shape(free1), node=1)
     assembly.set_boundary_conditions([0])
 
-    deg = 40  # rotation in degree
-    rad = deg * mt.pi / 180
-    assembly.rotate_assembly([0, 0, 0], [0, 1, 0], rad)  # around y-axis
+    assembly.rotate_assembly([0, 0, 0], rotate_axis, deg)
 
     assembly_interfaces_numpy(assembly, amin=1e-6, tmax=1e-4)
 

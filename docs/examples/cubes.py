@@ -26,8 +26,6 @@ if __name__ == '__main__':
 
     assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
 
-    print(assembly)
-
     cra_solve(assembly, verbose=True, timer=True)
     cra_view(assembly, resultant=False, nodal=True, grid=True,
              displacements=True, dispscale=0, scale=0.5)

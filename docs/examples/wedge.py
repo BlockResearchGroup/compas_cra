@@ -21,6 +21,17 @@ if __name__ == '__main__':
     from compas_cra.equilibrium import cra_solve
     from compas_cra.viewers import cra_view
 
+    mu = 0.84  # friction coefficient
+    deg = 90  # rotation in degree
+    axis = 'y-axis'  # y-axis, x-axis, xy30-axis
+
+    if axis == 'y-axis':
+        rotate_axis = [0, 1, 0]  # around y-axis
+    if axis == 'x-axis':
+        rotate_axis = [1, 0, 0]  # around x-axis
+    if axis == 'xy30-axis':
+        rotate_axis = [mt.sqrt(3), 1, 0]  # rotate around xy30-axis
+
     assembly = compas.json_load(
             os.path.join(compas_cra.DATA, 'type-b.json'))
     assembly = assembly.copy(cls=CRA_Assembly)
@@ -28,15 +39,7 @@ if __name__ == '__main__':
 
     assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
 
-    print(assembly)
-
-    mu = 0.84  # friction coefficient
-    deg = 90  # rotation in degree
-    rad = deg * mt.pi / 180
-    # assembly.rotate_assembly([0, 0, 0], [1, 0, 0], rad)  # around x-axis
-    assembly.rotate_assembly([0, 0, 0], [0, 1, 0], rad)  # around y-axis
-    # assembly.rotate_assembly([0, 0, 0], [mt.sqrt(3), 1, 0], rad)
-    # rotate around xy30-axis
+    assembly.rotate_assembly([0, 0, 0], rotate_axis, deg)  # around y-axis
 
     cra_solve(assembly, verbose=True, timer=True, d_bnd=1e-2)
     cra_view(assembly, resultant=False, nodal=True, grid=True,

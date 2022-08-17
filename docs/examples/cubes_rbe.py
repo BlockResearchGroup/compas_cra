@@ -21,6 +21,9 @@ if __name__ == '__main__':
     from compas_cra.viewers import cra_view
     from compas_cra.equilibrium import rbe_solve
 
+    deg = 48.00  # rotation in degree
+    rotate_axis = [0, 1, 0]  # around y-axis
+
     support = Box(Frame.worldXY(), 1, 1, 1)  # supporting block
     free1 = Box(Frame.worldXY().transformed(
         Translation.from_vector([0, 0, 1])), 1, 1, 1)  # block to analyse
@@ -39,9 +42,7 @@ if __name__ == '__main__':
 
     assembly.add_interfaces_from_meshes([interface1], 0, 1)
 
-    deg = 48.00  # rotation in degree
-    rad = deg * mt.pi / 180
-    assembly.rotate_assembly([0, 0, 0], [0, 1, 0], rad)  # around y-axis
+    assembly.rotate_assembly([0, 0, 0], rotate_axis, deg)  # around y-axis
 
     rbe_solve(assembly, mu=0.1, verbose=True, timer=True)
     cra_view(assembly, resultant=False, nodal=True, grid=True,

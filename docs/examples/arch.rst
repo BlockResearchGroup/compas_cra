@@ -1,11 +1,11 @@
 ********************************************************************************
-Curve 3 Blocks
+Arch
 ********************************************************************************
 
-.. figure:: /_images/example_curve-3-blocks.png
+.. figure:: /_images/example_arch.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: curve-3-blocks.py
+.. literalinclude:: arch.py
     :language: python
 

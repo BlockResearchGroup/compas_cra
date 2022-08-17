@@ -94,8 +94,13 @@ class CRA_Assembly(Assembly):
         """Check if the block is a support."""
         return self.graph.node_attribute(key, "is_support")
 
-    def rotate_assembly(self, o, axis, rad):
+    def rotate_assembly(self, o, axis, angle, is_rad=False):
         """Rotate the entire assembly."""
+        from math import pi
+        rad = angle
+        if not is_rad:
+            rad = angle * pi / 180
+
         R = Rotation().from_axis_and_angle(axis, angle=rad, point=o)
         self.transform(R)
         for edge in self.edges():

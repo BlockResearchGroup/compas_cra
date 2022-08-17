@@ -19,13 +19,11 @@ if __name__ == '__main__':
     from compas_cra.equilibrium import cra_solve
     from compas_cra.viewers import cra_view
 
+    density = 0.1
+
     assembly = compas.json_load(os.path.join(compas_cra.DATA, './curve-3-blocks.json'))
     assembly = assembly.copy(cls=CRA_Assembly)
     assembly.set_boundary_conditions([0])
-
-    print(assembly)
-
-    density = 0.1
 
     cra_solve(assembly, verbose=True, timer=True, density=density)
     cra_view(assembly, resultant=False, nodal=True, grid=True,

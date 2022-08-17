@@ -1,11 +1,11 @@
 ********************************************************************************
-Curve 3 Blocks
+Cubes RBE Solve
 ********************************************************************************
 
-.. figure:: /_images/example_curve-3-blocks.png
+.. figure:: /_images/example_cubes_rbe.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: curve-3-blocks.py
+.. literalinclude:: cubes_rbe.py
     :language: python
 
