@@ -86,7 +86,7 @@ def rbe_solve(
     afr_b = friction_setup(assembly, mu, penalty=True)
     p = external_force_setup(assembly, density)
 
-    obj_rbe = objectives('rbe', (0, 0, 1e+6))
+    obj_rbe = objectives('rbe', (0, 1e+0, 1e+6, 1e+0))
     eq_con, fr_con = static_equilibrium_constraints(model, aeq_b, afr_b, p)
 
     model.obj = pyo.Objective(rule=obj_rbe, sense=pyo.minimize)

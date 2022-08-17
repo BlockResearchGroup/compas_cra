@@ -65,10 +65,10 @@ Table of Contents
    examples
    api
    license
+   contributions
 
 
-Indices and tables
+Indices
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`

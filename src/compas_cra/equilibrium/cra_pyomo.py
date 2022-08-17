@@ -112,7 +112,7 @@ def cra_solve(
     model.forces = basis * model.array_f[:, np.newaxis]  # force x in global coordinate
     model.displs = basis * model.d[:, np.newaxis]  # displacement d in global coordinate
 
-    obj_cra = objectives('cra', (1e+0, 1e+0, 1e+6))
+    obj_cra = objectives('cra', (1e+0, 1e+0, 1e+6, 0))
     bound_d = bounds('d', d_bnd)
     constraint_contact = constraints('contact', eps)
     constraint_no_penetration = constraints('no_penetration', eps)

@@ -1,0 +1,15 @@
+********************************************************************************
+Model HA
+********************************************************************************
+
+.. list-table:: Figure 1
+   :class: borderless
+
+   * - .. image:: /_images/example_h.png
+          :width: 100 %
+     - .. image:: /_images/example_a.png
+          :width: 100 %
+
+.. literalinclude:: 16_ha.py
+    :language: python
+

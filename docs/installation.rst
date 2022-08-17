@@ -5,7 +5,7 @@ Installation
 
 Install with conda
 ==================
-
+.. _Installation:
 
 Set up conda channels
 
@@ -14,14 +14,14 @@ Set up conda channels
     conda config --add channels conda-forge
 
 
-Clone `compas_cra`:
+Clone :mod:`compas_cra`:
 
 .. code-block:: bash
 
     git clone git@github.com:BlockResearchGroup/compas_cra.git
     cd compas_cra
 
-Install compas_cra with all dependencies in a new conda environment:
+Install :mod:`compas_cra` with all dependencies in a new conda environment:
 
 .. code-block:: bash
 
@@ -78,4 +78,4 @@ Known issues (Windows)
 
 - pyomo cannot find ipopt location: ``pyomo.common.errors.ApplicationError: No executable found for solver 'ipopt'``. Please refer this thread for solution: https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1
 
-- `compas_cra` uses IPOPT solver, so it might not work for PC with AMD processor.
+- :mod:`compas_cra` uses `IPOPT <https://coin-or.github.io/Ipopt/>`_ solver, so it might not work for PC with AMD processor.

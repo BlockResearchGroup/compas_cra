@@ -92,7 +92,7 @@ def bounds(
 
 def objectives(
     solver: str = 'cra',
-    weights: tuple = (1e+0, 1e+0, 1e+6)
+    weights: tuple = (1e+0, 1e+0, 1e+6, 1e+0)
 ):
     """Objective functions for pyomo.
 
@@ -101,9 +101,9 @@ def objectives(
         solver : str, optional
             * cra: CRA objective, :math:`W_{compression} * ||f_n||_2^2 + W_{α} * ||α||_2^2`
             * cra_penalty: CRA penalty objective, :math:`W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{α} * ||α||_2^2`
-            * rbe: RBE objective, :math:`W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2`
+            * rbe: RBE objective, :math:`W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{friction} * ||{f_u}||_2^2 + W_{friction} * ||{f_v}||_2^2`
         weights : tuple, optional
-            weighting factors, :math:`(W_{α}, W_{compression}, W_{tension})`
+            weighting factors, :math:`(W_{α}, W_{compression}, W_{tension}, W_{friction})`
 
         Returns
         -------
@@ -137,6 +137,8 @@ def objectives(
                 f_sum = f_sum + (model.f[i] * model.f[i] * weights[2])  # tension
             elif i % 4 == 0:
                 f_sum = f_sum + (model.f[i] * model.f[i] * weights[1])  # compression
+            elif i % 4 == 2 or i % 3 == 0:
+                f_sum = f_sum + (model.f[i] * model.f[i] * weights[3])  # friction
         return f_sum
 
     if solver == 'cra':
