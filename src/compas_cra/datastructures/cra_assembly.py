@@ -10,6 +10,7 @@ from compas.geometry import Rotation
 from compas.geometry import Pointcloud
 from compas_assembly.datastructures import Assembly
 from compas_assembly.datastructures import Interface
+from compas_assembly.datastructures import Block
 
 __author__ = "Gene Ting-Chun Kao"
 __email__ = "kao@arch.ethz.ch"
@@ -21,7 +22,9 @@ class CRA_Assembly(Assembly):
     """Extended data structure for concave assemblies."""
 
     def __init__(self):
-        super().__init__()
+        # keep this old coding style for Rhino IronPython. super().__init__() doesn't work
+        super(CRA_Assembly, self).__init__()
+
         self.attributes.update({'name': 'CRA_Assembly'})
         self.graph.default_node_attributes.update({
             'block': None,
@@ -31,6 +34,26 @@ class CRA_Assembly(Assembly):
             'interface': None,
             'interfaces': []
         })
+
+    def add_blocks_from_rhinomeshes(self, guids):
+        """Add multiple blocks from their representation as as Rhino meshes.
+        Parameters
+        ----------
+        guids : list of str
+            A list of GUIDs identifying the meshes representing the blocks of the assembly.
+
+        Returns
+        -------
+        list
+            The keys of the added blocks.
+
+        """
+        keys = []
+        for guid in guids:
+            block = Block.from_rhinomesh(guid)
+            key = self.add_block(block)
+            keys.append(key)
+        return keys
 
     def add_to_interfaces(self, u, v, type, size, points, frame):
         """Add interface from attributes to edge (u, v) interfaces."""
