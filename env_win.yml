@@ -10,6 +10,6 @@ dependencies:
   - textdistance
   - compas
   - compas_view2
-  - ipopt
+  - ipopt=3.11.1
   - pip:
     - -r requirements-dev.txt
