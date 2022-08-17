@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_cra - viewers</title>
+  <title>compas_cra - Cubes Penalty Solve</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="cra_view" href="generated/compas_cra.viewers.cra_view.html" />
+  <link rel="next" title="Cubes RBE Solve" href="cubes_rbe.html" />
   
 
   
-  <link rel="prev" title="Arch.blocks" href="generated/compas_cra.geometry.Arch.blocks.html" />
+  <link rel="prev" title="Cubes" href="cubes.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -82,36 +82,62 @@
           <ol class="breadcrumb mb-3 bg-white px-0">
             <li class="breadcrumb-item"><a href="../index.html">COMPAS CRA</a></li>
             
-            <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+            <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
             
-            <li class="breadcrumb-item"><a href="compas_cra.html">compas_cra</a></li>
-            
-            <!-- <li class="breadcrumb-item active" aria-current="page">viewers</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">Cubes Penalty Solve</li> -->
           </ol>
         </nav>
         
 
         
         
-        <span class="target" id="module-compas_cra.viewers"></span><section id="viewers">
-<h1>viewers</h1>
-<section id="cra-viewer">
-<h2>CRA Viewer</h2>
-<table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_cra.viewers.cra_view.html#compas_cra.viewers.cra_view" title="compas_cra.viewers.cra_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cra_view</span></code></a></p></td>
-<td><p>CRA Viewer, creating new viewer</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_cra.viewers.cra_view_ex.html#compas_cra.viewers.cra_view_ex" title="compas_cra.viewers.cra_view_ex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cra_view_ex</span></code></a></p></td>
-<td><p>CRA Viewer using existing view</p></td>
-</tr>
-</tbody>
-</table>
-</section>
+        <section id="cubes-penalty-solve">
+<h1>Cubes Penalty Solve</h1>
+<figure class="figure align-default">
+<img alt="../_images/example_cubes_penalty.png" class="figure-img img-fluid" src="../_images/example_cubes_penalty.png" />
+</figure>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Simple example to calculate cubes</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Gene Ting-Chun Kao&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;kao@arch.ethz.ch&quot;</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Frame</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Translation</span>
+    <span class="kn">from</span> <span class="nn">compas_assembly.datastructures</span> <span class="kn">import</span> <span class="n">Block</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_penalty_solve</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
+
+    <span class="n">deg</span> <span class="o">=</span> <span class="mi">40</span>  <span class="c1"># rotation in degree</span>
+    <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># around y-axis</span>
+
+    <span class="n">support</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">worldXY</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># supporting block</span>
+    <span class="n">free1</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">worldXY</span><span class="p">()</span><span class="o">.</span><span class="n">transformed</span><span class="p">(</span>
+        <span class="n">Translation</span><span class="o">.</span><span class="n">from_vector</span><span class="p">([</span><span class="mf">0.75</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># block to analyse</span>
+
+    <span class="n">assembly</span> <span class="o">=</span> <span class="n">CRA_Assembly</span><span class="p">()</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">support</span><span class="p">),</span> <span class="n">node</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">free1</span><span class="p">),</span> <span class="n">node</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">assembly</span><span class="o">.</span><span class="n">rotate_assembly</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">rotate_axis</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>
+
+    <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+
+    <span class="n">cra_penalty_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</div>
 </section>
 
         
@@ -134,26 +160,26 @@
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../tutorial.html">Tutorial</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/arch.html">Arch</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/armadillo.html">Armadillo Vault</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/bridge.html">Bridge</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/cubes.html">Cubes</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/cubes_penalty.html">Cubes Penalty Solve</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/cubes_rbe.html">Cubes RBE Solve</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve-3-blocks.html">Curve 3 Blocks</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/shelf.html">Shelf</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/snake.html">Snake</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/stacks.html">Stacks</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/wedge.html">Wedge</a></li>
+<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse show active">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="arch.html">Arch</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="armadillo.html">Armadillo Vault</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="bridge.html">Bridge</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="cubes.html">Cubes</a></li>
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Cubes Penalty Solve</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="cubes_rbe.html">Cubes RBE Solve</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve-3-blocks.html">Curve 3 Blocks</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="shelf.html">Shelf</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="snake.html">Snake</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="stacks.html">Stacks</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="wedge.html">Wedge</a></li>
 </ul>
 </li>
-<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse show active">
-<li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="compas_cra.html">compas_cra</a><ul class="nav flex-column collapse show active">
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_cra.datastructures.html">datastructures</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_cra.equilibrium.html">equilibrium</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_cra.geometry.html">geometry</a></li>
-<li class="toctree-l3 nav-item active"><a class="nav-link active reference internal" href="#">viewers</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.html">compas_cra</a><ul class="nav flex-column collapse">
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.equilibrium.html">equilibrium</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.geometry.html">geometry</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.viewers.html">viewers</a></li>
 </ul>
 </li>
 </ul>
@@ -169,10 +195,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">viewers</a><ul class="nav flex-column">
-<li class="nav-item"><a class="nav-link reference internal" href="#cra-viewer">CRA Viewer</a></li>
-</ul>
-</li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Cubes Penalty Solve</a></li>
 </ul>
 
       </div>
@@ -184,20 +207,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="generated/compas_cra.geometry.Arch.blocks.html" title="Arch.blocks" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="cubes.html" title="Cubes" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          Arch.blocks
+          Cubes
         </div>
       </a>
       
 
       
-      <a href="generated/compas_cra.viewers.cra_view.html" title="cra_view" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="cubes_rbe.html" title="Cubes RBE Solve" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          cra_view
+          Cubes RBE Solve
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

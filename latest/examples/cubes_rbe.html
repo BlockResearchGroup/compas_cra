@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_cra - Wedge</title>
+  <title>compas_cra - Cubes RBE Solve</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="API Reference" href="../api.html" />
+  <link rel="next" title="Curve 3 Blocks" href="curve-3-blocks.html" />
   
 
   
-  <link rel="prev" title="Stacks" href="stacks.html" />
+  <link rel="prev" title="Cubes Penalty Solve" href="cubes_penalty.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -84,29 +84,23 @@
             
             <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">Wedge</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">Cubes RBE Solve</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section id="wedge">
-<h1>Wedge</h1>
+        <section id="cubes-rbe-solve">
+<h1>Cubes RBE Solve</h1>
 <figure class="figure align-default">
-<img alt="../_images/example_wedges.png" class="figure-img img-fluid" src="../_images/example_wedges.png" />
-</figure>
-<section id="type-b">
-<h2>Type-b</h2>
-<p>This example rotate type-b geometry 90 degree respect to Y-axis</p>
-<figure class="figure align-default">
-<img alt="../_images/example_type_b.png" class="figure-img img-fluid" src="../_images/example_type_b.png" />
+<img alt="../_images/example_cubes_rbe.png" class="figure-img img-fluid" src="../_images/example_cubes_rbe.png" />
 </figure>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Example to simulate wedge example type-a, type-b, type-c, type-d</span>
+<span class="sd">Simple example to calculate cubes</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Gene Ting-Chun Kao&quot;</span>
@@ -115,42 +109,45 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 
-    <span class="kn">import</span> <span class="nn">compas</span>
-    <span class="kn">import</span> <span class="nn">compas_cra</span>
-    <span class="kn">import</span> <span class="nn">os</span>
     <span class="kn">import</span> <span class="nn">math</span> <span class="k">as</span> <span class="nn">mt</span>
-
+    <span class="kn">from</span> <span class="nn">compas.datastructures</span> <span class="kn">import</span> <span class="n">Mesh</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Frame</span>
+    <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Translation</span>
+    <span class="kn">from</span> <span class="nn">compas_assembly.datastructures</span> <span class="kn">import</span> <span class="n">Block</span>
     <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
-    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
-    <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_solve</span>
     <span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">rbe_solve</span>
 
-    <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.84</span>  <span class="c1"># friction coefficient</span>
-    <span class="n">deg</span> <span class="o">=</span> <span class="mi">90</span>  <span class="c1"># rotation in degree</span>
-    <span class="n">axis</span> <span class="o">=</span> <span class="s1">&#39;y-axis&#39;</span>  <span class="c1"># y-axis, x-axis, xy30-axis</span>
+    <span class="n">deg</span> <span class="o">=</span> <span class="mf">48.00</span>  <span class="c1"># rotation in degree</span>
+    <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># around y-axis</span>
 
-    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;y-axis&#39;</span><span class="p">:</span>
-        <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># around y-axis</span>
-    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;x-axis&#39;</span><span class="p">:</span>
-        <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># around x-axis</span>
-    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;xy30-axis&#39;</span><span class="p">:</span>
-        <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="n">mt</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># rotate around xy30-axis</span>
+    <span class="n">support</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">worldXY</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># supporting block</span>
+    <span class="n">free1</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">worldXY</span><span class="p">()</span><span class="o">.</span><span class="n">transformed</span><span class="p">(</span>
+        <span class="n">Translation</span><span class="o">.</span><span class="n">from_vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># block to analyse</span>
 
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s1">&#39;type-b.json&#39;</span><span class="p">))</span>
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
-    <span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">assembly</span> <span class="o">=</span> <span class="n">CRA_Assembly</span><span class="p">()</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">support</span><span class="p">))</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">free1</span><span class="p">))</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+    <span class="n">interface1</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">()</span>
+    <span class="c1"># interface corners</span>
+    <span class="n">corners</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">.5</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="mf">.5</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="mf">.5</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="mf">.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">.5</span><span class="p">,</span> <span class="mf">.5</span><span class="p">]]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">corners</span><span class="p">):</span>
+        <span class="n">interface1</span><span class="o">.</span><span class="n">add_vertex</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">interface1</span><span class="o">.</span><span class="n">add_face</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_interfaces_from_meshes</span><span class="p">([</span><span class="n">interface1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">assembly</span><span class="o">.</span><span class="n">rotate_assembly</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">rotate_axis</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>  <span class="c1"># around y-axis</span>
 
-    <span class="n">cra_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">d_bnd</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+    <span class="n">rbe_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-             <span class="n">displacements</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dispscale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+             <span class="n">displacements</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dispscale</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
 </code></pre></div>
 </div>
-</section>
 </section>
 
         
@@ -179,12 +176,12 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="bridge.html">Bridge</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="cubes.html">Cubes</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="cubes_penalty.html">Cubes Penalty Solve</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="cubes_rbe.html">Cubes RBE Solve</a></li>
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Cubes RBE Solve</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve-3-blocks.html">Curve 3 Blocks</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="shelf.html">Shelf</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="snake.html">Snake</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="stacks.html">Stacks</a></li>
-<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Wedge</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="wedge.html">Wedge</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse">
@@ -208,10 +205,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Wedge</a><ul class="nav flex-column">
-<li class="nav-item"><a class="nav-link reference internal" href="#type-b">Type-b</a></li>
-</ul>
-</li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Cubes RBE Solve</a></li>
 </ul>
 
       </div>
@@ -223,20 +217,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="stacks.html" title="Stacks" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="cubes_penalty.html" title="Cubes Penalty Solve" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          Stacks
+          Cubes Penalty Solve
         </div>
       </a>
       
 
       
-      <a href="../api.html" title="API Reference" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="curve-3-blocks.html" title="Curve 3 Blocks" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          API Reference
+          Curve 3 Blocks
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

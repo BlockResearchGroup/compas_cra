@@ -119,6 +119,11 @@
     <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">density_setup</span>
     <span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
 
+    <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.9</span>
+    <span class="n">dispbnd</span> <span class="o">=</span> <span class="mf">1e-1</span>
+    <span class="n">overlap</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
+
     <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s1">&#39;./bridge.json&#39;</span><span class="p">))</span>
     <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
@@ -149,10 +154,6 @@
 
     <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
 
-    <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.9</span>
-    <span class="n">dispbnd</span> <span class="o">=</span> <span class="mf">1e-1</span>
-    <span class="n">overlap</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">cra_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">d_bnd</span><span class="o">=</span><span class="n">dispbnd</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">)</span>
     <span class="c1"># cra_penalty_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)</span>
     <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">forcesdirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">forcesline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -182,10 +183,13 @@
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse show active">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="arch.html">Arch</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="armadillo.html">Armadillo Vault</a></li>
 <li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Bridge</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="cubes.html">Cubes</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve-3-blocks.html">Curve-3-Blocks</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="cubes_penalty.html">Cubes Penalty Solve</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="cubes_rbe.html">Cubes RBE Solve</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve-3-blocks.html">Curve 3 Blocks</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="shelf.html">Shelf</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="snake.html">Snake</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="stacks.html">Stacks</a></li>
