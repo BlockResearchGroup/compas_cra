@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <title>compas_cra - CRA_Assembly</title>
+  
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <meta name="author" content="Gene Ting-Chun Kao" />
+  <meta name="description" content="" />
+
+  <link rel="shortcut icon" href="../../_static/images/compas.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/mono-blue.min.css">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/compas.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
+
+  
+  <link rel="next" title="CRA_Assembly.add_blocks_from_rhinomeshes" href="compas_cra.datastructures.CRA_Assembly.add_blocks_from_rhinomeshes.html" />
+  
+
+  
+  <link rel="prev" title="datastructures" href="../compas_cra.datastructures.html" />
+  
+
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
+
+<body data-spy="scroll" data-target="#compas-toc">
+  <!-- header -->
+  <header id="header" class="compas-header d-flex align-items-center">
+    <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
+      <!-- brand -->
+      <a class="navbar-brand" href="https://BlockResearchGroup.github.io/compas_cra/">
+        <img src="../../_static/images/compas_icon_white.png" alt="COMPAS CRA" width="48px" height="48px" />
+      </a>
+      <!-- brand -->
+      <!-- primary -->
+      <ul class="navbar-nav">
+        <li class="nav-item active"><a class="nav-link" href="https://BlockResearchGroup.github.io/compas_cra/">COMPAS CRA</a></li>
+      </ul>
+      <!-- primary -->
+      <ul class="navbar-nav d-none d-md-flex ml-md-auto">
+        <!-- version -->
+        
+        <meta id="doc_versions" data-url="https://BlockResearchGroup.github.io/compas_cra/doc_versions.txt" data-docs="https://BlockResearchGroup.github.io/compas_cra/">
+        <li class="nav-item nav-versions dropdown">
+          <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            0.1.0
+          </a>
+          <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
+        </li>
+        
+        <!-- version -->
+        <!-- social -->
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/BlockResearchGroup/compas_cra" target="_blank">
+            <span class="fab fa-github fa-1x"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://forum.compas-framework.org" target="_blank">
+            <span class="fab fa-discourse fa-1x"></span>
+          </a>
+        </li>
+        <!-- social -->
+      </ul>
+    </nav>
+  </header>
+  <!-- header -->
+  <!-- main -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- main -->
+      <main class="col-12 col-md-9 col-xl-7 px-4 px-md-5 pt-2 pb-5 compas-content" role="main">
+        
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-3 bg-white px-0">
+            <li class="breadcrumb-item"><a href="../../index.html">COMPAS CRA</a></li>
+            
+            <li class="breadcrumb-item"><a href="../../api.html">API Reference</a></li>
+            
+            <li class="breadcrumb-item"><a href="../compas_cra.html">compas_cra</a></li>
+            
+            <li class="breadcrumb-item"><a href="../compas_cra.datastructures.html">datastructures</a></li>
+            
+            <!-- <li class="breadcrumb-item active" aria-current="page">CRA_Assembly</li> -->
+          </ol>
+        </nav>
+        
+
+        
+        
+        <section class="detail" id="cra-assembly">
+<h1>CRA_Assembly</h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="compas_cra.datastructures.CRA_Assembly">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_cra.datastructures.</span></span><span class="sig-name descname"><span class="pre">CRA_Assembly</span></span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/datastructures/cra_assembly.py#L21"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Assembly</span></code></p>
+<p>Extended data structure for concave assemblies.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_blocks_from_rhinomeshes.html#compas_cra.datastructures.CRA_Assembly.add_blocks_from_rhinomeshes" title="compas_cra.datastructures.CRA_Assembly.add_blocks_from_rhinomeshes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_blocks_from_rhinomeshes</span></code></a></p></td>
+<td><p>Add multiple blocks from their representation as as Rhino meshes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_interface_to_interfaces.html#compas_cra.datastructures.CRA_Assembly.add_interface_to_interfaces" title="compas_cra.datastructures.CRA_Assembly.add_interface_to_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_interface_to_interfaces</span></code></a></p></td>
+<td><p>Add interface to edge (u, v) interfaces.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_interfaces_from_meshes.html#compas_cra.datastructures.CRA_Assembly.add_interfaces_from_meshes" title="compas_cra.datastructures.CRA_Assembly.add_interfaces_from_meshes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_interfaces_from_meshes</span></code></a></p></td>
+<td><p>Add interfaces from meshes to edge (u, v) interfaces.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_to_interfaces.html#compas_cra.datastructures.CRA_Assembly.add_to_interfaces" title="compas_cra.datastructures.CRA_Assembly.add_to_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_to_interfaces</span></code></a></p></td>
+<td><p>Add interface to edge (u, v) interfaces.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.get_weight_mean.html#compas_cra.datastructures.CRA_Assembly.get_weight_mean" title="compas_cra.datastructures.CRA_Assembly.get_weight_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_weight_mean</span></code></a></p></td>
+<td><p>Get assembly mean weight.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.get_weight_total.html#compas_cra.datastructures.CRA_Assembly.get_weight_total" title="compas_cra.datastructures.CRA_Assembly.get_weight_total"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_weight_total</span></code></a></p></td>
+<td><p>Get total assembly weight.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.is_block_support.html#compas_cra.datastructures.CRA_Assembly.is_block_support" title="compas_cra.datastructures.CRA_Assembly.is_block_support"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_block_support</span></code></a></p></td>
+<td><p>Check if the block is a support.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.move_block.html#compas_cra.datastructures.CRA_Assembly.move_block" title="compas_cra.datastructures.CRA_Assembly.move_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_block</span></code></a></p></td>
+<td><p>Move block with vector.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.rotate_assembly.html#compas_cra.datastructures.CRA_Assembly.rotate_assembly" title="compas_cra.datastructures.CRA_Assembly.rotate_assembly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate_assembly</span></code></a></p></td>
+<td><p>Rotate the entire assembly.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.set_boundary_condition.html#compas_cra.datastructures.CRA_Assembly.set_boundary_condition" title="compas_cra.datastructures.CRA_Assembly.set_boundary_condition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_boundary_condition</span></code></a></p></td>
+<td><p>Set block as boundary condition.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.set_boundary_conditions.html#compas_cra.datastructures.CRA_Assembly.set_boundary_conditions" title="compas_cra.datastructures.CRA_Assembly.set_boundary_conditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_boundary_conditions</span></code></a></p></td>
+<td><p>Set blocks as boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Inherited Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.ToString.html#compas_cra.datastructures.CRA_Assembly.ToString" title="compas_cra.datastructures.CRA_Assembly.ToString"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToString</span></code></a></p></td>
+<td><p>Converts the instance to a string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_block.html#compas_cra.datastructures.CRA_Assembly.add_block" title="compas_cra.datastructures.CRA_Assembly.add_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_block</span></code></a></p></td>
+<td><p>Add a block to the assembly.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.add_block_block_interfaces.html#compas_cra.datastructures.CRA_Assembly.add_block_block_interfaces" title="compas_cra.datastructures.CRA_Assembly.add_block_block_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_block_block_interfaces</span></code></a></p></td>
+<td><p>Add an interface between two blocks.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.block_node.html#compas_cra.datastructures.CRA_Assembly.block_node" title="compas_cra.datastructures.CRA_Assembly.block_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_node</span></code></a></p></td>
+<td><p>Retrieve the graph node corresponding to a block.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.blocks.html#compas_cra.datastructures.CRA_Assembly.blocks" title="compas_cra.datastructures.CRA_Assembly.blocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">blocks</span></code></a></p></td>
+<td><p>Iterate over the blocks of the assembly.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.copy.html#compas_cra.datastructures.CRA_Assembly.copy" title="compas_cra.datastructures.CRA_Assembly.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
+<td><p>Make an independent copy of the data object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_blocks.html#compas_cra.datastructures.CRA_Assembly.edge_blocks" title="compas_cra.datastructures.CRA_Assembly.edge_blocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_blocks</span></code></a></p></td>
+<td><p>Retrieve the two blocks corresponding to a graph edge.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_interfaces.html#compas_cra.datastructures.CRA_Assembly.edge_interfaces" title="compas_cra.datastructures.CRA_Assembly.edge_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_interfaces</span></code></a></p></td>
+<td><p>Retrieve the interface corresponding to a graph edge.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edge_line.html#compas_cra.datastructures.CRA_Assembly.edge_line" title="compas_cra.datastructures.CRA_Assembly.edge_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_line</span></code></a></p></td>
+<td><p>Retrieve the line segment between the nodes of the edge.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.edges.html#compas_cra.datastructures.CRA_Assembly.edges" title="compas_cra.datastructures.CRA_Assembly.edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edges</span></code></a></p></td>
+<td><p>Iterate over the edges of the graph of the assembly.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_data.html#compas_cra.datastructures.CRA_Assembly.from_data" title="compas_cra.datastructures.CRA_Assembly.from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_data</span></code></a></p></td>
+<td><p>Construct an object of this type from the provided data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_json.html#compas_cra.datastructures.CRA_Assembly.from_json" title="compas_cra.datastructures.CRA_Assembly.from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_json</span></code></a></p></td>
+<td><p>Construct an object from serialized data contained in a JSON file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_jsonstring.html#compas_cra.datastructures.CRA_Assembly.from_jsonstring" title="compas_cra.datastructures.CRA_Assembly.from_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_jsonstring</span></code></a></p></td>
+<td><p>Construct an object from serialized data contained in a JSON string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_polysurfaces.html#compas_cra.datastructures.CRA_Assembly.from_polysurfaces" title="compas_cra.datastructures.CRA_Assembly.from_polysurfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_polysurfaces</span></code></a></p></td>
+<td><p>Construct an assembly from Rhino polysurfaces.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_rhinomeshes.html#compas_cra.datastructures.CRA_Assembly.from_rhinomeshes" title="compas_cra.datastructures.CRA_Assembly.from_rhinomeshes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_rhinomeshes</span></code></a></p></td>
+<td><p>Construct an assembly from Rhino meshes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.from_template.html#compas_cra.datastructures.CRA_Assembly.from_template" title="compas_cra.datastructures.CRA_Assembly.from_template"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_template</span></code></a></p></td>
+<td><p>Construct an assembly from a parameteric template.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.has_block.html#compas_cra.datastructures.CRA_Assembly.has_block" title="compas_cra.datastructures.CRA_Assembly.has_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_block</span></code></a></p></td>
+<td><p>Verify that the assembly contains a given block.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.has_interface.html#compas_cra.datastructures.CRA_Assembly.has_interface" title="compas_cra.datastructures.CRA_Assembly.has_interface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_interface</span></code></a></p></td>
+<td><p>Verify that the assembly contains a given interface.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.interfaces.html#compas_cra.datastructures.CRA_Assembly.interfaces" title="compas_cra.datastructures.CRA_Assembly.interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interfaces</span></code></a></p></td>
+<td><p>Yield the interfaces of the assembly.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_block.html#compas_cra.datastructures.CRA_Assembly.node_block" title="compas_cra.datastructures.CRA_Assembly.node_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_block</span></code></a></p></td>
+<td><p>Retrieve the block corresponding to a graph node.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.node_point.html#compas_cra.datastructures.CRA_Assembly.node_point" title="compas_cra.datastructures.CRA_Assembly.node_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_point</span></code></a></p></td>
+<td><p>Retrieve a point representing the location of the node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.nodes.html#compas_cra.datastructures.CRA_Assembly.nodes" title="compas_cra.datastructures.CRA_Assembly.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a></p></td>
+<td><p>Iterate over the nodes of the graph of the assembly.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.sha256.html#compas_cra.datastructures.CRA_Assembly.sha256" title="compas_cra.datastructures.CRA_Assembly.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
+<td><p>Compute a hash of the data for comparison during version control using the sha256 algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_data.html#compas_cra.datastructures.CRA_Assembly.to_data" title="compas_cra.datastructures.CRA_Assembly.to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_data</span></code></a></p></td>
+<td><p>Convert an object to its native data representation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_json.html#compas_cra.datastructures.CRA_Assembly.to_json" title="compas_cra.datastructures.CRA_Assembly.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
+<td><p>Serialize the data representation of an object to a JSON file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.to_jsonstring.html#compas_cra.datastructures.CRA_Assembly.to_jsonstring" title="compas_cra.datastructures.CRA_Assembly.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
+<td><p>Serialize the data representation of an object to a JSON string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.transform.html#compas_cra.datastructures.CRA_Assembly.transform" title="compas_cra.datastructures.CRA_Assembly.transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code></a></p></td>
+<td><p>Transform this assembly by the given transformation matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.transformed.html#compas_cra.datastructures.CRA_Assembly.transformed" title="compas_cra.datastructures.CRA_Assembly.transformed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transformed</span></code></a></p></td>
+<td><p>Transform a copy of this assembly by the given transformation matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.validate_data.html#compas_cra.datastructures.CRA_Assembly.validate_data" title="compas_cra.datastructures.CRA_Assembly.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
+<td><p>Validate the object's data against its data schema.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_cra.datastructures.CRA_Assembly.validate_json.html#compas_cra.datastructures.CRA_Assembly.validate_json" title="compas_cra.datastructures.CRA_Assembly.validate_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_json</span></code></a></p></td>
+<td><p>Validate the object's data against its json schema.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+        
+      </main>
+      <!-- content -->
+      <!-- sidebar -->
+      <div class="col-12 col-md-3 compas-sidebar" role="navigation">
+        <form id="search" class="d-flex align-items-center compas-searchbox" action="../../search.html" method="get">
+          <input class="form-control" type="text" name="q" placeholder="Search docs" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+          <button class="navbar-toggler d-md-none" type="button" data-toggle="collapse" data-target="#compas-navigation" aria-controls="compas-navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </form>
+        
+        
+        <div id="compas-navigation" class="collapse compas-navigation">
+          <ul class="nav flex-column collapse show active">
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../examples.html">Examples</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/00_simple_cube.html">Simplest Cube</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/01_cubes_rbe.html">RBE Solve Cubes</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/02_cubes.html">CRA Solve Cubes</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/03_cubes_penalty.html">Penalty Solve Cubes</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/04_stacks.html">Stacks</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/05_wedge.html">Wedge</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/06_arch.html">Arch</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/07_shelf.html">Shelf</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/08_snake.html">Snake</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/09_bridge.html">Bridge</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/10_armadillo.html">Armadillo Vault</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/11_concave-short.html">Short Concave Interlocking Joint</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/12_concave-long.html">Long Concave Interlocking Joint</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/13_curve-3-blocks.html">Curve Interface Surface with 3 Blocks</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/14_cube-curve-short.html">Short Cube with Curve interface</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/15_cube-curve-tall.html">Tall Cube with Curve interface</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/16_ha.html">Model HA</a></li>
+</ul>
+</li>
+<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
+<li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_cra.html">compas_cra</a><ul class="nav flex-column collapse show active">
+<li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.equilibrium.html">equilibrium</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.geometry.html">geometry</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.viewers.html">viewers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../contributions.html">How to contribute</a></li>
+</ul>
+
+        </div>
+        
+      </div>
+      <!-- sidebar -->
+      <!-- toc -->
+      <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
+        
+        <ul class="nav flex-column" id="compas-toc">
+<li class="nav-item"><a class="nav-link reference internal" href="#">CRA_Assembly</a><ul class="nav flex-column">
+</ul>
+</li>
+</ul>
+
+      </div>
+      <!-- toc -->
+    </div>
+  </div>
+  <!-- main -->
+  <!-- footer -->
+  <footer class="compas-footer">
+    <nav class="nav p-2">
+      
+      <a href="../compas_cra.datastructures.html" title="datastructures" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+        <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
+        <div class="nav-title flex-grow-1 align-self-center">
+          <div class="nav-direction small font-weight-light">Previous</div>
+          datastructures
+        </div>
+      </a>
+      
+
+      
+      <a href="compas_cra.datastructures.CRA_Assembly.add_blocks_from_rhinomeshes.html" title="CRA_Assembly.add_blocks_from_rhinomeshes" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+        <div class="nav-title footer-link flex-grow-1 align-self-center">
+          <div class="nav-direction small font-weight-light">Next</div>
+          CRA_Assembly.add_blocks_from_rhinomeshes
+        </div>
+        <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
+      </a>
+      
+    </nav>
+  </footer>
+  <!-- footer -->
+  <!-- below -->
+  <div class="below py-5" style="background-color: #222;">
+    <div class="container">
+      <div class="row flex-column">
+        <div class="col-12 col-md-6 mx-md-auto text-center">
+          <h4 class="pb-3 below-text">COMPAS</h4>
+          <p class="below-text">
+            A computational framework for collaboration and research
+            in Architecture, Engineering, Fabrication, and Construction.
+          </p>
+          <nav class="nav justify-content-center pb-3">
+            <a class="nav-link mx-2 px-0 below-link" href="http://github.com/compas-dev" target="_blank">
+              <span class="fab fa-github fa-1x"></span>
+            </a>
+            <a class="nav-link mx-2 px-0 below-link" href="http://forum.compas-framework.org" target="_blank">
+              <span class="fab fa-discourse fa-1x"></span>
+            </a>
+            <a class="nav-link mx-2 px-0 below-link" href="https://pypi.org/project/COMPAS/" target="_blank">
+              <span class="fab fa-python fa-1x"></span>
+            </a>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+          <p class="p-0 m-0 below-text">Copyright &copy; 2017-2021 compas-dev</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- below -->
+  <!-- scripts -->
+  <script id="documentation_options" data-url_root="" src="../../_static/documentation_options.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.0.0/anchor.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+
+  <script src="../../_static/underscore.js"></script>
+  <script src="../../_static/doctools.js"></script>
+  <script src="../../_static/searchtools.js"></script>
+  <script src="../../_static/language_data.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $(".language-default code").addClass("python");
+      $(".language-python code").addClass("python");
+      $(".language-bash code").addClass("bash");
+      $(".language-cpp code").addClass("cpp");
+      $(".language-json code").addClass("json");
+      $(".language-none code").addClass("plaintext");
+
+      hljs.initHighlighting();
+      anchors.add();
+
+      new ClipboardJS(".btn.copy", {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      $("#compas-navigation li.active > ul").each(function() {
+        var ul = $(this);
+        if (! ul.hasClass("show")) {
+          ul.addClass("show");
+        }
+      });
+
+      $("#compas-navigation li.toctree-l1").has("ul").each(function() {
+        var li = $(this);
+        li.addClass("has-children");
+        if (li.hasClass("active")) {
+          li.prepend('<span class="menu-toggle"><i class="fas fa-chevron-up"></i></span>');
+        }
+        else {
+          li.prepend('<span class="menu-toggle"><i class="fas fa-chevron-down"></i></span>');
+        }
+      });
+
+      $(".menu-toggle").click(function() {
+        var toggle = $(this);
+        toggle.siblings("ul").toggleClass("show");
+      });
+
+    });
+
+
+    var url = $("#doc_versions").data("url");
+    var docs_site = $("#doc_versions").data("docs");
+
+    if (url) {
+      $.get(url, res => {
+        var lines = res.match(/[^\r\n]+/g);
+        lines.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        lines.reverse();
+        lines.forEach(version => {
+          $("#doc_version_list").append("<a class=\"dropdown-item\" href=\"" + docs_site + version + "\">" + version + "</a>");
+        });
+
+        var selected_version = $('.nav-versions .dropdown-item').filter(function (i, ver) {
+          return window.location.href.startsWith(ver.href);
+        });
+        selected_version.addClass('active');
+        $("#bd-versions").text(selected_version.text());
+
+      })
+    }
+  </script>
+  <!-- scripts -->
+  
+  
+</body>
+
+</html>
