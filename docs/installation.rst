@@ -32,8 +32,40 @@ Install compas_cra with all dependencies in a new conda environment:
     conda activate cra
 
 
+Verify installation
+===================
+
+After running:
+
+.. code-block:: bash
+
+    invoke test
+
+You should see something like:
+
+.. code-block:: bash
+
+    ============================= test session starts ==============================
+    platform darwin -- Python 3.8.13, pytest-7.0.1, pluggy-1.0.0
+    rootdir: ~/compas-dev/compas_cra, configfile: setup.cfg, testpaths: tests
+    collected 4 items
+
+    tests/test_cra.py .                                                      [ 25%]
+    tests/test_cra_penalty.py .                                              [ 50%]
+    tests/test_ipopt.py .                                                    [ 75%]
+    tests/test_rbe.py .                                                      [100%]
+
+    =============================== warnings summary ===============================
+    .
+    .
+    .
+    .
+    .
+    -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+    ======================== 4 passed, 5 warnings in 2.41s =========================
 
 Update conda packages
+=====================
 
 .. code-block:: bash
 
@@ -42,6 +74,7 @@ Update conda packages
     conda env update cra --file env_linux.yml --prune  # (Linux)
 
 Known issues (Windows)
+======================
 
 - pyomo cannot find ipopt location: ``pyomo.common.errors.ApplicationError: No executable found for solver 'ipopt'``. Please refer this thread for solution: https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1
 

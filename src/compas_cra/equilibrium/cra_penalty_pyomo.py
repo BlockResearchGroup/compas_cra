@@ -146,6 +146,8 @@ def cra_penalty_solve(
     solver = pyo.SolverFactory('ipopt')
     solver.options['tol'] = 1e-8  # same as default tolerance
     solver.options['constr_viol_tol'] = 1e-7  # constraint tolerance
+    solver.options['acceptable_tol'] = 1e-6
+    solver.options['acceptable_constr_viol_tol'] = 1e-5
     # https://coin-or.github.io/Ipopt/OPTIONS.html
     result = solver.solve(model, tee=verbose)
 
