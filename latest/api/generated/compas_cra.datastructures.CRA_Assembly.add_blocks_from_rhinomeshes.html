@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="CRA_Assembly.add_edge" href="compas_cra.datastructures.CRA_Assembly.add_edge.html" />
+  <link rel="next" title="CRA_Assembly.add_interface_to_interfaces" href="compas_cra.datastructures.CRA_Assembly.add_interface_to_interfaces.html" />
   
 
   
-  <link rel="prev" title="CRA_Assembly.add_blocks_from_polysurfaces" href="compas_cra.datastructures.CRA_Assembly.add_blocks_from_polysurfaces.html" />
+  <link rel="prev" title="CRA_Assembly" href="compas_cra.datastructures.CRA_Assembly.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -35,19 +35,19 @@
   <header id="header" class="compas-header d-flex align-items-center">
     <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
       <!-- brand -->
-      <a class="navbar-brand" href="https://Block Research Group.github.io/compas_cra/">
+      <a class="navbar-brand" href="https://BlockResearchGroup.github.io/compas_cra/">
         <img src="../../_static/images/compas_icon_white.png" alt="COMPAS CRA" width="48px" height="48px" />
       </a>
       <!-- brand -->
       <!-- primary -->
       <ul class="navbar-nav">
-        <li class="nav-item active"><a class="nav-link" href="https://Block Research Group.github.io/compas_cra/">COMPAS CRA</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://BlockResearchGroup.github.io/compas_cra/">COMPAS CRA</a></li>
       </ul>
       <!-- primary -->
       <ul class="navbar-nav d-none d-md-flex ml-md-auto">
         <!-- version -->
         
-        <meta id="doc_versions" data-url="https://Block Research Group.github.io/compas_cra/doc_versions.txt" data-docs="https://Block Research Group.github.io/compas_cra/">
+        <meta id="doc_versions" data-url="https://BlockResearchGroup.github.io/compas_cra/doc_versions.txt" data-docs="https://BlockResearchGroup.github.io/compas_cra/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             0.1.0
@@ -58,7 +58,7 @@
         <!-- version -->
         <!-- social -->
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/Block Research Group/compas_cra" target="_blank">
+          <a class="nav-link" href="https://github.com/BlockResearchGroup/compas_cra" target="_blank">
             <span class="fab fa-github fa-1x"></span>
           </a>
         </li>
@@ -101,22 +101,14 @@
 <h1>CRA_Assembly.add_blocks_from_rhinomeshes</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_cra.datastructures.CRA_Assembly.add_blocks_from_rhinomeshes">
-<span class="sig-prename descclassname"><span class="pre">CRA_Assembly.</span></span><span class="sig-name descname"><span class="pre">add_blocks_from_rhinomeshes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">guids</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/Block Research Group/compas_cra/blob/master/src/compas_cra/datastructures/cra_assembly.py#L107"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Add multiple blocks from their representation as as Rhino meshes.</p>
+<span class="sig-prename descclassname"><span class="pre">CRA_Assembly.</span></span><span class="sig-name descname"><span class="pre">add_blocks_from_rhinomeshes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">guids</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/datastructures/cra_assembly.py#L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Add multiple blocks from their representation as as Rhino meshes.
+:Parameters: <strong>guids</strong> (<em>list of str</em>) – A list of GUIDs identifying the meshes representing the blocks of the assembly.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>guids</strong> (<em>list of str</em>) – A list of GUIDs identifying the meshes representing the blocks of the assembly.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>list</em> – The keys of the added blocks.</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>list</em> – The keys of the added blocks.</p>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="doctest language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">assembly</span> <span class="o">=</span> <span class="n">Assembly</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">guids</span> <span class="o">=</span> <span class="n">compas_rhino</span><span class="o">.</span><span class="n">select_meshes</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">assembly</span><span class="o">.</span><span class="n">add_blocks_from_rhinomeshes</span><span class="p">(</span><span class="n">guids</span><span class="p">)</span>
-</code></pre></div>
-</div>
 </dd></dl>
 
 </section>
@@ -145,6 +137,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/armadillo.html">Armadillo Vault</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/bridge.html">Bridge</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/cubes.html">Cubes</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve-3-blocks.html">Curve-3-Blocks</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/shelf.html">Shelf</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/snake.html">Snake</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/stacks.html">Stacks</a></li>
@@ -155,6 +148,8 @@
 <li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_cra.html">compas_cra</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_cra.datastructures.html">datastructures</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.equilibrium.html">equilibrium</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.geometry.html">geometry</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.viewers.html">viewers</a></li>
 </ul>
 </li>
 </ul>
@@ -182,20 +177,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_cra.datastructures.CRA_Assembly.add_blocks_from_polysurfaces.html" title="CRA_Assembly.add_blocks_from_polysurfaces" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_cra.datastructures.CRA_Assembly.html" title="CRA_Assembly" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          CRA_Assembly.add_blocks_from_polysurfaces
+          CRA_Assembly
         </div>
       </a>
       
 
       
-      <a href="compas_cra.datastructures.CRA_Assembly.add_edge.html" title="CRA_Assembly.add_edge" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_cra.datastructures.CRA_Assembly.add_interface_to_interfaces.html" title="CRA_Assembly.add_interface_to_interfaces" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          CRA_Assembly.add_edge
+          CRA_Assembly.add_interface_to_interfaces
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
