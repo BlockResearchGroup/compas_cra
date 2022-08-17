@@ -93,16 +93,16 @@
 <h1>Installation</h1>
 <section id="install-with-conda">
 <h2>Install with conda</h2>
-<p>Set up conda channels</p>
+<p id="id1">Set up conda channels</p>
 <div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda config --add channels conda-forge
 </code></pre></div>
 </div>
-<p>Clone <cite>compas_cra</cite>:</p>
+<p>Clone <a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a>:</p>
 <div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>git clone git@github.com:BlockResearchGroup/compas_cra.git
 <span class="nb">cd</span> compas_cra
 </code></pre></div>
 </div>
-<p>Install compas_cra with all dependencies in a new conda environment:</p>
+<p>Install <a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> with all dependencies in a new conda environment:</p>
 <div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda env create -f env_osx.yml  <span class="c1"># (Mac)</span>
 conda env create -f env_win.yml  <span class="c1"># (Windows)</span>
 conda env create -f env_linux.yml  <span class="c1"># (Linux)</span>
@@ -151,7 +151,7 @@ conda env update cra --file env_linux.yml --prune  <span class="c1"># (Linux)</s
 <h2>Known issues (Windows)</h2>
 <ul class="simple">
 <li><p>pyomo cannot find ipopt location: <code class="docutils literal notranslate"><span class="pre">pyomo.common.errors.ApplicationError:</span> <span class="pre">No</span> <span class="pre">executable</span> <span class="pre">found</span> <span class="pre">for</span> <span class="pre">solver</span> <span class="pre">'ipopt'</span></code>. Please refer this thread for solution: <a class="reference external" href="https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1">https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1</a></p></li>
-<li><p><cite>compas_cra</cite> uses IPOPT solver, so it might not work for PC with AMD processor.</p></li>
+<li><p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> uses <a class="reference external" href="https://coin-or.github.io/Ipopt/">IPOPT</a> solver, so it might not work for PC with AMD processor.</p></li>
 </ul>
 </section>
 </section>
@@ -193,6 +193,7 @@ conda env update cra --file env_linux.yml --prune  <span class="c1"># (Linux)</s
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/13_curve-3-blocks.html">Curve Interface Surface with 3 Blocks</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/14_cube-curve-short.html">Short Cube with Curve interface</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/15_cube-curve-tall.html">Tall Cube with Curve interface</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/16_ha.html">Model HA</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="nav flex-column collapse">
@@ -206,6 +207,7 @@ conda env update cra --file env_linux.yml --prune  <span class="c1"># (Linux)</s
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="contributions.html">How to contribute</a></li>
 </ul>
 
         </div>

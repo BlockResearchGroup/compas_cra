@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_cra - Arch</title>
+  <title>compas_cra - Model HA</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="Shelf" href="07_shelf.html" />
+  <link rel="next" title="API Reference" href="../api.html" />
   
 
   
-  <link rel="prev" title="Wedge" href="05_wedge.html" />
+  <link rel="prev" title="Tall Cube with Curve interface" href="15_cube-curve-tall.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -84,23 +84,34 @@
             
             <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">Arch</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">Model HA</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section id="arch">
-<h1>Arch</h1>
-<figure class="figure align-default">
-<img alt="../_images/example_arch.png" class="figure-img img-fluid" src="../_images/example_arch.png" />
-</figure>
+        <section id="model-ha">
+<h1>Model HA</h1>
+<table class="borderless docutils align-default" id="id1">
+<caption><span class="caption-text">Figure 1</span></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../_images/example_h.png"><img alt="../_images/example_h.png" src="../_images/example_h.png" style="width: 100%;" /></a>
+</td>
+<td><a class="reference internal image-reference" href="../_images/example_a.png"><img alt="../_images/example_a.png" src="../_images/example_a.png" style="width: 100%;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Parametric Arch</span>
+<span class="sd">Model H and A.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Gene Ting-Chun Kao&quot;</span>
@@ -109,24 +120,29 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 
-    <span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
-    <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_penalty_solve</span><span class="p">,</span> <span class="n">cra_solve</span>
+    <span class="kn">import</span> <span class="nn">compas</span>
+    <span class="kn">import</span> <span class="nn">compas_cra</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+
+    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
     <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
-    <span class="kn">from</span> <span class="nn">compas_cra.geometry</span> <span class="kn">import</span> <span class="n">Arch</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">rbe_solve</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
 
-    <span class="n">height</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">span</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">thickness</span> <span class="o">=</span> <span class="mf">0.5</span>
-    <span class="n">depth</span> <span class="o">=</span> <span class="mf">0.5</span>
-    <span class="n">num_blocks</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.84</span>  <span class="c1"># friction coefficient</span>
+    <span class="n">deg</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># rotation in degree</span>
+    <span class="n">IS_A</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># True: model A. False: model H</span>
 
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">Arch</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="n">span</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="n">thickness</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">,</span> <span class="n">num_blocks</span><span class="o">=</span><span class="n">num_blocks</span><span class="p">,</span> <span class="n">extra_support</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">assembly</span><span class="p">()</span>
+    <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s1">&#39;A.json&#39;</span> <span class="k">if</span> <span class="n">IS_A</span> <span class="k">else</span> <span class="s1">&#39;H.json&#39;</span><span class="p">))</span>
+    <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
     <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
 
-    <span class="c1"># cra_penalty_solve(assembly, mu=0.7, verbose=True, timer=True)</span>
-    <span class="n">cra_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">forcesdirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">forcesline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">displacements</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dispscale</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">rbe_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">displacements</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dispscale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
 </div>
 </section>
@@ -158,7 +174,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="03_cubes_penalty.html">Penalty Solve Cubes</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="04_stacks.html">Stacks</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="05_wedge.html">Wedge</a></li>
-<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Arch</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="06_arch.html">Arch</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="07_shelf.html">Shelf</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="08_snake.html">Snake</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="09_bridge.html">Bridge</a></li>
@@ -168,7 +184,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="13_curve-3-blocks.html">Curve Interface Surface with 3 Blocks</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="14_cube-curve-short.html">Short Cube with Curve interface</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="15_cube-curve-tall.html">Tall Cube with Curve interface</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="16_ha.html">Model HA</a></li>
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Model HA</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse">
@@ -193,7 +209,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Arch</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Model HA</a></li>
 </ul>
 
       </div>
@@ -205,20 +221,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="05_wedge.html" title="Wedge" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="15_cube-curve-tall.html" title="Tall Cube with Curve interface" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          Wedge
+          Tall Cube with Curve interface
         </div>
       </a>
       
 
       
-      <a href="07_shelf.html" title="Shelf" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="../api.html" title="API Reference" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          Shelf
+          API Reference
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

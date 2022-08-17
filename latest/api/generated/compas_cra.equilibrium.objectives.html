@@ -99,7 +99,7 @@
 <h1>objectives</h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_cra.equilibrium.objectives">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">objectives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cra'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1000000.0)</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L93"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">objectives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cra'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1000000.0,</span> <span class="pre">1.0)</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L93"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Objective functions for pyomo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -108,10 +108,10 @@
 <ul>
 <li><p>cra: CRA objective, <span class="math notranslate nohighlight">\(W_{compression} * ||f_n||_2^2 + W_{α} * ||α||_2^2\)</span></p></li>
 <li><p>cra_penalty: CRA penalty objective, <span class="math notranslate nohighlight">\(W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{α} * ||α||_2^2\)</span></p></li>
-<li><p>rbe: RBE objective, <span class="math notranslate nohighlight">\(W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2\)</span></p></li>
+<li><p>rbe: RBE objective, <span class="math notranslate nohighlight">\(W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{friction} * ||{f_u}||_2^2 + W_{friction} * ||{f_v}||_2^2\)</span></p></li>
 </ul>
 </li>
-<li><p><strong>weights</strong> (<em>tuple, optional</em>) – weighting factors, <span class="math notranslate nohighlight">\((W_{α}, W_{compression}, W_{tension})\)</span></p></li>
+<li><p><strong>weights</strong> (<em>tuple, optional</em>) – weighting factors, <span class="math notranslate nohighlight">\((W_{α}, W_{compression}, W_{tension}, W_{friction})\)</span></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -159,6 +159,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/13_curve-3-blocks.html">Curve Interface Surface with 3 Blocks</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/14_cube-curve-short.html">Short Cube with Curve interface</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/15_cube-curve-tall.html">Tall Cube with Curve interface</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/16_ha.html">Model HA</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
@@ -172,6 +173,7 @@
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../contributions.html">How to contribute</a></li>
 </ul>
 
         </div>

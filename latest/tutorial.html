@@ -91,6 +91,165 @@
         
         <section id="tutorial">
 <h1>Tutorial</h1>
+<section id="export-geometry-from-cad-software-rhino">
+<h2>Export geometry from CAD software (Rhino)</h2>
+<section id="rhino-installation">
+<h3>Rhino Installation</h3>
+<p>Please make sure install <a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> first, see <span class="xref std std-ref">Installation</span>.</p>
+<p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> is developed independent of the functionality of CAD software.
+However, CAD software is still useful to create complicated geometrical objects.
+For a more detailed information on how to install COMPAS and its packages for Rhino,
+please refer to <a class="reference external" href="https://compas.dev/compas/latest/gettingstarted/rhino.html">Working in Rhino</a> page of the COMPAS documentation.</p>
+<p>In order to install <a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> for Rhino, do</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>$ python -m compas_rhino.uninstall
+$ python -m compas_rhino.install
+$ python -m compas_rhino.install -p compas_cra
+</code></pre></div>
+</div>
+<p>Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.</p>
+</section>
+<section id="export-mesh-blocks-as-assembly-json-file">
+<h3>Export mesh blocks as Assembly json file</h3>
+<p>Use this script at <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_json.py">scripts/mesh_to_assembly_json.py</a>
+to select mesh blocks and export to assembly data structure and store it as json file.</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This is the script to add assembly without interfaces from rhino meshes</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Gene Ting-Chun Kao&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;kao@arch.ethz.ch&quot;</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="kn">import</span> <span class="nn">compas</span>
+    <span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="k">as</span> <span class="nn">rs</span>
+
+    <span class="kn">from</span> <span class="nn">compas_rhino</span> <span class="kn">import</span> <span class="n">select_meshes</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+
+    <span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">DATA</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;../data/&quot;</span><span class="p">))</span>
+
+    <span class="n">guid</span> <span class="o">=</span> <span class="n">select_meshes</span><span class="p">()</span>
+
+    <span class="n">assembly</span> <span class="o">=</span> <span class="n">CRA_Assembly</span><span class="p">()</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_blocks_from_rhinomeshes</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s2">&quot;file name (xxx.json):&quot;</span><span class="p">)</span>
+    <span class="n">file_o</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">compas</span><span class="o">.</span><span class="n">json_dump</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;file save to: &quot;</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<p><strong>Note</strong>: The selection sequence is important because it represents the node indices.</p>
+</section>
+<section id="export-mesh-blocks-and-interfaces-as-assembly-json-file">
+<h3>Export mesh blocks and interfaces as Assembly json file</h3>
+<p>Currently, we do not implement automatic interface detection algorithm for blocks with curve/free-form interfaces,
+so they have to be discretised manually as planar faces or triangles.</p>
+<p>Use this script at <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_interfaces_json.py">scripts/mesh_to_assembly_interfaces_json.py</a>
+to select mesh blocks with interfaces and export to assembly data structure and store it as json file.</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This is the script to add assembly and interfaces from rhino meshes</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Gene Ting-Chun Kao&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;kao@arch.ethz.ch&quot;</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="kn">import</span> <span class="nn">compas</span>
+    <span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="k">as</span> <span class="nn">rs</span>
+
+    <span class="kn">from</span> <span class="nn">compas_rhino.geometry</span> <span class="kn">import</span> <span class="n">RhinoMesh</span>
+    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+
+    <span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">DATA</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;../data/&quot;</span><span class="p">))</span>
+
+    <span class="n">guid</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObjects</span><span class="p">(</span><span class="s2">&quot;select blocks&quot;</span><span class="p">,</span>
+                         <span class="n">preselect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                         <span class="nb">filter</span><span class="o">=</span><span class="n">rs</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">mesh</span><span class="p">)</span>
+
+    <span class="n">assembly</span> <span class="o">=</span> <span class="n">CRA_Assembly</span><span class="p">()</span>
+    <span class="n">assembly</span><span class="o">.</span><span class="n">add_blocks_from_rhinomeshes</span><span class="p">(</span><span class="n">guids</span><span class="o">=</span><span class="n">guid</span><span class="p">)</span>
+
+    <span class="n">node_labels</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">assembly</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+        <span class="n">block</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">node_attribute</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;block&quot;</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">centroid</span><span class="p">()</span>
+        <span class="n">node_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">AddTextDot</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+
+    <span class="n">IS_FINISHED</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">IS_FINISHED</span><span class="p">:</span>
+
+        <span class="n">interface_guids</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObjects</span><span class="p">(</span><span class="s2">&quot;select interfaces&quot;</span><span class="p">,</span>
+                                        <span class="n">preselect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                        <span class="n">group</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">rs</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">mesh</span><span class="p">)</span>
+
+        <span class="n">interfaces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">interface_guid</span> <span class="ow">in</span> <span class="n">interface_guids</span><span class="p">:</span>
+            <span class="n">mesh</span> <span class="o">=</span> <span class="n">RhinoMesh</span><span class="o">.</span><span class="n">from_guid</span><span class="p">(</span><span class="n">interface_guid</span><span class="p">)</span>
+            <span class="n">interfaces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">to_compas</span><span class="p">())</span>
+
+        <span class="n">edge_a</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetInteger</span><span class="p">(</span><span class="s2">&quot;assign interface from&quot;</span><span class="p">)</span>
+        <span class="n">edge_b</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetInteger</span><span class="p">(</span><span class="s2">&quot;assign interface to&quot;</span><span class="p">)</span>
+
+        <span class="n">assembly</span><span class="o">.</span><span class="n">add_interfaces_from_meshes</span><span class="p">(</span><span class="n">interfaces</span><span class="p">,</span> <span class="n">edge_a</span><span class="p">,</span> <span class="n">edge_b</span><span class="p">)</span>
+
+        <span class="n">IS_FINISHED</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetBoolean</span><span class="p">(</span><span class="s2">&quot;Continue select interface?&quot;</span><span class="p">,</span>
+                                    <span class="p">(</span><span class="s2">&quot;Continue&quot;</span><span class="p">,</span> <span class="s2">&quot;Continue&quot;</span><span class="p">,</span> <span class="s2">&quot;Stop&quot;</span><span class="p">),</span>
+                                    <span class="p">(</span><span class="kc">False</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">rs</span><span class="o">.</span><span class="n">DeleteObjects</span><span class="p">(</span><span class="n">node_labels</span><span class="p">)</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s2">&quot;file name (xxx.json):&quot;</span><span class="p">)</span>
+    <span class="n">file_o</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">compas</span><span class="o">.</span><span class="n">json_dump</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;file save to: &quot;</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<p><strong>Note</strong>:</p>
+<ul class="simple">
+<li><p>The selection sequence is important because it represents the node indices.</p></li>
+<li><p>The interface normal directions are important, it must point from <strong>assign interface from</strong> to <strong>assign interface to</strong>. For example, in Figure 1, <strong>assign interface from: 1</strong> and <strong>assign interface to: 0</strong> for the interface from 1 to 0.</p></li>
+</ul>
+<table class="borderless docutils align-default" id="id1">
+<caption><span class="caption-text">Figure 1</span></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="_images/tutorial_interface1.png"><img alt="_images/tutorial_interface1.png" src="_images/tutorial_interface1.png" style="width: 100%;" /></a>
+</td>
+<td><a class="reference internal image-reference" href="_images/tutorial_interface2.png"><img alt="_images/tutorial_interface2.png" src="_images/tutorial_interface2.png" style="width: 100%;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>More Rhino files and precomputed <code class="code docutils literal notranslate"><span class="pre">.json</span></code> files are located at <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/data">data</a> folder.</p>
+</section>
+</section>
+<section id="using-cra-solvers">
+<h2>Using CRA Solvers</h2>
+<p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> provide three solvers:</p>
+<ul class="simple">
+<li><p>RBE Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.rbe_solve.html#compas_cra.equilibrium.rbe_solve" title="compas_cra.equilibrium.rbe_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.rbe_solve</span></code></a>.</p></li>
+<li><p>CRA Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_solve.html#compas_cra.equilibrium.cra_solve" title="compas_cra.equilibrium.cra_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_solve</span></code></a>.</p></li>
+<li><p>CRA Penalty Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_penalty_solve.html#compas_cra.equilibrium.cra_penalty_solve" title="compas_cra.equilibrium.cra_penalty_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_penalty_solve</span></code></a>.</p></li>
+</ul>
+<p>To see more how to construct assembly and solve equilibrium, please check <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a>.</p>
+</section>
 </section>
 
         
@@ -130,6 +289,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/13_curve-3-blocks.html">Curve Interface Surface with 3 Blocks</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/14_cube-curve-short.html">Short Cube with Curve interface</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/15_cube-curve-tall.html">Tall Cube with Curve interface</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/16_ha.html">Model HA</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="nav flex-column collapse">
@@ -143,6 +303,7 @@
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="contributions.html">How to contribute</a></li>
 </ul>
 
         </div>
@@ -153,7 +314,16 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Tutorial</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Tutorial</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#export-geometry-from-cad-software-rhino">Export geometry from CAD software (Rhino)</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#rhino-installation">Rhino Installation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#export-mesh-blocks-as-assembly-json-file">Export mesh blocks as Assembly json file</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#export-mesh-blocks-and-interfaces-as-assembly-json-file">Export mesh blocks and interfaces as Assembly json file</a></li>
+</ul>
+</li>
+<li class="nav-item"><a class="nav-link reference internal" href="#using-cra-solvers">Using CRA Solvers</a></li>
+</ul>
+</li>
 </ul>
 
       </div>
