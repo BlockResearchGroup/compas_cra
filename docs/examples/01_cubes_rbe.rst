@@ -1,11 +1,11 @@
 ********************************************************************************
-Cubes
+RBE Solve Cubes
 ********************************************************************************
 
-.. figure:: /_images/example_cubes.png
+.. figure:: /_images/example_cubes_rbe.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: cubes.py
+.. literalinclude:: 01_cubes_rbe.py
     :language: python
 

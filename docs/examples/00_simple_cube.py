@@ -38,5 +38,5 @@ if __name__ == '__main__':
 
     assembly.add_interfaces_from_meshes([interface1], 0, 1)
 
-    cra_solve(assembly, verbose=True, timer=True, density=2300*9.8)
-    cra_view(assembly, resultant=True, nodal=True, grid=True, forcesline=True, scale=0.00001)
+    cra_solve(assembly, verbose=True, timer=True, density=1)
+    cra_view(assembly, resultant=False, nodal=True, grid=True, forcesline=False, scale=1)

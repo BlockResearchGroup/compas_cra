@@ -1,11 +1,11 @@
 ********************************************************************************
-Cubes RBE Solve
+Bridge
 ********************************************************************************
 
-.. figure:: /_images/example_cubes_rbe.png
+.. figure:: /_images/example_bridge.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: cubes_rbe.py
+.. literalinclude:: 09_bridge.py
     :language: python
 

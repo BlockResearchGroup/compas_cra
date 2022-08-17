@@ -1,11 +1,11 @@
 ********************************************************************************
-Cubes Penalty Solve
+Penalty Solve Cubes
 ********************************************************************************
 
 .. figure:: /_images/example_cubes_penalty.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: cubes_penalty.py
+.. literalinclude:: 03_cubes_penalty.py
     :language: python
 

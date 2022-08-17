@@ -1,11 +1,11 @@
 ********************************************************************************
-Armadillo Vault
+Arch
 ********************************************************************************
 
-.. figure:: /_images/example_armadillo.png
+.. figure:: /_images/example_arch.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: armadillo.py
+.. literalinclude:: 06_arch.py
     :language: python
 

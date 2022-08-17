@@ -14,6 +14,6 @@ This example rotate type-b geometry 90 degree respect to Y-axis
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: wedge.py
+.. literalinclude:: 05_wedge.py
     :language: python
 

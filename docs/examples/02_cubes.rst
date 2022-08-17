@@ -1,11 +1,11 @@
 ********************************************************************************
-Curve 3 Blocks
+CRA Solve Cubes
 ********************************************************************************
 
-.. figure:: /_images/example_curve-3-blocks.png
+.. figure:: /_images/example_cubes.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: curve-3-blocks.py
+.. literalinclude:: 02_cubes.py
     :language: python
 

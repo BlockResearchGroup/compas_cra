@@ -1,11 +1,11 @@
 ********************************************************************************
-Snake
+Stacks
 ********************************************************************************
 
-.. figure:: /_images/example_snake.png
+.. figure:: /_images/example_stacks.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: snake.py
+.. literalinclude:: 04_stacks.py
     :language: python
 

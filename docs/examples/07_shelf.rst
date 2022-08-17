@@ -1,11 +1,11 @@
 ********************************************************************************
-Stacks
+Shelf
 ********************************************************************************
 
-.. figure:: /_images/example_stacks.png
+.. figure:: /_images/example_shelf.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: stacks.py
+.. literalinclude:: 07_shelf.py
     :language: python
 

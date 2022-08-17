@@ -25,6 +25,7 @@ if __name__ == '__main__':
     deg = 90  # rotation in degree
     axis = 'y-axis'  # y-axis, x-axis, xy30-axis
 
+    rotate_axis = [0, 1, 0]
     if axis == 'y-axis':
         rotate_axis = [0, 1, 0]  # around y-axis
     if axis == 'x-axis':
@@ -39,7 +40,7 @@ if __name__ == '__main__':
 
     assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
 
-    assembly.rotate_assembly([0, 0, 0], rotate_axis, deg)  # around y-axis
+    assembly.rotate_assembly([0, 0, 0], rotate_axis, deg)
 
     cra_solve(assembly, verbose=True, timer=True, d_bnd=1e-2)
     cra_view(assembly, resultant=False, nodal=True, grid=True,

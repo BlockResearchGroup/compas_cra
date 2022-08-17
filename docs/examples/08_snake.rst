@@ -1,11 +1,11 @@
 ********************************************************************************
-Bridge
+Snake
 ********************************************************************************
 
-.. figure:: /_images/example_bridge.png
+.. figure:: /_images/example_snake.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: bridge.py
+.. literalinclude:: 08_snake.py
     :language: python
 
