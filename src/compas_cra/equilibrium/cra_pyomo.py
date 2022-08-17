@@ -112,7 +112,7 @@ def cra_solve(
     model.forces = basis * model.array_f[:, np.newaxis]  # force x in global coordinate
     model.displs = basis * model.d[:, np.newaxis]  # displacement d in global coordinate
 
-    obj_cra = objectives('cra')
+    obj_cra = objectives('cra', (1e+0, 1e+0, 1e+6))
     bound_d = bounds('d', d_bnd)
     constraint_contact = constraints('contact', eps)
     constraint_no_penetration = constraints('no_penetration', eps)
@@ -135,8 +135,12 @@ def cra_solve(
         start_time = time.time()
 
     solver = pyo.SolverFactory('ipopt')
-    solver.options['tol'] = 1e-8  # same as default tolerance
-    solver.options['constr_viol_tol'] = 1e-7  # constraint tolerance
+    solver.options['tol'] = 1e-10  # same as default tolerance
+    solver.options['constr_viol_tol'] = 1e-12  # constraint tolerance
+    solver.options['compl_inf_tol'] = 1e-12
+    solver.options['acceptable_tol'] = 1e-8
+    solver.options['acceptable_constr_viol_tol'] = 1e-8
+    solver.options['acceptable_compl_inf_tol'] = 1e-8
     # https://coin-or.github.io/Ipopt/OPTIONS.html
     result = solver.solve(model, tee=verbose)
 
