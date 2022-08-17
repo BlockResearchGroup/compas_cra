@@ -110,13 +110,45 @@ conda env create -f env_linux.yml  <span class="c1"># (Linux)</span>
 conda activate cra
 </code></pre></div>
 </div>
-<p>Update conda packages</p>
+</section>
+<section id="verify-installation">
+<h2>Verify installation</h2>
+<p>After running:</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>invoke <span class="nb">test</span>
+</code></pre></div>
+</div>
+<p>You should see something like:</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="o">=============================</span> <span class="nb">test</span> session <span class="nv">starts</span> <span class="o">==============================</span>
+platform darwin -- Python <span class="m">3</span>.8.13, pytest-7.0.1, pluggy-1.0.0
+rootdir: ~/compas-dev/compas_cra, configfile: setup.cfg, testpaths: tests
+collected <span class="m">4</span> items
+
+tests/test_cra.py .                                                      <span class="o">[</span> <span class="m">25</span>%<span class="o">]</span>
+tests/test_cra_penalty.py .                                              <span class="o">[</span> <span class="m">50</span>%<span class="o">]</span>
+tests/test_ipopt.py .                                                    <span class="o">[</span> <span class="m">75</span>%<span class="o">]</span>
+tests/test_rbe.py .                                                      <span class="o">[</span><span class="m">100</span>%<span class="o">]</span>
+
+<span class="o">===============================</span> warnings <span class="nv">summary</span> <span class="o">===============================</span>
+.
+.
+.
+.
+.
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+<span class="o">========================</span> <span class="m">4</span> passed, <span class="m">5</span> warnings <span class="k">in</span> <span class="m">2</span>.41s <span class="o">=========================</span>
+</code></pre></div>
+</div>
+</section>
+<section id="update-conda-packages">
+<h2>Update conda packages</h2>
 <div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda env update cra --file env_osx.yml --prune  <span class="c1"># (Mac)</span>
 conda env update cra --file env_win.yml --prune  <span class="c1"># (Windows)</span>
 conda env update cra --file env_linux.yml --prune  <span class="c1"># (Linux)</span>
 </code></pre></div>
 </div>
-<p>Known issues (Windows)</p>
+</section>
+<section id="known-issues-windows">
+<h2>Known issues (Windows)</h2>
 <ul class="simple">
 <li><p>pyomo cannot find ipopt location: <code class="docutils literal notranslate"><span class="pre">pyomo.common.errors.ApplicationError:</span> <span class="pre">No</span> <span class="pre">executable</span> <span class="pre">found</span> <span class="pre">for</span> <span class="pre">solver</span> <span class="pre">'ipopt'</span></code>. Please refer this thread for solution: <a class="reference external" href="https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1">https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1</a></p></li>
 <li><p><cite>compas_cra</cite> uses IPOPT solver, so it might not work for PC with AMD processor.</p></li>
@@ -186,6 +218,9 @@ conda env update cra --file env_linux.yml --prune  <span class="c1"># (Linux)</s
         <ul class="nav flex-column" id="compas-toc">
 <li class="nav-item"><a class="nav-link reference internal" href="#">Installation</a><ul class="nav flex-column">
 <li class="nav-item"><a class="nav-link reference internal" href="#install-with-conda">Install with conda</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#verify-installation">Verify installation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#update-conda-packages">Update conda packages</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#known-issues-windows">Known issues (Windows)</a></li>
 </ul>
 </li>
 </ul>
