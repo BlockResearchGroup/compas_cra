@@ -51,12 +51,6 @@ def assembly_interfaces_numpy(assembly,
     References
     ----------
 
-    Examples
-    --------
-    .. code-block:: python
-
-        pass
-
     """
     node_index = {node: index for index, node in enumerate(assembly.nodes())}
     index_node = {index: node for index, node in enumerate(assembly.nodes())}

@@ -32,11 +32,6 @@ if __name__ == '__main__':
     assembly.set_boundary_conditions([0, 1])
 
     density = {node: 3.51 if node in [11, 12, 13, 14, 15] else 1 for node in assembly.graph.nodes()}
-    # for node in assembly.graph.nodes():
-    #     block = assembly.graph.node_attribute(node, 'block')
-    #     block.attributes["density"] = 1
-    #     if node in [11, 12, 13, 14, 15]:
-    #         block.attributes["density"] = 3.51
     density_setup(assembly, density)
     # assembly.graph.delete_node(2)
     # assembly.graph.delete_node(3)

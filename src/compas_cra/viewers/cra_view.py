@@ -419,7 +419,62 @@ def cra_view(assembly, scale=1., density=1., dispscale=1., tol=1e-5,
              blocks=True, interfaces=True, forces=True,
              forcesdirect=True, forcesline=False,
              weights=True, displacements=True):
-    """CRA Viewer, creating new viewer"""
+    """CRA Viewer, creating new viewer.
+
+        Parameters
+        ----------
+        assembly : compas_assembly.datastructures.Assembly
+            The rigid block assembly.
+        scale : float, optional
+            Force scale.
+            Default is ``1.0``.
+        density : float, optional
+            Density of the block material.
+            Default is ``1.0``.
+        dispscale : float, optional
+            virtual displacement scale.
+            Default is ``1.0``.
+        tol : float, optional
+            Tolerance value to consider faces to be planar.
+            Default is ``1e-5``.
+        grid : bool, optional
+            Show view grid.
+            Default is ``False``.
+        resultant : bool, optional
+            Plot resultant forces.
+            Default is ``True``.
+        nodal : bool, optional
+            Plot nodal forces.
+            Default is ``False``.
+        edge : bool, optional
+            Plot block edges.
+            Default is ``True``.
+        blocks : bool, optional
+            Plot block.
+            Default is ``True``.
+        interfaces : bool, optional
+            Plot interfaces.
+            Default is ``True``.
+        forces : bool, optional
+            Plot forces.
+            Default is ``True``.
+        forcesdirect : bool, optional
+            Plot forces as vectors.
+            Default is ``True``.
+        forcesline : bool, optional
+            Plot forces as lines.
+            Default is ``False``.
+        weights : bool, optional
+            Plot block self weight as vectors.
+            Default is ``True``.
+        displacements : bool, optional
+            Plot virtual displacements.
+            Default is ``True``.
+
+        Returns
+        -------
+        None
+    """
 
     viewer = app.App(width=1600, height=1000,
                      viewmode='shaded', show_grid=grid)
@@ -447,7 +502,61 @@ def cra_view_ex(viewer, assembly, scale=1., density=1., dispscale=1., tol=1e-5,
                 blocks=True, interfaces=True, forces=True,
                 forcesdirect=True, forcesline=False,
                 weights=True, displacements=True):
-    """CRA Viewer using existing view"""
+    """CRA Viewer using existing view.
+
+        Parameters
+        ----------
+        viewer : compas_view2.app.App
+            External viewer object.
+        assembly : compas_assembly.datastructures.Assembly
+            The rigid block assembly.
+        scale : float, optional
+            Force scale.
+            Default is ``1.0``.
+        density : float, optional
+            Density of the block material.
+            Default is ``1.0``.
+        dispscale : float, optional
+            virtual displacement scale.
+            Default is ``1.0``.
+        tol : float, optional
+            Tolerance value to consider faces to be planar.
+            Default is ``1e-5``.
+        resultant : bool, optional
+            Plot resultant forces.
+            Default is ``True``.
+        nodal : bool, optional
+            Plot nodal forces.
+            Default is ``False``.
+        edge : bool, optional
+            Plot block edges.
+            Default is ``True``.
+        blocks : bool, optional
+            Plot block.
+            Default is ``True``.
+        interfaces : bool, optional
+            Plot interfaces.
+            Default is ``True``.
+        forces : bool, optional
+            Plot forces.
+            Default is ``True``.
+        forcesdirect : bool, optional
+            Plot forces as vectors.
+            Default is ``True``.
+        forcesline : bool, optional
+            Plot forces as lines.
+            Default is ``False``.
+        weights : bool, optional
+            Plot block self weight as vectors.
+            Default is ``True``.
+        displacements : bool, optional
+            Plot virtual displacements.
+            Default is ``True``.
+
+        Returns
+        -------
+        None
+    """
 
     if blocks:
         draw_blocks(assembly, viewer, edge, tol)
