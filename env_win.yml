@@ -8,3 +8,4 @@ dependencies:
   - ipopt=3.11.1
   - pip:
     - -r requirements.txt
+    - -r requirements-dev.txt
