@@ -1,31 +1,29 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Simple example to calculate three stacked cubes"""
 
-"""
-Simple example to calculate three stacked cubes
-"""
+import os
+import compas
+import compas_cra
 
-__author__ = "Gene Ting-Chun Kao"
-__email__ = "kao@arch.ethz.ch"
+from compas_cra.datastructures import CRA_Assembly
+from compas_cra.algorithms import assembly_interfaces_numpy
+from compas_cra.equilibrium import cra_solve
+from compas_cra.viewers import cra_view
 
+FILE_I = os.path.join(compas_cra.SAMPLE, "cubes.json")
 
-if __name__ == '__main__':
+assembly = compas.json_load(FILE_I)
+assembly = assembly.copy(cls=CRA_Assembly)
+assembly.set_boundary_conditions([0])
 
-    import compas
-    import compas_cra
-    import os
+assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
 
-    from compas_cra.datastructures import CRA_Assembly
-    from compas_cra.datastructures import assembly_interfaces_numpy
-    from compas_cra.equilibrium import cra_solve
-    from compas_cra.viewers import cra_view
-
-    assembly = compas.json_load(os.path.join(compas_cra.DATA, './cubes.json'))
-    assembly = assembly.copy(cls=CRA_Assembly)
-    assembly.set_boundary_conditions([0])
-
-    assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
-
-    cra_solve(assembly, verbose=True, timer=True)
-    cra_view(assembly, resultant=False, nodal=True, grid=True,
-             displacements=True, dispscale=0, scale=0.5)
+cra_solve(assembly, verbose=True, timer=True)
+cra_view(
+    assembly,
+    resultant=False,
+    nodal=True,
+    grid=True,
+    displacements=True,
+    dispscale=0,
+    scale=0.5,
+)

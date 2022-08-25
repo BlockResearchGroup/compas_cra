@@ -10,8 +10,9 @@ from compas_cra.equilibrium import cra_solve
 def test_cra():
 
     support = Box(Frame.worldXY(), 1, 1, 1)  # supporting block
-    free1 = Box(Frame.worldXY().transformed(
-        Translation.from_vector([0, 0, 1])), 1, 1, 1)  # block to analyse
+    free1 = Box(
+        Frame.worldXY().transformed(Translation.from_vector([0, 0, 1])), 1, 1, 1
+    )  # block to analyse
 
     assembly = CRA_Assembly()
     assembly.add_block(Block.from_shape(support), node=0)
@@ -20,7 +21,7 @@ def test_cra():
 
     interface1 = Mesh()
     # interface corners
-    corners = [[.5, .5, .5], [-.5, .5, .5], [-.5, -.5, .5], [.5, -.5, .5]]
+    corners = [[0.5, 0.5, 0.5], [-0.5, 0.5, 0.5], [-0.5, -0.5, 0.5], [0.5, -0.5, 0.5]]
     for i, c in enumerate(corners):
         interface1.add_vertex(key=i, x=c[0], y=c[1], z=c[2])
     interface1.add_face([0, 1, 2, 3])
@@ -31,11 +32,11 @@ def test_cra():
 
     IS_FORCE_CORRECT = True
     for edge in assembly.graph.edges():
-        for interface in assembly.graph.edge_attribute(edge, 'interfaces'):
+        for interface in assembly.graph.edge_attribute(edge, "interfaces"):
             corners = interface.points
             forces = interface.forces
             for i, corner in enumerate(corners):
-                force = forces[i]['c_np'] - forces[i]['c_nn']
+                force = forces[i]["c_np"] - forces[i]["c_nn"]
                 if round(force, 2) == 0.25:
                     IS_FORCE_CORRECT = True
                 else:

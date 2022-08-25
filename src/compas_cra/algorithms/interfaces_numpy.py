@@ -1,9 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Identify interfaces for CRA extended assembly data structures."""
 
-"""
-Identify interfaces for CRA extended assembly data structures.
-"""
 from math import fabs
 
 from numpy import array
@@ -15,11 +11,6 @@ from shapely.geometry import Polygon
 from compas.geometry import Frame
 from compas.geometry import local_to_world_coordinates_numpy
 
-__author__ = "Gene Ting-Chun Kao"
-__email__ = "kao@arch.ethz.ch"
-
-__all__ = ['assembly_interfaces_numpy']
-
 
 def find_nearest_neighbours(cloud, nmax):
     tree = cKDTree(cloud)
@@ -28,25 +19,20 @@ def find_nearest_neighbours(cloud, nmax):
     return nnbrs
 
 
-def assembly_interfaces_numpy(assembly,
-                              nmax=10,
-                              tmax=1e-6,
-                              amin=1e-1):
-    """Identify the interfaces between the blocks of an assembly.
+def assembly_interfaces_numpy(assembly, nmax=10, tmax=1e-6, amin=1e-1):
+    """
+    Identify the interfaces between the blocks of an assembly.
 
     Parameters
     ----------
-    assembly : compas_cra.datastructures.CRA_Assembly or compas_assembly.datastructures.Assembly
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
         An assembly of discrete blocks.
     nmax : int, optional
         Maximum number of neighbours per block.
-        Default is ``10``.
     tmax : float, optional
         Maximum deviation from the perfectly flat interface plane.
-        Default is ``1e-6``.
     amin : float, optional
         Minimum area of a "face-face" interface.
-        Default is ``1e-1``.
 
     References
     ----------
@@ -101,8 +87,7 @@ def assembly_interfaces_numpy(assembly,
 
             A = array(uvw, dtype=float64)
             o = array(origin, dtype=float64).reshape((-1, 1))
-            xyz0 = array(block.face_coordinates(f0),
-                         dtype=float64).reshape((-1, 3)).T
+            xyz0 = array(block.face_coordinates(f0), dtype=float64).reshape((-1, 3)).T
             rst0 = solve(A.T, xyz0 - o).T.tolist()
             p0 = Polygon(rst0)
 
@@ -115,15 +100,18 @@ def assembly_interfaces_numpy(assembly,
                 if n in assembly.graph.edge and node in assembly.graph.edge[n]:
                     continue
 
-                if assembly.graph.node_attribute(node, 'is_support') and \
-                   assembly.graph.node_attribute(n, 'is_support'):
+                if assembly.graph.node_attribute(
+                    node, "is_support"
+                ) and assembly.graph.node_attribute(n, "is_support"):
                     continue
 
                 nbr = blocks[j]
-                k_i = {key: index
-                       for index, key in enumerate(nbr.vertices())}
-                xyz = array(nbr.vertices_attributes('xyz'),
-                            dtype=float64).reshape((-1, 3)).T
+                k_i = {key: index for index, key in enumerate(nbr.vertices())}
+                xyz = (
+                    array(nbr.vertices_attributes("xyz"), dtype=float64)
+                    .reshape((-1, 3))
+                    .T
+                )
                 rst = solve(A.T, xyz - o).T.tolist()
                 rst = {key: rst[k_i[key]] for key in nbr.vertices()}
 
@@ -146,19 +134,21 @@ def assembly_interfaces_numpy(assembly,
 
                         if area >= amin:
                             coords = [
-                                [x, y, 0.0]
-                                for x, y, z in
-                                intersection.exterior.coords]
+                                [x, y, 0.0] for x, y, z in intersection.exterior.coords
+                            ]
 
                             coords = local_to_world_coordinates_numpy(
-                                Frame(o, A[0], A[1]), coords)
+                                Frame(o, A[0], A[1]), coords
+                            )
 
                             assembly.add_to_interfaces(
-                                node, n,
-                                type='face_face',
+                                node,
+                                n,
+                                type="face_face",
                                 size=area,
                                 points=coords.tolist()[:-1],
-                                frame=Frame(origin, uvw[0], uvw[1]))
+                                frame=Frame(origin, uvw[0], uvw[1]),
+                            )
 
     return assembly
 

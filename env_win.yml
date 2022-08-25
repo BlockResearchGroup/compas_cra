@@ -2,14 +2,9 @@ name: cra
 channels:
   - conda-forge
 dependencies:
-  - python=3.8
-  - cython
-  - git
-  - freeglut
-  - freetype-py
-  - textdistance
+  - python
   - compas
   - compas_view2
   - ipopt=3.11.1
   - pip:
-    - -r requirements-dev.txt
+    - -r requirements.txt

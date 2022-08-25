@@ -3,15 +3,16 @@ from compas.geometry import Frame
 from compas.geometry import Translation
 from compas_assembly.datastructures import Block
 from compas_cra.datastructures import CRA_Assembly
-from compas_cra.datastructures import assembly_interfaces_numpy
+from compas_cra.algorithms import assembly_interfaces_numpy
 from compas_cra.equilibrium import rbe_solve
 
 
 def test_cra_penalty():
 
     support = Box(Frame.worldXY(), 1, 1, 1)  # supporting block
-    free1 = Box(Frame.worldXY().transformed(
-        Translation.from_vector([0.75, 0, 1])), 1, 1, 1)  # block to analyse
+    free1 = Box(
+        Frame.worldXY().transformed(Translation.from_vector([0.75, 0, 1])), 1, 1, 1
+    )  # block to analyse
 
     assembly = CRA_Assembly()
     assembly.add_block(Block.from_shape(support), node=0)
@@ -22,15 +23,15 @@ def test_cra_penalty():
 
     rbe_solve(assembly, density=1)
 
-    block = assembly.graph.node_attribute(1, 'block')
+    block = assembly.graph.node_attribute(1, "block")
     weight = block.volume()
     resultant = 0
     for edge in assembly.graph.edges():
-        for interface in assembly.graph.edge_attribute(edge, 'interfaces'):
+        for interface in assembly.graph.edge_attribute(edge, "interfaces"):
             corners = interface.points
             forces = interface.forces
             for i, corner in enumerate(corners):
-                force = forces[i]['c_np'] - forces[i]['c_nn']
+                force = forces[i]["c_np"] - forces[i]["c_nn"]
                 resultant += force
 
     assert round(weight, 2) == round(resultant, 2)

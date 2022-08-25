@@ -17,8 +17,6 @@ Classes
 
 """
 
-from __future__ import absolute_import
+from .arch import Arch
 
-from .arch import *  # noqa: F401 F403
-
-__all__ = [name for name in dir() if not name.startswith('_')]
+__all__ = ["Arch"]

@@ -1,25 +1,24 @@
 """
 ********************************************************************************
-datastructures
+algorithms
 ********************************************************************************
 
-.. currentmodule:: compas_cra.datastructures
+.. currentmodule:: compas_cra.algorithms
 
 
-Classes
-=======
+Functions
+============
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    CRA_Assembly
+    assembly_interfaces_numpy
+
 
 """
 
 
-from __future__ import absolute_import
+from .interfaces_numpy import assembly_interfaces_numpy
 
-from .cra_assembly import CRA_Assembly
-
-__all__ = ["CRA_Assembly"]
+__all__ = ["assembly_interfaces_numpy"]

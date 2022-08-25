@@ -1,10 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-Rigid-block Equilibrium
-Using Pyomo + IPOPT
-"""
+"""Rigid-block Equilibrium Using Pyomo + IPOPT"""
 
 import time
 import numpy as np
@@ -17,57 +11,52 @@ from .pyomo_helper import bounds, objectives
 from .pyomo_helper import static_equilibrium_constraints
 from .pyomo_helper import pyomo_result_check, pyomo_result_assembly
 
-__author__ = "Gene Ting-Chun Kao"
-__email__ = "kao@arch.ethz.ch"
-
-__all__ = ['rbe_solve']
-
 
 def rbe_solve(
     assembly: Assembly,
     mu: float = 0.84,
-    density: float = 1.,
+    density: float = 1.0,
     verbose: bool = False,
-    timer: bool = False
-):
+    timer: bool = False,
+) -> Assembly:
     r"""RBE solver with penalty formulation using Pyomo + IPOPT.
 
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
-        mu : float, optional
-            Friction coefficient value.
-        density : float, optional
-            Density of the block material.
-            Default is ``1.0``.
-        verbose : bool, optional
-            Print information during the execution of the algorithm.
-            Default is ``False``.
-        timer : bool, optional
-            Time the solving time.
-            Default is ``False``.
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
+    mu : float, optional
+        Friction coefficient value.
+    density : float, optional
+        Density of the block material.
+    verbose : bool, optional
+        Print information during the execution of the algorithm.
+    timer : bool, optional
+        Time the solving time.
 
-        Returns
-        -------
-        assembly : compas_assembly.datastructures.Assembly
-            The assembly is updated in place, also return Assembly for compas.rpc and compas.cloud
+    Returns
+    -------
+    :class:`~compas_assembly.datastructures.Assembly`
+        The assembly is updated in place, also return Assembly for compas.rpc and compas.cloud
 
 
-        Notes
-        -----
-        This function solves the following optimisation problem:
+    Notes
+    -----
+    This function solves the following optimisation problem, `Eq.(6) <https://www.sciencedirect.com/science/article/pii/S0010448522000161?via%3Dihub#fd6>`_ :
 
-        .. math::
+    .. math::
 
-            \begin{align}
-                \begin{split}
-                    \min_{\bf{f}} \quad & \left\| {\bf{f}}_n \right\|_2^2 \\
-                    \textrm{s.t.} \quad & {{\bf{A}}_{eq}}\:{\bf{f}} = -{\bf{p}} \\
-                    & {\bf{A}}_{fr}\:{\bf{f}} \le {\bf{0}} \\
-                    & f_{jkn}^i \ge 0 \;, \quad \forall i,j,k \;,
-                \end{split}
-            \end{align}
+        \begin{align}
+            \begin{split}
+                \min_{\bf{\tilde{f}}} \quad & \frac{1}{2}\:{\bf{\tilde{f}}^\intercal}\:{\bf{H}}\:{\bf{\tilde{f}}} \\
+                \textrm{s.t.} \quad & {{\bf{A}}_{eq}}\:{\bf{B}}\:{\bf{\tilde{f}}} = -{\bf{p}} \\
+                & {\bf{A}}_{fr}\:{\bf{B}}\:{\bf{\tilde{f}}} \le {\bf{0}} \\
+                & f_{jkn}^{i+}\, ,f_{jkn}^{i-} \ge 0 \;, \quad \forall i,j,k \;,
+            \end{split}
+        \end{align}
+
+    For more information please check our research paper:
+    `Coupled Rigid-Block Analysis: Stability-Aware Design of Complex Discrete-Element Assemblies <https://doi.org/10.1016/j.cad.2022.103216>`_
 
     """
 
@@ -79,14 +68,14 @@ def rbe_solve(
     v_num = num_vertices(assembly)  # number of vertices
 
     model.f_id = pyo.Set(initialize=range(v_num * 4))  # force indices
-    model.f = pyo.Var(model.f_id, initialize=0, domain=bounds('f_tilde'))
+    model.f = pyo.Var(model.f_id, initialize=0, domain=bounds("f_tilde"))
     model.array_f = np.array([model.f[i] for i in model.f_id])
 
     aeq_b = equilibrium_setup(assembly, penalty=True)
     afr_b = friction_setup(assembly, mu, penalty=True)
     p = external_force_setup(assembly, density)
 
-    obj_rbe = objectives('rbe', (0, 1e+0, 1e+6, 1e+0))
+    obj_rbe = objectives("rbe", (0, 1e0, 1e6, 1e0))
     eq_con, fr_con = static_equilibrium_constraints(model, aeq_b, afr_b, p)
 
     model.obj = pyo.Objective(rule=obj_rbe, sense=pyo.minimize)
@@ -99,7 +88,7 @@ def rbe_solve(
     if timer:
         start_time = time.time()
 
-    solver = pyo.SolverFactory('ipopt')
+    solver = pyo.SolverFactory("ipopt")
     result = solver.solve(model, tee=verbose)
 
     if timer:

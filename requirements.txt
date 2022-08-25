@@ -1,0 +1,2 @@
+pyomo
+compas_assembly ==0.4.1

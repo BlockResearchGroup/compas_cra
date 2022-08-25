@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-CRA assembly data structures
-"""
+"""CRA assembly data structures"""
 
 from compas.geometry import Frame
 from compas.geometry import Rotation
@@ -11,11 +6,6 @@ from compas.geometry import Pointcloud
 from compas_assembly.datastructures import Assembly
 from compas_assembly.datastructures import Interface
 from compas_assembly.datastructures import Block
-
-__author__ = "Gene Ting-Chun Kao"
-__email__ = "kao@arch.ethz.ch"
-
-__all__ = ['CRA_Assembly']
 
 
 class CRA_Assembly(Assembly):
@@ -25,28 +15,24 @@ class CRA_Assembly(Assembly):
         # keep this old coding style for Rhino IronPython. super().__init__() doesn't work
         super(CRA_Assembly, self).__init__()
 
-        self.attributes.update({'name': 'CRA_Assembly'})
-        self.graph.default_node_attributes.update({
-            'block': None,
-            'displacement': [0, 0, 0, 0, 0, 0]
-        })
-        self.graph.default_edge_attributes.update({
-            'interface': None,
-            'interfaces': []
-        })
+        self.attributes.update({"name": "CRA_Assembly"})
+        self.graph.default_node_attributes.update(
+            {"block": None, "displacement": [0, 0, 0, 0, 0, 0]}
+        )
+        self.graph.default_edge_attributes.update({"interface": None, "interfaces": []})
 
     def add_blocks_from_rhinomeshes(self, guids):
         """Add multiple blocks from their representation as as Rhino meshes.
 
-            Parameters
-            ----------
-            guids : list of str
-                A list of GUIDs identifying the meshes representing the blocks of the assembly.
+        Parameters
+        ----------
+        guids : list of str
+            A list of GUIDs identifying the meshes representing the blocks of the assembly.
 
-            Returns
-            -------
-            list
-                The keys of the added blocks.
+        Returns
+        -------
+        list
+            The keys of the added blocks.
 
         """
         keys = []
@@ -59,45 +45,44 @@ class CRA_Assembly(Assembly):
     def add_to_interfaces(self, u, v, type, size, points, frame):
         """Add interface to edge (u, v) interfaces.
 
-            Parameters
-            ----------
-            u : int
-                block_j id.
-            v : int
-                block_k id.
-            type : str
-                Interface type.
-            size : float
-                Interface area.
-            points : int
-                Interface vertices.
-            frame : int
-                Local coordinate.
+        Parameters
+        ----------
+        u : int
+            block_j id.
+        v : int
+            block_k id.
+        type : str
+            Interface type.
+        size : float
+            Interface area.
+        points : int
+            Interface vertices.
+        frame : int
+            Local coordinate.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
-        interface = Interface(type=type, size=size, points=points,
-                              frame=frame)
+        interface = Interface(type=type, size=size, points=points, frame=frame)
         self.add_interface_to_interfaces(u, v, interface)
 
     def add_interface_to_interfaces(self, u, v, interface):
         """Add interface to edge (u, v) interfaces.
 
-            Parameters
-            ----------
-            u : int
-                block_j id.
-            v : int
-                block_k id.
-            interface : compas_assembly.datastructures.Interface
-                Interface.
+        Parameters
+        ----------
+        u : int
+            block_j id.
+        v : int
+            block_k id.
+        interface : class:`compas_assembly.datastructures.Interface`
+            Interface.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
         if not self.graph.has_edge(u, v):
@@ -110,40 +95,42 @@ class CRA_Assembly(Assembly):
     def add_interfaces_from_meshes(self, meshes, u, v):
         """Add interfaces from meshes to edge (u, v) interfaces.
 
-            Parameters
-            ----------
-            meshes : list of compas.datastructures.Mesh
-                Meshes.
-            u : int
-                block_j id.
-            v : int
-                block_k id.
+        Parameters
+        ----------
+        meshes : list of compas.datastructures.Mesh
+            Meshes.
+        u : int
+            block_j id.
+        v : int
+            block_k id.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
         for mesh in meshes:
             for f in mesh.faces():
                 pt = mesh.face_coordinates(f)
-                interface = Interface(type='face_face',
-                                      size=mesh.face_area(f),
-                                      points=pt,
-                                      frame=Frame.from_points(pt[0], pt[1], pt[2]))
+                interface = Interface(
+                    type="face_face",
+                    size=mesh.face_area(f),
+                    points=pt,
+                    frame=Frame.from_points(pt[0], pt[1], pt[2]),
+                )
                 self.add_interface_to_interfaces(u, v, interface)
 
     def set_boundary_conditions(self, keys):
         """Set blocks as boundary conditions.
 
-            Parameters
-            ----------
-            keys : list of int
-                Assembly node keys.
+        Parameters
+        ----------
+        keys : list of int
+            Assembly node keys.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
         for key in keys:
@@ -152,14 +139,14 @@ class CRA_Assembly(Assembly):
     def set_boundary_condition(self, key):
         """Set block as boundary condition.
 
-            Parameters
-            ----------
-            key : int
-                Assembly node key.
+        Parameters
+        ----------
+        key : int
+            Assembly node key.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
         self.graph.node_attribute(key, "is_support", True)
@@ -167,14 +154,14 @@ class CRA_Assembly(Assembly):
     def is_block_support(self, key):
         """Check if the block is a support.
 
-            Parameters
-            ----------
-            key : int
-                Assembly node key.
+        Parameters
+        ----------
+        key : int
+            Assembly node key.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
         return self.graph.node_attribute(key, "is_support")
@@ -182,24 +169,24 @@ class CRA_Assembly(Assembly):
     def rotate_assembly(self, o, axis, angle, is_rad=False):
         """Rotate the entire assembly.
 
-            Parameters
-            ----------
-            o : list
-                Rotation origin.
-            axis : list
-                Rotation axis.
-            angle : float
-                Rotation angle.
-            is_rad : bool, optional
-                True: angle is radian. False: angle is degree.
-                Default is ``False``.
+        Parameters
+        ----------
+        o : list
+            Rotation origin.
+        axis : list
+            Rotation axis.
+        angle : float
+            Rotation angle.
+        is_rad : bool, optional
+            True: angle is radian. False: angle is degree.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
         from math import pi
+
         rad = angle
         if not is_rad:
             rad = angle * pi / 180
@@ -208,64 +195,62 @@ class CRA_Assembly(Assembly):
         self.transform(R)
         for edge in self.edges():
             for interface in self.graph.edge_attribute(edge, "interfaces"):
-                interface.points = [list(c) for c in
-                                    Pointcloud(interface.points).transformed(
-                                        R)]
+                interface.points = [
+                    list(c) for c in Pointcloud(interface.points).transformed(R)
+                ]
                 interface.frame.transform(R)
 
     def move_block(self, key, vector=(0, 0, 0)):
         """Move block with vector.
 
-            Parameters
-            ----------
-            key : int
-                Assembly node key.
-            vector : list, optional
-                Translation vector.
-                Default is ``(0, 0, 0)``.
+        Parameters
+        ----------
+        key : int
+            Assembly node key.
+        vector : list, optional
+            Translation vector.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
         from compas.geometry import Translation
 
         self.graph.node_attribute(key, "block").transform(
-            Translation.from_vector(vector))
+            Translation.from_vector(vector)
+        )
 
     def get_weight_total(self, density=1):
         """Get total assembly weight.
 
-            Parameters
-            ----------
-            density : float, optional
-                Material density.
-                Default is ``1``.
+        Parameters
+        ----------
+        density : float, optional
+            Material density.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
         weight = 0
         for node in self.nodes():
-            block = self.graph.node_attribute(node, 'block')
+            block = self.graph.node_attribute(node, "block")
             weight += block.volume() * density
         return weight
 
     def get_weight_mean(self, density=1):
         """Get assembly mean weight.
 
-            Parameters
-            ----------
-            density : float, optional
-                Material density.
-                Default is ``1``.
+        Parameters
+        ----------
+        density : float, optional
+            Material density.
 
-            Returns
-            -------
-            None
+        Returns
+        -------
+        None
 
         """
         n = self.graph.number_of_nodes()
@@ -273,5 +258,5 @@ class CRA_Assembly(Assembly):
         return w / n
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

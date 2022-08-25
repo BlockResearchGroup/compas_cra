@@ -7,7 +7,7 @@ viewers
 
 
 CRA Viewer
-=======
+==========
 
 .. autosummary::
     :toctree: generated/
@@ -19,8 +19,9 @@ CRA Viewer
 
 """
 
-from __future__ import absolute_import
+from .cra_view import (
+    cra_view,
+    cra_view_ex,
+)
 
-from .cra_view import *  # noqa: F401 F403
-
-__all__ = [name for name in dir() if not name.startswith('_')]
+__all__ = ["cra_view", "cra_view_ex"]

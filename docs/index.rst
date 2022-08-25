@@ -2,19 +2,14 @@
 Introduction
 ********************************************************************************
 
-.. rst-class:: lead
-
-`Coupled Rigid-Block Analysis (CRA) <https://doi.org/10.1016/j.cad.2022.103216>`_
-in `COMPAS <https://compas.dev/>`_ framework.
-
-To find out more about CRA, please refer to our paper in the CAD Computer-Aided Design journal: `https://doi.org/10.1016/j.cad.2022.103216 <https://doi.org/10.1016/j.cad.2022.103216>`_
-
 .. figure:: /_images/cra_bridge.png
     :figclass: figure
     :class: figure-img img-fluid
 
-**Coupled Rigid-Block Analysis:
-Stability-Aware Design of Complex Discrete-Element Assemblies**
+`Coupled Rigid-Block Analysis (CRA) <https://doi.org/10.1016/j.cad.2022.103216>`_
+in `COMPAS <https://compas.dev/>`_ framework.
+
+.. rst-class:: lead
 
 The rigid-block equilibrium (RBE) method uses a penalty formulation to
 measure structural infeasibility or to guide the design of stable
@@ -34,6 +29,12 @@ In addition, an interactive stability-aware design process to
 guide user design towards structurally-sound assemblies is proposed.
 Finally, the potential of our method for real-world problems are demonstrated
 by designing complex and scaffolding-free physical models.
+
+To find out more about CRA, please refer to our paper in the CAD Computer-Aided Design journal:
+
+**Coupled Rigid-Block Analysis: Stability-Aware Design of Complex Discrete-Element Assemblies**
+
+`https://doi.org/10.1016/j.cad.2022.103216 <https://doi.org/10.1016/j.cad.2022.103216>`_
 
 Credits
 =================

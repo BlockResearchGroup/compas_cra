@@ -1,63 +1,62 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""This is the script to add assembly and interfaces from rhino meshes"""
 
-"""
-This is the script to add assembly and interfaces from rhino meshes
-"""
+import os
+import compas
+import rhinoscriptsyntax as rs
 
-__author__ = "Gene Ting-Chun Kao"
-__email__ = "kao@arch.ethz.ch"
+from compas_rhino.geometry import RhinoMesh
+from compas_cra.datastructures import CRA_Assembly
 
+HERE = os.path.abspath(os.path.dirname(__file__))
+PATH = os.path.abspath(
+    os.path.join(HERE, "..", "data")
+)  # or change to your own directory
 
-if __name__ == '__main__':
+guid = rs.GetObjects(
+    "select blocks",
+    preselect=False,
+    select=False,
+    group=False,
+    filter=rs.filter.mesh,
+)
 
-    import os
-    import compas
-    import rhinoscriptsyntax as rs
+assembly = CRA_Assembly()
+assembly.add_blocks_from_rhinomeshes(guids=guid)
 
-    from compas_rhino.geometry import RhinoMesh
-    from compas_cra.datastructures import CRA_Assembly
+node_labels = []
+for node in assembly.nodes():
+    block = assembly.graph.node_attribute(node, "block")
+    c = block.centroid()
+    node_labels.append(rs.AddTextDot(node, c))
 
-    HERE = os.path.abspath(os.path.dirname(__file__))
-    DATA = os.path.abspath(os.path.join(HERE, "../data/"))
+IS_FINISHED = False
+while not IS_FINISHED:
 
-    guid = rs.GetObjects("select blocks",
-                         preselect=False, select=False, group=False,
-                         filter=rs.filter.mesh)
+    interface_guids = rs.GetObjects(
+        "select interfaces",
+        preselect=False,
+        select=False,
+        group=False,
+        filter=rs.filter.mesh,
+    )
 
-    assembly = CRA_Assembly()
-    assembly.add_blocks_from_rhinomeshes(guids=guid)
+    interfaces = []
+    for interface_guid in interface_guids:
+        mesh = RhinoMesh.from_guid(interface_guid)
+        interfaces.append(mesh.to_compas())
 
-    node_labels = []
-    for node in assembly.nodes():
-        block = assembly.graph.node_attribute(node, "block")
-        c = block.centroid()
-        node_labels.append(rs.AddTextDot(node, c))
+    edge_a = rs.GetInteger("assign interface from")
+    edge_b = rs.GetInteger("assign interface to")
 
-    IS_FINISHED = False
-    while not IS_FINISHED:
+    assembly.add_interfaces_from_meshes(interfaces, edge_a, edge_b)
 
-        interface_guids = rs.GetObjects("select interfaces",
-                                        preselect=False, select=False,
-                                        group=False, filter=rs.filter.mesh)
+    IS_FINISHED = rs.GetBoolean(
+        "Continue select interface?", ("Continue", "Continue", "Stop"), (False)
+    )[0]
 
-        interfaces = []
-        for interface_guid in interface_guids:
-            mesh = RhinoMesh.from_guid(interface_guid)
-            interfaces.append(mesh.to_compas())
+rs.DeleteObjects(node_labels)
 
-        edge_a = rs.GetInteger("assign interface from")
-        edge_b = rs.GetInteger("assign interface to")
-
-        assembly.add_interfaces_from_meshes(interfaces, edge_a, edge_b)
-
-        IS_FINISHED = rs.GetBoolean("Continue select interface?",
-                                    ("Continue", "Continue", "Stop"),
-                                    (False))[0]
-
-    rs.DeleteObjects(node_labels)
-
-    filename = rs.GetString("file name (xxx.json):")
-    file_o = os.path.join(DATA + '/' + filename)
-    compas.json_dump(assembly, file_o)
-    print("file save to: ", file_o)
+filename = rs.GetString("file name (xxx.json):")
+file_o = os.path.join(PATH, filename)
+compas.json_dump(assembly, file_o)
+print("file save to: ", file_o)

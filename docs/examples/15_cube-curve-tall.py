@@ -1,30 +1,29 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Example to calculate cube tall with curved interfaces"""
 
-"""
-Example to calculate three block with curved interfaces
-"""
+import os
+import compas
+import compas_cra
 
-__author__ = "Gene Ting-Chun Kao"
-__email__ = "kao@arch.ethz.ch"
+from compas_cra.datastructures import CRA_Assembly
+from compas_cra.equilibrium import cra_solve
+from compas_cra.viewers import cra_view
 
+density = 0.1
 
-if __name__ == '__main__':
+FILE_I = os.path.join(compas_cra.SAMPLE, "cube-curve-tall.json")
 
-    import compas
-    import compas_cra
-    import os
+assembly = compas.json_load(FILE_I)
+assembly = assembly.copy(cls=CRA_Assembly)
+assembly.set_boundary_conditions([0])
 
-    from compas_cra.datastructures import CRA_Assembly
-    from compas_cra.equilibrium import cra_solve
-    from compas_cra.viewers import cra_view
-
-    density = 0.1
-
-    assembly = compas.json_load(os.path.join(compas_cra.DATA, './cube-curve-tall.json'))
-    assembly = assembly.copy(cls=CRA_Assembly)
-    assembly.set_boundary_conditions([0])
-
-    cra_solve(assembly, verbose=True, timer=True, density=density)
-    cra_view(assembly, resultant=True, nodal=False, grid=True,
-             displacements=True, dispscale=0, scale=40, density=density)
+cra_solve(assembly, verbose=True, timer=True, density=density)
+cra_view(
+    assembly,
+    resultant=True,
+    nodal=False,
+    grid=True,
+    displacements=True,
+    dispscale=0,
+    scale=40,
+    density=density,
+)

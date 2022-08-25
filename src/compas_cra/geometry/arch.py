@@ -9,27 +9,26 @@ from compas_assembly.datastructures import Block
 from compas_cra.datastructures import CRA_Assembly
 
 
-__all__ = ['Arch']
-
-
 class Arch(object):
     """Create voussoir geometry for a semi-circular arch with given height and span.
 
-        Parameters
-        ----------
-        height : float
-            The distance between the base of the arch and the highest point of the intrados.
-        span : float
-            The distance between opposite intrados points at the base.
-        thickness : float
-            The distance between intrados and extrados.
-        depth : float
-            The depth of the arch.
-        n : int
-            Number of blocks
+    Parameters
+    ----------
+    height : float
+        The distance between the base of the arch and the highest point of the intrados.
+    span : float
+        The distance between opposite intrados points at the base.
+    thickness : float
+        The distance between intrados and extrados.
+    depth : float
+        The depth of the arch.
+    n : int
+        Number of blocks
     """
 
-    def __init__(self, height, span, thickness, depth, num_blocks=None, extra_support=False):
+    def __init__(
+        self, height, span, thickness, depth, num_blocks=None, extra_support=False
+    ):
         super().__init__()
         self.height = height
         self.span = span
@@ -53,11 +52,11 @@ class Arch(object):
             assembly.add_block(mesh.copy(cls=Block))
 
         if self.extra_support is False:
-            assembly.graph.node_attribute(0, 'is_support', True)
-            assembly.graph.node_attribute(self.num_blocks - 1, 'is_support', True)
+            assembly.graph.node_attribute(0, "is_support", True)
+            assembly.graph.node_attribute(self.num_blocks - 1, "is_support", True)
         else:
-            assembly.graph.node_attribute(self.num_blocks, 'is_support', True)
-            assembly.graph.node_attribute(self.num_blocks + 1, 'is_support', True)
+            assembly.graph.node_attribute(self.num_blocks, "is_support", True)
+            assembly.graph.node_attribute(self.num_blocks + 1, "is_support", True)
 
         return assembly
 
@@ -73,9 +72,9 @@ class Arch(object):
         if self.height > self.span / 2:
             raise Exception("Not a semicircular arch.")
 
-        radius = self.height / 2 + self.span ** 2 / (8 * self.height)
+        radius = self.height / 2 + self.span**2 / (8 * self.height)
         top = [0.0, 0.0, self.height]
-        left = [- self.span / 2, 0.0, 0.0]
+        left = [-self.span / 2, 0.0, 0.0]
         center = [0.0, 0.0, self.height - radius]
         vector = subtract_vectors(left, center)
         springing = angle_vectors(vector, [-1.0, 0.0, 0.0])
@@ -90,7 +89,14 @@ class Arch(object):
         R = Rotation.from_axis_and_angle([0, 1.0, 0], 0.5 * sector, center)
         bottom = transform_points([a, b, c, d], R)
 
-        faces = [[0, 1, 2, 3], [7, 6, 5, 4], [3, 7, 4, 0], [6, 2, 1, 5], [7, 3, 2, 6], [5, 1, 0, 4]]
+        faces = [
+            [0, 1, 2, 3],
+            [7, 6, 5, 4],
+            [3, 7, 4, 0],
+            [6, 2, 1, 5],
+            [7, 3, 2, 6],
+            [5, 1, 0, 4],
+        ]
         faces_inverse = [list(reversed(f)) for f in faces]
 
         R = Rotation.from_axis_and_angle([0, 1.0, 0], 0.5 * sector, center)
@@ -100,7 +106,14 @@ class Arch(object):
             R = Rotation.from_axis_and_angle([0, 1.0, 0], -angle, center)
             top = transform_points(bottom, R)
             vertices = bottom + top
-            faces = [[0, 1, 2, 3], [7, 6, 5, 4], [3, 7, 4, 0], [6, 2, 1, 5], [7, 3, 2, 6], [5, 1, 0, 4]]
+            faces = [
+                [0, 1, 2, 3],
+                [7, 6, 5, 4],
+                [3, 7, 4, 0],
+                [6, 2, 1, 5],
+                [7, 3, 2, 6],
+                [5, 1, 0, 4],
+            ]
             mesh = Mesh.from_vertices_and_faces(vertices, faces)
             blocks.append(mesh)
             bottom = top

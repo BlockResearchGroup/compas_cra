@@ -1,3 +1,4 @@
+black
 autopep8
 attrs >=17.4
 bump2version >=1.0.1
@@ -14,10 +15,9 @@ nbsphinx
 pydocstyle
 pytest <7.1
 sphinx_compas_theme >=0.15.13
-sphinx == 4.5
+sphinx ==4.5
 twine
 wheel
 matplotlib
-pyomo
 git+https://github.com/BlockResearchGroup/compas_assembly.git@main#egg=compas_assembly
 -e .

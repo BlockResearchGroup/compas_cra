@@ -9,4 +9,3 @@ def test_ipopt():
     with pyo.SolverFactory("ipopt") as solver:
         result = solver.solve(model, tee=True)
         assert result.Solver._active
-

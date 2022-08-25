@@ -1,46 +1,26 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Helper functions to construct matrices for CRA"""
 
-"""
-Helper functions to construct matrices for CRA
-"""
-
-import numpy as np
 import math as mt
+import numpy as np
 
 from compas.geometry import cross_vectors
 from scipy.sparse import csr_matrix
-
-__author__ = "Gene Ting-Chun Kao"
-__email__ = "kao@arch.ethz.ch"
-
-__all__ = ['equilibrium_setup',
-           'friction_setup',
-           'external_force_setup',
-           'density_setup',
-           'make_aeq',
-           'make_afr',
-           'unit_basis',
-           'num_vertices',
-           'num_free',
-           'free_nodes']
 
 
 def equilibrium_setup(assembly, penalty=False):
     """Set up equilibrium matrix.
 
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
-        penalty : bool, optional
-            if True then return penalty matrix.
-            Default is ``False``.
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
+    penalty : bool, optional
+        if True then return penalty matrix.
 
-        Returns
-        -------
-        aeq : scipy.sparse.csr_matrix
-            Equilibrium matrix Aeq (penalty=False) or Equilibrium penalty matrix Aeq@B (penalty=True).
+    Returns
+    -------
+    :class:`~scipy.sparse.csr_matrix`
+        Equilibrium matrix Aeq (penalty=False) or Equilibrium penalty matrix Aeq@B (penalty=True).
 
     """
     free = free_nodes(assembly)
@@ -51,21 +31,50 @@ def equilibrium_setup(assembly, penalty=False):
     return aeq
 
 
+def friction_setup(assembly, mu, penalty=False, friction_net=False):
+    """Set up friction matrix.
+
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
+    mu : float, optional
+        Friction coefficient value.
+    penalty : bool, optional
+        if True then return penalty matrix.
+    friction_net : bool, optional
+        Friction net formulation if True for the penalty formulation, friction plus formulation if True.
+
+    Returns
+    -------
+    :class:`~scipy.sparse.csr_matrix`
+        Afr (penalty=False) or Afr@B (penalty=True)
+
+    """
+    v_count = num_vertices(assembly)
+    afr = make_afr(
+        v_count, fcon_number=8, mu=mu, penalty=penalty, friction_net=friction_net
+    )
+    print("Afr: ", afr.shape)
+
+    return afr
+
+
 def external_force_setup(assembly, density):
     """Set up external force vector.
 
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
-        density : float
-            Density of the material.
-            If density attribute is not set, optimisation will use this density value.
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
+    density : float
+        Density of the material.
+        If density attribute is not set, optimisation will use this density value.
 
-        Returns
-        -------
-        p : numpy.ndarray
-            External force p.
+    Returns
+    -------
+    :class:`~numpy.ndarray`
+        External force p.
 
     """
     free = free_nodes(assembly)
@@ -77,62 +86,37 @@ def external_force_setup(assembly, density):
     for node in assembly.graph.nodes():
         block = assembly.node_block(node)
         index = key_index[node]
-        p[index][2] = -block.volume() * (block.attributes["density"] if "density" in block.attributes else density)
-        print((block.attributes["density"] if "density" in block.attributes else density))
+        p[index][2] = -block.volume() * (
+            block.attributes["density"] if "density" in block.attributes else density
+        )
+        print(
+            (block.attributes["density"] if "density" in block.attributes else density)
+        )
 
     p = np.array(p, dtype=float)
-    p = p[free, :].reshape((-1, 1), order='C')
+    p = p[free, :].reshape((-1, 1), order="C")
 
     return p
-
-
-def friction_setup(assembly, mu, penalty=False, friction_net=False):
-    """Set up friction matrix.
-
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
-        mu : float, optional
-            Friction coefficient value.
-        penalty : bool, optional
-            if True then return penalty matrix.
-            Default is ``False``.
-        friction_net : bool, optional
-            Friction net formulation if True for the penalty formulation, friction plus formulation if True.
-            Default is ``False``.
-
-        Returns
-        -------
-        afr : scipy.sparse.csr_matrix
-            Afr (penalty=False) or Afr@B (penalty=True)
-
-    """
-    v_count = num_vertices(assembly)
-    afr = make_afr(v_count, fcon_number=8, mu=mu, penalty=penalty, friction_net=friction_net)
-    print("Afr: ", afr.shape)
-
-    return afr
 
 
 def density_setup(assembly, density):
     """Set up material density.
 
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
-        density : dict of float
-            density values, the dict key should match with assembly.graph.nodes()
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
+    density : dict of float
+        density values, the dict key should match with assembly.graph.nodes()
 
-        Returns
-        -------
-        None
+    Returns
+    -------
+    None
 
     """
 
     for node in assembly.graph.nodes():
-        block = assembly.graph.node_attribute(node, 'block')
+        block = assembly.graph.node_attribute(node, "block")
         if node in density:
             block.attributes["density"] = density[node]
 
@@ -140,38 +124,38 @@ def density_setup(assembly, density):
 def num_free(assembly):
     """Return number of free blocks.
 
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
 
-        Returns
-        -------
-        num_free_block : float
-            Number of free node/blocks
+    Returns
+    -------
+    num_free_block : float
+        Number of free node/blocks
 
     """
-    return len(list(key for key in assembly.graph.nodes_where({'is_support': False})))
+    return len(list(key for key in assembly.graph.nodes_where({"is_support": False})))
 
 
 def free_nodes(assembly):
     """Return free and fixed node list.
 
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
 
-        Returns
-        -------
-        free_block : float
-            Node id of free node/blocks
+    Returns
+    -------
+    free_block : float
+        Node id of free node/blocks
 
     """
     num_nodes = assembly.graph.number_of_nodes()
     key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
 
-    fixed = list(key for key in assembly.graph.nodes_where({'is_support': True}))
+    fixed = list(key for key in assembly.graph.nodes_where({"is_support": True}))
     fixed = [key_index[key] for key in fixed]
     free = list(set(range(num_nodes)) - set(fixed))
     return free
@@ -180,20 +164,20 @@ def free_nodes(assembly):
 def num_vertices(assembly):
     """Total number of vertices.
 
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
 
-        Returns
-        -------
-        v_count : int
-            Number of total vertices of assembly
+    Returns
+    -------
+    v_count : int
+        Number of total vertices of assembly
 
     """
     v_count = 0
     for b_j, b_k in assembly.graph.edges(False):
-        for interface in assembly.graph.edge_attribute((b_j, b_k), 'interfaces'):
+        for interface in assembly.graph.edge_attribute((b_j, b_k), "interfaces"):
             v_count += len(interface.points)
     return v_count
 
@@ -201,21 +185,19 @@ def num_vertices(assembly):
 def make_aeq(assembly, flip=False, penalty=False):
     """Create equilibrium matrix Aeq or penalty formulation matrix Aeq@B.
 
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
-        flip : bool, optional
-            Flip all interfaces if True.
-            Default is ``False``.
-        penalty : bool, optional
-            Return penalty matrix if True.
-            Default is ``False``.
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
+    flip : bool, optional
+        Flip all interfaces if True.
+    penalty : bool, optional
+        Return penalty matrix if True.
 
-        Returns
-        -------
-        aeq | aeq@b : scipy.sparse.csr_matrix
-            Equilibrium matrix Aeq or penalty formulation matrix Aeq@B
+    Returns
+    -------
+    :class:`~scipy.sparse.csr_matrix`
+        Equilibrium matrix Aeq or penalty formulation matrix Aeq@B
 
     """
 
@@ -231,18 +213,22 @@ def make_aeq(assembly, flip=False, penalty=False):
     key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
 
     for b_j, b_k in assembly.graph.edges(False):
-        bj_center = assembly.graph.node_attribute(b_j, 'block').center()
-        bk_center = assembly.graph.node_attribute(b_k, 'block').center()
+        bj_center = assembly.graph.node_attribute(b_j, "block").center()
+        bk_center = assembly.graph.node_attribute(b_k, "block").center()
 
-        for interface in assembly.graph.edge_attribute((b_j, b_k), 'interfaces'):
+        for interface in assembly.graph.edge_attribute((b_j, b_k), "interfaces"):
             # B_j
-            block_rows, block_cols, block_data = aeq_block(interface, bj_center, not flip, penalty)
+            block_rows, block_cols, block_data = aeq_block(
+                interface, bj_center, not flip, penalty
+            )
             # shift rows and cols
             rows += [row + 6 * key_index[b_j] for row in block_rows]
             cols += [col + shift * count for col in block_cols]
             data += block_data
             # B_k
-            block_rows, block_cols, block_data = aeq_block(interface, bk_center, flip, penalty)
+            block_rows, block_cols, block_data = aeq_block(
+                interface, bk_center, flip, penalty
+            )
             # shift rows and cols
             rows += [row + 6 * key_index[b_k] for row in block_rows]
             cols += [col + shift * count for col in block_cols]
@@ -255,22 +241,21 @@ def make_aeq(assembly, flip=False, penalty=False):
 def aeq_block(interface, center, reverse, penalty=False):
     """Helper function to create Aeq and Aeq@B.
 
-        Parameters
-        ----------
-        interface : compas_assembly.datastructures.Interface
-           The interface between rigid block assembly.
-        center : list
-            Center of the block.
-        reverse : bool
-            reverse/flip the interface direction.
-        penalty : bool, optional
-            Return penalty matrix if True.
-            Default is ``False``.
+    Parameters
+    ----------
+    interface : :class:`~compas_assembly.datastructures.Interface`
+       The interface between rigid block assembly.
+    center : list
+        Center of the block.
+    reverse : bool
+        reverse/flip the interface direction.
+    penalty : bool, optional
+        Return penalty matrix if True.
 
-        Returns
-        -------
-        rows, cols, data : list, list, list
-            rows, cols, data for the constructing the sparse matrix.
+    Returns
+    -------
+    rows, cols, data : list, list, list
+        rows, cols, data for the constructing the sparse matrix.
 
     """
     shift = 3
@@ -336,23 +321,22 @@ def aeq_block(interface, center, reverse, penalty=False):
 def unit_basis(assembly, penalty=False):
     """Create interface reference system as unit basis.
 
-        Parameters
-        ----------
-        assembly : compas_assembly.datastructures.Assembly
-            The rigid block assembly.
-        penalty : bool, optional
-            Return penalty matrix if True.
-            Default is ``False``.
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
+    penalty : bool, optional
+        Return penalty matrix if True.
 
-        Returns
-        -------
-        basis : numpy.ndarray
-            the basis matrix # is Nx3
+    Returns
+    -------
+    :class:`~numpy.ndarray`
+        the basis matrix # is Nx3
 
     """
     basis = []
     for edge in assembly.graph.edges():
-        interfaces = assembly.graph.edge_attribute(edge, 'interfaces')
+        interfaces = assembly.graph.edge_attribute(edge, "interfaces")
 
         for interface in interfaces:
             u = interface.frame.xaxis
@@ -370,31 +354,29 @@ def unit_basis(assembly, penalty=False):
 def make_afr(total_vcount, fcon_number=8, mu=0.8, penalty=False, friction_net=False):
     """Create friction matrix Afr and Afr@B.
 
-        Parameters
-        ----------
-        total_vcount : int
-            The total number of vertices
-        fcon_number : int, optional
-            N-sided of linearised friction cone.
-            Default is ``8``.
-        mu : float, optional
-            Friction coefficient.
-            Default is ``8``.
-        penalty : bool, optional
-            Return penalty matrix if True.
-            Default is ``False``.
-        friction_net : bool, optional
-            Friction net formulation if True for the penalty formulation, friction plus formulation if True.
-            Default is ``False``.
+    Parameters
+    ----------
+    total_vcount : int
+        The total number of vertices
+    fcon_number : int, optional
+        N-sided of linearised friction cone.
+    mu : float, optional
+        Friction coefficient.
+    penalty : bool, optional
+        Return penalty matrix if True.
+    friction_net : bool, optional
+        Friction net formulation if True for the penalty formulation, friction plus formulation if True.
 
-        Returns
-        -------
-        basis : numpy.ndarray
-            the basis matrix # is Nx3
+    Returns
+    -------
+    :class:`~scipy.sparse.csr_matrix`
+        the basis matrix # Nx3
 
     """
     if penalty:
-        return _make_afr_b(total_vcount, fcon_number=fcon_number, mu=mu, friction_net=friction_net)
+        return _make_afr_b(
+            total_vcount, fcon_number=fcon_number, mu=mu, friction_net=friction_net
+        )
     return _make_afr(total_vcount, fcon_number=8, mu=mu)
 
 
@@ -475,10 +457,21 @@ def _make_afr_b(total_vcount, fcon_number=8, mu=0.8, friction_net=False):
     for n in range(total_vcount):
         # friction4
         if friction_net:
-            rows += [i + 0, i + 0, i + 0, i + 1, i + 1, i + 1,
-                     i + 2, i + 2, i + 2, i + 3, i + 3, i + 3]
-            cols += [j, j + 1, j + 2, j, j + 1, j + 2,
-                     j, j + 1, j + 3, j, j + 1, j + 3]
+            rows += [
+                i + 0,
+                i + 0,
+                i + 0,
+                i + 1,
+                i + 1,
+                i + 1,
+                i + 2,
+                i + 2,
+                i + 2,
+                i + 3,
+                i + 3,
+                i + 3,
+            ]
+            cols += [j, j + 1, j + 2, j, j + 1, j + 2, j, j + 1, j + 3, j, j + 1, j + 3]
             data += [-mu, mu, 1, -mu, mu, -1, -mu, mu, 1, -mu, mu, -1]
         else:
             rows += [i + 0, i + 0, i + 1, i + 1, i + 2, i + 2, i + 3, i + 3]
@@ -528,5 +521,5 @@ def _make_afr_b(total_vcount, fcon_number=8, mu=0.8, friction_net=False):
     return csr_matrix((data, (rows, cols)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass
