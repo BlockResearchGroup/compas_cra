@@ -99,8 +99,21 @@
 <h1>static_equilibrium_constraints</h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_cra.equilibrium.static_equilibrium_constraints">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">static_equilibrium_constraints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aeq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L222"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">static_equilibrium_constraints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aeq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">afr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/pyomo_helper.py#L226"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Create equilibrium and friction constraints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>model, optional</em>) – Pyomo model object</p></li>
+<li><p><strong>aeq</strong> (<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">csr_matrix</span></code></a>) – Aeq matrix for equilibrium equation.</p></li>
+<li><p><strong>afr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">csr_matrix</span></code></a>) – Afr matrix for friction equation,</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – External force p.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Callable, Callable</em> – equilibrium and friction constraint functions for pyomo</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -148,6 +161,7 @@
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_cra.html">compas_cra</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.algorithms.html">algorithms</a></li>
 <li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_cra.equilibrium.html">equilibrium</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.geometry.html">geometry</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.viewers.html">viewers</a></li>

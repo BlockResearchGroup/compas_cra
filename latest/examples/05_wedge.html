@@ -102,53 +102,51 @@
 <figure class="figure align-default">
 <img alt="../_images/example_type_b.png" class="figure-img img-fluid" src="../_images/example_type_b.png" />
 </figure>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="sd">&quot;&quot;&quot;Example to simulate wedge example type-a, type-b, type-c, type-d&quot;&quot;&quot;</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Example to simulate wedge example type-a, type-b, type-c, type-d</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">math</span> <span class="k">as</span> <span class="nn">mt</span>
+<span class="kn">import</span> <span class="nn">compas</span>
+<span class="kn">import</span> <span class="nn">compas_cra</span>
 
-<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Gene Ting-Chun Kao&quot;</span>
-<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;kao@arch.ethz.ch&quot;</span>
+<span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+<span class="kn">from</span> <span class="nn">compas_cra.algorithms</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
+<span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_solve</span>
+<span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="mf">0.84</span>  <span class="c1"># friction coefficient</span>
+<span class="n">deg</span> <span class="o">=</span> <span class="mi">90</span>  <span class="c1"># rotation in degree</span>
+<span class="n">axis</span> <span class="o">=</span> <span class="s2">&quot;y-axis&quot;</span>  <span class="c1"># y-axis, x-axis, xy30-axis</span>
 
-    <span class="kn">import</span> <span class="nn">compas</span>
-    <span class="kn">import</span> <span class="nn">compas_cra</span>
-    <span class="kn">import</span> <span class="nn">os</span>
-    <span class="kn">import</span> <span class="nn">math</span> <span class="k">as</span> <span class="nn">mt</span>
+<span class="n">FILE_I</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">SAMPLE</span><span class="p">,</span> <span class="s2">&quot;type-b.json&quot;</span><span class="p">)</span>
 
-    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
-    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
-    <span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_solve</span>
-    <span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
+<span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;y-axis&quot;</span><span class="p">:</span>
+    <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># around y-axis</span>
+<span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;x-axis&quot;</span><span class="p">:</span>
+    <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># around x-axis</span>
+<span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;xy30-axis&quot;</span><span class="p">:</span>
+    <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="n">mt</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># rotate around xy30-axis</span>
 
-    <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.84</span>  <span class="c1"># friction coefficient</span>
-    <span class="n">deg</span> <span class="o">=</span> <span class="mi">90</span>  <span class="c1"># rotation in degree</span>
-    <span class="n">axis</span> <span class="o">=</span> <span class="s1">&#39;y-axis&#39;</span>  <span class="c1"># y-axis, x-axis, xy30-axis</span>
+<span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">FILE_I</span><span class="p">)</span>
+<span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
+<span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
-    <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;y-axis&#39;</span><span class="p">:</span>
-        <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># around y-axis</span>
-    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;x-axis&#39;</span><span class="p">:</span>
-        <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># around x-axis</span>
-    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;xy30-axis&#39;</span><span class="p">:</span>
-        <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="n">mt</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># rotate around xy30-axis</span>
+<span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
 
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s1">&#39;type-b.json&#39;</span><span class="p">))</span>
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
-    <span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">assembly</span><span class="o">.</span><span class="n">rotate_assembly</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">rotate_axis</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>
 
-    <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
-
-    <span class="n">assembly</span><span class="o">.</span><span class="n">rotate_assembly</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">rotate_axis</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>
-
-    <span class="n">cra_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">d_bnd</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
-    <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-             <span class="n">displacements</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dispscale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cra_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">d_bnd</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+<span class="n">cra_view</span><span class="p">(</span>
+    <span class="n">assembly</span><span class="p">,</span>
+    <span class="n">resultant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">nodal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">displacements</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">dispscale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
 </div>
 </section>
@@ -197,6 +195,7 @@
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse">
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.html">compas_cra</a><ul class="nav flex-column collapse">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.algorithms.html">algorithms</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.equilibrium.html">equilibrium</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.geometry.html">geometry</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.viewers.html">viewers</a></li>

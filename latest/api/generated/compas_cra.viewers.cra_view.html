@@ -99,42 +99,27 @@
 <h1>cra_view</h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_cra.viewers.cra_view">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.viewers.</span></span><span class="sig-name descname"><span class="pre">cra_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dispscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resultant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interfaces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forcesdirect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forcesline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displacements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/viewers/cra_view.py#L417"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_cra.viewers.</span></span><span class="sig-name descname"><span class="pre">cra_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dispscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resultant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interfaces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forcesdirect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forcesline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displacements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/viewers/cra_view.py#L471"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>CRA Viewer, creating new viewer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>assembly</strong> (<em>compas_assembly.datastructures.Assembly</em>) – The rigid block assembly.</p></li>
-<li><p><strong>scale</strong> (<em>float, optional</em>) – Force scale.
-Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
-<li><p><strong>density</strong> (<em>float, optional</em>) – Density of the block material.
-Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
-<li><p><strong>dispscale</strong> (<em>float, optional</em>) – virtual displacement scale.
-Default is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
-<li><p><strong>tol</strong> (<em>float, optional</em>) – Tolerance value to consider faces to be planar.
-Default is <code class="docutils literal notranslate"><span class="pre">1e-5</span></code>.</p></li>
-<li><p><strong>grid</strong> (<em>bool, optional</em>) – Show view grid.
-Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>resultant</strong> (<em>bool, optional</em>) – Plot resultant forces.
-Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>nodal</strong> (<em>bool, optional</em>) – Plot nodal forces.
-Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>edge</strong> (<em>bool, optional</em>) – Plot block edges.
-Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>blocks</strong> (<em>bool, optional</em>) – Plot block.
-Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>interfaces</strong> (<em>bool, optional</em>) – Plot interfaces.
-Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>forces</strong> (<em>bool, optional</em>) – Plot forces.
-Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>forcesdirect</strong> (<em>bool, optional</em>) – Plot forces as vectors.
-Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>forcesline</strong> (<em>bool, optional</em>) – Plot forces as lines.
-Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>weights</strong> (<em>bool, optional</em>) – Plot block self weight as vectors.
-Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>displacements</strong> (<em>bool, optional</em>) – Plot virtual displacements.
-Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>assembly</strong> (<a class="reference external" href="https://blockresearchgroup.github.io/compas_assembly/0.4.1/api/generated/compas_assembly.datastructures.Assembly.html#compas_assembly.datastructures.Assembly" title="(in COMPAS Assembly v0.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Assembly</span></code></a>) – The rigid block assembly.</p></li>
+<li><p><strong>scale</strong> (<em>float, optional</em>) – Force scale.</p></li>
+<li><p><strong>density</strong> (<em>float, optional</em>) – Density of the block material.</p></li>
+<li><p><strong>dispscale</strong> (<em>float, optional</em>) – virtual displacement scale.</p></li>
+<li><p><strong>tol</strong> (<em>float, optional</em>) – Tolerance value to consider faces to be planar.</p></li>
+<li><p><strong>grid</strong> (<em>bool, optional</em>) – Show view grid.</p></li>
+<li><p><strong>resultant</strong> (<em>bool, optional</em>) – Plot resultant forces.</p></li>
+<li><p><strong>nodal</strong> (<em>bool, optional</em>) – Plot nodal forces.</p></li>
+<li><p><strong>edge</strong> (<em>bool, optional</em>) – Plot block edges.</p></li>
+<li><p><strong>blocks</strong> (<em>bool, optional</em>) – Plot block.</p></li>
+<li><p><strong>interfaces</strong> (<em>bool, optional</em>) – Plot interfaces.</p></li>
+<li><p><strong>forces</strong> (<em>bool, optional</em>) – Plot forces.</p></li>
+<li><p><strong>forcesdirect</strong> (<em>bool, optional</em>) – Plot forces as vectors.</p></li>
+<li><p><strong>forcesline</strong> (<em>bool, optional</em>) – Plot forces as lines.</p></li>
+<li><p><strong>weights</strong> (<em>bool, optional</em>) – Plot block self weight as vectors.</p></li>
+<li><p><strong>displacements</strong> (<em>bool, optional</em>) – Plot virtual displacements.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -188,6 +173,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">True</sp
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_cra.html">compas_cra</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.algorithms.html">algorithms</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.equilibrium.html">equilibrium</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.geometry.html">geometry</a></li>
 <li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_cra.viewers.html">viewers</a></li>

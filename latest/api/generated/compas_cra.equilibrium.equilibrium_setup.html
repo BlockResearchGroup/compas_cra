@@ -99,18 +99,17 @@
 <h1>equilibrium_setup</h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_cra.equilibrium.equilibrium_setup">
-<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">equilibrium_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_helper.py#L29"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_cra.equilibrium.</span></span><span class="sig-name descname"><span class="pre">equilibrium_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assembly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/src/compas_cra/equilibrium/cra_helper.py#L10"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Set up equilibrium matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>assembly</strong> (<em>compas_assembly.datastructures.Assembly</em>) – The rigid block assembly.</p></li>
-<li><p><strong>penalty</strong> (<em>bool, optional</em>) – if True then return penalty matrix.
-Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>assembly</strong> (<a class="reference external" href="https://blockresearchgroup.github.io/compas_assembly/0.4.1/api/generated/compas_assembly.datastructures.Assembly.html#compas_assembly.datastructures.Assembly" title="(in COMPAS Assembly v0.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Assembly</span></code></a>) – The rigid block assembly.</p></li>
+<li><p><strong>penalty</strong> (<em>bool, optional</em>) – if True then return penalty matrix.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>aeq</strong> (<em>scipy.sparse.csr_matrix</em>) – Equilibrium matrix Aeq (penalty=False) or Equilibrium penalty matrix Aeq&#64;B (penalty=True).</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.9.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">csr_matrix</span></code></a> – Equilibrium matrix Aeq (penalty=False) or Equilibrium penalty matrix Aeq&#64;B (penalty=True).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -160,6 +159,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">False</s
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_cra.html">compas_cra</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.algorithms.html">algorithms</a></li>
 <li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_cra.equilibrium.html">equilibrium</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.geometry.html">geometry</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_cra.viewers.html">viewers</a></li>
