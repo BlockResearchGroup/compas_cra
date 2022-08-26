@@ -5,8 +5,115 @@ Installation
 ********************************************************************************
 
 
-Install with conda
-==================
+Install with conda (recommended)
+================================
+
+Create an ``conda`` environment ``cra`` and install COMPAS CRA from the package channel ``conda-forge``.
+
+.. code-block:: bash
+
+    conda create -n cra -c conda-forge compas_cra
+
+
+Activate the environment.
+
+.. code-block:: bash
+
+    conda create -n cra -c conda-forge compas_cra
+
+
+Verify that the installation was successful.
+
+.. code-block:: bash
+
+    python -m compas
+
+.. code-block:: bash
+
+    Yay! COMPAS CRA is installed correctly!
+
+
+Installation options
+--------------------
+
+Install COMPAS CRA in an environment with a specific version of Python.
+
+.. code-block:: bash
+
+    conda create -n cra python=3.8 compas_cra
+
+Install COMPAS CRA in an existing environment.
+
+.. code-block:: bash
+
+    conda install -n cra compas_cra
+
+
+Install with pip
+================
+
+Install COMPAS CRA using ``pip`` from the Python Package Index.
+
+.. code-block:: bash
+
+    pip install cython --install-option="--no-cython-compile"
+    pip install compas_cra
+
+Install `IPOPT <https://coin-or.github.io/Ipopt/>`_ solver.
+
+.. code-block:: bash
+
+    conda install -c conda-forge ipopt
+
+Developer Guide
+===============
+
+You can also install COMPAS CRA manually from `source <https://github.com/BlockResearchGroup/compas_cra>`_.
+
+Install from source
+-------------------
+
+Create a virtual environment using your tool of choice (e.g. virtualenv, conda, etc), optional.
+
+.. code-block:: bash
+
+    conda create -n cra
+    conda activate cra
+
+Go to your directory and clone :mod:`compas_cra`:
+
+.. code-block:: bash
+
+    git clone git@github.com:BlockResearchGroup/compas_cra.git
+    cd compas_cra
+
+Install requirements
+
+.. code-block:: bash
+
+    pip install -r requirements.txt
+
+Install requirements for developments, optional.
+
+.. code-block:: bash
+
+    pip install -r requirements-dev.txt
+
+Install COMPAS CRA as an editable version from local source.
+
+.. code-block:: bash
+
+    pip install -e .
+
+Install `IPOPT <https://coin-or.github.io/Ipopt/>`_ solver.
+
+.. code-block:: bash
+
+    conda install -c conda-forge ipopt
+
+
+A quicker way - from `.yml` file
+--------------------------------
 
 Set up conda channels
 
@@ -22,7 +129,7 @@ Clone :mod:`compas_cra`:
     git clone git@github.com:BlockResearchGroup/compas_cra.git
     cd compas_cra
 
-Install :mod:`compas_cra` with all dependencies in a new conda environment:
+Install COMPAS CRA with all dependencies in a new conda environment:
 
 .. code-block:: bash
 
@@ -30,7 +137,16 @@ Install :mod:`compas_cra` with all dependencies in a new conda environment:
     conda env create -f env_win.yml  # (Windows)
     conda env create -f env_linux.yml  # (Linux)
 
-    conda activate cra
+    conda activate cra  # you can change the environment name in .yml file
+
+Update conda packages
+---------------------
+
+.. code-block:: bash
+
+    conda env update cra --file env_osx.yml --prune  # (Mac)
+    conda env update cra --file env_win.yml --prune  # (Windows)
+    conda env update cra --file env_linux.yml --prune  # (Linux)
 
 
 Verify installation
@@ -60,19 +176,36 @@ You should see something like:
     .
     .
     .
-    .
-    .
     -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
     ======================== 4 passed, 5 warnings in 2.41s =========================
 
-Update conda packages
-=====================
 
-.. code-block:: bash
+Rhino Installation
+==================
 
-    conda env update cra --file env_osx.yml --prune  # (Mac)
-    conda env update cra --file env_win.yml --prune  # (Windows)
-    conda env update cra --file env_linux.yml --prune  # (Linux)
+:mod:`compas_cra` is developed independent of the functionality of CAD software.
+However, CAD software can be useful to create geometrical objects.
+For a more detailed information on how to install COMPAS and its packages for Rhino,
+please refer to `Working in Rhino <https://compas.dev/compas/latest/gettingstarted/rhino.html>`_ page of the COMPAS documentation.
+
+In order to install COMPAS CRA for Rhino, do
+
+::
+
+    $ python -m compas_rhino.uninstall
+    $ python -m compas_rhino.install
+    $ python -m compas_rhino.install -p compas_cra
+
+Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.
+
+
+Verify Conda Environment, COMPAS CRA, and COMPAS in Rhino
+---------------------------------------------------------
+
+.. literalinclude:: ../scripts/rhinoenv.py
+    :language: python
+
+File can also be found in `scripts/rhinoenv.py <https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/rhinoenv.py>`_
 
 Known issues (Windows)
 ======================
