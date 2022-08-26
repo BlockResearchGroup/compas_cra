@@ -26,7 +26,7 @@ Verify that the installation was successful.
 
 .. code-block:: bash
 
-    python -m compas
+    python -m compas_cra
 
 .. code-block:: bash
 
@@ -63,7 +63,13 @@ Install `IPOPT <https://coin-or.github.io/Ipopt/>`_ solver.
 
 .. code-block:: bash
 
-    conda install -c conda-forge ipopt
+     pip install ipopt
+
+Install `compas_view2 <https://github.com/compas-dev/compas_view2>`_ for visualisation.
+
+.. code-block:: bash
+
+     conda install compas_view2
 
 Developer Guide
 ===============

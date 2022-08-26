@@ -3,26 +3,102 @@ Tutorial
 ********************************************************************************
 
 
+How to use CRA for your analysis
+================================
+
+
+1. Creating geometries
+----------------------
+
+We create two blocks: one as support and another one as free block.
+
+.. code-block:: python
+
+    from compas.geometry import Box, Frame, Translation
+
+    support = Box(Frame.worldXY(), 4, 2, 1)  # supporting block
+    free1 = Box(
+        Frame.worldXY().transformed(
+            Translation.from_vector([0, 0, 1])
+            * Rotation.from_axis_and_angle([0, 0, 1], 0.2)
+        ), 1, 3, 1
+    )  # block to analyse
+
+2. CRA Assembly data structure
+------------------------------
+
+Add them to assembly data structure.
+
+.. code-block:: python
+
+    from compas_assembly.datastructures import Block
+    from compas_cra.datastructures import CRA_Assembly
+
+    assembly = CRA_Assembly()
+    assembly.add_block(Block.from_shape(support), node=0)
+    assembly.add_block(Block.from_shape(free1), node=1)
+
+.. figure:: /_images/tutorial_cubes_1.png
+    :figclass: figure
+    :class: figure-img img-fluid
+
+Set boundary conditions.
+
+.. code-block:: python
+
+    assembly.set_boundary_conditions([0])
+
+.. figure:: /_images/tutorial_cubes_2.png
+    :figclass: figure
+    :class: figure-img img-fluid
+
+3. Identifying interfaces
+-------------------------
+Then we identify planar interfaces between blocks automatically.
+
+.. code-block:: python
+
+    from compas_cra.algorithms import assembly_interfaces_numpy
+    assembly_interfaces_numpy(assembly)
+
+.. figure:: /_images/tutorial_cubes_3.png
+    :figclass: figure
+    :class: figure-img img-fluid
+
+4. Solving equilibrium
+----------------------
+
+:mod:`compas_cra` provide three solvers:
+
+- RBE Solve: :mod:`compas_cra.equilibrium.rbe_solve`.
+- CRA Solve: :mod:`compas_cra.equilibrium.cra_solve`.
+- CRA Penalty Solve: :mod:`compas_cra.equilibrium.cra_penalty_solve`.
+
+.. code-block:: python
+
+    from compas_cra.equilibrium import cra_solve
+    cra_solve(assembly, verbose=True, timer=True)
+
+5. Visualisation
+----------------
+
+.. code-block:: python
+
+    from compas_cra.viewers import cra_view
+    cra_view(assembly, resultant=False, nodal=True, grid=True)
+
+.. figure:: /_images/tutorial_cubes_4.png
+    :figclass: figure
+    :class: figure-img img-fluid
+
+The complete tutorial script can be downloaded from
+`scripts/tutorial_cubes.py <https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/tutorial_cubes.py>`_
+
+To see more how to construct assembly and solve equilibrium, please check :ref:`Examples`.
+
+
 Export geometry from CAD software (Rhino)
 =========================================
-
-Rhino Installation
--------------------
-
-Please make sure install :mod:`compas_cra` first, see :ref:`Installation`.
-
-:mod:`compas_cra` is developed independent of the functionality of CAD software.
-However, CAD software is still useful to create complicated geometrical objects.
-For a more detailed information on how to install COMPAS and its packages for Rhino,
-please refer to `Working in Rhino <https://compas.dev/compas/latest/gettingstarted/rhino.html>`_ page of the COMPAS documentation.
-
-In order to install :mod:`compas_cra` for Rhino, do
-
-::
-
-    $ python -m compas_rhino.uninstall
-    $ python -m compas_rhino.install
-    $ python -m compas_rhino.install -p compas_cra
 
 Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.
 
@@ -67,13 +143,4 @@ to select mesh blocks with interfaces and export to assembly data structure and 
 
 More Rhino files and precomputed :code:`.json` files are located at `data <https://github.com/BlockResearchGroup/compas_cra/blob/main/data>`_ folder.
 
-Using CRA Solvers
-=========================================
 
-:mod:`compas_cra` provide three solvers:
-
-- RBE Solve: :mod:`compas_cra.equilibrium.rbe_solve`.
-- CRA Solve: :mod:`compas_cra.equilibrium.cra_solve`.
-- CRA Penalty Solve: :mod:`compas_cra.equilibrium.cra_penalty_solve`.
-
-To see more how to construct assembly and solve equilibrium, please check :ref:`Examples`.
