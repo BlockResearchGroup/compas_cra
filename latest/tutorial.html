@@ -91,23 +91,86 @@
         
         <section id="tutorial">
 <h1>Tutorial</h1>
-<section id="export-geometry-from-cad-software-rhino">
-<h2>Export geometry from CAD software (Rhino)</h2>
-<section id="rhino-installation">
-<h3>Rhino Installation</h3>
-<p>Please make sure install <a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> first, see <a class="reference internal" href="installation.html#installation"><span class="std std-ref">Installation</span></a>.</p>
-<p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> is developed independent of the functionality of CAD software.
-However, CAD software is still useful to create complicated geometrical objects.
-For a more detailed information on how to install COMPAS and its packages for Rhino,
-please refer to <a class="reference external" href="https://compas.dev/compas/latest/gettingstarted/rhino.html">Working in Rhino</a> page of the COMPAS documentation.</p>
-<p>In order to install <a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> for Rhino, do</p>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>$ python -m compas_rhino.uninstall
-$ python -m compas_rhino.install
-$ python -m compas_rhino.install -p compas_cra
+<section id="how-to-use-cra-for-your-analysis">
+<h2>How to use CRA for your analysis</h2>
+<section id="creating-geometries">
+<h3>1. Creating geometries</h3>
+<p>We create two blocks: one as support and another one as free block.</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Translation</span>
+
+<span class="n">support</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">worldXY</span><span class="p">(),</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># supporting block</span>
+<span class="n">free1</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span>
+    <span class="n">Frame</span><span class="o">.</span><span class="n">worldXY</span><span class="p">()</span><span class="o">.</span><span class="n">transformed</span><span class="p">(</span>
+        <span class="n">Translation</span><span class="o">.</span><span class="n">from_vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="o">*</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_axis_and_angle</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mf">0.2</span><span class="p">)</span>
+    <span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span>
+<span class="p">)</span>  <span class="c1"># block to analyse</span>
 </code></pre></div>
 </div>
-<p>Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.</p>
 </section>
+<section id="cra-assembly-data-structure">
+<h3>2. CRA Assembly data structure</h3>
+<p>Add them to assembly data structure.</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas_assembly.datastructures</span> <span class="kn">import</span> <span class="n">Block</span>
+<span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+
+<span class="n">assembly</span> <span class="o">=</span> <span class="n">CRA_Assembly</span><span class="p">()</span>
+<span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">support</span><span class="p">),</span> <span class="n">node</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">free1</span><span class="p">),</span> <span class="n">node</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<figure class="figure align-default">
+<img alt="_images/tutorial_cubes_1.png" class="figure-img img-fluid" src="_images/tutorial_cubes_1.png" />
+</figure>
+<p>Set boundary conditions.</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+</div>
+<figure class="figure align-default">
+<img alt="_images/tutorial_cubes_2.png" class="figure-img img-fluid" src="_images/tutorial_cubes_2.png" />
+</figure>
+</section>
+<section id="identifying-interfaces">
+<h3>3. Identifying interfaces</h3>
+<p>Then we identify planar interfaces between blocks automatically.</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas_cra.algorithms</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
+<span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<figure class="figure align-default">
+<img alt="_images/tutorial_cubes_3.png" class="figure-img img-fluid" src="_images/tutorial_cubes_3.png" />
+</figure>
+</section>
+<section id="solving-equilibrium">
+<h3>4. Solving equilibrium</h3>
+<p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> provide three solvers:</p>
+<ul class="simple">
+<li><p>RBE Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.rbe_solve.html#compas_cra.equilibrium.rbe_solve" title="compas_cra.equilibrium.rbe_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.rbe_solve</span></code></a>.</p></li>
+<li><p>CRA Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_solve.html#compas_cra.equilibrium.cra_solve" title="compas_cra.equilibrium.cra_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_solve</span></code></a>.</p></li>
+<li><p>CRA Penalty Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_penalty_solve.html#compas_cra.equilibrium.cra_penalty_solve" title="compas_cra.equilibrium.cra_penalty_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_penalty_solve</span></code></a>.</p></li>
+</ul>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_solve</span>
+<span class="n">cra_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</section>
+<section id="visualisation">
+<h3>5. Visualisation</h3>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
+<span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<figure class="figure align-default">
+<img alt="_images/tutorial_cubes_4.png" class="figure-img img-fluid" src="_images/tutorial_cubes_4.png" />
+</figure>
+<p>The complete tutorial script can be downloaded from
+<a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/tutorial_cubes.py">scripts/tutorial_cubes.py</a></p>
+<p>To see more how to construct assembly and solve equilibrium, please check <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a>.</p>
+</section>
+</section>
+<section id="export-geometry-from-cad-software-rhino">
+<h2>Export geometry from CAD software (Rhino)</h2>
+<p>Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.</p>
 <section id="export-mesh-blocks-as-assembly-json-file">
 <h3>Export mesh blocks as Assembly json file</h3>
 <p>Use this script at <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_json.py">scripts/mesh_to_assembly_json.py</a>
@@ -231,16 +294,6 @@ to select mesh blocks with interfaces and export to assembly data structure and 
 <p>More Rhino files and precomputed <code class="code docutils literal notranslate"><span class="pre">.json</span></code> files are located at <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/data">data</a> folder.</p>
 </section>
 </section>
-<section id="using-cra-solvers">
-<h2>Using CRA Solvers</h2>
-<p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> provide three solvers:</p>
-<ul class="simple">
-<li><p>RBE Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.rbe_solve.html#compas_cra.equilibrium.rbe_solve" title="compas_cra.equilibrium.rbe_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.rbe_solve</span></code></a>.</p></li>
-<li><p>CRA Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_solve.html#compas_cra.equilibrium.cra_solve" title="compas_cra.equilibrium.cra_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_solve</span></code></a>.</p></li>
-<li><p>CRA Penalty Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_penalty_solve.html#compas_cra.equilibrium.cra_penalty_solve" title="compas_cra.equilibrium.cra_penalty_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_penalty_solve</span></code></a>.</p></li>
-</ul>
-<p>To see more how to construct assembly and solve equilibrium, please check <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a>.</p>
-</section>
 </section>
 
         
@@ -307,13 +360,19 @@ to select mesh blocks with interfaces and export to assembly data structure and 
         
         <ul class="nav flex-column" id="compas-toc">
 <li class="nav-item"><a class="nav-link reference internal" href="#">Tutorial</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#how-to-use-cra-for-your-analysis">How to use CRA for your analysis</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#creating-geometries">1. Creating geometries</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#cra-assembly-data-structure">2. CRA Assembly data structure</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#identifying-interfaces">3. Identifying interfaces</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#solving-equilibrium">4. Solving equilibrium</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#visualisation">5. Visualisation</a></li>
+</ul>
+</li>
 <li class="nav-item"><a class="nav-link reference internal" href="#export-geometry-from-cad-software-rhino">Export geometry from CAD software (Rhino)</a><ul class="nav flex-column">
-<li class="nav-item"><a class="nav-link reference internal" href="#rhino-installation">Rhino Installation</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#export-mesh-blocks-as-assembly-json-file">Export mesh blocks as Assembly json file</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#export-mesh-blocks-and-interfaces-as-assembly-json-file">Export mesh blocks and interfaces as Assembly json file</a></li>
 </ul>
 </li>
-<li class="nav-item"><a class="nav-link reference internal" href="#using-cra-solvers">Using CRA Solvers</a></li>
 </ul>
 </li>
 </ul>
