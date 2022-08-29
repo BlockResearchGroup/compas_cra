@@ -7,6 +7,8 @@ How to use CRA for your analysis
 ================================
 
 
+.. _Creating_Geometry:
+
 1. Creating geometries
 ----------------------
 
@@ -42,6 +44,12 @@ Add them to assembly data structure.
     :figclass: figure
     :class: figure-img img-fluid
 
+
+.. _BC:
+
+3. Boundary conditions
+----------------------
+
 Set boundary conditions.
 
 .. code-block:: python
@@ -52,7 +60,7 @@ Set boundary conditions.
     :figclass: figure
     :class: figure-img img-fluid
 
-3. Identifying interfaces
+4. Identifying interfaces
 -------------------------
 Then we identify planar interfaces between blocks automatically.
 
@@ -65,7 +73,7 @@ Then we identify planar interfaces between blocks automatically.
     :figclass: figure
     :class: figure-img img-fluid
 
-4. Solving equilibrium
+5. Solving equilibrium
 ----------------------
 
 :mod:`compas_cra` provide three solvers:
@@ -79,7 +87,7 @@ Then we identify planar interfaces between blocks automatically.
     from compas_cra.equilibrium import cra_solve
     cra_solve(assembly, verbose=True, timer=True)
 
-5. Visualisation
+6. Visualisation
 ----------------
 
 .. code-block:: python
@@ -97,23 +105,40 @@ The complete tutorial script can be downloaded from
 To see more how to construct assembly and solve equilibrium, please check :ref:`Examples`.
 
 
-Export geometry from CAD software (Rhino)
+Optional: Export geometry from CAD software (Rhino)
 =========================================
 
-Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.
+For the step :ref:`Creating_Geometry`, we can also input geometry from CAD software.
+Here we use Rhino as an example.
 
 
 Export mesh blocks as Assembly json file
 ----------------------------------------
 
 Use this script at `scripts/mesh_to_assembly_json.py <https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_json.py>`_
-to select mesh blocks and export to assembly data structure and store it as json file.
+to select Rhino mesh blocks and export to assembly data structure as a ``.json`` file.
 
 .. literalinclude:: ../scripts/mesh_to_assembly_json.py
     :language: python
 
 **Note**: The selection sequence is important because it represents the node indices.
 
+Then we can load the ``.json`` file from local path.
+
+.. code-block:: python
+
+    import os
+    import compas
+    import compas_cra
+
+    from compas_cra.datastructures import CRA_Assembly
+
+    FILE_I = os.path.join(compas_cra.DATA, "XXX.json")  # or your own path
+    assembly = compas.json_load(FILE_I)
+    assembly = assembly.copy(cls=CRA_Assembly)
+
+After loading the ``.json`` file and convert it to :mod:`compas_cra.datastructures.CRA_Assembly`,
+we can follow the previous step :ref:`BC` for the analysis.
 
 Export mesh blocks and interfaces as Assembly json file
 -------------------------------------------------------
@@ -143,4 +168,6 @@ to select mesh blocks with interfaces and export to assembly data structure and 
 
 More Rhino files and precomputed :code:`.json` files are located at `data <https://github.com/BlockResearchGroup/compas_cra/blob/main/data>`_ folder.
 
+**Note**:
 
+Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.
