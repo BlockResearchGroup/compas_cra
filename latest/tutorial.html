@@ -94,7 +94,7 @@
 <section id="how-to-use-cra-for-your-analysis">
 <h2>How to use CRA for your analysis</h2>
 <section id="creating-geometries">
-<h3>1. Creating geometries</h3>
+<span id="creating-geometry"></span><h3>1. Creating geometries</h3>
 <p>We create two blocks: one as support and another one as free block.</p>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Translation</span>
 
@@ -122,6 +122,9 @@
 <figure class="figure align-default">
 <img alt="_images/tutorial_cubes_1.png" class="figure-img img-fluid" src="_images/tutorial_cubes_1.png" />
 </figure>
+</section>
+<section id="boundary-conditions">
+<span id="bc"></span><h3>3. Boundary conditions</h3>
 <p>Set boundary conditions.</p>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div>
@@ -131,7 +134,7 @@
 </figure>
 </section>
 <section id="identifying-interfaces">
-<h3>3. Identifying interfaces</h3>
+<h3>4. Identifying interfaces</h3>
 <p>Then we identify planar interfaces between blocks automatically.</p>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas_cra.algorithms</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
 <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">)</span>
@@ -142,7 +145,7 @@
 </figure>
 </section>
 <section id="solving-equilibrium">
-<h3>4. Solving equilibrium</h3>
+<h3>5. Solving equilibrium</h3>
 <p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> provide three solvers:</p>
 <ul class="simple">
 <li><p>RBE Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.rbe_solve.html#compas_cra.equilibrium.rbe_solve" title="compas_cra.equilibrium.rbe_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.rbe_solve</span></code></a>.</p></li>
@@ -155,7 +158,7 @@
 </div>
 </section>
 <section id="visualisation">
-<h3>5. Visualisation</h3>
+<h3>6. Visualisation</h3>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
 <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
@@ -168,13 +171,14 @@
 <p>To see more how to construct assembly and solve equilibrium, please check <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a>.</p>
 </section>
 </section>
-<section id="export-geometry-from-cad-software-rhino">
-<h2>Export geometry from CAD software (Rhino)</h2>
-<p>Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.</p>
+<section id="optional-export-geometry-from-cad-software-rhino">
+<h2>Optional: Export geometry from CAD software (Rhino)</h2>
+<p>For the step <a class="reference internal" href="#creating-geometry"><span class="std std-ref">1. Creating geometries</span></a>, we can also input geometry from CAD software.
+Here we use Rhino as an example.</p>
 <section id="export-mesh-blocks-as-assembly-json-file">
 <h3>Export mesh blocks as Assembly json file</h3>
 <p>Use this script at <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_json.py">scripts/mesh_to_assembly_json.py</a>
-to select mesh blocks and export to assembly data structure and store it as json file.</p>
+to select Rhino mesh blocks and export to assembly data structure as a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file.</p>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="sd">&quot;&quot;&quot;This is the script to add assembly without interfaces from rhino meshes&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -201,6 +205,20 @@ to select mesh blocks and export to assembly data structure and store it as json
 </code></pre></div>
 </div>
 <p><strong>Note</strong>: The selection sequence is important because it represents the node indices.</p>
+<p>Then we can load the <code class="docutils literal notranslate"><span class="pre">.json</span></code> file from local path.</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">compas</span>
+<span class="kn">import</span> <span class="nn">compas_cra</span>
+
+<span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+
+<span class="n">FILE_I</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s2">&quot;XXX.json&quot;</span><span class="p">)</span>  <span class="c1"># or your own path</span>
+<span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">FILE_I</span><span class="p">)</span>
+<span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<p>After loading the <code class="docutils literal notranslate"><span class="pre">.json</span></code> file and convert it to <a class="reference internal" href="api/generated/compas_cra.datastructures.CRA_Assembly.html#compas_cra.datastructures.CRA_Assembly" title="compas_cra.datastructures.CRA_Assembly"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.datastructures.CRA_Assembly</span></code></a>,
+we can follow the previous step <a class="reference internal" href="#bc"><span class="std std-ref">3. Boundary conditions</span></a> for the analysis.</p>
 </section>
 <section id="export-mesh-blocks-and-interfaces-as-assembly-json-file">
 <h3>Export mesh blocks and interfaces as Assembly json file</h3>
@@ -292,6 +310,8 @@ to select mesh blocks with interfaces and export to assembly data structure and 
 </tbody>
 </table>
 <p>More Rhino files and precomputed <code class="code docutils literal notranslate"><span class="pre">.json</span></code> files are located at <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/data">data</a> folder.</p>
+<p><strong>Note</strong>:</p>
+<p>Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.</p>
 </section>
 </section>
 </section>
@@ -363,12 +383,13 @@ to select mesh blocks with interfaces and export to assembly data structure and 
 <li class="nav-item"><a class="nav-link reference internal" href="#how-to-use-cra-for-your-analysis">How to use CRA for your analysis</a><ul class="nav flex-column">
 <li class="nav-item"><a class="nav-link reference internal" href="#creating-geometries">1. Creating geometries</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#cra-assembly-data-structure">2. CRA Assembly data structure</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="#identifying-interfaces">3. Identifying interfaces</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="#solving-equilibrium">4. Solving equilibrium</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="#visualisation">5. Visualisation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#boundary-conditions">3. Boundary conditions</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#identifying-interfaces">4. Identifying interfaces</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#solving-equilibrium">5. Solving equilibrium</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#visualisation">6. Visualisation</a></li>
 </ul>
 </li>
-<li class="nav-item"><a class="nav-link reference internal" href="#export-geometry-from-cad-software-rhino">Export geometry from CAD software (Rhino)</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#optional-export-geometry-from-cad-software-rhino">Optional: Export geometry from CAD software (Rhino)</a><ul class="nav flex-column">
 <li class="nav-item"><a class="nav-link reference internal" href="#export-mesh-blocks-as-assembly-json-file">Export mesh blocks as Assembly json file</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#export-mesh-blocks-and-interfaces-as-assembly-json-file">Export mesh blocks and interfaces as Assembly json file</a></li>
 </ul>
