@@ -99,9 +99,7 @@ In short, this is how that works.</p>
 <li><p>Create a virtual environment using your tool of choice (e.g. <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>, <code class="docutils literal notranslate"><span class="pre">conda</span></code>, etc).</p></li>
 <li><p>Install development dependencies:</p></li>
 </ol>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>$ conda env create -f env_osx.yml  <span class="c1"># (Mac)</span>
-$ conda env create -f env_win.yml  <span class="c1"># (Windows)</span>
-$ conda env create -f env_linux.yml  <span class="c1"># (Linux)</span>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>$ pip install -r requirements-dev.txt
 </code></pre></div>
 </div>
 <ol class="arabic simple" start="4">
@@ -131,6 +129,8 @@ command line to ease recurring operations:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">invoke</span> <span class="pre">test</span></code>: Run all tests and checks in one swift command.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">invoke</span></code>: Show available tasks.</p></li>
 </ul>
+<p>We highly recommend you have <a class="reference external" href="https://black.readthedocs.io/en/stable/index.html">Black</a> installed in your favourite editor/IDE.
+For setting up Black in your editor, please refer to their documentation <a class="reference external" href="https://black.readthedocs.io/en/stable/integrations/editors.html">Editor integration</a>.</p>
 </section>
 <section id="bug-reports">
 <h2>Bug reports</h2>
