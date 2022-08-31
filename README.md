@@ -48,3 +48,12 @@ by designing complex and scaffolding-free physical models.
 ```
 
 Read the docs: [https://blockresearchgroup.github.io/compas_cra](https://blockresearchgroup.github.io/compas_cra)
+
+Build the docs locally: 
+
+   ```bash
+   $ pip install -r requirements-dev.txt
+   $ invoke docs
+   $ open dist/docs/index.html  # or open index.html in compas_cra/dist/docs/
+   ```
+
