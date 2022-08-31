@@ -43,6 +43,11 @@ command line to ease recurring operations:
 * `invoke test`: Run all tests and checks in one swift command.
 * `invoke`: Show available tasks.
 
+
+We highly recommend you have [Black](https://black.readthedocs.io/en/stable/index.html) installed in your favourite editor/IDE.
+For setting up Black in your editor, please refer to their documentation [Editor integration](https://black.readthedocs.io/en/stable/integrations/editors.html).
+
+
 ## Bug reports
 
 When [reporting a bug](https://github.com/BlockResearchGroup/compas_cra/issues) please include:

@@ -51,6 +51,9 @@ command line to ease recurring operations:
 * ``invoke test``: Run all tests and checks in one swift command.
 * ``invoke``: Show available tasks.
 
+We highly recommend you have `Black <https://black.readthedocs.io/en/stable/index.html>`_ installed in your favourite editor/IDE.
+For setting up Black in your editor, please refer to their documentation `Editor integration <https://black.readthedocs.io/en/stable/integrations/editors.html>`_.
+
 Bug reports
 ===========
 
