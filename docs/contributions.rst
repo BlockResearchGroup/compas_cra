@@ -18,9 +18,7 @@ In short, this is how that works.
 
 ::
 
-    $ conda env create -f env_osx.yml  # (Mac)
-    $ conda env create -f env_win.yml  # (Windows)
-    $ conda env create -f env_linux.yml  # (Linux)
+    $ pip install -r requirements-dev.txt
 
 
 4. Make sure all tests pass:
