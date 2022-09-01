@@ -129,7 +129,7 @@ intersphinx_mapping = {
     "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
     "compas": ("https://compas.dev/compas/latest/", None),
     "compas_assembly": (
-        "https://blockresearchgroup.github.io/compas_assembly/0.4.1/",
+        "https://blockresearchgroup.github.io/compas_assembly/latest/",
         None,
     ),
 }
