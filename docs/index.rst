@@ -67,6 +67,7 @@ Table of Contents
    api
    license
    contributions
+   cite
 
 
 Indices

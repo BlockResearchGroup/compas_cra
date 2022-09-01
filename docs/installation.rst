@@ -156,7 +156,7 @@ Update conda packages
 
 
 Verify installation
-===================
+-------------------
 
 After running:
 
