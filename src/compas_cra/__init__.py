@@ -25,7 +25,7 @@ __author__ = ["Gene Ting-Chun Kao"]
 __copyright__ = "Gene Ting-Chun Kao"
 __license__ = "MIT License"
 __email__ = "kao@arch.ethz.ch, kao.gene@gmail.com"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 
 HERE = os.path.dirname(__file__)
