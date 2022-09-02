@@ -1,7 +1,7 @@
 # COMPAS CRA
 
 ![build](https://github.com/blockresearchgroup/compas_cra/workflows/build/badge.svg)
-[![GitHub - License](https://img.shields.io/github/license/blockresearchgroup/compas_cra.svg)](./LICENSE)
+
 [![pip downloads](https://img.shields.io/pypi/dm/compas_cra)](https://pypi.python.org/project/compas_cra)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/compas_cra.svg)](https://pypi.python.org/project/compas_cra)
 [![PyPI - Latest Release](https://img.shields.io/pypi/v/compas_cra.svg)](https://pypi.python.org/project/compas_cra)
