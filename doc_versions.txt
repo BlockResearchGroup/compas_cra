@@ -1,3 +1,2 @@
 latest
 stable
-0.2.0
