@@ -28,7 +28,7 @@ optional_requirements = {}
 
 setup(
     name="compas_cra",
-    version="0.2.0",
+    version="0.2.1",
     description="Coupled Rigid-Block Analysis implementation using COMPAS framework",
     long_description=long_description,
     long_description_content_type="text/markdown",
