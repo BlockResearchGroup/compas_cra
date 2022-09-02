@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://BlockResearchGroup.github.io/compas_cra/doc_versions.txt" data-docs="https://BlockResearchGroup.github.io/compas_cra/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.1.0
+            0.2.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -96,55 +96,56 @@
 <figure class="figure align-default">
 <img alt="../_images/example_armadillo.png" class="figure-img img-fluid" src="../_images/example_armadillo.png" />
 </figure>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="sd">&quot;&quot;&quot;Load and visualise armadillo vault CRA result.&quot;&quot;&quot;</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Load and visualise armadillo vault CRA result.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">compas</span>
+<span class="kn">import</span> <span class="nn">compas_cra</span>
 
-<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Gene Ting-Chun Kao&quot;</span>
-<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;kao@arch.ethz.ch&quot;</span>
+<span class="kn">from</span> <span class="nn">compas_cra.algorithms</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
+<span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
+
+<span class="c1"># if True show precalculated result, False to identify interfaces</span>
+<span class="n">load_from_result</span> <span class="o">=</span> <span class="kc">True</span>
 
 
 <span class="k">def</span> <span class="nf">load_result</span><span class="p">():</span>
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s1">&#39;./armadillo_cra.json&#39;</span><span class="p">))</span>
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">assembly</span>
+    <span class="sd">&quot;&quot;&quot;Load armadillo vault with cra result.&quot;&quot;&quot;</span>
+    <span class="n">armadillo_assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">SAMPLE</span><span class="p">,</span> <span class="s2">&quot;armadillo_cra.json&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">armadillo_assembly</span>
 
 
 <span class="k">def</span> <span class="nf">identify_interfaces</span><span class="p">():</span>
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s1">&#39;./armadillo.json&#39;</span><span class="p">))</span>
-    <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
-    <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">assembly</span>
+    <span class="sd">&quot;&quot;&quot;Load armadillo vault blocks.&quot;&quot;&quot;</span>
+    <span class="n">armadillo_assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">SAMPLE</span><span class="p">,</span> <span class="s2">&quot;armadillo.json&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">armadillo_assembly</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">armadillo_assembly</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">load_from_result</span><span class="p">:</span>
+    <span class="n">assembly</span> <span class="o">=</span> <span class="n">load_result</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">assembly</span> <span class="o">=</span> <span class="n">identify_interfaces</span><span class="p">()</span>
 
-    <span class="kn">import</span> <span class="nn">compas</span>
-    <span class="kn">import</span> <span class="nn">compas_cra</span>
-    <span class="kn">import</span> <span class="nn">os</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">assembly</span><span class="p">)</span>
 
-    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
-    <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
-    <span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
-
-    <span class="c1"># if True show precalculated result, False to identify interfaces</span>
-    <span class="n">load_from_result</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="k">if</span> <span class="n">load_from_result</span><span class="p">:</span>
-        <span class="n">assembly</span> <span class="o">=</span> <span class="n">load_result</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">assembly</span> <span class="o">=</span> <span class="n">identify_interfaces</span><span class="p">()</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">assembly</span><span class="p">)</span>
-
-    <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-             <span class="n">interfaces</span><span class="o">=</span><span class="ow">not</span> <span class="n">load_from_result</span><span class="p">,</span> <span class="n">forcesline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">forcesdirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-             <span class="n">displacements</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dispscale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">cra_view</span><span class="p">(</span>
+    <span class="n">assembly</span><span class="p">,</span>
+    <span class="n">resultant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">nodal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">weights</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">interfaces</span><span class="o">=</span><span class="ow">not</span> <span class="n">load_from_result</span><span class="p">,</span>
+    <span class="n">forcesline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">forcesdirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">displacements</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">dispscale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
 </div>
 </section>
@@ -192,6 +193,7 @@
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse">
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.html">compas_cra</a><ul class="nav flex-column collapse">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.algorithms.html">algorithms</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.equilibrium.html">equilibrium</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.geometry.html">geometry</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../api/compas_cra.viewers.html">viewers</a></li>
@@ -201,6 +203,7 @@
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../license.html">License</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../contributions.html">How to contribute</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../cite.html">Citing</a></li>
 </ul>
 
         </div>

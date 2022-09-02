@@ -48,7 +48,7 @@
         <meta id="doc_versions" data-url="https://BlockResearchGroup.github.io/compas_cra/doc_versions.txt" data-docs="https://BlockResearchGroup.github.io/compas_cra/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.1.0
+            0.2.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -89,15 +89,12 @@
         
         <section id="introduction">
 <h1>Introduction</h1>
-<p class="lead"><a class="reference external" href="https://doi.org/10.1016/j.cad.2022.103216">Coupled Rigid-Block Analysis (CRA)</a>
-in <a class="reference external" href="https://compas.dev/">COMPAS</a> framework.</p>
-<p>To find out more about CRA, please refer to our paper in the CAD Computer-Aided Design journal: <a class="reference external" href="https://doi.org/10.1016/j.cad.2022.103216">https://doi.org/10.1016/j.cad.2022.103216</a></p>
 <figure class="figure align-default">
 <img alt="_images/cra_bridge.png" class="figure-img img-fluid" src="_images/cra_bridge.png" />
 </figure>
-<p><strong>Coupled Rigid-Block Analysis:
-Stability-Aware Design of Complex Discrete-Element Assemblies</strong></p>
-<p>The rigid-block equilibrium (RBE) method uses a penalty formulation to
+<p><a class="reference external" href="https://doi.org/10.1016/j.cad.2022.103216">Coupled Rigid-Block Analysis (CRA)</a>
+in <a class="reference external" href="https://compas.dev/">COMPAS</a> framework.</p>
+<p class="lead">The rigid-block equilibrium (RBE) method uses a penalty formulation to
 measure structural infeasibility or to guide the design of stable
 discrete-element assemblies from unstable geometry.
 However, RBE is a purely force-based formulation,
@@ -115,6 +112,9 @@ In addition, an interactive stability-aware design process to
 guide user design towards structurally-sound assemblies is proposed.
 Finally, the potential of our method for real-world problems are demonstrated
 by designing complex and scaffolding-free physical models.</p>
+<p>To find out more about CRA, please refer to our paper in the CAD Computer-Aided Design journal:</p>
+<p><strong>Coupled Rigid-Block Analysis: Stability-Aware Design of Complex Discrete-Element Assemblies</strong></p>
+<p><a class="reference external" href="https://doi.org/10.1016/j.cad.2022.103216">https://doi.org/10.1016/j.cad.2022.103216</a></p>
 <section id="credits">
 <h2>Credits</h2>
 <p>CRA is developed and implemented by <a class="reference external" href="https://geneatcg.com">Gene Ting-Chun Kao</a> et al.</p>
@@ -160,6 +160,7 @@ by designing complex and scaffolding-free physical models.</p>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/compas_cra.html">compas_cra</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.algorithms.html">algorithms</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/compas_cra.equilibrium.html">equilibrium</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/compas_cra.geometry.html">geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/compas_cra.viewers.html">viewers</a></li>
@@ -169,6 +170,7 @@ by designing complex and scaffolding-free physical models.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cite.html">Citing</a></li>
 </ul>
 </div>
 </section>
@@ -223,6 +225,7 @@ by designing complex and scaffolding-free physical models.</p>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="nav flex-column collapse">
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_cra.html">compas_cra</a><ul class="nav flex-column collapse">
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/compas_cra.algorithms.html">algorithms</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/compas_cra.equilibrium.html">equilibrium</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/compas_cra.geometry.html">geometry</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/compas_cra.viewers.html">viewers</a></li>
@@ -232,6 +235,7 @@ by designing complex and scaffolding-free physical models.</p>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="contributions.html">How to contribute</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="cite.html">Citing</a></li>
 </ul>
 
         </div>
