@@ -1,5 +1,12 @@
 # COMPAS CRA
 
+![build](https://github.com/blockresearchgroup/compas_cra/workflows/build/badge.svg)
+[![GitHub - License](https://img.shields.io/github/license/blockresearchgroup/compas_cra.svg)](https://github.com/blockresearchgroup/compas_cra)
+[![pip downloads](https://img.shields.io/pypi/dm/compas_cra)](https://pypi.python.org/project/compas_cra)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/compas_cra.svg)](https://pypi.python.org/project/compas_cra)
+[![PyPI - Latest Release](https://img.shields.io/pypi/v/compas_cra.svg)](https://pypi.python.org/project/compas_cra)
+[![DOI](https://zenodo.org/badge/374677757.svg)](https://zenodo.org/badge/latestdoi/374677757)
+
 [Coupled Rigid-Block Analysis (CRA)](https://doi.org/10.1016/j.cad.2022.103216) implementation using [COMPAS](https://compas.dev/) framework.
 
 > developed with <span style="color: #e25555;">&#9829;</span> by [Gene Ting-Chun Kao](https://geneatcg.com) 
