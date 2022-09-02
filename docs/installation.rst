@@ -5,22 +5,39 @@ Installation
 ********************************************************************************
 
 
-Install with conda (recommended)
-================================
+Install with conda and pip (recommended)
+===========================================
 
-Create an ``conda`` environment ``cra`` and install COMPAS CRA from the package channel ``conda-forge``.
+Create an ``conda`` environment ``cra``.
 
 .. code-block:: bash
 
-    conda create -n cra -c conda-forge compas_cra
+    conda create -n cra python=3.8
 
 
 Activate the environment.
 
 .. code-block:: bash
 
-    conda create -n cra -c conda-forge compas_cra
+    conda activate cra
 
+Install ``compas_cra`` with ``pip``.
+
+.. code-block:: bash
+
+    pip install compas_cra
+
+Install `IPOPT <https://coin-or.github.io/Ipopt/>`_ solver.
+
+.. code-block:: bash
+
+     pip install ipopt  # For Windows: pip install ipopt==3.11.1
+
+Install `compas_view2 <https://compas.dev/compas_view2/>`_ for visualisation.
+
+.. code-block:: bash
+
+     conda install -c conda-forge compas_view2=0.7.0
 
 Verify that the installation was successful.
 
@@ -32,44 +49,12 @@ Verify that the installation was successful.
 
     Yay! COMPAS CRA is installed correctly!
 
-
-Installation options
---------------------
-
-Install COMPAS CRA in an environment with a specific version of Python.
+Try the :ref:`Tutorial` script.
 
 .. code-block:: bash
 
-    conda create -n cra python=3.8 compas_cra
+    python scripts/tutorial_cubes.py
 
-Install COMPAS CRA in an existing environment.
-
-.. code-block:: bash
-
-    conda install -n cra compas_cra
-
-
-Install with pip
-================
-
-Install COMPAS CRA using ``pip`` from the Python Package Index.
-
-.. code-block:: bash
-
-    pip install cython --install-option="--no-cython-compile"
-    pip install compas_cra
-
-Install `IPOPT <https://coin-or.github.io/Ipopt/>`_ solver.
-
-.. code-block:: bash
-
-     pip install ipopt
-
-Install `compas_view2 <https://github.com/compas-dev/compas_view2>`_ for visualisation.
-
-.. code-block:: bash
-
-     conda install compas_view2
 
 Developer Guide
 ===============
@@ -98,14 +83,9 @@ Install requirements
 .. code-block:: bash
 
     pip install -r requirements.txt
-
-Install requirements for developments, optional.
-
-.. code-block:: bash
-
     pip install -r requirements-dev.txt
 
-Install COMPAS CRA as an editable version from local source.
+In the `requirements-dev.txt <https://github.com/BlockResearchGroup/compas_cra/blob/main/requirements-dev.txt>`_, we also installed COMPAS CRA as an editable version from local source.
 
 .. code-block:: bash
 
@@ -115,7 +95,13 @@ Install `IPOPT <https://coin-or.github.io/Ipopt/>`_ solver.
 
 .. code-block:: bash
 
-    conda install -c conda-forge ipopt
+    pip install ipopt  # For Windows: pip install ipopt==3.11.1
+
+Install `compas_view2 <https://compas.dev/compas_view2/>`_ for visualisation.
+
+.. code-block:: bash
+
+    conda install -c conda-forge compas_view2=0.7.0
 
 
 A quicker way - from `.yml` file
