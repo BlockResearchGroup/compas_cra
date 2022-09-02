@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://BlockResearchGroup.github.io/compas_cra/doc_versions.txt" data-docs="https://BlockResearchGroup.github.io/compas_cra/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.2.0
+            0.2.1
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -91,14 +91,26 @@
         
         <section id="installation">
 <span id="id1"></span><h1>Installation</h1>
-<section id="install-with-conda-recommended">
-<h2>Install with conda (recommended)</h2>
-<p>Create an <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment <code class="docutils literal notranslate"><span class="pre">cra</span></code> and install COMPAS CRA from the package channel <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda create -n cra -c conda-forge compas_cra
+<section id="install-with-conda-and-pip-recommended">
+<h2>Install with conda and pip (recommended)</h2>
+<p>Create an <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment <code class="docutils literal notranslate"><span class="pre">cra</span></code>.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda create -n cra <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8
 </code></pre></div>
 </div>
 <p>Activate the environment.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda create -n cra -c conda-forge compas_cra
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda activate cra
+</code></pre></div>
+</div>
+<p>Install <code class="docutils literal notranslate"><span class="pre">compas_cra</span></code> with <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip install compas_cra
+</code></pre></div>
+</div>
+<p>Install <a class="reference external" href="https://coin-or.github.io/Ipopt/">IPOPT</a> solver.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip install ipopt  <span class="c1"># For Windows: pip install ipopt==3.11.1</span>
+</code></pre></div>
+</div>
+<p>Install <a class="reference external" href="https://compas.dev/compas_view2/">compas_view2</a> for visualisation.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda install -c conda-forge <span class="nv">compas_view2</span><span class="o">=</span><span class="m">0</span>.7.0
 </code></pre></div>
 </div>
 <p>Verify that the installation was successful.</p>
@@ -108,31 +120,8 @@
 <div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>Yay! COMPAS CRA is installed correctly!
 </code></pre></div>
 </div>
-<section id="installation-options">
-<h3>Installation options</h3>
-<p>Install COMPAS CRA in an environment with a specific version of Python.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda create -n cra <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8 compas_cra
-</code></pre></div>
-</div>
-<p>Install COMPAS CRA in an existing environment.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda install -n cra compas_cra
-</code></pre></div>
-</div>
-</section>
-</section>
-<section id="install-with-pip">
-<h2>Install with pip</h2>
-<p>Install COMPAS CRA using <code class="docutils literal notranslate"><span class="pre">pip</span></code> from the Python Package Index.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip install cython --install-option<span class="o">=</span><span class="s2">&quot;--no-cython-compile&quot;</span>
-pip install compas_cra
-</code></pre></div>
-</div>
-<p>Install <a class="reference external" href="https://coin-or.github.io/Ipopt/">IPOPT</a> solver.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip install ipopt
-</code></pre></div>
-</div>
-<p>Install <a class="reference external" href="https://github.com/compas-dev/compas_view2">compas_view2</a> for visualisation.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda install compas_view2
+<p>Try the <a class="reference internal" href="tutorial.html#tutorial"><span class="std std-ref">Tutorial</span></a> script.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>python scripts/tutorial_cubes.py
 </code></pre></div>
 </div>
 </section>
@@ -153,18 +142,19 @@ conda activate cra
 </div>
 <p>Install requirements</p>
 <div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip install -r requirements.txt
+pip install -r requirements-dev.txt
 </code></pre></div>
 </div>
-<p>Install requirements for developments, optional.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip install -r requirements-dev.txt
-</code></pre></div>
-</div>
-<p>Install COMPAS CRA as an editable version from local source.</p>
+<p>In the <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/requirements-dev.txt">requirements-dev.txt</a>, we also installed COMPAS CRA as an editable version from local source.</p>
 <div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip install -e .
 </code></pre></div>
 </div>
 <p>Install <a class="reference external" href="https://coin-or.github.io/Ipopt/">IPOPT</a> solver.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda install -c conda-forge ipopt
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip install ipopt  <span class="c1"># For Windows: pip install ipopt==3.11.1</span>
+</code></pre></div>
+</div>
+<p>Install <a class="reference external" href="https://compas.dev/compas_view2/">compas_view2</a> for visualisation.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda install -c conda-forge <span class="nv">compas_view2</span><span class="o">=</span><span class="m">0</span>.7.0
 </code></pre></div>
 </div>
 </section>
@@ -322,11 +312,7 @@ $ python -m compas_rhino.install -p compas_cra
         
         <ul class="nav flex-column" id="compas-toc">
 <li class="nav-item"><a class="nav-link reference internal" href="#">Installation</a><ul class="nav flex-column">
-<li class="nav-item"><a class="nav-link reference internal" href="#install-with-conda-recommended">Install with conda (recommended)</a><ul class="nav flex-column">
-<li class="nav-item"><a class="nav-link reference internal" href="#installation-options">Installation options</a></li>
-</ul>
-</li>
-<li class="nav-item"><a class="nav-link reference internal" href="#install-with-pip">Install with pip</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#install-with-conda-and-pip-recommended">Install with conda and pip (recommended)</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#developer-guide">Developer Guide</a><ul class="nav flex-column">
 <li class="nav-item"><a class="nav-link reference internal" href="#install-from-source">Install from source</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#a-quicker-way-from-yml-file">A quicker way - from <cite>.yml</cite> file</a></li>
