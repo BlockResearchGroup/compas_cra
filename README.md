@@ -17,7 +17,7 @@ To find out more about CRA, please refer to our paper in the CAD Computer-Aided 
 #### Coupled Rigid-Block Analysis: Stability-Aware Design of Complex Discrete-Element Assemblies
 
 
-![image](./docs/_images/cra_bridge.png)
+![image](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/_images/cra_bridge.png?raw=true)
 
 ##### Abstract
 
