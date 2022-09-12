@@ -78,7 +78,7 @@ Then we identify planar interfaces between blocks automatically.
 5. Solving equilibrium
 ----------------------
 
-:mod:`compas_cra` provide three solvers:
+:mod:`compas_cra` provides three solvers:
 
 - RBE Solve: :mod:`compas_cra.equilibrium.rbe_solve`.
 - CRA Solve: :mod:`compas_cra.equilibrium.cra_solve`.
@@ -104,7 +104,9 @@ Then we identify planar interfaces between blocks automatically.
 The complete tutorial script can be downloaded from
 `scripts/tutorial_cubes.py <https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/tutorial_cubes.py>`_
 
-To see more how to construct assembly and solve equilibrium, please check :ref:`Examples`.
+To reproduce our `paper <https://doi.org/10.1016/j.cad.2022.103216>`_'s examples
+or to see more how to construct assembly and solve equilibrium,
+please check :ref:`Examples`.
 
 
 Optional: Export geometry from CAD software (Rhino)
