@@ -71,10 +71,10 @@ by designing complex and scaffolding-free physical models.
 }
 ```
 
-###### Read the docs: 
+##### Read the docs: 
 [https://blockresearchgroup.github.io/compas_cra](https://blockresearchgroup.github.io/compas_cra)
 
-###### Build the docs locally: 
+##### Build the docs locally: 
 
    ```bash
    $ pip install -r requirements-dev.txt
@@ -82,6 +82,6 @@ by designing complex and scaffolding-free physical models.
    $ open dist/docs/index.html  # or open index.html in compas_cra/dist/docs/
    ```
 
-###### Examples to reproduce our paper results:
+##### Examples to reproduce our paper results:
 
 See examples in [docs](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/examples) or try them in [docs/examples](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/examples). 
