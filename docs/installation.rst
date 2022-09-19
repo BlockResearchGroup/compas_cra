@@ -31,7 +31,7 @@ Install `IPOPT <https://coin-or.github.io/Ipopt/>`_ solver.
 
 .. code-block:: bash
 
-     pip install ipopt  # For Windows: pip install ipopt==3.11.1
+     conda install ipopt  # For Windows: conda install ipopt=3.11.1
 
 Install `compas_view2 <https://compas.dev/compas_view2/>`_ for visualisation.
 
@@ -95,7 +95,7 @@ Install `IPOPT <https://coin-or.github.io/Ipopt/>`_ solver.
 
 .. code-block:: bash
 
-    pip install ipopt  # For Windows: pip install ipopt==3.11.1
+    conda install ipopt  # For Windows: conda install ipopt=3.11.1
 
 Install `compas_view2 <https://compas.dev/compas_view2/>`_ for visualisation.
 
