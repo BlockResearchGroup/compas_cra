@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Add example folder directory to tutorial docs for easy access. 
+
 ### Changed
+
+* Fix some typos and wrong url links. 
+* Change ipopt installation guide using conda.
 
 ### Removed
 
