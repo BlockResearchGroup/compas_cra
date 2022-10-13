@@ -29,7 +29,7 @@ Software implementation
     @misc{compas-cra,
         title  = {{COMPAS CRA}: Coupled Rigid-Block Analysis ({CRA}) for the {COMPAS} framework},
         author = {Gene Ting-Chun Kao},
-        note   = {https://github.com/BlockResearchGroup/compas_cra},
+        note   = {https://github.com/BlockResearchGroup/compas{\_}cra},
         year   = {2020-2022},
         doi    = {10.5281/zenodo.7043135},
         url    = {https://doi.org/10.5281/zenodo.7043135},
