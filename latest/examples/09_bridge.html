@@ -123,21 +123,9 @@
     <span class="n">node</span><span class="p">:</span> <span class="mf">3.51</span> <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">assembly</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="n">density_setup</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">density</span><span class="p">)</span>
-<span class="c1"># assembly.graph.delete_node(2)</span>
-<span class="c1"># assembly.graph.delete_node(3)</span>
-<span class="c1"># assembly.graph.delete_node(4)</span>
-<span class="c1"># assembly.graph.delete_node(5)</span>
-<span class="c1"># assembly.graph.delete_node(6)</span>
-<span class="c1"># assembly.graph.delete_node(7)</span>
-<span class="c1"># assembly.graph.delete_node(8)</span>
-<span class="c1"># assembly.graph.delete_node(9)</span>
-<span class="c1"># assembly.graph.delete_node(10)</span>
 
-<span class="c1"># assembly.graph.delete_node(11)</span>
-<span class="c1"># assembly.graph.delete_node(12)</span>
-<span class="c1"># assembly.graph.delete_node(13)</span>
-<span class="c1"># assembly.graph.delete_node(14)</span>
-<span class="c1"># assembly.graph.delete_node(15)</span>
+<span class="n">assembly</span><span class="o">.</span><span class="n">delete_blocks</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">assembly</span><span class="o">.</span><span class="n">delete_blocks</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">])</span>
 
 <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
 
