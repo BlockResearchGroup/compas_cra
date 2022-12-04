@@ -25,21 +25,9 @@ density = {
     node: 3.51 if node in [11, 12, 13, 14, 15] else 1 for node in assembly.graph.nodes()
 }
 density_setup(assembly, density)
-# assembly.graph.delete_node(2)
-# assembly.graph.delete_node(3)
-# assembly.graph.delete_node(4)
-# assembly.graph.delete_node(5)
-# assembly.graph.delete_node(6)
-# assembly.graph.delete_node(7)
-# assembly.graph.delete_node(8)
-# assembly.graph.delete_node(9)
-# assembly.graph.delete_node(10)
 
-# assembly.graph.delete_node(11)
-# assembly.graph.delete_node(12)
-# assembly.graph.delete_node(13)
-# assembly.graph.delete_node(14)
-# assembly.graph.delete_node(15)
+assembly.delete_blocks([3, 4, 5, 6, 7, 8, 9, 10])
+assembly.delete_blocks([11, 12, 13, 14, 15])
 
 assembly_interfaces_numpy(assembly, amin=1e-6, tmax=1e-4)
 

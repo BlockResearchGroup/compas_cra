@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Add delete block and blocks methods in CRA_Assembly class. 
+* A script to export mesh to json in Rhino. 
+
 ### Changed
 
 ### Removed

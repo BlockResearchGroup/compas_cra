@@ -151,6 +151,37 @@ class CRA_Assembly(Assembly):
         """
         self.graph.node_attribute(key, "is_support", True)
 
+    def delete_blocks(self, keys):
+        """Delete blocks.
+
+        Parameters
+        ----------
+        keys : list of int
+            Assembly node keys.
+
+        Returns
+        -------
+        None
+
+        """
+        for key in keys:
+            self.delete_block(key)
+
+    def delete_block(self, key):
+        """Delete block.
+
+        Parameters
+        ----------
+        key : int
+            Assembly node key.
+
+        Returns
+        -------
+        None
+
+        """
+        self.graph.delete_node(key)
+
     def is_block_support(self, key):
         """Check if the block is a support.
 
