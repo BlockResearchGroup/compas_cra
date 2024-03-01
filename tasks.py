@@ -1,220 +1,194 @@
-# -*- coding: utf-8 -*-
-from __future__ import print_function
-
-import contextlib
 import glob
 import os
-import sys
-from shutil import rmtree
+import shutil
+import invoke
+from invoke import Collection
 
-from invoke import Exit
-from invoke import task
-
-try:
-    input = raw_input
-except NameError:
-    pass
-
-
-BASE_FOLDER = os.path.dirname(__file__)
+from compas_invocations import build
+from compas_invocations import docs as docs_
+from compas_invocations import tests
+from compas_invocations.console import chdir
+from compas_invocations.console import confirm
 
 
-class Log(object):
-    def __init__(self, out=sys.stdout, err=sys.stderr):
-        self.out = out
-        self.err = err
-
-    def flush(self):
-        self.out.flush()
-        self.err.flush()
-
-    def write(self, message):
-        self.flush()
-        self.out.write(message + '\n')
-        self.out.flush()
-
-    def info(self, message):
-        self.write('[INFO] %s' % message)
-
-    def warn(self, message):
-        self.write('[WARN] %s' % message)
-
-
-log = Log()
-
-
-def confirm(question):
-    while True:
-        response = input(question).lower().strip()
-
-        if not response or response in ('n', 'no'):
-            return False
-
-        if response in ('y', 'yes'):
-            return True
-
-        print('Focus, kid! It is either (y)es or (n)o', file=sys.stderr)
-
-
-@task(default=True)
-def help(ctx):
-    """Lists available tasks and usage."""
-    ctx.run('invoke --list')
-    log.write('Use "invoke -h <taskname>" to get detailed help for a task.')
-
-
-@task(help={
-    'docs': 'True to clean up generated documentation, otherwise False',
-    'bytecode': 'True to clean up compiled python files, otherwise False.',
-    'builds': 'True to clean up build/packaging artifacts, otherwise False.'})
-def clean(ctx, docs=True, bytecode=True, builds=True):
+@invoke.task(
+    help={
+        "docs": "True to clean up generated documentation, otherwise False",
+        "bytecode": "True to clean up compiled python files, otherwise False.",
+        "builds": "True to clean up build/packaging artifacts, otherwise False.",
+    }
+)
+def clean(ctx, docs=True, bytecode=True, builds=True, ghuser=True):
     """Cleans the local copy from compiled artifacts."""
 
-    with chdir(BASE_FOLDER):
-        if builds:
-            ctx.run('python setup.py clean')
-
+    with chdir(ctx.base_folder):
         if bytecode:
-            for root, dirs, files in os.walk(BASE_FOLDER):
+            for root, dirs, files in os.walk(ctx.base_folder):
                 for f in files:
-                    if f.endswith('.pyc'):
+                    if f.endswith(".pyc"):
                         os.remove(os.path.join(root, f))
-                if '.git' in dirs:
-                    dirs.remove('.git')
+                if ".git" in dirs:
+                    dirs.remove(".git")
 
         folders = []
 
         if docs:
-            folders.append('docs/api/generated')
+            folders.append("docs/api/generated")
 
-        folders.append('dist/')
+        folders.append("dist/")
 
         if bytecode:
-            for t in ('src', 'tests'):
-                folders.extend(glob.glob('{}/**/__pycache__'.format(t), recursive=True))
+            for t in ("src", "tests"):
+                folders.extend(glob.glob("{}/**/__pycache__".format(t), recursive=True))
 
         if builds:
-            folders.append('build/')
-            folders.append('src/compas_cra.egg-info/')
+            folders.append("build/")
+            folders.extend(glob.glob("src/**/*.egg-info", recursive=False))
+
+        if ghuser and ctx.get("ghuser"):
+            folders.append(os.path.abspath(ctx.ghuser.target_dir))
 
         for folder in folders:
-            rmtree(os.path.join(BASE_FOLDER, folder), ignore_errors=True)
+            shutil.rmtree(os.path.join(ctx.base_folder, folder), ignore_errors=True)
 
 
-@task(help={
-      'rebuild': 'True to clean all previously built docs before starting, otherwise False.',
-      'doctest': 'True to run doctests, otherwise False.',
-      'check_links': 'True to check all web links in docs for validity, otherwise False.'})
+@invoke.task()
+def lint(ctx):
+    """Check the consistency of coding style."""
+
+    print("\nRunning ruff linter...")
+    ctx.run("ruff check --fix src tests")
+
+    print("\nRunning black linter...")
+    ctx.run("black --check --diff --color src tests")
+
+    print("\nAll linting is done!")
+
+
+@invoke.task()
+def format(ctx):
+    """Reformat the code base using black."""
+
+    print("\nRunning ruff formatter...")
+    ctx.run("ruff format src tests")
+
+    print("\nRunning black formatter...")
+    ctx.run("black src tests")
+
+    print("\nAll formatting is done!")
+
+
+@invoke.task()
+def check(ctx):
+    """Check the consistency of documentation, coding style and a few other things."""
+
+    with chdir(ctx.base_folder):
+        lint(ctx)
+
+
+@invoke.task(
+    help={
+        "rebuild": "True to clean all previously built docs before starting, otherwise False.",
+        "doctest": "True to run doctests, otherwise False.",
+        "check_links": "True to check all web links in docs for validity, otherwise False.",
+    }
+)
 def docs(ctx, doctest=False, rebuild=False, check_links=False):
-    """Builds package's HTML documentation."""
+    """Builds the HTML documentation."""
 
     if rebuild:
         clean(ctx)
 
-    with chdir(BASE_FOLDER):
-        # ctx.run('sphinx-autogen docs/**.rst')
-
+    with chdir(ctx.base_folder):
         if doctest:
-            testdocs(ctx, rebuild=rebuild)
+            ctx.run("pytest --doctest-modules")
 
-        opts = '-E' if rebuild else ''
-        ctx.run('sphinx-build {} -b html docs dist/docs'.format(opts))
+        opts = "-E" if rebuild else ""
+        ctx.run("sphinx-build {} -b html docs dist/docs".format(opts))
 
         if check_links:
             linkcheck(ctx, rebuild=rebuild)
 
 
-@task()
-def lint(ctx):
-    """Check the consistency of coding style."""
-    log.write('Running flake8 python linter...')
-    ctx.run('flake8 src')
-
-
-@task()
-def testdocs(ctx, rebuild=False):
-    """Test the examples in the docstrings."""
-    log.write('Running doctest...')
-    opts = '-E' if rebuild else ''
-    ctx.run('sphinx-build {} -b doctest docs dist/docs'.format(opts))
-
-
-@task()
+@invoke.task()
 def linkcheck(ctx, rebuild=False):
     """Check links in documentation."""
-    log.write('Running link check...')
-    opts = '-E' if rebuild else ''
-    ctx.run('sphinx-build {} -b linkcheck docs dist/docs'.format(opts))
+    print("Running link check...")
+    opts = "-E" if rebuild else ""
+    ctx.run("sphinx-build {} -b linkcheck docs dist/docs".format(opts))
 
 
-@task()
-def check(ctx):
-    """Check the consistency of documentation, coding style and a few other things."""
-
-    with chdir(BASE_FOLDER):
-        lint(ctx)
-
-        log.write('Checking MANIFEST.in...')
-        ctx.run('check-manifest')
-
-        log.write('Checking metadata...')
-        ctx.run('python setup.py check --strict --metadata')
-
-
-@task(help={
-      'checks': 'True to run all checks before testing, otherwise False.'})
-def test(ctx, checks=False, doctest=False):
-    """Run all tests."""
-    if checks:
-        check(ctx)
-
-    with chdir(BASE_FOLDER):
-        cmd = ['pytest']
-        if doctest:
-            cmd.append('--doctest-modules')
-
-        ctx.run(' '.join(cmd))
-
-
-@task
-def prepare_changelog(ctx):
-    """Prepare changelog for next release."""
-    UNRELEASED_CHANGELOG_TEMPLATE = '## Unreleased\n\n### Added\n\n### Changed\n\n### Removed\n\n\n## '
-
-    with chdir(BASE_FOLDER):
-        # Preparing changelog for next release
-        with open('CHANGELOG.md', 'r+') as changelog:
-            content = changelog.read()
-            changelog.seek(0)
-            changelog.write(content.replace(
-                '## ', UNRELEASED_CHANGELOG_TEMPLATE, 1))
-
-        ctx.run('git add CHANGELOG.md && git commit -m "Prepare changelog for next release"')
-
-
-@task(help={
-      'release_type': 'Type of release follows semver rules. Must be one of: major, minor, patch.'})
+@invoke.task(help={"release_type": "Type of release follows semver rules. Must be one of: major, minor, patch."})
 def release(ctx, release_type):
     """Releases the project in one swift command!"""
-    if release_type not in ('patch', 'minor', 'major'):
-        raise Exit('The release type parameter is invalid.\nMust be one of: major, minor, patch.')
+    if release_type not in ("patch", "minor", "major"):
+        raise invoke.Exit("The release type parameter is invalid.\nMust be one of: major, minor, patch.")
+
+    # Run formatter
+    ctx.run("invoke format")
 
     # Run checks
-    ctx.run('invoke check test')
+    ctx.run("invoke test")
 
     # Bump version and git tag it
-    ctx.run('bump2version %s --verbose' % release_type)
+    ctx.run("bump-my-version bump %s --verbose" % release_type)
+
+    # Build project
+    ctx.run("python -m build")
 
     # Prepare the change log for the next release
     prepare_changelog(ctx)
 
+    # Clean up local artifacts
+    clean(ctx)
 
-@contextlib.contextmanager
-def chdir(dirname=None):
-    current_dir = os.getcwd()
-    try:
-        if dirname is not None:
-            os.chdir(dirname)
-        yield
-    finally:
-        os.chdir(current_dir)
+    # Upload to pypi
+    if confirm(
+        "Everything is ready. You are about to push to git which will trigger a release to pypi.org. Are you sure?",
+        assume_yes=False,
+    ):
+        ctx.run("git push --tags && git push")
+    else:
+        raise invoke.Exit("You need to manually revert the tag/commits created.")
+
+
+@invoke.task
+def prepare_changelog(ctx):
+    """Prepare changelog for next release."""
+    UNRELEASED_CHANGELOG_TEMPLATE = "## Unreleased\n\n### Added\n\n### Changed\n\n### Removed\n\n\n## "
+
+    with chdir(ctx.base_folder):
+        # Preparing changelog for next release
+        with open("CHANGELOG.md", "r+") as changelog:
+            content = changelog.read()
+            changelog.seek(0)
+            changelog.write(content.replace("## ", UNRELEASED_CHANGELOG_TEMPLATE, 1))
+
+        ctx.run('git add CHANGELOG.md && git commit -m "Prepare changelog for next release"')
+
+
+ns = Collection(
+    docs_.help,
+    check,
+    lint,
+    format,
+    docs,
+    linkcheck,
+    tests.test,
+    tests.testdocs,
+    tests.testcodeblocks,
+    prepare_changelog,
+    clean,
+    release,
+    build.build_ghuser_components,
+)
+ns.configure(
+    {
+        "base_folder": os.path.dirname(__file__),
+        "ghuser": {
+            "source_dir": "src/compas_ghpython/components",
+            "target_dir": "src/compas_ghpython/components/ghuser",
+            "prefix": "COMPAS: ",
+        },
+    }
+)

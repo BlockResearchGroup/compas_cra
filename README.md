@@ -9,17 +9,16 @@
 
 [Coupled Rigid-Block Analysis (CRA)](https://doi.org/10.1016/j.cad.2022.103216) implementation using [COMPAS](https://compas.dev/) framework.
 
-> developed with <span style="color: #e25555;">&#9829;</span> by [Gene Ting-Chun Kao](https://geneatcg.com) 
+> developed with <span style="color: #e25555;">&#9829;</span> by [Gene Ting-Chun Kao](https://geneatcg.com)
 
-To find out more about CRA, please refer to our paper in the CAD Computer-Aided Design journal: 
-[https://doi.org/10.1016/j.cad.2022.103216](https://doi.org/10.1016/j.cad.2022.103216 ) 
+To find out more about CRA, please refer to our paper in the CAD Computer-Aided Design journal:
+[https://doi.org/10.1016/j.cad.2022.103216](https://doi.org/10.1016/j.cad.2022.103216 )
 
-#### Coupled Rigid-Block Analysis: Stability-Aware Design of Complex Discrete-Element Assemblies
-
+## Coupled Rigid-Block Analysis: Stability-Aware Design of Complex Discrete-Element Assemblies
 
 ![image](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/_images/cra_bridge.png?raw=true)
 
-##### Abstract
+### Abstract
 
 The rigid-block equilibrium (RBE) method uses a penalty formulation to
 measure structural infeasibility or to guide the design of stable
@@ -40,10 +39,9 @@ guide user design towards structurally-sound assemblies is proposed.
 Finally, the potential of our method for real-world problems are demonstrated
 by designing complex and scaffolding-free physical models.
 
+### Please cite our work if you use CRA in your research
 
-##### Please cite our work if you use CRA in your research
-
-###### Paper
+#### Paper
 
 ```latex
 @article{kao2022coupled,
@@ -59,7 +57,7 @@ by designing complex and scaffolding-free physical models.
 }
 ```
 
-###### Software implementation
+#### Software implementation
 
 ```latex
 @misc{compas-cra,
@@ -72,17 +70,18 @@ by designing complex and scaffolding-free physical models.
 }
 ```
 
-##### Read the docs
+### Read the docs
+
 [https://blockresearchgroup.github.io/compas_cra](https://blockresearchgroup.github.io/compas_cra)
 
-##### Build the docs locally
+### Build the docs locally
 
-   ```bash
-   $ pip install -r requirements-dev.txt
-   $ invoke docs
-   $ open dist/docs/index.html  # or open index.html in compas_cra/dist/docs/
-   ```
+```bash
+pip install -r requirements-dev.txt
+invoke docs
+open dist/docs/index.html  # or open index.html in compas_cra/dist/docs/
+```
 
-##### Examples to reproduce our paper results
+### Examples to reproduce our paper results
 
-See examples in [docs](https://blockresearchgroup.github.io/compas_cra/latest/examples.html) or try them in [docs/examples](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/examples). 
+See examples in [docs](https://blockresearchgroup.github.io/compas_cra/latest/examples.html) or try them in [docs/examples](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/examples).
