@@ -8,11 +8,8 @@ from compas_cra.equilibrium import cra_solve
 
 
 def test_cra():
-
-    support = Box(Frame.worldXY(), 1, 1, 1)  # supporting block
-    free1 = Box(
-        Frame.worldXY().transformed(Translation.from_vector([0, 0, 1])), 1, 1, 1
-    )  # block to analyse
+    support = Box(1, 1, 1)  # supporting block
+    free1 = Box(1, 1, 1, frame=Frame.worldXY().transformed(Translation.from_vector([0, 0, 1])))  # block to analyse
 
     assembly = CRA_Assembly()
     assembly.add_block(Block.from_shape(support), node=0)
