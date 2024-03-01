@@ -17,7 +17,6 @@ Classes
 
 """
 
-
 from __future__ import absolute_import
 
 from .cra_assembly import CRA_Assembly
