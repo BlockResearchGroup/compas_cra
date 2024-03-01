@@ -4,16 +4,14 @@
 Installation
 ********************************************************************************
 
-
 Install with conda and pip (recommended)
-===========================================
+========================================
 
 Create an ``conda`` environment ``cra``.
 
 .. code-block:: bash
 
     conda create -n cra python=3.8
-
 
 Activate the environment.
 
