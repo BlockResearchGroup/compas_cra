@@ -110,7 +110,7 @@ please check :ref:`Examples`.
 
 
 Optional: Export geometry from CAD software (Rhino)
-=========================================
+===================================================
 
 For the step :ref:`Creating_Geometry`, we can also input geometry from CAD software.
 Here we use Rhino as an example.

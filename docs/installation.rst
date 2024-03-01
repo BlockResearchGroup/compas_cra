@@ -189,14 +189,6 @@ In order to install COMPAS CRA for Rhino, do
 Every time a new file is opened in Rhino, be sure to restart Rhino or reset the Python Script Engine before running scripts.
 
 
-Verify Conda Environment, COMPAS CRA, and COMPAS in Rhino
----------------------------------------------------------
-
-.. literalinclude:: ../scripts/rhinoenv.py
-    :language: python
-
-File can also be found in `scripts/rhinoenv.py <https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/rhinoenv.py>`_
-
 Known issues (Windows)
 ======================
 
