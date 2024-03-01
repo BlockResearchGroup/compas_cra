@@ -1,11 +1,11 @@
 """CRA assembly data structures"""
 
 from compas.geometry import Frame
-from compas.geometry import Rotation
 from compas.geometry import Pointcloud
+from compas.geometry import Rotation
 from compas_assembly.datastructures import Assembly
-from compas_assembly.datastructures import Interface
 from compas_assembly.datastructures import Block
+from compas_assembly.datastructures import Interface
 
 
 class CRA_Assembly(Assembly):
@@ -16,9 +16,7 @@ class CRA_Assembly(Assembly):
         super(CRA_Assembly, self).__init__()
 
         self.attributes.update({"name": "CRA_Assembly"})
-        self.graph.default_node_attributes.update(
-            {"block": None, "displacement": [0, 0, 0, 0, 0, 0]}
-        )
+        self.graph.default_node_attributes.update({"block": None, "displacement": [0, 0, 0, 0, 0, 0]})
         self.graph.default_edge_attributes.update({"interface": None, "interfaces": []})
 
     def add_blocks_from_rhinomeshes(self, guids):
@@ -42,7 +40,7 @@ class CRA_Assembly(Assembly):
             keys.append(key)
         return keys
 
-    def add_to_interfaces(self, u, v, type, size, points, frame):
+    def add_to_interfaces(self, u, v, size, points, frame):
         """Add interface to edge (u, v) interfaces.
 
         Parameters
@@ -65,7 +63,7 @@ class CRA_Assembly(Assembly):
         None
 
         """
-        interface = Interface(type=type, size=size, points=points, frame=frame)
+        interface = Interface(size=size, points=points, frame=frame)
         self.add_interface_to_interfaces(u, v, interface)
 
     def add_interface_to_interfaces(self, u, v, interface):
@@ -85,7 +83,7 @@ class CRA_Assembly(Assembly):
         None
 
         """
-        if not self.graph.has_edge(u, v):
+        if not self.graph.has_edge((u, v)):
             self.graph.add_edge(u, v, interfaces=[interface])
         else:
             interfaces = self.graph.edge_attribute((u, v), "interfaces")
@@ -113,7 +111,6 @@ class CRA_Assembly(Assembly):
             for f in mesh.faces():
                 pt = mesh.face_coordinates(f)
                 interface = Interface(
-                    type="face_face",
                     size=mesh.face_area(f),
                     points=pt,
                     frame=Frame.from_points(pt[0], pt[1], pt[2]),
@@ -226,9 +223,7 @@ class CRA_Assembly(Assembly):
         self.transform(R)
         for edge in self.edges():
             for interface in self.graph.edge_attribute(edge, "interfaces"):
-                interface.points = [
-                    list(c) for c in Pointcloud(interface.points).transformed(R)
-                ]
+                interface.points = [list(c) for c in Pointcloud(interface.points).transformed(R)]
                 interface.frame.transform(R)
 
     def move_block(self, key, vector=(0, 0, 0)):
@@ -248,9 +243,7 @@ class CRA_Assembly(Assembly):
         """
         from compas.geometry import Translation
 
-        self.graph.node_attribute(key, "block").transform(
-            Translation.from_vector(vector)
-        )
+        self.graph.node_attribute(key, "block").transform(Translation.from_vector(vector))
 
     def get_weight_total(self, density=1):
         """Get total assembly weight.
@@ -287,7 +280,3 @@ class CRA_Assembly(Assembly):
         n = self.graph.number_of_nodes()
         w = self.get_weight_total(density)
         return w / n
-
-
-if __name__ == "__main__":
-    pass

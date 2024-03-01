@@ -1,11 +1,13 @@
 from math import radians
+
+from compas.datastructures import Mesh
 from compas.geometry import Rotation
 from compas.geometry import add_vectors
+from compas.geometry import angle_vectors
 from compas.geometry import subtract_vectors
 from compas.geometry import transform_points
-from compas.geometry import angle_vectors
-from compas.datastructures import Mesh
 from compas_assembly.datastructures import Block
+
 from compas_cra.datastructures import CRA_Assembly
 
 
@@ -26,9 +28,7 @@ class Arch(object):
         Number of blocks
     """
 
-    def __init__(
-        self, height, span, thickness, depth, num_blocks=None, extra_support=False
-    ):
+    def __init__(self, height, span, thickness, depth, num_blocks=None, extra_support=False):
         super().__init__()
         self.height = height
         self.span = span

@@ -1,8 +1,8 @@
 """Helper functions to construct matrices for CRA"""
 
 import math as mt
-import numpy as np
 
+import numpy as np
 from compas.geometry import cross_vectors
 from scipy.sparse import csr_matrix
 
@@ -52,9 +52,7 @@ def friction_setup(assembly, mu, penalty=False, friction_net=False):
 
     """
     v_count = num_vertices(assembly)
-    afr = make_afr(
-        v_count, fcon_number=8, mu=mu, penalty=penalty, friction_net=friction_net
-    )
+    afr = make_afr(v_count, fcon_number=8, mu=mu, penalty=penalty, friction_net=friction_net)
     print("Afr: ", afr.shape)
 
     return afr
@@ -86,12 +84,8 @@ def external_force_setup(assembly, density):
     for node in assembly.graph.nodes():
         block = assembly.node_block(node)
         index = key_index[node]
-        p[index][2] = -block.volume() * (
-            block.attributes["density"] if "density" in block.attributes else density
-        )
-        print(
-            (block.attributes["density"] if "density" in block.attributes else density)
-        )
+        p[index][2] = -block.volume() * (block.attributes["density"] if "density" in block.attributes else density)
+        print((block.attributes["density"] if "density" in block.attributes else density))
 
     p = np.array(p, dtype=float)
     p = p[free, :].reshape((-1, 1), order="C")
@@ -218,17 +212,13 @@ def make_aeq(assembly, flip=False, penalty=False):
 
         for interface in assembly.graph.edge_attribute((b_j, b_k), "interfaces"):
             # B_j
-            block_rows, block_cols, block_data = aeq_block(
-                interface, bj_center, not flip, penalty
-            )
+            block_rows, block_cols, block_data = aeq_block(interface, bj_center, not flip, penalty)
             # shift rows and cols
             rows += [row + 6 * key_index[b_j] for row in block_rows]
             cols += [col + shift * count for col in block_cols]
             data += block_data
             # B_k
-            block_rows, block_cols, block_data = aeq_block(
-                interface, bk_center, flip, penalty
-            )
+            block_rows, block_cols, block_data = aeq_block(interface, bk_center, flip, penalty)
             # shift rows and cols
             rows += [row + 6 * key_index[b_k] for row in block_rows]
             cols += [col + shift * count for col in block_cols]
@@ -374,9 +364,7 @@ def make_afr(total_vcount, fcon_number=8, mu=0.8, penalty=False, friction_net=Fa
 
     """
     if penalty:
-        return _make_afr_b(
-            total_vcount, fcon_number=fcon_number, mu=mu, friction_net=friction_net
-        )
+        return _make_afr_b(total_vcount, fcon_number=fcon_number, mu=mu, friction_net=friction_net)
     return _make_afr(total_vcount, fcon_number=8, mu=mu)
 
 
@@ -519,7 +507,3 @@ def _make_afr_b(total_vcount, fcon_number=8, mu=0.8, friction_net=False):
         j += 4
 
     return csr_matrix((data, (rows, cols)))
-
-
-if __name__ == "__main__":
-    pass

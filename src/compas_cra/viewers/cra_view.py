@@ -1,13 +1,17 @@
 """CRA view style using compas_view2"""
 
 from math import sqrt
-import numpy as np
 
+import numpy as np
+from compas.colors import Color
 from compas.datastructures import Mesh
-from compas.geometry import Polyline, Point, Line, Polygon
-from compas.geometry import Rotation, Translation
+from compas.geometry import Line
+from compas.geometry import Point
+from compas.geometry import Polygon
+from compas.geometry import Polyline
+from compas.geometry import Rotation
+from compas.geometry import Translation
 from compas.geometry import is_coplanar
-from compas.utilities import hex_to_rgb
 
 try:
     from compas_view2 import app
@@ -15,10 +19,6 @@ try:
     from compas_view2.shapes import Arrow
 except ImportError:
     pass
-
-
-def hextorgb(hex):
-    return tuple(i / 255 for i in hex_to_rgb(hex))
 
 
 def draw_blocks(assembly, viewer, edge=True, tol=0.0):
@@ -36,24 +36,24 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.0):
             continue
         for edge in block.edges():
             if tol != 0.0:
-                fkeys = block.edge_faces(*edge)
+                fkeys = block.edge_faces(edge)
                 ps = [
                     block.face_center(fkeys[0]),
                     block.face_center(fkeys[1]),
-                    *block.edge_coordinates(*edge),
+                    *block.edge_coordinates(edge),
                 ]
 
                 if is_coplanar(ps, tol=tol):
                     continue
             if assembly.graph.node_attribute(node, "is_support"):
-                supportedges.append(Line(*block.edge_coordinates(*edge)))
+                supportedges.append(Line(*block.edge_coordinates(edge)))
             else:
-                blockedges.append(Line(*block.edge_coordinates(*edge)))
+                blockedges.append(Line(*block.edge_coordinates(edge)))
     if len(blocks) != 0:
         viewer.add(
             Collection(blocks),
             show_faces=True,
-            show_edges=False,
+            show_lines=False,
             opacity=0.6,
             facecolor=(0.9, 0.9, 0.9),
         )
@@ -61,14 +61,14 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.0):
         viewer.add(
             Collection(supports),
             show_faces=True,
-            show_edges=False,
+            show_lines=False,
             opacity=0.5,
-            facecolor=hextorgb("#f79d84"),
+            facecolor=Color.from_hex("#f79d84"),
         )
     if len(blockedges) != 0:
         viewer.add(Collection(blockedges), linewidth=1.5)
     if len(supportedges) != 0:
-        viewer.add(Collection(supportedges), linecolor=hextorgb("#f79d84"), linewidth=4)
+        viewer.add(Collection(supportedges), linecolor=Color.from_hex("#f79d84"), linewidth=4)
 
 
 def draw_interfaces(assembly, viewer):
@@ -79,9 +79,9 @@ def draw_interfaces(assembly, viewer):
         if interface is not None:
             corners = np.array(interface.points)
             faces.append(Polyline(np.vstack((corners, corners[0]))))
-            if assembly.graph.node_attribute(
-                edge[0], "is_support"
-            ) or assembly.graph.node_attribute(edge[1], "is_support"):
+            if assembly.graph.node_attribute(edge[0], "is_support") or assembly.graph.node_attribute(
+                edge[1], "is_support"
+            ):
                 continue
             polygon = Polygon(interface.points)
             interfaces.append(Mesh.from_polygons([polygon]))
@@ -96,14 +96,14 @@ def draw_interfaces(assembly, viewer):
     if len(interfaces) != 0:
         viewer.add(
             Collection(interfaces),
-            show_edges=False,
-            show_vertices=False,
+            show_lines=False,
+            show_points=False,
             facecolor=(0.8, 0.8, 0.8),
         )
     if len(faces) != 0:
         viewer.add(
             Collection(faces),
-            linecolor=hextorgb("#fac05e"),
+            linecolor=Color.from_hex("#fac05e"),
             linewidth=10,
             pointsize=10,
             show_points=True,
@@ -163,13 +163,13 @@ def draw_forces(assembly, viewer, scale=1.0, resultant=True, nodal=False):
             else:
                 res_nn.append(Line(p1, p2))
     if len(locs) != 0:
-        viewer.add(Collection(locs), size=12, color=hextorgb("#386641"))
+        viewer.add(Collection(locs), size=12, color=Color.from_hex("#386641"))
     if len(res_np) != 0:
         viewer.add(Collection(res_np), linewidth=8, linecolor=(0, 0.3, 0))
     if len(res_nn) != 0:
         viewer.add(Collection(res_nn), linewidth=8, linecolor=(0.8, 0, 0))
     if len(fnn) != 0:
-        viewer.add(Collection(fnn), linewidth=5, linecolor=hextorgb("#00468b"))
+        viewer.add(Collection(fnn), linewidth=5, linecolor=Color.from_hex("#00468b"))
     if len(fnp) != 0:
         viewer.add(Collection(fnp), linewidth=5, linecolor=(1, 0, 0))
     if len(ft) != 0:
@@ -177,7 +177,6 @@ def draw_forces(assembly, viewer, scale=1.0, resultant=True, nodal=False):
 
 
 def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
-
     locs = []
     res_np = []
     res_nn = []
@@ -228,7 +227,9 @@ def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 resultant_f = (w * sum_n + u * sum_u + v * sum_v) * 0.5 * scale
                 # print((w * sum_n + u * sum_u + v * sum_v).length * 100000, "edge: ", edge)
 
-                # if assembly.graph.node_attribute(edge[0], 'is_support') or assembly.graph.node_attribute(edge[1], 'is_support'):
+                # if assembly.graph.node_attribute(edge[0], "is_support") or assembly.graph.node_attribute(
+                #     edge[1], "is_support"
+                # ):
                 #     print((w * sum_n + u * sum_u + v * sum_v).z)
                 # total_reaction += abs((w * sum_n + u * sum_u + v * sum_v).z * 100000)
 
@@ -240,13 +241,13 @@ def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 else:
                     res_nn.append(Line(p1, p2))
     if len(locs) != 0:
-        viewer.add(Collection(locs), size=12, color=hextorgb("#386641"))
+        viewer.add(Collection(locs), pointsize=12, pointcolor=Color.from_hex("#386641"))
     if len(res_np) != 0:
         viewer.add(Collection(res_np), linewidth=8, linecolor=(0, 0.3, 0))
     if len(res_nn) != 0:
         viewer.add(Collection(res_nn), linewidth=8, linecolor=(0.8, 0, 0))
     if len(fnn) != 0:
-        viewer.add(Collection(fnn), linewidth=5, linecolor=hextorgb("#00468b"))
+        viewer.add(Collection(fnn), linewidth=5, linecolor=Color.from_hex("#00468b"))
     if len(fnp) != 0:
         viewer.add(Collection(fnp), linewidth=5, linecolor=(1, 0, 0))
     if len(ft) != 0:
@@ -263,9 +264,9 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
     ft = []
     for edge in assembly.graph.edges():
         thres = 1e-6
-        if assembly.graph.node_attribute(
-            edge[0], "is_support"
-        ) and not assembly.graph.node_attribute(edge[1], "is_support"):
+        if assembly.graph.node_attribute(edge[0], "is_support") and not assembly.graph.node_attribute(
+            edge[1], "is_support"
+        ):
             flip = False
         else:
             flip = True
@@ -338,10 +339,7 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                     resultant_pos = np.average(
                         np.array(corners),
                         axis=0,
-                        weights=[
-                            sqrt(force["c_u"] ** 2 + force["c_v"] ** 2)
-                            for force in forces
-                        ],
+                        weights=[sqrt(force["c_u"] ** 2 + force["c_v"] ** 2) for force in forces],
                     )
                     friction = True
                 else:
@@ -371,30 +369,28 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                         body_width=0.02,
                     )
                 if friction:
-                    viewer.add(f, facecolor=(1.0, 0.5, 0.0), show_edges=False)
+                    viewer.add(f, facecolor=(1.0, 0.5, 0.0), show_lines=False)
                 if not is_tension:
                     res_np.append(f)
                 else:
                     res_nn.append(f)
     if len(locs) != 0:
-        viewer.add(Collection(locs), size=12, color=hextorgb("#386641"))
+        viewer.add(Collection(locs), size=12, color=Color.from_hex("#386641"))
     if len(res_np) != 0:
-        viewer.add(Collection(res_np), facecolor=hextorgb("#386641"), show_edges=False)
+        viewer.add(Collection(res_np), facecolor=Color.from_hex("#386641"), show_lines=False)
     if len(res_nn) != 0:
-        viewer.add(Collection(res_nn), facecolor=(0.8, 0, 0), show_edges=False)
+        viewer.add(Collection(res_nn), facecolor=(0.8, 0, 0), show_lines=False)
     if len(fnp) != 0:
         viewer.add(
             Collection(fnp),
-            facecolor=hextorgb("#00468b"),
-            show_edges=False,
+            facecolor=Color.from_hex("#00468b"),
+            show_lines=False,
             opacity=0.5,
         )
     if len(fnn) != 0:
-        viewer.add(Collection(fnn), facecolor=(1, 0, 0), show_edges=False, opacity=0.5)
+        viewer.add(Collection(fnn), facecolor=(1, 0, 0), show_lines=False, opacity=0.5)
     if len(ft) != 0:
-        viewer.add(
-            Collection(ft), facecolor=(1.0, 0.5, 0.0), show_edges=False, opacity=0.5
-        )
+        viewer.add(Collection(ft), facecolor=(1.0, 0.5, 0.0), show_lines=False, opacity=0.5)
 
 
 def draw_displacements(assembly, viewer, dispscale=1.0, tol=0.0):
@@ -419,19 +415,19 @@ def draw_displacements(assembly, viewer, dispscale=1.0, tol=0.0):
         nodes.append(Point(*new_block.center()))
         for edge in block.edges():
             if tol != 0.0:
-                fkeys = block.edge_faces(*edge)
+                fkeys = block.edge_faces(edge)
                 ps = [
                     block.face_center(fkeys[0]),
                     block.face_center(fkeys[1]),
-                    *block.edge_coordinates(*edge),
+                    *block.edge_coordinates(edge),
                 ]
                 if is_coplanar(ps, tol=tol):
                     continue
-            blocks.append(Line(*new_block.edge_coordinates(*edge)))
+            blocks.append(Line(*new_block.edge_coordinates(edge)))
     if len(blocks) != 0:
         viewer.add(Collection(blocks), linewidth=1, linecolor=(0.7, 0.7, 0.7))
     if len(nodes) != 0:
-        viewer.add(Collection(nodes), color=(0.7, 0.7, 0.7))
+        viewer.add(Collection(nodes), pointcolor=(0.7, 0.7, 0.7))
 
 
 def draw_weights(assembly, viewer, scale=1.0, density=1.0):
@@ -461,11 +457,11 @@ def draw_weights(assembly, viewer, scale=1.0, density=1.0):
     # print("total self-weight: ", total_weights)
 
     if len(supports) != 0:
-        viewer.add(Collection(supports), size=20, color=hextorgb("#ee6352"))
+        viewer.add(Collection(supports), pointsize=20, pointcolor=Color.from_hex("#ee6352"))
     if len(blocks) != 0:
-        viewer.add(Collection(blocks), size=30, color=hextorgb("#3284a0"))
+        viewer.add(Collection(blocks), pointsize=30, pointcolor=Color.from_hex("#3284a0"))
     if len(weights) != 0:
-        viewer.add(Collection(weights), facecolor=hextorgb("#59cd90"), show_edges=False)
+        viewer.add(Collection(weights), facecolor=Color.from_hex("#59cd90"), show_lines=False)
 
 
 def cra_view(
@@ -622,7 +618,3 @@ def cra_view_ex(
         draw_weights(assembly, viewer, scale, density)
     if displacements:
         draw_displacements(assembly, viewer, dispscale, tol)
-
-
-if __name__ == "__main__":
-    pass

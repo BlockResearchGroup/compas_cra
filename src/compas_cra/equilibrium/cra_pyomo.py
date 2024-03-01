@@ -1,15 +1,23 @@
 """Nonlinear formulation to solve Coupled Rigid-block Equilibrium Using Pyomo + IPOPT"""
 
 import time
+
 import numpy as np
 import pyomo.environ as pyo
-
 from compas_assembly.datastructures import Assembly
-from .cra_helper import unit_basis, num_vertices, num_free
-from .cra_helper import equilibrium_setup, friction_setup, external_force_setup
-from .pyomo_helper import bounds, objectives, constraints
+
+from .cra_helper import equilibrium_setup
+from .cra_helper import external_force_setup
+from .cra_helper import friction_setup
+from .cra_helper import num_free
+from .cra_helper import num_vertices
+from .cra_helper import unit_basis
+from .pyomo_helper import bounds
+from .pyomo_helper import constraints
+from .pyomo_helper import objectives
+from .pyomo_helper import pyomo_result_assembly
+from .pyomo_helper import pyomo_result_check
 from .pyomo_helper import static_equilibrium_constraints
-from .pyomo_helper import pyomo_result_check, pyomo_result_assembly
 
 
 def cra_solve(
@@ -45,10 +53,10 @@ def cra_solve(
     :class:`~compas_assembly.datastructures.Assembly`
         The assembly is updated in place, also return Assembly for compas.rpc and compas.cloud
 
-
     Notes
     -----
-    This function solves the following optimisation problem, `Eq.(11) <https://www.sciencedirect.com/science/article/pii/S0010448522000161?via%3Dihub#fd11>`_ :
+    This function solves the following optimisation problem,
+    `Eq.(11) <https://www.sciencedirect.com/science/article/pii/S0010448522000161?via%3Dihub#fd11>`_ :
 
     .. math::
 
@@ -68,8 +76,7 @@ def cra_solve(
     For more information please check our research paper:
     `Coupled Rigid-Block Analysis: Stability-Aware Design of Complex Discrete-Element Assemblies <https://doi.org/10.1016/j.cad.2022.103216>`_
 
-
-    """
+    """  # noqa: E501
 
     if timer:
         start_time = time.time()
@@ -114,9 +121,7 @@ def cra_solve(
     model.d_bnd = pyo.Constraint(model.d_id, rule=bound_d)
     model.c_con = pyo.Constraint(model.v_id, rule=constraint_contact)
     model.p_con = pyo.Constraint(model.v_id, rule=constraint_no_penetration)
-    model.ft_dt = pyo.Constraint(
-        model.v_id, [i for i in range(3)], rule=constraint_ft_dt
-    )
+    model.ft_dt = pyo.Constraint(model.v_id, [i for i in range(3)], rule=constraint_ft_dt)
 
     if timer:
         print("--- set up time: %s seconds ---" % (time.time() - start_time))
@@ -148,7 +153,3 @@ def cra_solve(
     pyomo_result_assembly(model, assembly, penalty=False, verbose=verbose)
 
     return assembly
-
-
-if __name__ == "__main__":
-    pass

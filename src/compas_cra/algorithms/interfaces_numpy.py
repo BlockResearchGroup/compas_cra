@@ -2,14 +2,13 @@
 
 from math import fabs
 
+from compas.geometry import Frame
+from compas.geometry import local_to_world_coordinates_numpy
 from numpy import array
 from numpy import float64
 from scipy.linalg import solve
 from scipy.spatial import cKDTree
 from shapely.geometry import Polygon
-
-from compas.geometry import Frame
-from compas.geometry import local_to_world_coordinates_numpy
 
 
 def find_nearest_neighbours(cloud, nmax):
@@ -73,7 +72,6 @@ def assembly_interfaces_numpy(assembly, nmax=10, tmax=1e-6, amin=1e-1):
     # p1:   2D polygon of f1 in local coordinates
 
     for node in assembly.nodes():
-
         i = node_index[node]
 
         block = blocks[i]
@@ -100,25 +98,20 @@ def assembly_interfaces_numpy(assembly, nmax=10, tmax=1e-6, amin=1e-1):
                 if n in assembly.graph.edge and node in assembly.graph.edge[n]:
                     continue
 
-                if assembly.graph.node_attribute(
-                    node, "is_support"
-                ) and assembly.graph.node_attribute(n, "is_support"):
+                if assembly.graph.node_attribute(node, "is_support") and assembly.graph.node_attribute(
+                    n, "is_support"
+                ):
                     continue
 
                 nbr = blocks[j]
                 k_i = {key: index for index, key in enumerate(nbr.vertices())}
-                xyz = (
-                    array(nbr.vertices_attributes("xyz"), dtype=float64)
-                    .reshape((-1, 3))
-                    .T
-                )
+                xyz = array(nbr.vertices_attributes("xyz"), dtype=float64).reshape((-1, 3)).T
                 rst = solve(A.T, xyz - o).T.tolist()
                 rst = {key: rst[k_i[key]] for key in nbr.vertices()}
 
                 faces = nbr.faces()
 
                 for f1 in faces:
-
                     rst1 = [rst[key] for key in nbr.face_vertices(f1)]
 
                     if any(fabs(t) > tmax for r, s, t in rst1):
@@ -133,25 +126,16 @@ def assembly_interfaces_numpy(assembly, nmax=10, tmax=1e-6, amin=1e-1):
                         area = intersection.area
 
                         if area >= amin:
-                            coords = [
-                                [x, y, 0.0] for x, y, z in intersection.exterior.coords
-                            ]
+                            coords = [[x, y, 0.0] for x, y, z in intersection.exterior.coords]
 
-                            coords = local_to_world_coordinates_numpy(
-                                Frame(o, A[0], A[1]), coords
-                            )
+                            coords = local_to_world_coordinates_numpy(Frame(o, A[0], A[1]), coords)
 
                             assembly.add_to_interfaces(
                                 node,
                                 n,
-                                type="face_face",
                                 size=area,
                                 points=coords.tolist()[:-1],
                                 frame=Frame(origin, uvw[0], uvw[1]),
                             )
 
     return assembly
-
-
-if __name__ == "__main__":
-    pass

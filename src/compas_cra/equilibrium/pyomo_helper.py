@@ -1,7 +1,7 @@
 """Some functions to help building pyomo optimisation problems"""
 
-from typing import Literal
 from typing import Callable
+from typing import Literal
 
 import pyomo.environ as pyo
 from numpy import zeros
@@ -84,16 +84,16 @@ def objectives(
     solver: Literal["cra", "cra_penalty", "rbe"],
     weights: tuple = (1e0, 1e0, 1e6, 1e0),
 ) -> Callable:
-    """Objective functions for pyomo.
+    r"""Objective functions for pyomo.
 
     Parameters
     ----------
     solver : str
-        * cra: CRA objective, :math:`W_{compression} * ||f_n||_2^2 + W_{α} * ||α||_2^2`
-        * cra_penalty: CRA penalty objective, :math:`W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{α} * ||α||_2^2`
+        * cra: CRA objective, :math:`W_{compression} * ||f_n||_2^2 + W_{\alpha} * ||\alpha||_2^2`
+        * cra_penalty: CRA penalty objective, :math:`W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{\alpha} * ||\alpha||_2^2`
         * rbe: RBE objective, :math:`W_{compression} * ||{f_n}^+||_2^2 + W_{tension} * ||{f_n}^-||_2^2 + W_{friction} * ||{f_u}||_2^2 + W_{friction} * ||{f_v}||_2^2`
     weights : tuple, optional
-        weighting factors, :math:`(W_{α}, W_{compression}, W_{tension}, W_{friction})`
+        weighting factors, :math:`(W_{\alpha}, W_{compression}, W_{tension}, W_{friction})`
 
     Returns
     -------
@@ -105,7 +105,7 @@ def objectives(
 
     dsodijsio jdois jois
 
-    """
+    """  # noqa: E501
 
     def obj_rbe(model):
         """RBE objective function"""
@@ -165,8 +165,8 @@ def constraints(
         * penalty_contact: penalty formulation contact constraint, :math:`{f_{jkn}^{i+}}\:({\delta d_{jkn}^i} + eps) = 0`
         * fn_np: fn+ and fn- cannot coexist, :math:`{f_{jkn}^{i+}} \: {f_{jkn}^{i-}} = 0`
         * no_penetration: no penetration constraint, :math:`{f_{jkn}^{i+}}\:({\delta d_{jkn}^i} + eps) = 0`
-        * ft_dt: friction and virtual sliding alignment, :math:`f_{jkt}^{i} = -{α_{jk}^i} \: \delta{d}_{jkt}^{i}`
-        * penalty_ft_dt: penalty formulation friction and virtual sliding alignment, :math:`f_{jkt}^{i} = -{α_{jk}^i} \: \delta{d}_{jkt}^{i}`
+        * ft_dt: friction and virtual sliding alignment, :math:`f_{jkt}^{i} = -{\alpha_{jk}^i} \: \delta{d}_{jkt}^{i}`
+        * penalty_ft_dt: penalty formulation friction and virtual sliding alignment, :math:`f_{jkt}^{i} = -{\alpha_{jk}^i} \: \delta{d}_{jkt}^{i}`
     eps : float, optional
         epsilon, overlapping parameter
 
@@ -175,7 +175,7 @@ def constraints(
     Callable
          constraint function for pyomo
 
-    """
+    """  # noqa: E501
 
     def contact_con(model, i):
         """contact constraint"""
@@ -289,12 +289,8 @@ def pyomo_result_assembly(model, assembly, penalty=False, verbose=False):
                     {
                         "c_np": model.f[offset + shift * i + 0].value,
                         "c_nn": model.f[offset + shift * i + 1].value if penalty else 0,
-                        "c_u": model.f[
-                            offset + shift * i + 1 + (1 if penalty else 0)
-                        ].value,
-                        "c_v": model.f[
-                            offset + shift * i + 2 + (1 if penalty else 0)
-                        ].value,
+                        "c_u": model.f[offset + shift * i + 1 + (1 if penalty else 0)].value,
+                        "c_v": model.f[offset + shift * i + 2 + (1 if penalty else 0)].value,
                     }
                 )
             offset += shift * n
