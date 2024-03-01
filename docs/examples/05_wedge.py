@@ -1,15 +1,14 @@
 """Example to simulate wedge example type-a, type-b, type-c, type-d"""
 
-import os
 import math as mt
+import os
+
 import compas
 import compas_cra
-
-from compas_cra.datastructures import CRA_Assembly
 from compas_cra.algorithms import assembly_interfaces_numpy
+from compas_cra.datastructures import CRA_Assembly
 from compas_cra.equilibrium import cra_solve
 from compas_cra.viewers import cra_view
-
 
 mu = 0.84  # friction coefficient
 deg = 90  # rotation in degree

@@ -1,9 +1,9 @@
 """Parametric Arch showing penalty solve"""
 
-from compas_cra.viewers import cra_view
-from compas_cra.equilibrium import cra_penalty_solve
 from compas_cra.algorithms import assembly_interfaces_numpy
+from compas_cra.equilibrium import cra_penalty_solve
 from compas_cra.geometry import Arch
+from compas_cra.viewers import cra_view
 
 height = 5
 span = 10

@@ -12,9 +12,9 @@ from compas_cra.viewers import cra_view
 deg = 20  # rotation angle in degree
 rotate_axis = [0, 1, 0]  # around y-axis
 
-support = Box(Frame.worldXY(), 1, 1, 1)
-free1 = Box(Frame.worldXY().transformed(Translation.from_vector([0, 0, 1])), 1, 1, 1)
-free2 = Box(Frame.worldXY().transformed(Translation.from_vector([0, 0, 2])), 1, 1, 1)
+support = Box(1, 1, 1)
+free1 = Box(1, 1, 1, frame=Frame.worldXY().transformed(Translation.from_vector([0, 0, 1])))
+free2 = Box(1, 1, 1, frame=Frame.worldXY().transformed(Translation.from_vector([0, 0, 2])))
 
 assembly = CRA_Assembly()
 assembly.add_block(Block.from_shape(support), node=0)
@@ -40,6 +40,4 @@ assembly.add_interfaces_from_meshes([interface2], 1, 2)
 assembly.rotate_assembly([0, 0, 0], rotate_axis, deg)
 
 cra_solve(assembly, verbose=True, timer=True)
-cra_view(
-    assembly, resultant=False, nodal=True, grid=True, displacements=True, dispscale=10
-)
+cra_view(assembly, resultant=False, nodal=True, grid=True, displacements=True, dispscale=10)

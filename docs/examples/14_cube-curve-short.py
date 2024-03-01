@@ -1,9 +1,9 @@
 """Example to calculate cube short with curved interfaces"""
 
 import os
+
 import compas
 import compas_cra
-
 from compas_cra.datastructures import CRA_Assembly
 from compas_cra.equilibrium import cra_solve
 from compas_cra.viewers import cra_view

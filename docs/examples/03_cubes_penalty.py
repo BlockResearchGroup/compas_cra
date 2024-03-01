@@ -4,18 +4,16 @@ from compas.geometry import Box
 from compas.geometry import Frame
 from compas.geometry import Translation
 from compas_assembly.datastructures import Block
-from compas_cra.datastructures import CRA_Assembly
 from compas_cra.algorithms import assembly_interfaces_numpy
+from compas_cra.datastructures import CRA_Assembly
 from compas_cra.equilibrium import cra_penalty_solve
 from compas_cra.viewers import cra_view
 
 deg = 40  # rotation in degree
 rotate_axis = [0, 1, 0]  # around y-axis
 
-support = Box(Frame.worldXY(), 1, 1, 1)  # supporting block
-free1 = Box(
-    Frame.worldXY().transformed(Translation.from_vector([0.75, 0, 1])), 1, 1, 1
-)  # block to analyse
+support = Box(1, 1, 1)  # supporting block
+free1 = Box(1, 1, 1, frame=Frame.worldXY().transformed(Translation.from_vector([0.75, 0, 1])))  # block to analyse
 
 assembly = CRA_Assembly()
 assembly.add_block(Block.from_shape(support), node=0)

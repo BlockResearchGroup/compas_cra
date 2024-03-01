@@ -1,9 +1,9 @@
 """Example to calculate interlocking joint"""
 
 import os
+
 import compas
 import compas_cra
-
 from compas_cra.datastructures import CRA_Assembly
 from compas_cra.equilibrium import cra_solve
 from compas_cra.viewers import cra_view
@@ -21,9 +21,7 @@ assembly.set_boundary_conditions([0])
 
 assembly.rotate_assembly([0, 0, 0], rotate_axis, deg)
 
-cra_solve(
-    assembly, verbose=True, timer=True, density=density, mu=mu, eps=1e-3, d_bnd=1e-2
-)
+cra_solve(assembly, verbose=True, timer=True, density=density, mu=mu, eps=1e-3, d_bnd=1e-2)
 cra_view(
     assembly,
     resultant=True,

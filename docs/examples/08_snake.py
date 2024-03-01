@@ -1,12 +1,13 @@
 """Simple example to calculate three stacked cubes"""
 
 import os
+
 import compas
 import compas_cra
-
-from compas_cra.datastructures import CRA_Assembly
 from compas_cra.algorithms import assembly_interfaces_numpy
-from compas_cra.equilibrium import cra_solve, cra_penalty_solve
+from compas_cra.datastructures import CRA_Assembly
+from compas_cra.equilibrium import cra_penalty_solve
+from compas_cra.equilibrium import cra_solve
 from compas_cra.viewers import cra_view
 
 mu = 0.7
