@@ -2,10 +2,10 @@ name: cra
 channels:
   - conda-forge
 dependencies:
-  - python
+  - python >=3.9,<3.11
   - compas
   - compas_view2
-  - ipopt==3.11.1
+  - ipopt ==3.11.1
   - pip:
       - -r requirements.txt
       - -r requirements-dev.txt
