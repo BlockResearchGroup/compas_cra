@@ -76,7 +76,7 @@ commit = true
 tag = true
 
 [[tool.bumpversion.files]]
-filename = "compas_cra/__init__.py"
+filename = "src/compas_cra/__init__.py"
 search = "{current_version}"
 replace = "{new_version}"
 
