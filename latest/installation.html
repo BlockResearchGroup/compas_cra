@@ -516,13 +516,11 @@ document.write(`
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/compas_cra.html">compas_cra</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.datastructures.html">Classes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.algorithms.html">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.equilibrium.html">Solvers</a></li>
-
-
-<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.geometry.html">Classes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.viewers.html">CRA Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.datastructures.html">datastructures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.algorithms.html">algorithms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.equilibrium.html">equilibrium</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.geometry.html">geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.viewers.html">viewers</a></li>
 </ul>
 </li>
 </ul>
@@ -636,7 +634,7 @@ document.write(`
 conda<span class="w"> </span>activate<span class="w"> </span>cra
 </pre></div>
 </div>
-<p>Go to your directory and clone <a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a>:</p>
+<p>Go to your directory and clone <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:BlockResearchGroup/compas_cra.git
 <span class="nb">cd</span><span class="w"> </span>compas_cra
 </pre></div>
@@ -665,7 +663,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>conda-forge
 </pre></div>
 </div>
-<p>Clone <a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a>:</p>
+<p>Clone <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:BlockResearchGroup/compas_cra.git
 <span class="nb">cd</span><span class="w"> </span>compas_cra
 </pre></div>
@@ -716,7 +714,7 @@ tests/test_rbe.py<span class="w"> </span>.<span class="w">                      
 </section>
 <section id="rhino-installation">
 <h2>Rhino Installation</h2>
-<p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> is developed independent of the functionality of CAD software.
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code> is developed independent of the functionality of CAD software.
 However, CAD software can be useful to create geometrical objects.
 For a more detailed information on how to install COMPAS and its packages for Rhino,
 please refer to <a class="reference external" href="https://compas.dev/compas/latest/gettingstarted/rhino.html">Working in Rhino</a> page of the COMPAS documentation.</p>
@@ -732,7 +730,7 @@ $ python -m compas_rhino.install -p compas_cra
 <h2>Known issues (Windows)</h2>
 <ul class="simple">
 <li><p>pyomo cannot find ipopt location: <code class="docutils literal notranslate"><span class="pre">pyomo.common.errors.ApplicationError:</span> <span class="pre">No</span> <span class="pre">executable</span> <span class="pre">found</span> <span class="pre">for</span> <span class="pre">solver</span> <span class="pre">'ipopt'</span></code>. Please refer this thread for solution: <a class="reference external" href="https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1">https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1</a></p></li>
-<li><p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> uses <a class="reference external" href="https://coin-or.github.io/Ipopt/">IPOPT</a> solver, so it might not work for PC with AMD processor.</p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code> uses <a class="reference external" href="https://coin-or.github.io/Ipopt/">IPOPT</a> solver, so it might not work for PC with AMD processor.</p></li>
 </ul>
 </section>
 </section>
