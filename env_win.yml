@@ -3,8 +3,8 @@ channels:
   - conda-forge
 dependencies:
   - python
-  - compas ==1.16.0
-  - compas_view2 ==0.7.0
+  - compas
+  - compas_view2
   - ipopt==3.11.1
   - pip:
       - -r requirements.txt
