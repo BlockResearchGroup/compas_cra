@@ -516,6 +516,12 @@ document.write(`
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/compas_cra.html">compas_cra</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.datastructures.html">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.algorithms.html">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.equilibrium.html">Solvers</a></li>
+
+
+<li class="toctree-l3"><a class="reference internal" href="api/compas_cra.geometry.html">Classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/compas_cra.viewers.html">CRA Viewer</a></li>
 </ul>
 </li>
@@ -643,9 +649,9 @@ document.write(`
 <h3>5. Solving equilibrium</h3>
 <p><a class="reference internal" href="api/compas_cra.html#module-compas_cra" title="compas_cra"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code></a> provides three solvers:</p>
 <ul class="simple">
-<li><p>RBE Solve: <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.rbe_solve</span></code>.</p></li>
-<li><p>CRA Solve: <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_solve</span></code>.</p></li>
-<li><p>CRA Penalty Solve: <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_penalty_solve</span></code>.</p></li>
+<li><p>RBE Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.rbe_solve.html" title="compas_cra.equilibrium.rbe_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.rbe_solve</span></code></a>.</p></li>
+<li><p>CRA Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_solve.html" title="compas_cra.equilibrium.cra_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_solve</span></code></a>.</p></li>
+<li><p>CRA Penalty Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_penalty_solve.html" title="compas_cra.equilibrium.cra_penalty_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_penalty_solve</span></code></a>.</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_solve</span>
 <span class="n">cra_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -714,7 +720,7 @@ to select Rhino mesh blocks and export to assembly data structure as a <code cla
 <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>After loading the <code class="docutils literal notranslate"><span class="pre">.json</span></code> file and convert it to <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.datastructures.CRA_Assembly</span></code>,
+<p>After loading the <code class="docutils literal notranslate"><span class="pre">.json</span></code> file and convert it to <a class="reference internal" href="api/generated/compas_cra.datastructures.CRA_Assembly.html" title="compas_cra.datastructures.CRA_Assembly"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.datastructures.CRA_Assembly</span></code></a>,
 we can follow the previous step <a class="reference internal" href="#bc"><span class="std std-ref">3. Boundary conditions</span></a> for the analysis.</p>
 </section>
 <section id="export-mesh-blocks-and-interfaces-as-assembly-json-file">
