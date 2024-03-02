@@ -1,5 +1,6 @@
 attrs >=17.4
 black >=22.12.0
+build
 bump-my-version
 compas_invocations2
 # compas_notebook
