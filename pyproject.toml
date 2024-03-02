@@ -13,7 +13,7 @@ keywords = []
 authors = [{ name = "Gene Ting-Chun Kao", email = "kao@arch.ethz.ch" }]
 license = { file = "LICENSE" }
 readme = "README.md"
-requires-python = ">=3.9,<3.11"
+requires-python = ">=3.9"
 dynamic = ['dependencies', 'optional-dependencies', 'version']
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -22,6 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
 
 [project.urls]

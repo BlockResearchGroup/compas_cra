@@ -2,11 +2,16 @@ name: cra
 channels:
   - conda-forge
 dependencies:
-  - python >=3.9,<3.11
+  - git
+  - python ==3.9
+  - pip
   - compas
   - compas_view2
   - ipopt ==3.11.1
+  - pyomo ==6.4.2
+  - matplotlib
   - pip:
-      - -r requirements.txt
+      - git+https://github.com/compas-dev/compas_view2.git@compas2
+      - compas_assembly >=0.7.0
       - -r requirements-dev.txt
       - -e .
