@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+* Migrate from compas_view2 to compas_viewer 
 
 ### Removed
 

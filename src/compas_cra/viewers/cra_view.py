@@ -1,4 +1,4 @@
-"""CRA view style using compas_view2"""
+"""CRA view style using compas_viewer"""
 
 from math import sqrt
 
@@ -552,7 +552,7 @@ def cra_view_ex(
 
     Parameters
     ----------
-    viewer : compas_view2.app.App
+    viewer : compas_viewer.Viewer
         External viewer object.
     assembly : :class:`~compas_assembly.datastructures.Assembly`
         The rigid block assembly.
