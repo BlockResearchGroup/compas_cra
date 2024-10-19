@@ -3,15 +3,14 @@ channels:
   - conda-forge
 dependencies:
   - git
-  - python ==3.9
+  - python ==3.10
   - pip
   - compas
-  - compas_view2
-  - ipopt
+  - compas_viewer
+  - ipopt ==3.14.5
   - pyomo ==6.4.2
   - matplotlib
   - pip:
-      - git+https://github.com/compas-dev/compas_view2.git@compas2
       - compas_assembly >=0.7.0
       - -r requirements-dev.txt
       - -e .
