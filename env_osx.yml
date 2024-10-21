@@ -10,5 +10,4 @@ dependencies:
   - pyomo ==6.4.2
   - pip:
       - compas_assembly >=0.7.0
-      - -r requirements-dev.txt
-      - -e .
+      - -e .[dev]
