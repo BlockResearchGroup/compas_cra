@@ -4,6 +4,7 @@ import math as mt
 import os
 
 import compas
+
 import compas_cra
 from compas_cra.algorithms import assembly_interfaces_numpy
 from compas_cra.datastructures import CRA_Assembly
@@ -24,6 +25,7 @@ if axis == "x-axis":
 if axis == "xy30-axis":
     rotate_axis = [mt.sqrt(3), 1, 0]  # rotate around xy30-axis
 
+# conver to COMPAS 2 data format
 assembly = compas.json_load(FILE_I)
 assembly = assembly.copy(cls=CRA_Assembly)
 assembly.set_boundary_conditions([0, 1])

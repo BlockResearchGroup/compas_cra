@@ -3,12 +3,14 @@
 import os
 
 import compas
+
 import compas_cra
 from compas_cra.algorithms import assembly_interfaces_numpy
 from compas_cra.datastructures import CRA_Assembly
 from compas_cra.equilibrium import cra_solve
 from compas_cra.viewers import cra_view
 
+# convert to COMPAS 2 data format
 FILE_I = os.path.join(compas_cra.SAMPLE, "cubes.json")
 
 assembly = compas.json_load(FILE_I)
