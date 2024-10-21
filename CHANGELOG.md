@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Removed `matplotlib` from env files.
 * Removed `pip` requirements.
+* Removed incompatible interface info.
 
 
 ## [0.4.0] 2024-03-02
