@@ -39,6 +39,21 @@ def replace_untyped_graph_values(olddata, newdata):
                 newdata[key] = value
 
 
+def clean_up_interface_data(olddata):
+    if isinstance(olddata, dict):
+        for key, value in olddata.items():
+            if isinstance(value, dict):
+                if "type" in value and "interaction" in value and "viewmesh" in value:
+                    print("here")
+                    del value["type"]
+                    del value["interaction"]
+                    del value["viewmesh"]
+            clean_up_interface_data(value)
+    elif isinstance(olddata, list):
+        for item in olddata:
+            clean_up_interface_data(item)
+
+
 here = pathlib.Path(__file__).parent
 
 for filepath in here.iterdir():
@@ -53,6 +68,8 @@ for filepath in here.iterdir():
         olddata = newdata
         newdata = {}
         replace_untyped_graph_values(olddata, newdata)
+
+        clean_up_interface_data(newdata)
 
     with open(here / f"{filepath.stem}.json", "w+") as f:
         json.dump(newdata, f)
