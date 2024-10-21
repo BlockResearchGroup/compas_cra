@@ -1,4 +1,4 @@
-"""CRA view style using compas_view2"""
+"""CRA view style using compas_viewer"""
 
 from math import sqrt
 
@@ -11,14 +11,29 @@ from compas.geometry import Polygon
 from compas.geometry import Polyline
 from compas.geometry import Rotation
 from compas.geometry import Translation
+from compas.geometry import Vector
 from compas.geometry import is_coplanar
+from compas_viewer import Viewer
+from compas_viewer.config import Config
 
-try:
-    from compas_view2 import app
-    from compas_view2.collections import Collection
-    from compas_view2.shapes import Arrow
-except ImportError:
-    pass
+
+class Arrow:
+    def __init__(self, position=[0, 0, 0], direction=[0, 0, 1], linewidth=0.02):
+        super().__init__()
+        self.position = Vector(*position)
+        self.direction = Vector(*direction)
+        self.linewidth = linewidth
+
+    def add_to_scene(self, viewer, facecolor: Color, opacity=1):
+        viewer.scene.add(
+            Vector(*self.direction),
+            anchor=Point(*self.position),
+            facecolor=facecolor,
+            linecolor=facecolor,
+            linewidth=self.linewidth,
+            show_lines=True,
+            opacity=opacity,
+        )
 
 
 def draw_blocks(assembly, viewer, edge=True, tol=0.0):
@@ -50,25 +65,25 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.0):
             else:
                 blockedges.append(Line(*block.edge_coordinates(edge)))
     if len(blocks) != 0:
-        viewer.add(
-            Collection(blocks),
+        viewer.scene.add(
+            blocks,
             show_faces=True,
             show_lines=False,
             opacity=0.6,
-            facecolor=(0.9, 0.9, 0.9),
+            facecolor=Color(0.9, 0.9, 0.9),
         )
     if len(supports) != 0:
-        viewer.add(
-            Collection(supports),
+        viewer.scene.add(
+            supports,
             show_faces=True,
             show_lines=False,
             opacity=0.5,
             facecolor=Color.from_hex("#f79d84"),
         )
     if len(blockedges) != 0:
-        viewer.add(Collection(blockedges), linewidth=1.5)
+        viewer.scene.add(blockedges, linewidth=1.5)
     if len(supportedges) != 0:
-        viewer.add(Collection(supportedges), linecolor=Color.from_hex("#f79d84"), linewidth=4)
+        viewer.scene.add(supportedges, linecolor=Color.from_hex("#f79d84"), linewidth=4)
 
 
 def draw_interfaces(assembly, viewer):
@@ -94,15 +109,15 @@ def draw_interfaces(assembly, viewer):
             interfaces.append(Mesh.from_polygons([polygon]))
 
     if len(interfaces) != 0:
-        viewer.add(
-            Collection(interfaces),
+        viewer.scene.add(
+            interfaces,
             show_lines=False,
             show_points=False,
             facecolor=(0.8, 0.8, 0.8),
         )
     if len(faces) != 0:
-        viewer.add(
-            Collection(faces),
+        viewer.scene.add(
+            faces,
             linecolor=Color.from_hex("#fac05e"),
             linewidth=10,
             pointsize=10,
@@ -163,17 +178,17 @@ def draw_forces(assembly, viewer, scale=1.0, resultant=True, nodal=False):
             else:
                 res_nn.append(Line(p1, p2))
     if len(locs) != 0:
-        viewer.add(Collection(locs), size=12, color=Color.from_hex("#386641"))
+        viewer.scene.add(locs, size=12, color=Color.from_hex("#386641"))
     if len(res_np) != 0:
-        viewer.add(Collection(res_np), linewidth=8, linecolor=(0, 0.3, 0))
+        viewer.scene.add(res_np, linewidth=8, linecolor=Color(0, 0.3, 0))
     if len(res_nn) != 0:
-        viewer.add(Collection(res_nn), linewidth=8, linecolor=(0.8, 0, 0))
+        viewer.scene.add(res_nn, linewidth=8, linecolor=Color(0.8, 0, 0))
     if len(fnn) != 0:
-        viewer.add(Collection(fnn), linewidth=5, linecolor=Color.from_hex("#00468b"))
+        viewer.scene.add(fnn, linewidth=5, linecolor=Color.from_hex("#00468b"))
     if len(fnp) != 0:
-        viewer.add(Collection(fnp), linewidth=5, linecolor=(1, 0, 0))
+        viewer.scene.add(fnp, linewidth=5, linecolor=Color(1, 0, 0))
     if len(ft) != 0:
-        viewer.add(Collection(ft), linewidth=5, linecolor=(1.0, 0.5, 0.0))
+        viewer.scene.add(ft, linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
 
 
 def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
@@ -241,17 +256,17 @@ def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 else:
                     res_nn.append(Line(p1, p2))
     if len(locs) != 0:
-        viewer.add(Collection(locs), pointsize=12, pointcolor=Color.from_hex("#386641"))
+        viewer.scene.add(locs, pointsize=12, pointcolor=Color.from_hex("#386641"))
     if len(res_np) != 0:
-        viewer.add(Collection(res_np), linewidth=8, linecolor=(0, 0.3, 0))
+        viewer.scene.add(res_np, linewidth=8, linecolor=Color(0, 0.3, 0))
     if len(res_nn) != 0:
-        viewer.add(Collection(res_nn), linewidth=8, linecolor=(0.8, 0, 0))
+        viewer.scene.add(res_nn, linewidth=8, linecolor=Color(0.8, 0, 0))
     if len(fnn) != 0:
-        viewer.add(Collection(fnn), linewidth=5, linecolor=Color.from_hex("#00468b"))
+        viewer.scene.add(fnn, linewidth=5, linecolor=Color.from_hex("#00468b"))
     if len(fnp) != 0:
-        viewer.add(Collection(fnp), linewidth=5, linecolor=(1, 0, 0))
+        viewer.scene.add(fnp, linewidth=5, linecolor=Color(1, 0, 0))
     if len(ft) != 0:
-        viewer.add(Collection(ft), linewidth=5, linecolor=(1.0, 0.5, 0.0))
+        viewer.scene.add(ft, linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
     # print("total reaction: ", total_reaction)
 
 
@@ -286,21 +301,9 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                     if (w * force * scale).length == 0:
                         continue
                     if flip:
-                        f = Arrow(
-                            pt,
-                            w * force * scale * -1,
-                            head_portion=0.2,
-                            head_width=0.07,
-                            body_width=0.02,
-                        )
+                        f = Arrow(pt, w * force * scale * -1, linewidth=10)
                     else:
-                        f = Arrow(
-                            pt,
-                            w * force * scale,
-                            head_portion=0.2,
-                            head_width=0.07,
-                            body_width=0.02,
-                        )
+                        f = Arrow(pt, w * force * scale, linewidth=10)
                     if force >= 0:
                         fnp.append(f)
                     else:
@@ -312,17 +315,13 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                         f = Arrow(
                             pt,
                             ft_uv * -1,
-                            head_portion=0.2,
-                            head_width=0.07,
-                            body_width=0.02,
+                            linewidth=10,
                         )
                     else:
                         f = Arrow(
                             pt,
                             ft_uv,
-                            head_portion=0.2,
-                            head_width=0.07,
-                            body_width=0.02,
+                            linewidth=10,
                         )
                     ft.append(f)
             if resultant:
@@ -353,44 +352,32 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 if resultant_f.length >= thres:
                     locs.append(Point(*resultant_pos))
                 if flip:
-                    f = Arrow(
-                        resultant_pos,
-                        resultant_f * -1,
-                        head_portion=0.2,
-                        head_width=0.07,
-                        body_width=0.02,
-                    )
+                    f = Arrow(resultant_pos, resultant_f * -1, linewidth=10)
                 else:
-                    f = Arrow(
-                        resultant_pos,
-                        resultant_f,
-                        head_portion=0.2,
-                        head_width=0.07,
-                        body_width=0.02,
-                    )
+                    f = Arrow(resultant_pos, resultant_f, linewidth=10)
                 if friction:
-                    viewer.add(f, facecolor=(1.0, 0.5, 0.0), show_lines=False)
+                    viewer.scene.add(f, facecolor=(1.0, 0.5, 0.0), show_lines=False)
                 if not is_tension:
                     res_np.append(f)
                 else:
                     res_nn.append(f)
     if len(locs) != 0:
-        viewer.add(Collection(locs), size=12, color=Color.from_hex("#386641"))
+        viewer.scene.add(locs, size=12, color=Color.from_hex("#386641"))
     if len(res_np) != 0:
-        viewer.add(Collection(res_np), facecolor=Color.from_hex("#386641"), show_lines=False)
+        for arrow in res_np:
+            arrow.add_to_scene(viewer, facecolor=Color.from_hex("#386641"))
     if len(res_nn) != 0:
-        viewer.add(Collection(res_nn), facecolor=(0.8, 0, 0), show_lines=False)
+        for arrow in res_nn:
+            arrow.add_to_scene(viewer, facecolor=Color(0.8, 0, 0))
     if len(fnp) != 0:
-        viewer.add(
-            Collection(fnp),
-            facecolor=Color.from_hex("#00468b"),
-            show_lines=False,
-            opacity=0.5,
-        )
+        for arrow in fnp:
+            arrow.add_to_scene(viewer, facecolor=Color.from_hex("#00468b"), opacity=0.5)
     if len(fnn) != 0:
-        viewer.add(Collection(fnn), facecolor=(1, 0, 0), show_lines=False, opacity=0.5)
+        for arrow in fnn:
+            arrow.add_to_scene(viewer, facecolor=Color(1, 0, 0), opacity=0.5)
     if len(ft) != 0:
-        viewer.add(Collection(ft), facecolor=(1.0, 0.5, 0.0), show_lines=False, opacity=0.5)
+        for arrow in ft:
+            arrow.add_to_scene(viewer, facecolor=Color(1.0, 0.5, 0.0), opacity=0.5)
 
 
 def draw_displacements(assembly, viewer, dispscale=1.0, tol=0.0):
@@ -425,9 +412,9 @@ def draw_displacements(assembly, viewer, dispscale=1.0, tol=0.0):
                     continue
             blocks.append(Line(*new_block.edge_coordinates(edge)))
     if len(blocks) != 0:
-        viewer.add(Collection(blocks), linewidth=1, linecolor=(0.7, 0.7, 0.7))
+        viewer.scene.add(blocks, linewidth=1, linecolor=Color(0.7, 0.7, 0.7))
     if len(nodes) != 0:
-        viewer.add(Collection(nodes), pointcolor=(0.7, 0.7, 0.7))
+        viewer.scene.add(nodes, pointcolor=Color(0.7, 0.7, 0.7))
 
 
 def draw_weights(assembly, viewer, scale=1.0, density=1.0):
@@ -445,9 +432,7 @@ def draw_weights(assembly, viewer, scale=1.0, density=1.0):
             Arrow(
                 block.center(),
                 [0, 0, -block.volume() * d * scale],
-                head_portion=0.2,
-                head_width=0.07,
-                body_width=0.02,
+                linewidth=0.02,
             )
         )
         # print("self-weight", -block.volume() * density)
@@ -457,11 +442,12 @@ def draw_weights(assembly, viewer, scale=1.0, density=1.0):
     # print("total self-weight: ", total_weights)
 
     if len(supports) != 0:
-        viewer.add(Collection(supports), pointsize=20, pointcolor=Color.from_hex("#ee6352"))
+        viewer.scene.add(supports, pointsize=20, pointcolor=Color.from_hex("#ee6352"))
     if len(blocks) != 0:
-        viewer.add(Collection(blocks), pointsize=30, pointcolor=Color.from_hex("#3284a0"))
+        viewer.scene.add(blocks, pointsize=30, pointcolor=Color.from_hex("#3284a0"))
     if len(weights) != 0:
-        viewer.add(Collection(weights), facecolor=Color.from_hex("#59cd90"), show_lines=False)
+        for weight in weights:
+            weight.add_to_scene(viewer, facecolor=Color.from_hex("#59cd90"))
 
 
 def cra_view(
@@ -524,7 +510,7 @@ def cra_view(
     None
     """
 
-    viewer = app.App(width=1600, height=1000, viewmode="shaded", show_grid=grid)
+    viewer = Viewer(config=Config(vectorsize=0.15))
 
     if blocks:
         draw_blocks(assembly, viewer, edge, tol)
@@ -541,7 +527,7 @@ def cra_view(
     if displacements:
         draw_displacements(assembly, viewer, dispscale, tol)
 
-    viewer.run()
+    viewer.show()
 
 
 def cra_view_ex(
@@ -566,7 +552,7 @@ def cra_view_ex(
 
     Parameters
     ----------
-    viewer : compas_view2.app.App
+    viewer : compas_viewer.Viewer
         External viewer object.
     assembly : :class:`~compas_assembly.datastructures.Assembly`
         The rigid block assembly.

@@ -22,14 +22,11 @@ Stable releases can be installed using a combination of conda and pip.
     conda activate cra
     pip install compas_cra
 
-To use the CRA viewer, you should also install :mod:`compas_view2`
-and the COMPAS 2 migration from the compatibility branch of the github repo.
-(we will replace this by :mod:`compas_viewer` soon).
+To use the CRA viewer, you should also install :mod:`compas_viewer`.
 
 .. code-block:: bash
 
-    conda install matplotlib compas_view2
-    pip install git+https://github.com/compas-dev/compas_view2.git@compas2
+    conda install matplotlib compas_viewer
 
 
 Latest
