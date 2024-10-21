@@ -11,22 +11,22 @@ Stable releases can be installed using a combination of conda and pip.
 
 .. code-block:: bash
 
-    conda create -n cra python=3.9 pyomo=6.4.2 ipopt compas
+    conda create -n cra python=3.10 pyomo=6.4.2 ipopt=3.14.9 compas
 
 .. note::
 
-    On Windows, you should install ``ipopt=3.11.1``.
+    On Windows, you may have to install ``ipopt=3.11.1``.
 
 .. code-block:: bash
 
     conda activate cra
-    pip install compas_cra
+    pip install compas_assembly compas_cra
 
 To use the CRA viewer, you should also install :mod:`compas_viewer`.
 
 .. code-block:: bash
 
-    conda install matplotlib compas_viewer
+    conda install compas_viewer
 
 
 Latest
@@ -41,5 +41,6 @@ Please use the correct environment file for your system
     git clone https://github.com/blockresearchgroup/compas_cra.git
     cd compas_cra
     conda env create -f env_osx.yml
+    conda activate cra-dev
 
 Note that this will automatically create an editable install that can be used for development.
