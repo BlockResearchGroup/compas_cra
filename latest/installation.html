@@ -593,19 +593,19 @@ document.write(`
 <section id="stable">
 <h2>Stable</h2>
 <p>Stable releases can be installed using a combination of conda and pip.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>cra<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span><span class="nv">pyomo</span><span class="o">=</span><span class="m">6</span>.4.2<span class="w"> </span>ipopt<span class="w"> </span>compas
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>cra<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span><span class="nv">pyomo</span><span class="o">=</span><span class="m">6</span>.4.2<span class="w"> </span><span class="nv">ipopt</span><span class="o">=</span><span class="m">3</span>.14.9<span class="w"> </span>compas
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>On Windows, you should install <code class="docutils literal notranslate"><span class="pre">ipopt=3.11.1</span></code>.</p>
+<p>On Windows, you may have to install <code class="docutils literal notranslate"><span class="pre">ipopt=3.11.1</span></code>.</p>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>cra
-pip<span class="w"> </span>install<span class="w"> </span>compas_cra
+pip<span class="w"> </span>install<span class="w"> </span>compas_assembly<span class="w"> </span>compas_cra
 </pre></div>
 </div>
 <p>To use the CRA viewer, you should also install <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_viewer</span></code>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>matplotlib<span class="w"> </span>compas_viewer
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>compas_viewer
 </pre></div>
 </div>
 </section>
@@ -617,6 +617,7 @@ Please use the correct environment file for your system
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/blockresearchgroup/compas_cra.git
 <span class="nb">cd</span><span class="w"> </span>compas_cra
 conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>env_osx.yml
+conda<span class="w"> </span>activate<span class="w"> </span>cra-dev
 </pre></div>
 </div>
 <p>Note that this will automatically create an editable install that can be used for development.</p>
