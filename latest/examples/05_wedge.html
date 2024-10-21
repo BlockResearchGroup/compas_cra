@@ -608,6 +608,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">import</span> <span class="nn">compas</span>
+
 <span class="kn">import</span> <span class="nn">compas_cra</span>
 <span class="kn">from</span> <span class="nn">compas_cra.algorithms</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
 <span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
@@ -629,7 +630,7 @@ document.write(`
     <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="n">mt</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># rotate around xy30-axis</span>
 
 <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">FILE_I</span><span class="p">)</span>
-<span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
+<span class="n">assembly</span><span class="p">:</span> <span class="n">CRA_Assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
 <span class="n">assembly</span><span class="o">.</span><span class="n">set_boundary_conditions</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
 <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
