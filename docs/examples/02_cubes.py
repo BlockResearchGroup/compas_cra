@@ -10,16 +10,16 @@ from compas_cra.datastructures import CRA_Assembly
 from compas_cra.equilibrium import cra_solve
 from compas_cra.viewers import cra_view
 
-# convert to COMPAS 2 data format
 FILE_I = os.path.join(compas_cra.SAMPLE, "cubes.json")
 
 assembly = compas.json_load(FILE_I)
-assembly = assembly.copy(cls=CRA_Assembly)
+assembly: CRA_Assembly = assembly.copy(cls=CRA_Assembly)
 assembly.set_boundary_conditions([0])
 
 assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
 
 cra_solve(assembly, verbose=True, timer=True)
+
 cra_view(
     assembly,
     resultant=False,

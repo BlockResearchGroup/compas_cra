@@ -25,9 +25,8 @@ if axis == "x-axis":
 if axis == "xy30-axis":
     rotate_axis = [mt.sqrt(3), 1, 0]  # rotate around xy30-axis
 
-# conver to COMPAS 2 data format
 assembly = compas.json_load(FILE_I)
-assembly = assembly.copy(cls=CRA_Assembly)
+assembly: CRA_Assembly = assembly.copy(cls=CRA_Assembly)
 assembly.set_boundary_conditions([0, 1])
 
 assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)

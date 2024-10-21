@@ -356,7 +356,7 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 else:
                     f = Arrow(resultant_pos, resultant_f, linewidth=10)
                 if friction:
-                    viewer.scene.add(f, facecolor=(1.0, 0.5, 0.0), show_lines=False)
+                    f.add_to_scene(viewer, facecolor=(1.0, 0.5, 0.0))
                 if not is_tension:
                     res_np.append(f)
                 else:

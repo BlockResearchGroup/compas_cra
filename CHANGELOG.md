@@ -10,9 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-* Migrate from compas_view2 to compas_viewer 
+
+* Changed compas_view2 to compas_viewer.
+* Changed sample files to COMPAS 2 format.
+* Fixed bug in temp viewer arrow solution.
 
 ### Removed
+
+* Removed `matplotlib` from env files.
+* Removed `pip` requirements.
 
 
 ## [0.4.0] 2024-03-02

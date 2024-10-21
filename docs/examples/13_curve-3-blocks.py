@@ -3,6 +3,7 @@
 import os
 
 import compas
+
 import compas_cra
 from compas_cra.datastructures import CRA_Assembly
 from compas_cra.equilibrium import cra_solve
@@ -13,7 +14,7 @@ density = 1
 FILE_I = os.path.join(compas_cra.SAMPLE, "curve-3-blocks.json")
 
 assembly = compas.json_load(FILE_I)
-assembly = assembly.copy(cls=CRA_Assembly)
+assembly: CRA_Assembly = assembly.copy(cls=CRA_Assembly)
 assembly.set_boundary_conditions([0])
 
 cra_solve(assembly, verbose=True, timer=True, density=density)
