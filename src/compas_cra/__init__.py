@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import os
 
 __author__ = ["Gene Ting-Chun Kao"]
