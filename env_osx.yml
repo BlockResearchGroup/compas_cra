@@ -7,7 +7,7 @@ dependencies:
   - compas >=2.4
   - compas_viewer
   - ipopt ==3.14.9
-  - pyomo ==6.4.2
+  - pyomo >=6.4.2
   - pip:
       - compas_assembly >=0.7.0
       - -e .[dev]

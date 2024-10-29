@@ -13,14 +13,13 @@ keywords = []
 authors = [{ name = "Gene Ting-Chun Kao", email = "kao@arch.ethz.ch" }]
 license = { file = "LICENSE" }
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dynamic = ['dependencies', 'optional-dependencies', 'version']
 classifiers = [
     "Development Status :: 4 - Beta",
     "Topic :: Scientific/Engineering",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
@@ -95,7 +94,7 @@ line-length = 119
 [tool.ruff]
 line-length = 119
 indent-width = 4
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
