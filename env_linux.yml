@@ -5,7 +5,6 @@ dependencies:
   - python
   - pip
   - compas >=2.4
-  - compas_viewer
   - ipopt ==3.14.9
   - pyomo ==6.4.2
   - pip:
