@@ -58,7 +58,7 @@ def friction_setup(assembly, mu, penalty=False, friction_net=False):
     return afr
 
 
-def external_force_setup(assembly, density):
+def external_force_setup(assembly, density, gravity):
     """Set up external force vector.
 
     Parameters
@@ -68,6 +68,8 @@ def external_force_setup(assembly, density):
     density : float
         Density of the material.
         If density attribute is not set, optimisation will use this density value.
+    gravity: float
+        Gravitational acceleration.
 
     Returns
     -------
@@ -84,7 +86,7 @@ def external_force_setup(assembly, density):
     for node in assembly.graph.nodes():
         block = assembly.node_block(node)
         index = key_index[node]
-        p[index][2] = -block.volume() * (block.attributes["density"] if "density" in block.attributes else density)
+        p[index][2] = -block.volume() * (block.attributes["density"] if "density" in block.attributes else density) * gravity
         print((block.attributes["density"] if "density" in block.attributes else density))
 
     p = np.array(p, dtype=float)
