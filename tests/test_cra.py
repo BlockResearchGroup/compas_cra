@@ -25,7 +25,7 @@ def test_cra():
 
     assembly.add_interfaces_from_meshes([interface1], 0, 1)
 
-    cra_solve(assembly, density=1)
+    cra_solve(assembly, density=1, gravity=1)
 
     IS_FORCE_CORRECT = True
     for edge in assembly.graph.edges():
