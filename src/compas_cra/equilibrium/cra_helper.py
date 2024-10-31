@@ -117,6 +117,28 @@ def density_setup(assembly, density):
             block.attributes["density"] = density[node]
 
 
+def load_setup(assembly, load):
+    """Set up additional load in vertical direction.
+
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
+    load : dict of float
+        load values, the dict key should match with assembly.graph.nodes()
+
+    Returns
+    -------
+    None
+
+    """
+
+    for node in assembly.graph.nodes():
+        block = assembly.graph.node_attribute(node, "block")
+        if node in load:
+            block.attributes["load"] = load[node]
+
+
 def num_free(assembly):
     """Return number of free blocks.
 

@@ -31,6 +31,7 @@ Equilibrium Helper Functions
     friction_setup
     external_force_setup
     density_setup
+    load_setup
     make_aeq
     make_afr
     unit_basis
