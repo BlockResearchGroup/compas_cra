@@ -82,13 +82,15 @@ def external_force_setup(assembly, density, gravity):
     num_nodes = assembly.graph.number_of_nodes()
     key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
 
+    print("resulting vertical force p on blocks:")
+
     p = [[0, 0, 0, 0, 0, 0] for i in range(num_nodes)]
     for node in assembly.graph.nodes():
         block = assembly.node_block(node)
         index = key_index[node]
         p[index][2] = -block.volume() * (block.attributes["density"] if "density" in block.attributes else density) * gravity
         p[index][2] += -block.attributes["load"] if "load" in block.attributes else 0
-        print((block.attributes["density"] if "density" in block.attributes else density))
+        print(f"{index}: {round(p[index][2],3)}")
 
     p = np.array(p, dtype=float)
     p = p[free, :].reshape((-1, 1), order="C")
