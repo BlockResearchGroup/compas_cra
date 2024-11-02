@@ -58,7 +58,7 @@ def friction_setup(assembly, mu, penalty=False, friction_net=False):
     return afr
 
 
-def external_force_setup(assembly, density):
+def external_force_setup(assembly, density, gravity):
     """Set up external force vector.
 
     Parameters
@@ -68,6 +68,8 @@ def external_force_setup(assembly, density):
     density : float
         Density of the material.
         If density attribute is not set, optimisation will use this density value.
+    gravity: float
+        Gravitational acceleration.
 
     Returns
     -------
@@ -80,12 +82,21 @@ def external_force_setup(assembly, density):
     num_nodes = assembly.graph.number_of_nodes()
     key_index = {key: index for index, key in enumerate(assembly.graph.nodes())}
 
+    print("\nblock   ext. force p")
+    print("-" * 20)
+
     p = [[0, 0, 0, 0, 0, 0] for i in range(num_nodes)]
     for node in assembly.graph.nodes():
         block = assembly.node_block(node)
         index = key_index[node]
-        p[index][2] = -block.volume() * (block.attributes["density"] if "density" in block.attributes else density)
-        print((block.attributes["density"] if "density" in block.attributes else density))
+        # determine weight and load
+        weight = block.volume() * (block.attributes["density"] if "density" in block.attributes else density) * gravity
+        load = block.attributes["load"] if "load" in block.attributes else 0
+        # set external force
+        p[index][2] = -(weight + load)
+        print(f"{node:>4}    {round(p[index][2],3):>10}")
+
+    print()
 
     p = np.array(p, dtype=float)
     p = p[free, :].reshape((-1, 1), order="C")
@@ -113,6 +124,28 @@ def density_setup(assembly, density):
         block = assembly.graph.node_attribute(node, "block")
         if node in density:
             block.attributes["density"] = density[node]
+
+
+def load_setup(assembly, load):
+    """Set up additional load in vertical direction.
+
+    Parameters
+    ----------
+    assembly : :class:`~compas_assembly.datastructures.Assembly`
+        The rigid block assembly.
+    load : dict of float
+        load values, the dict key should match with assembly.graph.nodes()
+
+    Returns
+    -------
+    None
+
+    """
+
+    for node in assembly.graph.nodes():
+        block = assembly.graph.node_attribute(node, "block")
+        if node in load:
+            block.attributes["load"] = load[node]
 
 
 def num_free(assembly):

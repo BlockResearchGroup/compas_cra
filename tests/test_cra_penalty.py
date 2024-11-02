@@ -18,7 +18,7 @@ def test_cra_penalty():
 
     assembly_interfaces_numpy(assembly, amin=1e-6, tmax=1e-4)
 
-    cra_penalty_solve(assembly, density=1)
+    cra_penalty_solve(assembly, density=1, gravity=1)
 
     block = assembly.graph.node_attribute(1, "block")
     weight = block.volume()

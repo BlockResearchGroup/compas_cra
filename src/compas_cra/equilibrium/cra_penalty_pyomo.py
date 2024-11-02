@@ -24,6 +24,7 @@ def cra_penalty_solve(
     assembly: Assembly,
     mu: float = 0.84,
     density: float = 1.0,
+    gravity: float = 9.81,
     d_bnd: float = 1e-3,
     eps: float = 1e-4,
     verbose: bool = False,
@@ -39,6 +40,8 @@ def cra_penalty_solve(
         Friction coefficient value.
     density : float, optional
         Density of the block material.
+    gravity : float, optional
+        Gravitational acceleration.
     d_bnd : float, optional
         The bound of virtual displacement d.
     eps : float, optional
@@ -107,7 +110,7 @@ def cra_penalty_solve(
     aeq = equilibrium_setup(assembly, penalty=False)
     aeq_b = equilibrium_setup(assembly, penalty=True)
     afr_b = friction_setup(assembly, mu, penalty=True)
-    p = external_force_setup(assembly, density)
+    p = external_force_setup(assembly, density, gravity)
 
     model.d = aeq.toarray().T @ model.array_q
     model.forces = f_basis * model.array_f[:, np.newaxis]  # force x in global coordinate
