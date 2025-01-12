@@ -10,11 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added instructions for fixing problems on Windows.
-* Added function to set additional vertical loads.
+* Added gravity variable and function to set additional vertical loads.
 
 ### Changed
-
-* The force calculation now works in SI-units.
 
 ### Removed
 
