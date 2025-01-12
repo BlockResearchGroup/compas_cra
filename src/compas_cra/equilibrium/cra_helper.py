@@ -90,11 +90,11 @@ def external_force_setup(assembly, density, gravity):
         block = assembly.node_block(node)
         index = key_index[node]
         # determine weight and load
-        weight = block.volume() * (block.attributes["density"] if "density" in block.attributes else density) * gravity
-        load = block.attributes["load"] if "load" in block.attributes else 0
-        # set external force
+        weight = block.volume() * (block.attributes["density"] if "density" in block.attributes else density)
+        load = (block.attributes["load"] if "load" in block.attributes else 0) / gravity  # normalized load
+        # set external force vector
         p[index][2] = -(weight + load)
-        print(f"{node:>4}    {round(p[index][2],3):>10}")
+        print(f"{node:>4}    {round(p[index][2] * gravity, 3):>10}")
 
     print()
 
