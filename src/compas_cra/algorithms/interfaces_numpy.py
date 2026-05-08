@@ -2,6 +2,7 @@
 
 from math import fabs
 
+import compas.geometry as cg
 from compas.geometry import Frame
 from compas.geometry import local_to_world_coordinates_numpy
 from numpy import array
@@ -127,8 +128,8 @@ def assembly_interfaces_numpy(assembly, nmax=10, tmax=1e-6, amin=1e-1):
 
                         if area >= amin:
                             coords = [[x, y, 0.0] for x, y, z in intersection.exterior.coords]
-
-                            coords = local_to_world_coordinates_numpy(Frame(o, A[0], A[1]), coords)
+                            origin = cg.Point(*o.flatten())
+                            coords = local_to_world_coordinates_numpy(Frame(origin, A[0], A[1]), coords)
 
                             assembly.add_to_interfaces(
                                 node,
