@@ -2,7 +2,7 @@ name: cra-dev
 channels:
   - conda-forge
 dependencies:
-  - python
+  - python < 3.14
   - pip
   - compas >=2.4
   - ipopt
