@@ -247,11 +247,11 @@ def static_equilibrium_constraints(model, aeq, afr, p) -> Callable:
 
     # aeq = aeq.tocsr()  # tocsr gives data, indicies and indptr instead of decomposing them one by one
     # afr = afr.tocsr()
-    rhs = (-p).flatten()  # flattened once instead of twice
+    rhs = (-p).flatten()
     f_var = model.array_f
 
     # Deprecated code for reference:
-    # equilibrium_constraints = (
+    # equilibrium_constraints = matrix_constraint(
     # aeq.data, aeq.indices, aeq.indptr, -p.flatten(),
     # -p.flatten(), model.array_f )
     # A_eq is the tangent matrix, equal to -p,
@@ -267,7 +267,7 @@ def static_equilibrium_constraints(model, aeq, afr, p) -> Callable:
         expr = pyo.quicksum(float(aeq.data[k]) * f_var[int(aeq.indices[k])] for k in range(s, e))
         return expr == float(rhs[i])
 
-    # Expression still equivalent to:
+    # Expression equivalent to:
     # -p <= A_eq * f <= -p (Friction)
 
     def fr_rule(m, j):
@@ -277,7 +277,7 @@ def static_equilibrium_constraints(model, aeq, afr, p) -> Callable:
         expr = pyo.quicksum(float(afr.data[k]) * f_var[int(afr.indices[k])] for k in range(s, e))
         return expr <= 0.0
 
-    # Expression still equivalent to:
+    # Expression equivalent to:
     # A_fr * f <= 0 (Unilateral constraint)
 
     equilibrium_constraints = pyo.Constraint(range(aeq.shape[0]), rule=eq_rule)

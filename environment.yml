@@ -5,8 +5,9 @@ dependencies:
   - python
   - pip
   - compas >=2.4
-  - ipopt == 3.14.19
-  - pyomo == 6.10
+  - ipopt
+  - pyomo 
   - pip:
       - compas_assembly >=0.7.0
+      - matplotlib
       - -e .[dev]
