@@ -245,8 +245,8 @@ def static_equilibrium_constraints(model, aeq, afr, p) -> Callable:
     # The previous MatrixConstraint function was causing problems,
     # it's now replaced by
 
-    aeq = aeq.tocsr()  # tocsr gives data, indicies and indptr instead of decomposing them one by one
-    afr = afr.tocsr()
+    # aeq = aeq.tocsr()  # tocsr gives data, indicies and indptr instead of decomposing them one by one
+    # afr = afr.tocsr()
     rhs = (-p).flatten()  # flattened once instead of twice
     f_var = model.array_f
 
