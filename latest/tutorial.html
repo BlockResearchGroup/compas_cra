@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 
@@ -6,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
     <link rel="icon" href="_static/compas.ico" type="image/x-icon">
     <title>Tutorial &#8212; COMPAS CRA</title>
   
@@ -28,29 +29,28 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="_static/css/compas.css?v=617b33e2" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/compas.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script src="_static/documentation_options.js?v=bb99e320"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/tabs.js?v=3ee01567"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/tabs.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/design-tabs.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorial';</script>
     <script>
@@ -595,7 +595,7 @@ document.write(`
 <section id="creating-geometries">
 <span id="creating-geometry"></span><h3>1. Creating geometries</h3>
 <p>We create two blocks: one as support and another one as free block.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Translation</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Translation</span>
 
 <span class="n">support</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">worldXY</span><span class="p">(),</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># supporting block</span>
 <span class="n">free1</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span>
@@ -610,8 +610,8 @@ document.write(`
 <section id="cra-assembly-data-structure">
 <h3>2. CRA Assembly data structure</h3>
 <p>Add them to assembly data structure.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas_assembly.datastructures</span> <span class="kn">import</span> <span class="n">Block</span>
-<span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_assembly.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">Block</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_cra.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">CRA_Assembly</span>
 
 <span class="n">assembly</span> <span class="o">=</span> <span class="n">CRA_Assembly</span><span class="p">()</span>
 <span class="n">assembly</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">Block</span><span class="o">.</span><span class="n">from_shape</span><span class="p">(</span><span class="n">support</span><span class="p">),</span> <span class="n">node</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -635,7 +635,7 @@ document.write(`
 <section id="identifying-interfaces">
 <h3>4. Identifying interfaces</h3>
 <p>Then we identify planar interfaces between blocks automatically.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas_cra.algorithms</span> <span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_cra.algorithms</span><span class="w"> </span><span class="kn">import</span> <span class="n">assembly_interfaces_numpy</span>
 <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">assembly</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -651,14 +651,14 @@ document.write(`
 <li><p>CRA Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_solve.html" title="compas_cra.equilibrium.cra_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_solve</span></code></a>.</p></li>
 <li><p>CRA Penalty Solve: <a class="reference internal" href="api/generated/compas_cra.equilibrium.cra_penalty_solve.html" title="compas_cra.equilibrium.cra_penalty_solve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra.equilibrium.cra_penalty_solve</span></code></a>.</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas_cra.equilibrium</span> <span class="kn">import</span> <span class="n">cra_solve</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_cra.equilibrium</span><span class="w"> </span><span class="kn">import</span> <span class="n">cra_solve</span>
 <span class="n">cra_solve</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="visualisation">
 <h3>6. Visualisation</h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas_cra.viewers</span> <span class="kn">import</span> <span class="n">cra_view</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">compas_cra.viewers</span><span class="w"> </span><span class="kn">import</span> <span class="n">cra_view</span>
 <span class="n">cra_view</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">resultant</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -682,12 +682,12 @@ Here we use Rhino as an example.</p>
 to select Rhino mesh blocks and export to assembly data structure as a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;This is the script to add assembly without interfaces from rhino meshes&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">compas</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="k">as</span> <span class="nn">rs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">compas</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rhinoscriptsyntax</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rs</span>
 
-<span class="kn">from</span> <span class="nn">compas_rhino</span> <span class="kn">import</span> <span class="n">select_meshes</span>
-<span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_rhino</span><span class="w"> </span><span class="kn">import</span> <span class="n">select_meshes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_cra.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">CRA_Assembly</span>
 
 <span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 <span class="n">PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
@@ -707,11 +707,11 @@ to select Rhino mesh blocks and export to assembly data structure as a <code cla
 </div>
 <p><strong>Note</strong>: The selection sequence is important because it represents the node indices.</p>
 <p>Then we can load the <code class="docutils literal notranslate"><span class="pre">.json</span></code> file from local path.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">compas</span>
-<span class="kn">import</span> <span class="nn">compas_cra</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">compas</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">compas_cra</span>
 
-<span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_cra.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">CRA_Assembly</span>
 
 <span class="n">FILE_I</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s2">&quot;XXX.json&quot;</span><span class="p">)</span>  <span class="c1"># or your own path</span>
 <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">FILE_I</span><span class="p">)</span>
@@ -729,12 +729,12 @@ so they have to be discretised manually as planar faces or triangles.</p>
 to select mesh blocks with interfaces and export to assembly data structure and store it as json file.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;This is the script to add assembly and interfaces from rhino meshes&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">compas</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="k">as</span> <span class="nn">rs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">compas</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rhinoscriptsyntax</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rs</span>
 
-<span class="kn">from</span> <span class="nn">compas_rhino.geometry</span> <span class="kn">import</span> <span class="n">RhinoMesh</span>
-<span class="kn">from</span> <span class="nn">compas_cra.datastructures</span> <span class="kn">import</span> <span class="n">CRA_Assembly</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_rhino.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">RhinoMesh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">compas_cra.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">CRA_Assembly</span>
 
 <span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 <span class="n">PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
@@ -799,11 +799,9 @@ to select mesh blocks with interfaces and export to assembly data structure and 
 <table class="borderless table" id="id2">
 <caption><span class="caption-text">Figure 1</span></caption>
 <tbody>
-<tr class="row-odd"><td><a class="reference internal image-reference" href="_images/tutorial_interface1.png"><img alt="_images/tutorial_interface1.png" src="_images/tutorial_interface1.png" style="width: 100%;" />
-</a>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="_images/tutorial_interface1.png"><img alt="_images/tutorial_interface1.png" src="_images/tutorial_interface1.png" style="width: 100%;" /></a>
 </td>
-<td><a class="reference internal image-reference" href="_images/tutorial_interface2.png"><img alt="_images/tutorial_interface2.png" src="_images/tutorial_interface2.png" style="width: 100%;" />
-</a>
+<td><a class="reference internal image-reference" href="_images/tutorial_interface2.png"><img alt="_images/tutorial_interface2.png" src="_images/tutorial_interface2.png" style="width: 100%;" /></a>
 </td>
 </tr>
 </tbody>
@@ -885,7 +883,7 @@ to select mesh blocks with interfaces and export to assembly data structure and 
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
     <br/>
   </p>
 </div>
