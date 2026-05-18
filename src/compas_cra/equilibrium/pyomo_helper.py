@@ -4,8 +4,6 @@ from typing import Callable
 from typing import Literal
 
 import pyomo.environ as pyo
-from numpy import zeros
-from pyomo.core.base.matrix_constraint import MatrixConstraint
 
 
 def initialisations(
@@ -244,18 +242,46 @@ def static_equilibrium_constraints(model, aeq, afr, p) -> Callable:
 
     """
 
-    equilibrium_constraints = MatrixConstraint(
-        aeq.data, aeq.indices, aeq.indptr, -p.flatten(), -p.flatten(), model.array_f
-    )
+    # The previous MatrixConstraint function was causing problems,
+    # it's now replaced by
 
-    friction_constraint = MatrixConstraint(
-        afr.data,
-        afr.indices,
-        afr.indptr,
-        [None for i in range(afr.shape[0])],
-        zeros(afr.shape[0]),
-        model.array_f,
-    )
+    # aeq = aeq.tocsr()  # tocsr gives data, indicies and indptr instead of decomposing them one by one
+    # afr = afr.tocsr()
+    rhs = (-p).flatten()
+    f_var = model.array_f
+
+    # Deprecated code for reference:
+    # equilibrium_constraints = matrix_constraint(
+    # aeq.data, aeq.indices, aeq.indptr, -p.flatten(),
+    # -p.flatten(), model.array_f )
+    # A_eq is the tangent matrix, equal to -p,
+    # A container for constraints of the form lb <= Ax <= ub.
+    # here, lp and ub are both equal to -p,
+    # so the constraint is Ax = -p, which is the equilibrium equation.
+    # https://pyomo.readthedocs.io/en/6.9.1/api/pyomo.core.kernel.matrix_constraint.matrix_constraint.html
+
+    def eq_rule(m, i):
+        s, e = aeq.indptr[i], aeq.indptr[i + 1]
+        if s == e:
+            return pyo.Constraint.Skip
+        expr = pyo.quicksum(float(aeq.data[k]) * f_var[int(aeq.indices[k])] for k in range(s, e))
+        return expr == float(rhs[i])
+
+    # Expression equivalent to:
+    # -p <= A_eq * f <= -p (Friction)
+
+    def fr_rule(m, j):
+        s, e = afr.indptr[j], afr.indptr[j + 1]
+        if s == e:
+            return pyo.Constraint.Skip
+        expr = pyo.quicksum(float(afr.data[k]) * f_var[int(afr.indices[k])] for k in range(s, e))
+        return expr <= 0.0
+
+    # Expression equivalent to:
+    # A_fr * f <= 0 (Unilateral constraint)
+
+    equilibrium_constraints = pyo.Constraint(range(aeq.shape[0]), rule=eq_rule)
+    friction_constraint = pyo.Constraint(range(afr.shape[0]), rule=fr_rule)
     return equilibrium_constraints, friction_constraint
 
 
