@@ -21,6 +21,7 @@ def rbe_solve(
     assembly: Assembly,
     mu: float = 0.84,
     density: float = 1.0,
+    gravity: float = 9.81,
     verbose: bool = False,
     timer: bool = False,
 ) -> Assembly:
@@ -34,6 +35,8 @@ def rbe_solve(
         Friction coefficient value.
     density : float, optional
         Density of the block material.
+    gravity : float, optional
+        Gravitational acceleration.
     verbose : bool, optional
         Print information during the execution of the algorithm.
     timer : bool, optional
@@ -78,7 +81,7 @@ def rbe_solve(
 
     aeq_b = equilibrium_setup(assembly, penalty=True)
     afr_b = friction_setup(assembly, mu, penalty=True)
-    p = external_force_setup(assembly, density)
+    p = external_force_setup(assembly, density, gravity)
 
     obj_rbe = objectives("rbe", (0, 1e0, 1e6, 1e0))
     eq_con, fr_con = static_equilibrium_constraints(model, aeq_b, afr_b, p)
