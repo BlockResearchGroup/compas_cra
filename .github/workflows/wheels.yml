@@ -213,6 +213,10 @@ jobs:
     permissions:
       id-token: write  # required for trusted publishing
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - uses: actions/download-artifact@v4
         with:
           pattern: wheel-*
@@ -223,4 +227,11 @@ jobs:
           name: sdist
           path: dist
       - run: ls -lh dist
+
+      # A green build is not enough: a renamed job or a dropped artifact would publish
+      # a partial release, and a pure py3-none-any wheel would install everywhere and
+      # then fail at the first solve. Neither is visible without looking inside.
+      - name: Verify every platform is present and every wheel carries a solver
+        run: python packaging/check_release.py dist
+
       - uses: pypa/gh-action-pypi-publish@release/v1
