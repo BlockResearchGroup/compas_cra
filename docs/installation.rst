@@ -26,7 +26,7 @@ Verify the solver is available with:
 
 .. code-block:: bash
 
-    ipopt --version
+    compas-cra-ipopt --version
 
 
 Latest
@@ -42,8 +42,8 @@ The latest version can be installed from local source.
 
 A source install contains no IPOPT binary, since that is added to the wheels at build
 time. Either build one with ``packaging/build_ipopt.sh`` (see ``packaging/README.md``),
-or provide ``ipopt`` yourself on the ``PATH``. The development environment does the
-latter with conda:
+or provide ``ipopt`` yourself on the ``PATH`` - which is what the conda development
+environment does:
 
 .. code-block:: bash
 

@@ -31,8 +31,15 @@ fi
 "$VBIN/python" -m pip install -q --upgrade pip
 "$VBIN/python" -m pip install -q "$WHEEL" pytest
 
-echo "--- the ipopt console script is on PATH of the environment"
-"$VBIN/ipopt" --version
+echo "--- the console script resolves the solver"
+"$VBIN/compas-cra-ipopt" --version
+
+echo '--- and it installs no command named ipopt, which would shadow a real solver'
+if [ -e "$VBIN/ipopt" ] || [ -e "$VBIN/ipopt.exe" ]; then
+    echo "ERROR: the package installed a command named ipopt, which would take" >&2
+    echo "       precedence over a conda or system solver of the same name" >&2
+    exit 1
+fi
 
 echo "--- the bundled executable is found from Python"
 "$VBIN/python" -c "

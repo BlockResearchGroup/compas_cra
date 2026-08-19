@@ -66,8 +66,32 @@ def executable():
     path = bundled()
     if path is not None:
         return path
-    found = shutil.which("ipopt")
-    return Path(found) if found else None
+    return _which_solver()
+
+
+def _which_solver():
+    """Return the first real ipopt on the PATH, stepping over any wrapper scripts."""
+    for directory in os.environ.get("PATH", "").split(os.pathsep):
+        if not directory:
+            continue
+        found = shutil.which("ipopt", path=directory)
+        if found and not _is_wrapper_script(Path(found)):
+            return Path(found)
+    return None
+
+
+def _is_wrapper_script(path):
+    """Whether a path is a shell/python wrapper rather than the solver itself.
+
+    An installation of this package used to put a console script named ``ipopt`` on the
+    PATH, and other tools do similar things. Executing one of those in place of the
+    solver either fails outright or, worse, calls back into this package.
+    """
+    try:
+        with open(path, "rb") as f:
+            return f.read(2) == b"#!"
+    except OSError:
+        return False
 
 
 def ipopt_version():

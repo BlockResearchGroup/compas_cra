@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Added a bundled, statically linked IPOPT executable to the platform wheels, so `pip install compas_cra` no longer needs conda, homebrew or a manually downloaded solver. Wheels are built for Windows, macOS (Apple Silicon and Intel) and manylinux (x86_64 and aarch64) by `.github/workflows/wheels.yml`.
 * Added `packaging/` with the scripts that build IPOPT 3.14.19 from source with coinbrew (MUMPS linear solver, no HSL), pack the platform wheels and test them in a clean environment.
-* Added `compas_cra._ipopt` to locate the solver, and an `ipopt` console script so `SolverFactory("ipopt")` also works outside `compas_cra`.
+* Added `compas_cra._ipopt` to locate the solver, and a `compas-cra-ipopt` console script to check which solver will be used.
 * Added the `viz` optional dependencies (`pip install compas_cra[viz]`).
 
 ### Changed

@@ -1,22 +1,27 @@
-"""Run the bundled IPOPT executable.
+"""Run the IPOPT executable that :mod:`compas_cra` would solve with.
 
-Installed as the ``ipopt`` console script, so that ``SolverFactory("ipopt")`` finds a
-solver on ``PATH`` in any environment where :mod:`compas_cra` is installed, and also
-reachable as ``python -m compas_cra._ipopt``.
+Installed as the ``compas-cra-ipopt`` console script, and reachable as
+``python -m compas_cra._ipopt``. Useful for checking which solver is being used.
+
+The command is deliberately not called ``ipopt``: pip would install it over a conda
+environment's own ``bin/ipopt``, and :func:`compas_cra._ipopt.executable` would then
+find this wrapper instead of a real solver.
 """
 
 import os
 import subprocess
 import sys
 
-from compas_cra._ipopt import bundled
+from compas_cra._ipopt import executable
 
 
 def main():
-    """Forward all arguments to the bundled IPOPT executable."""
-    exe = bundled()
+    """Forward all arguments to the IPOPT executable."""
+    exe = executable()
     if exe is None:
-        sys.stderr.write("no IPOPT executable is bundled with this installation of compas_cra\n")
+        sys.stderr.write(
+            "no IPOPT executable is bundled with this installation of compas_cra, and none was found on PATH\n"
+        )
         return 1
     args = [str(exe)] + sys.argv[1:]
     if os.name == "posix":

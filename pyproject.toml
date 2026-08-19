@@ -30,9 +30,11 @@ classifiers = [
 ]
 
 # The platform wheels bundle an ipopt executable (see packaging/build_ipopt.sh), which
-# is what makes `pip install compas_cra` enough to actually solve something.
+# is what makes `pip install compas_cra` enough to actually solve something. The command
+# is deliberately not called `ipopt`: pip would install it over a conda environment's own
+# bin/ipopt, and compas_cra would then find its own wrapper instead of a real solver.
 [project.scripts]
-ipopt = "compas_cra._ipopt.__main__:main"
+compas-cra-ipopt = "compas_cra._ipopt.__main__:main"
 
 [project.urls]
 Homepage = "https://blockresearchgroup.github.io/compas_cra"
