@@ -76,9 +76,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-14
+          - os: macos-15
             tag: macosx_11_0_arm64
-          - os: macos-13
+          # macos-13 was retired; macos-15-intel is the x86_64 image
+          - os: macos-15-intel
             tag: macosx_11_0_x86_64
 
     env:
@@ -91,8 +92,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install gfortran
+      - name: Install build dependencies
         run: |
+          # coinbrew needs bash >= 4; macOS still ships 3.2 as /bin/bash
+          brew list bash >/dev/null 2>&1 || brew install bash
           brew list gcc >/dev/null 2>&1 || brew install gcc
           # The formula installs versioned binaries only (gfortran-14, ...).
           test -x "$(brew --prefix)/bin/gfortran" || \

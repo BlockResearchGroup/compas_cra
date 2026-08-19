@@ -59,8 +59,12 @@ make_lapack_shim() {
         echo "ERROR: no static openblas found (install openblas-static)" >&2
         exit 1
     fi
+    local threads="-lpthread"
+    if [ "$PLATFORM" = "windows" ]; then
+        threads=""
+    fi
     mkdir -p "$LAPACK_SHIM_DIR"
-    echo "INPUT($openblas -lgfortran -lquadmath -lm -lpthread)" \
+    echo "INPUT($openblas$RUNTIME_LINK_LIBS -lm $threads)" \
         > "$LAPACK_SHIM_DIR/libcralapack.a"
     echo "  lapack shim: $(cat "$LAPACK_SHIM_DIR/libcralapack.a")"
 }
@@ -98,18 +102,23 @@ echo "==========================================================================
 
 STATIC_LDFLAGS="-static-libgcc -static-libstdc++"
 
+# Which of these exist is platform dependent - libquadmath is x86 only, libwinpthread
+# is mingw only - so the list is discovered rather than assumed, and reused when the
+# lapack shim is written.
+RUNTIME_LINK_LIBS=""
+
 force_static_runtime_libs() {
     local libdir="$WORK_DIR/static-runtime"
     rm -rf "$libdir" && mkdir -p "$libdir"
-    local lib path found=""
+    local lib path
     for lib in libgfortran libquadmath libwinpthread; do
         path="$(${FC:-gfortran} -print-file-name=${lib}.a)"
         if [ -f "$path" ]; then
             ln -sf "$path" "$libdir/${lib}.a"
-            found="$found ${lib}"
+            RUNTIME_LINK_LIBS="$RUNTIME_LINK_LIBS -l${lib#lib}"
         fi
     done
-    echo "  static runtime libs:$found"
+    echo "  static runtime libs:$RUNTIME_LINK_LIBS"
     STATIC_LDFLAGS="$STATIC_LDFLAGS -L$libdir"
 }
 
@@ -123,6 +132,23 @@ fi
 # ------------------------------------------------------------------------------
 # fetch
 # ------------------------------------------------------------------------------
+# coinbrew refuses to run under bash 3, which is still what /bin/bash is on macOS.
+find_modern_bash() {
+    local candidate version
+    for candidate in bash /opt/homebrew/bin/bash /usr/local/bin/bash; do
+        version="$("$candidate" -c 'echo ${BASH_VERSINFO[0]}' 2>/dev/null)" || continue
+        if [ "${version:-0}" -ge 4 ]; then
+            echo "$candidate"
+            return 0
+        fi
+    done
+    echo "ERROR: coinbrew needs bash >= 4; install one (brew install bash)" >&2
+    exit 1
+}
+
+BASH_BIN="${BASH_BIN:-$(find_modern_bash)}"
+echo "  coinbrew runs under: $BASH_BIN ($("$BASH_BIN" --version | head -1))"
+
 # coinbrew drives git, which refuses to touch a tree owned by another user - which is
 # what happens as soon as the build runs in a container over a mounted checkout. Set the
 # exception through the environment so no global git config is written.
@@ -142,7 +168,7 @@ fi
 # download the ASL and MUMPS sources. ThirdParty/HSL is cloned too but coinbrew skips
 # building it because we never provide the (non-redistributable) HSL sources.
 if [ ! -d Ipopt ]; then
-    bash ./coinbrew fetch "Ipopt@releases/$IPOPT_VERSION" --no-prompt --skip-update
+    "$BASH_BIN" ./coinbrew fetch "Ipopt@releases/$IPOPT_VERSION" --no-prompt --skip-update
 fi
 
 # ------------------------------------------------------------------------------
@@ -165,7 +191,7 @@ fi
 
 export LDFLAGS="${LDFLAGS:-} $STATIC_LDFLAGS"
 
-bash ./coinbrew build Ipopt "${COMMON_CONFIG[@]}" --with-lapack="$LAPACK_FLAGS"
+"$BASH_BIN" ./coinbrew build Ipopt "${COMMON_CONFIG[@]}" --with-lapack="$LAPACK_FLAGS"
 
 # ------------------------------------------------------------------------------
 # stage

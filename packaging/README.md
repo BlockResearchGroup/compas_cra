@@ -18,8 +18,8 @@ platform serves every supported Python version**:
 | --- | --- |
 | `py3-none-manylinux_2_28_x86_64` | `quay.io/pypa/manylinux_2_28_x86_64` |
 | `py3-none-manylinux_2_28_aarch64` | `quay.io/pypa/manylinux_2_28_aarch64` on an arm runner |
-| `py3-none-macosx_11_0_arm64` | `macos-14` |
-| `py3-none-macosx_11_0_x86_64` | `macos-13` |
+| `py3-none-macosx_11_0_arm64` | `macos-15` |
+| `py3-none-macosx_11_0_x86_64` | `macos-15-intel` |
 | `py3-none-win_amd64` | `windows-latest` + MSYS2 UCRT64 |
 
 ## Scripts
