@@ -100,18 +100,26 @@ echo "==========================================================================
 # What remains dynamic is the platform's own C library and friends (libc, libm, libdl,
 # libpthread, libz), which exist everywhere. check_binary.sh enforces exactly that.
 
-STATIC_LDFLAGS="-static-libgcc -static-libstdc++"
+# -static-libgcc/-static-libstdc++ are gcc options. On macOS the C compiler is clang,
+# which rejects them outright - and does not need them: libc++ is a system library
+# there, so only the Fortran runtime has to be pinned, which the -L trick below does.
+if [ "$PLATFORM" = "macos" ]; then
+    STATIC_LDFLAGS=""
+else
+    STATIC_LDFLAGS="-static-libgcc -static-libstdc++"
+fi
 
 # Which of these exist is platform dependent - libquadmath is x86 only, libwinpthread
 # is mingw only - so the list is discovered rather than assumed, and reused when the
-# lapack shim is written.
+# lapack shim is written. libgomp is in there because MSYS2 ships the OpenMP build of
+# OpenBLAS; on the other platforms nothing references it and ld pulls in nothing.
 RUNTIME_LINK_LIBS=""
 
 force_static_runtime_libs() {
     local libdir="$WORK_DIR/static-runtime"
     rm -rf "$libdir" && mkdir -p "$libdir"
     local lib path
-    for lib in libgfortran libquadmath libwinpthread; do
+    for lib in libgfortran libquadmath libgcc libemutls_w libgomp libwinpthread; do
         path="$(${FC:-gfortran} -print-file-name=${lib}.a)"
         if [ -f "$path" ]; then
             ln -sf "$path" "$libdir/${lib}.a"
