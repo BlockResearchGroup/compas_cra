@@ -4,30 +4,31 @@ on:
   push:
     branches:
       - main
+      - pypi
   pull_request:
     branches:
       - main
+      - pypi
 
 jobs:
-  Build:
+  lint:
     if: "!contains(github.event.pull_request.labels.*.name, 'docs-only')"
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest]
-        python: ["3.10"]
-
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v2.0.0
-        with:
-          miniconda-version: "latest"
-          channels: conda-forge
-          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v4
 
-      - uses: compas-dev/compas-actions.build@v4
+      - uses: actions/setup-python@v5
         with:
-          invoke_lint: true
-          invoke_test: true
-          use_conda: true
-          python: ${{ matrix.python }}
+          python-version: "3.10"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Lint
+        run: invoke lint
+
+  # The test suite needs the ipopt executable, which is built and shipped by the
+  # wheels workflow. Tests therefore run there, against the installed wheel, on all
+  # five target platforms - see .github/workflows/wheels.yml.

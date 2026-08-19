@@ -22,7 +22,17 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
 ]
+
+# The platform wheels bundle an ipopt executable (see packaging/build_ipopt.sh), which
+# is what makes `pip install compas_cra` enough to actually solve something.
+[project.scripts]
+ipopt = "compas_cra._ipopt.__main__:main"
 
 [project.urls]
 Homepage = "https://blockresearchgroup.github.io/compas_cra"
@@ -42,10 +52,15 @@ zip-safe = false
 [tool.setuptools.dynamic]
 version = { attr = "compas_cra.__version__" }
 dependencies = { file = "requirements.txt" }
-optional-dependencies = { dev = { file = "requirements-dev.txt" } }
+optional-dependencies = { dev = { file = "requirements-dev.txt" }, viz = { file = "requirements-viz.txt" } }
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"compas_cra._ipopt" = ["bin/*", "licenses/*"]
+# data/ is not a package, so it needs an explicit glob to end up in the wheel
+"compas_cra" = ["data/samples/*.json"]
 
 # ============================================================================
 # replace pytest.ini
