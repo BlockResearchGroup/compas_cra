@@ -592,37 +592,48 @@ document.write(`
 <span id="id1"></span><h1>Installation</h1>
 <section id="stable">
 <h2>Stable</h2>
-<p>Stable releases can be installed on <code class="docutils literal notranslate"><span class="pre">osx</span></code> and <code class="docutils literal notranslate"><span class="pre">linux</span></code> using a combination of conda and pip.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>cra<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span><span class="nv">pyomo</span><span class="o">=</span><span class="m">6</span>.4.2<span class="w"> </span><span class="nv">ipopt</span><span class="o">=</span><span class="m">3</span>.14.9<span class="w"> </span>compas<span class="w"> </span>compas_viewer
-conda<span class="w"> </span>activate<span class="w"> </span>cra
-pip<span class="w"> </span>install<span class="w"> </span>compas_assembly<span class="w"> </span>compas_cra
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>compas_cra
+</pre></div>
+</div>
+<p>That is all that is needed, on Windows, macOS (Apple Silicon and Intel) and Linux.
+The wheels bundle a statically linked <a class="reference external" href="https://coin-or.github.io/Ipopt/">IPOPT</a>
+executable, so no conda environment, no homebrew and no manual download of solver
+binaries are required.</p>
+<p>To also install the viewers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>compas_cra<span class="o">[</span>viz<span class="o">]</span>
+</pre></div>
+</div>
+<p>Verify the solver is available with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>compas-cra-ipopt<span class="w"> </span>--version
 </pre></div>
 </div>
 </section>
 <section id="latest">
 <h2>Latest</h2>
-<p>The latest version can be installed on <code class="docutils literal notranslate"><span class="pre">osx</span></code> and <code class="docutils literal notranslate"><span class="pre">linux</span></code> from local source using an environment file.</p>
+<p>The latest version can be installed from local source.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/blockresearchgroup/compas_cra.git
 <span class="nb">cd</span><span class="w"> </span>compas_cra
-conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>environment.yml
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev]"</span>
+</pre></div>
+</div>
+<p>A source install contains no IPOPT binary, since that is added to the wheels at build
+time. Either build one with <code class="docutils literal notranslate"><span class="pre">packaging/build_ipopt.sh</span></code> (see <code class="docutils literal notranslate"><span class="pre">packaging/README.md</span></code>),
+or provide <code class="docutils literal notranslate"><span class="pre">ipopt</span></code> yourself on the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> - which is what the conda development
+environment does:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>environment.yml
 conda<span class="w"> </span>activate<span class="w"> </span>cra-dev
 </pre></div>
 </div>
-<p>Note that this will automatically create an editable install that can be used for development.</p>
 </section>
-<section id="windows">
-<h2>Windows</h2>
-<p>On Windows, the first part of the installation is the same.</p>
-<p>However, once you start using CRA, you will very likely run into a problem with missing <code class="docutils literal notranslate"><span class="pre">ipopt</span></code> binares.
-To solve this, you can download the binaries from the <code class="docutils literal notranslate"><span class="pre">ipopt</span></code> github release and place it in in the correct folder of you environment.
-(Thank you Petras for figuring this out :)</p>
-<p>The bnary of release <code class="docutils literal notranslate"><span class="pre">ipopt=3.14.9</span></code> is available here:</p>
-<ul class="simple">
-<li><p>&lt;<a class="github reference external" href="https://github.com/coin-or/Ipopt/releases/download/releases%2F3.14.9/Ipopt-3.14.9-win64-msvs2019-md.zip">coin-or/Ipopt</a>&gt;</p></li>
-</ul>
-<p>Copy the contents of the <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder of the archive into the <code class="docutils literal notranslate"><span class="pre">Library\bin</span></code> of your environment.
-For example, into <code class="docutils literal notranslate"><span class="pre">C:\Users\You\anaconda3\envs\cra\Library\bin</span></code>.</p>
-<p>If this still doesn’t fix the problem, please let us know.</p>
+<section id="conda">
+<h2>Conda</h2>
+<p>Using conda for the solver is still supported: if no bundled binary is present,
+<code class="docutils literal notranslate"><span class="pre">compas_cra</span></code> falls back to whatever <code class="docutils literal notranslate"><span class="pre">ipopt</span></code> is on the <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>cra<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>ipopt<span class="w"> </span>compas<span class="w"> </span>compas_viewer
+conda<span class="w"> </span>activate<span class="w"> </span>cra
+pip<span class="w"> </span>install<span class="w"> </span>compas_assembly<span class="w"> </span>compas_cra
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -649,7 +660,7 @@ For example, into <code class="docutils literal notranslate"><span class="pre">C
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stable">Stable</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latest">Latest</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#windows">Windows</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conda">Conda</a></li>
 </ul>
   </nav></div>
 

@@ -680,7 +680,7 @@ Here we use Rhino as an example.</p>
 <h3>Export mesh blocks as Assembly json file</h3>
 <p>Use this script at <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_json.py">scripts/mesh_to_assembly_json.py</a>
 to select Rhino mesh blocks and export to assembly data structure as a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;This is the script to add assembly without interfaces from rhino meshes&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""This is the script to add assembly without interfaces from rhino meshes"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">compas</span>
@@ -691,7 +691,7 @@ to select Rhino mesh blocks and export to assembly data structure as a <code cla
 
 <span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 <span class="n">PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">".."</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">)</span>
 <span class="p">)</span>  <span class="c1"># or change to your own directory</span>
 
 <span class="n">guid</span> <span class="o">=</span> <span class="n">select_meshes</span><span class="p">()</span>
@@ -699,10 +699,10 @@ to select Rhino mesh blocks and export to assembly data structure as a <code cla
 <span class="n">assembly</span> <span class="o">=</span> <span class="n">CRA_Assembly</span><span class="p">()</span>
 <span class="n">assembly</span><span class="o">.</span><span class="n">add_blocks_from_rhinomeshes</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
 
-<span class="n">filename</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s2">&quot;file name (xxx.json):&quot;</span><span class="p">)</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s2">"file name (xxx.json):"</span><span class="p">)</span>
 <span class="n">file_o</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
 <span class="n">compas</span><span class="o">.</span><span class="n">json_dump</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;file save to: &quot;</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"file save to: "</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Note</strong>: The selection sequence is important because it represents the node indices.</p>
@@ -713,7 +713,7 @@ to select Rhino mesh blocks and export to assembly data structure as a <code cla
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">compas_cra.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">CRA_Assembly</span>
 
-<span class="n">FILE_I</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s2">&quot;XXX.json&quot;</span><span class="p">)</span>  <span class="c1"># or your own path</span>
+<span class="n">FILE_I</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="s2">"XXX.json"</span><span class="p">)</span>  <span class="c1"># or your own path</span>
 <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">FILE_I</span><span class="p">)</span>
 <span class="n">assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>
 </pre></div>
@@ -727,7 +727,7 @@ we can follow the previous step <a class="reference internal" href="#bc"><span c
 so they have to be discretised manually as planar faces or triangles.</p>
 <p>Use this script at <a class="reference external" href="https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_interfaces_json.py">scripts/mesh_to_assembly_interfaces_json.py</a>
 to select mesh blocks with interfaces and export to assembly data structure and store it as json file.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;This is the script to add assembly and interfaces from rhino meshes&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""This is the script to add assembly and interfaces from rhino meshes"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">compas</span>
@@ -738,11 +738,11 @@ to select mesh blocks with interfaces and export to assembly data structure and 
 
 <span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 <span class="n">PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">".."</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">)</span>
 <span class="p">)</span>  <span class="c1"># or change to your own directory</span>
 
 <span class="n">guid</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObjects</span><span class="p">(</span>
-    <span class="s2">&quot;select blocks&quot;</span><span class="p">,</span>
+    <span class="s2">"select blocks"</span><span class="p">,</span>
     <span class="n">preselect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">select</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">group</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -754,7 +754,7 @@ to select mesh blocks with interfaces and export to assembly data structure and 
 
 <span class="n">node_labels</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">assembly</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-    <span class="n">block</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">node_attribute</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;block&quot;</span><span class="p">)</span>
+    <span class="n">block</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">node_attribute</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">"block"</span><span class="p">)</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">centroid</span><span class="p">()</span>
     <span class="n">node_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">AddTextDot</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
 
@@ -762,7 +762,7 @@ to select mesh blocks with interfaces and export to assembly data structure and 
 <span class="k">while</span> <span class="ow">not</span> <span class="n">IS_FINISHED</span><span class="p">:</span>
 
     <span class="n">interface_guids</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObjects</span><span class="p">(</span>
-        <span class="s2">&quot;select interfaces&quot;</span><span class="p">,</span>
+        <span class="s2">"select interfaces"</span><span class="p">,</span>
         <span class="n">preselect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">select</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">group</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -774,21 +774,21 @@ to select mesh blocks with interfaces and export to assembly data structure and 
         <span class="n">mesh</span> <span class="o">=</span> <span class="n">RhinoMesh</span><span class="o">.</span><span class="n">from_guid</span><span class="p">(</span><span class="n">interface_guid</span><span class="p">)</span>
         <span class="n">interfaces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">to_compas</span><span class="p">())</span>
 
-    <span class="n">edge_a</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetInteger</span><span class="p">(</span><span class="s2">&quot;assign interface from&quot;</span><span class="p">)</span>
-    <span class="n">edge_b</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetInteger</span><span class="p">(</span><span class="s2">&quot;assign interface to&quot;</span><span class="p">)</span>
+    <span class="n">edge_a</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetInteger</span><span class="p">(</span><span class="s2">"assign interface from"</span><span class="p">)</span>
+    <span class="n">edge_b</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetInteger</span><span class="p">(</span><span class="s2">"assign interface to"</span><span class="p">)</span>
 
     <span class="n">assembly</span><span class="o">.</span><span class="n">add_interfaces_from_meshes</span><span class="p">(</span><span class="n">interfaces</span><span class="p">,</span> <span class="n">edge_a</span><span class="p">,</span> <span class="n">edge_b</span><span class="p">)</span>
 
     <span class="n">IS_FINISHED</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetBoolean</span><span class="p">(</span>
-        <span class="s2">&quot;Continue select interface?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;Continue&quot;</span><span class="p">,</span> <span class="s2">&quot;Continue&quot;</span><span class="p">,</span> <span class="s2">&quot;Stop&quot;</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="s2">"Continue select interface?"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"Continue"</span><span class="p">,</span> <span class="s2">"Continue"</span><span class="p">,</span> <span class="s2">"Stop"</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">)</span>
     <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="n">rs</span><span class="o">.</span><span class="n">DeleteObjects</span><span class="p">(</span><span class="n">node_labels</span><span class="p">)</span>
 
-<span class="n">filename</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s2">&quot;file name (xxx.json):&quot;</span><span class="p">)</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s2">"file name (xxx.json):"</span><span class="p">)</span>
 <span class="n">file_o</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
 <span class="n">compas</span><span class="o">.</span><span class="n">json_dump</span><span class="p">(</span><span class="n">assembly</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;file save to: &quot;</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"file save to: "</span><span class="p">,</span> <span class="n">file_o</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Note</strong>:</p>

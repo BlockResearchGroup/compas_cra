@@ -592,7 +592,7 @@ document.write(`
 <figure class="figure align-default">
 <img alt="../_images/example_concave-long.png" class="figure-img img-fluid" src="../_images/example_concave-long.png" />
 </figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Example to calculate interlocking joint&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Example to calculate interlocking joint"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
@@ -608,7 +608,7 @@ document.write(`
 <span class="n">deg</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># rotation angle in degree</span>
 <span class="n">rotate_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># around y-axis</span>
 
-<span class="n">FILE_I</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">SAMPLE</span><span class="p">,</span> <span class="s2">&quot;concave-long.json&quot;</span><span class="p">)</span>
+<span class="n">FILE_I</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">SAMPLE</span><span class="p">,</span> <span class="s2">"concave-long.json"</span><span class="p">)</span>
 
 <span class="n">assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">FILE_I</span><span class="p">)</span>
 <span class="n">assembly</span><span class="p">:</span> <span class="n">CRA_Assembly</span> <span class="o">=</span> <span class="n">assembly</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">CRA_Assembly</span><span class="p">)</span>

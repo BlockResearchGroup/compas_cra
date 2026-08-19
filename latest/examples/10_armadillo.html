@@ -592,7 +592,7 @@ document.write(`
 <figure class="figure align-default">
 <img alt="../_images/example_armadillo.png" class="figure-img img-fluid" src="../_images/example_armadillo.png" />
 </figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Load and visualise armadillo vault CRA result.&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Load and visualise armadillo vault CRA result."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
@@ -607,14 +607,14 @@ document.write(`
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">load_result</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load armadillo vault with cra result.&quot;&quot;&quot;</span>
-    <span class="n">armadillo_assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">SAMPLE</span><span class="p">,</span> <span class="s2">&quot;armadillo_cra.json&quot;</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">"""Load armadillo vault with cra result."""</span>
+    <span class="n">armadillo_assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">SAMPLE</span><span class="p">,</span> <span class="s2">"armadillo_cra.json"</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">armadillo_assembly</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">identify_interfaces</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load armadillo vault blocks.&quot;&quot;&quot;</span>
-    <span class="n">armadillo_assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">SAMPLE</span><span class="p">,</span> <span class="s2">&quot;armadillo.json&quot;</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">"""Load armadillo vault blocks."""</span>
+    <span class="n">armadillo_assembly</span> <span class="o">=</span> <span class="n">compas</span><span class="o">.</span><span class="n">json_load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compas_cra</span><span class="o">.</span><span class="n">SAMPLE</span><span class="p">,</span> <span class="s2">"armadillo.json"</span><span class="p">))</span>
     <span class="n">assembly_interfaces_numpy</span><span class="p">(</span><span class="n">armadillo_assembly</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">armadillo_assembly</span>
 

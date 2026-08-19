@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
     <link rel="icon" href="_static/compas.ico" type="image/x-icon">
-    <title>Known Issues &#8212; COMPAS CRA</title>
+    <title>&lt;no title&gt; &#8212; COMPAS CRA</title>
   
   
   
@@ -314,6 +314,10 @@ document.write(`
   
 
   
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
 
     </nav>
@@ -565,7 +569,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Known Issues</li>
+    <li class="breadcrumb-item active" aria-current="page">&lt;no title&gt;</li>
   </ul>
 </nav>
 </div>
@@ -582,14 +586,16 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="known-issues">
-<h1>Known Issues</h1>
-<ul class="simple">
-<li><p>pyomo cannot find ipopt location: <code class="docutils literal notranslate"><span class="pre">pyomo.common.errors.ApplicationError:</span> <span class="pre">No</span> <span class="pre">executable</span> <span class="pre">found</span> <span class="pre">for</span> <span class="pre">solver</span> <span class="pre">'ipopt'</span></code>.
-Please refer this thread for solution: <a class="reference external" href="https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1">https://groups.google.com/g/open-dsopf/c/wYPbZp-HLCw?pli=1</a></p></li>
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code> uses <a class="reference external" href="https://coin-or.github.io/Ipopt/">IPOPT</a> solver, so it might not work for PC with AMD processor.</p></li>
+  <ul class="simple">
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_cra</span></code> uses the <a class="reference external" href="https://coin-or.github.io/Ipopt/">IPOPT</a> solver with the
+MUMPS linear solver. Ill-conditioned assemblies can end in a non-optimal termination
+condition, which is reported as a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a> by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">compas_cra.equilibrium.pyomo_helper.pyomo_result_check()</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">compas_cra</span></code> was installed from a source distribution rather than a wheel, no
+IPOPT executable is bundled and one has to be available on the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> instead. Not
+having one raises <code class="docutils literal notranslate"><span class="pre">RuntimeError:</span> <span class="pre">No</span> <span class="pre">IPOPT</span> <span class="pre">executable</span> <span class="pre">found</span></code>. Installing a binary
+wheel with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">compas_cra</span></code> is the simplest fix.</p></li>
 </ul>
-</section>
 
 
                 </article>
@@ -603,6 +609,20 @@ Please refer this thread for solution: <a class="reference external" href="https
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>
