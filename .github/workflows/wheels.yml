@@ -97,6 +97,7 @@ jobs:
           # coinbrew needs bash >= 4; macOS still ships 3.2 as /bin/bash
           brew list bash >/dev/null 2>&1 || brew install bash
           brew list gcc >/dev/null 2>&1 || brew install gcc
+          brew list openblas >/dev/null 2>&1 || brew install openblas
           # The formula installs versioned binaries only (gfortran-14, ...).
           test -x "$(brew --prefix)/bin/gfortran" || \
             ln -sf "$(ls "$(brew --prefix)"/bin/gfortran-* | tail -1)" "$(brew --prefix)/bin/gfortran"

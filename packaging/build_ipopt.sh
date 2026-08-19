@@ -37,52 +37,40 @@ case "$(uname -s)" in
     *) echo "unsupported platform: $(uname -s)" >&2; exit 1 ;;
 esac
 
-# BLAS/LAPACK comes from the platform, statically linked: the serial OpenBLAS archive
-# on Linux and Windows (libopenblas.a provides LAPACK as well; the serial rather than the
-# pthread/openmp build, since MUMPS is called sequentially here), and the system
-# Accelerate framework on macOS.
+# BLAS/LAPACK is the same implementation on every platform - a static OpenBLAS - so the
+# solver gives identical numbers everywhere. Accelerate would be the obvious choice on
+# macOS, but `-framework Accelerate` does not survive libtool: it configures fine and
+# then every BLAS symbol is undefined when the ipopt executable is finally linked.
 #
-# A static libopenblas.a also needs libgfortran, libquadmath, libm and libpthread, and
-# they have to come *after* it on the link line. Neither LIBS nor a multi-word
-# --with-lapack survives coinbrew (it clears the first and splits the second on
-# whitespace), so on Linux the whole chain is wrapped in a GNU ld linker script that
-# looks like an archive and is therefore a single token. See make_lapack_shim below.
+# A static libopenblas.a in turn needs libgfortran, libm and friends, and they have to
+# come *after* it on the link line. Neither LIBS nor a multi-word --with-lapack survives
+# coinbrew (it clears the first and splits the second on whitespace), so on the GNU ld
+# platforms the whole chain is wrapped in a linker script that looks like an archive and
+# is therefore a single token - see make_lapack_shim. ld64 has no linker scripts, so on
+# macOS the archive is named directly and the rest comes from the Fortran link flags.
 
 LAPACK_SHIM_DIR="$WORK_DIR/lapack-shim"
+
+find_openblas() {
+    local path
+    path="$(${CC:-gcc} -print-file-name=libopenblas.a)"
+    if [ ! -f "$path" ] && command -v brew >/dev/null 2>&1; then
+        path="$(brew --prefix openblas 2>/dev/null)/lib/libopenblas.a"
+    fi
+    if [ ! -f "$path" ]; then
+        echo "ERROR: no static openblas found (install openblas-static / brew install openblas)" >&2
+        exit 1
+    fi
+    echo "$path"
+}
 
 make_lapack_shim() {
     # A text file named lib<name>.a is read by GNU ld as a script, so -lcralapack pulls
     # in every archive listed here, in this order.
-    local openblas
-    openblas="$(${CC:-gcc} -print-file-name=libopenblas.a)"
-    if [ ! -f "$openblas" ]; then
-        echo "ERROR: no static openblas found (install openblas-static)" >&2
-        exit 1
-    fi
-    local threads="-lpthread"
-    if [ "$PLATFORM" = "windows" ]; then
-        threads=""
-    fi
     mkdir -p "$LAPACK_SHIM_DIR"
-    echo "INPUT($openblas$RUNTIME_LINK_LIBS -lm $threads)" \
-        > "$LAPACK_SHIM_DIR/libcralapack.a"
+    echo "INPUT($(find_openblas)$RUNTIME_LINK_LIBS -lm)" > "$LAPACK_SHIM_DIR/libcralapack.a"
     echo "  lapack shim: $(cat "$LAPACK_SHIM_DIR/libcralapack.a")"
 }
-
-case "$PLATFORM" in
-    linux|windows)
-        LAPACK_FLAGS="${LAPACK_FLAGS:--lcralapack}"
-        LAPACK_LABEL="serial OpenBLAS, statically linked        BSD 3-clause"
-        ;;
-    macos)
-        LAPACK_FLAGS="${LAPACK_FLAGS:--Wl,-framework,Accelerate}"
-        LAPACK_LABEL="Apple Accelerate framework"
-        ;;
-esac
-
-echo "=============================================================================="
-echo " building ipopt $IPOPT_VERSION for $PLATFORM ($(uname -m)) with $JOBS jobs"
-echo "=============================================================================="
 
 # ------------------------------------------------------------------------------
 # static linking flags
@@ -119,18 +107,37 @@ force_static_runtime_libs() {
     local libdir="$WORK_DIR/static-runtime"
     rm -rf "$libdir" && mkdir -p "$libdir"
     local lib path
-    for lib in libgfortran libquadmath libgcc libemutls_w libgomp libwinpthread; do
+    for lib in libgfortran libquadmath libgcc libemutls_w libgomp; do
         path="$(${FC:-gfortran} -print-file-name=${lib}.a)"
         if [ -f "$path" ]; then
             ln -sf "$path" "$libdir/${lib}.a"
             RUNTIME_LINK_LIBS="$RUNTIME_LINK_LIBS -l${lib#lib}"
         fi
     done
+
+    # On mingw the pthread implementation is libwinpthread, but gcc links -lpthread,
+    # which resolves to the DLL import library. Offering the static archive under the
+    # name ld actually looks for leaves exactly one definition instead of two.
+    path="$(${FC:-gfortran} -print-file-name=libwinpthread.a)"
+    if [ -f "$path" ]; then
+        ln -sf "$path" "$libdir/libpthread.a"
+    fi
+    if [ "$PLATFORM" != "macos" ]; then
+        RUNTIME_LINK_LIBS="$RUNTIME_LINK_LIBS -lpthread"
+    fi
+
     echo "  static runtime libs:$RUNTIME_LINK_LIBS"
     STATIC_LDFLAGS="$STATIC_LDFLAGS -L$libdir"
 }
 
 force_static_runtime_libs
+
+if [ "$PLATFORM" = "macos" ]; then
+    LAPACK_FLAGS="${LAPACK_FLAGS:-$(find_openblas)}"
+else
+    LAPACK_FLAGS="${LAPACK_FLAGS:--lcralapack}"
+fi
+LAPACK_LABEL="static OpenBLAS                BSD 3-clause"
 
 if [ "$PLATFORM" = "macos" ]; then
     : "${MACOSX_DEPLOYMENT_TARGET:?MACOSX_DEPLOYMENT_TARGET must be set}"
@@ -215,10 +222,7 @@ collect_licenses() {
         "ThirdParty/Mumps/MUMPS/LICENSE:MUMPS-LICENSE.txt"
         "ThirdParty/ASL/LICENSE:ASL-LICENSE.txt"
     )
-    # Accelerate is a system framework, so only the OpenBLAS builds bundle its license.
-    if [ "$LAPACK_FLAGS" = "-lcralapack" ]; then
-        sources+=("$HERE/licenses/OpenBLAS-LICENSE.txt:OpenBLAS-LICENSE.txt")
-    fi
+    sources+=("$HERE/licenses/OpenBLAS-LICENSE.txt:OpenBLAS-LICENSE.txt")
     local src
     for src in "${sources[@]}"
     do
