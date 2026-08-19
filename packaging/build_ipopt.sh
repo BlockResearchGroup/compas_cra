@@ -106,6 +106,10 @@ fi
 # lapack shim is written. libgomp is in there because MSYS2 ships the OpenMP build of
 # OpenBLAS; on the other platforms nothing references it and ld pulls in nothing.
 RUNTIME_LINK_LIBS=""
+# The compiler support archives, as opposed to the Fortran ones. libgfortran's
+# quad-precision code calls into libgcc (__addtf3, __divtf3, ...), and nothing else puts
+# these on the link line where there is no linker script to hold them.
+SUPPORT_LINK_LIBS=""
 
 force_static_runtime_libs() {
     local libdir="$WORK_DIR/static-runtime"
@@ -116,6 +120,10 @@ force_static_runtime_libs() {
         if [ -f "$path" ]; then
             ln -sf "$path" "$libdir/${lib}.a"
             RUNTIME_LINK_LIBS="$RUNTIME_LINK_LIBS -l${lib#lib}"
+            case "$lib" in
+                libgcc|libemutls_w|libgomp)
+                    SUPPORT_LINK_LIBS="$SUPPORT_LINK_LIBS -l${lib#lib}" ;;
+            esac
         fi
     done
 
@@ -143,7 +151,9 @@ if [ "$PLATFORM" = "macos" ]; then
     else
         LAPACK_FLAGS="${LAPACK_FLAGS:--Wl,-framework,Accelerate}"
     fi
-    STATIC_LDFLAGS="$STATIC_LDFLAGS -Wl,-framework,Accelerate"
+    # ld64 resolves archives regardless of their position, so these can ride along in
+    # LDFLAGS - there is no linker script to hold them the way there is with GNU ld.
+    STATIC_LDFLAGS="$STATIC_LDFLAGS -Wl,-framework,Accelerate$SUPPORT_LINK_LIBS"
     LAPACK_LABEL="Apple Accelerate framework"
 else
     LAPACK_FLAGS="${LAPACK_FLAGS:--lcralapack}"
