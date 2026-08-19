@@ -1,1 +1,6 @@
-
+compas>=2.4
+compas_assembly>=0.7.0
+numpy>=1.24
+pyomo>=6.7
+scipy>=1.10
+shapely>=2.0

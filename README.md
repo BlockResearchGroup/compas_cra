@@ -11,6 +11,20 @@
 
 > developed with <span style="color: #e25555;">&#9829;</span> by [Gene Ting-Chun Kao](https://geneatcg.com)
 
+## Installation
+
+```bash
+pip install compas_cra
+```
+
+Nothing else is needed on Windows, macOS (Apple Silicon and Intel) or Linux: the wheels
+bundle a statically linked [IPOPT](https://coin-or.github.io/Ipopt/) 3.14.19 executable
+(Eclipse Public License 2.0, MUMPS linear solver, no HSL), built from source by
+[`packaging/`](./packaging). See [`packaging/README.md`](./packaging/README.md) for how
+it is built and which licenses apply, and the
+[installation docs](https://blockresearchgroup.github.io/compas_cra/latest/installation.html)
+for development installs.
+
 To find out more about CRA, please refer to our paper in the CAD Computer-Aided Design journal:
 [https://doi.org/10.1016/j.cad.2022.103216](https://doi.org/10.1016/j.cad.2022.103216 )
 

@@ -6,6 +6,7 @@ import numpy as np
 import pyomo.environ as pyo
 from compas_assembly.datastructures import Assembly
 
+from ._solver import ipopt_solver
 from .cra_helper import equilibrium_setup
 from .cra_helper import external_force_setup
 from .cra_helper import friction_setup
@@ -129,14 +130,15 @@ def cra_solve(
     if timer:
         start_time = time.time()
 
-    solver = pyo.SolverFactory("ipopt")
-    solver.options["tol"] = 1e-10  # same as default tolerance
-    solver.options["constr_viol_tol"] = 1e-12  # constraint tolerance
-    solver.options["compl_inf_tol"] = 1e-12
-    solver.options["acceptable_tol"] = 1e-8
-    solver.options["acceptable_constr_viol_tol"] = 1e-8
-    solver.options["acceptable_compl_inf_tol"] = 1e-8
     # https://coin-or.github.io/Ipopt/OPTIONS.html
+    solver = ipopt_solver(
+        tol=1e-10,  # same as default tolerance
+        constr_viol_tol=1e-12,  # constraint tolerance
+        compl_inf_tol=1e-12,
+        acceptable_tol=1e-8,
+        acceptable_constr_viol_tol=1e-8,
+        acceptable_compl_inf_tol=1e-8,
+    )
     result = solver.solve(model, tee=verbose)
 
     if timer:

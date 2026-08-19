@@ -5,8 +5,8 @@ dependencies:
   - python < 3.14
   - pip
   - compas >=2.4
+  # ipopt for editable installs, which carry no bundled binary; wheels ship their own
   - ipopt
-  - pyomo 
   - pip:
       - compas_assembly >=0.7.0
       - matplotlib

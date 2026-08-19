@@ -6,6 +6,7 @@ import numpy as np
 import pyomo.environ as pyo
 from compas_assembly.datastructures import Assembly
 
+from ._solver import ipopt_solver
 from .cra_helper import equilibrium_setup
 from .cra_helper import external_force_setup
 from .cra_helper import friction_setup
@@ -93,7 +94,7 @@ def rbe_solve(
     if timer:
         start_time = time.time()
 
-    solver = pyo.SolverFactory("ipopt")
+    solver = ipopt_solver()
     result = solver.solve(model, tee=verbose)
 
     if timer:
