@@ -37,9 +37,8 @@ platform serves every supported Python version**:
 - **MUMPS** as the linear solver. This is IPOPT's default and the one `compas_cra`
   relies on, since none of the formulations set `linear_solver`.
 - **AMPL ASL**, without which the `ipopt` executable is not built at all.
-- **BLAS/LAPACK**: a static OpenBLAS on every platform, so the solver gives the same
-  numbers everywhere. (Accelerate would be the natural choice on macOS, but
-  `-framework Accelerate` does not survive libtool's link line.)
+- **BLAS/LAPACK**: a static OpenBLAS on Linux and Windows, Accelerate on macOS - named
+  by its SDK stub path, because `-framework Accelerate` does not survive libtool.
 - **No HSL.** The HSL linear solvers (`ma27`, `ma57`, ...) are not redistributable.
 
 Everything that can be is linked statically, so the shipped binary has no dynamic

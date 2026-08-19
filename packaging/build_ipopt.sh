@@ -37,17 +37,21 @@ case "$(uname -s)" in
     *) echo "unsupported platform: $(uname -s)" >&2; exit 1 ;;
 esac
 
-# BLAS/LAPACK is the same implementation on every platform - a static OpenBLAS - so the
-# solver gives identical numbers everywhere. Accelerate would be the obvious choice on
-# macOS, but `-framework Accelerate` does not survive libtool: it configures fine and
-# then every BLAS symbol is undefined when the ipopt executable is finally linked.
+# BLAS/LAPACK: a static OpenBLAS on Linux and Windows, and Accelerate on macOS.
+#
+# Getting the flag through to the final link took some care. `-framework Accelerate`
+# configures fine and then leaves every BLAS symbol undefined when libtool links the
+# ipopt executable, and homebrew's OpenBLAS is built against LLVM's OpenMP, so it drags
+# in libomp. Naming the SDK's Accelerate stub by absolute path avoids both: it is a
+# single token, so coinbrew cannot split it, and it is an ordinary library path, so
+# libtool passes it straight through. The framework flag also goes into LDFLAGS as a
+# belt-and-braces measure.
 #
 # A static libopenblas.a in turn needs libgfortran, libm and friends, and they have to
 # come *after* it on the link line. Neither LIBS nor a multi-word --with-lapack survives
 # coinbrew (it clears the first and splits the second on whitespace), so on the GNU ld
 # platforms the whole chain is wrapped in a linker script that looks like an archive and
-# is therefore a single token - see make_lapack_shim. ld64 has no linker scripts, so on
-# macOS the archive is named directly and the rest comes from the Fortran link flags.
+# is therefore a single token - see make_lapack_shim.
 
 LAPACK_SHIM_DIR="$WORK_DIR/lapack-shim"
 
@@ -133,11 +137,19 @@ force_static_runtime_libs() {
 force_static_runtime_libs
 
 if [ "$PLATFORM" = "macos" ]; then
-    LAPACK_FLAGS="${LAPACK_FLAGS:-$(find_openblas)}"
+    ACCELERATE="$(xcrun --show-sdk-path)/System/Library/Frameworks/Accelerate.framework/Accelerate.tbd"
+    if [ -f "$ACCELERATE" ]; then
+        LAPACK_FLAGS="${LAPACK_FLAGS:-$ACCELERATE}"
+    else
+        LAPACK_FLAGS="${LAPACK_FLAGS:--Wl,-framework,Accelerate}"
+    fi
+    STATIC_LDFLAGS="$STATIC_LDFLAGS -Wl,-framework,Accelerate"
+    LAPACK_LABEL="Apple Accelerate framework"
 else
     LAPACK_FLAGS="${LAPACK_FLAGS:--lcralapack}"
+    LAPACK_LABEL="static OpenBLAS               BSD 3-clause"
 fi
-LAPACK_LABEL="static OpenBLAS                BSD 3-clause"
+echo "  lapack: $LAPACK_FLAGS"
 
 if [ "$PLATFORM" = "macos" ]; then
     : "${MACOSX_DEPLOYMENT_TARGET:?MACOSX_DEPLOYMENT_TARGET must be set}"
@@ -222,7 +234,10 @@ collect_licenses() {
         "ThirdParty/Mumps/MUMPS/LICENSE:MUMPS-LICENSE.txt"
         "ThirdParty/ASL/LICENSE:ASL-LICENSE.txt"
     )
-    sources+=("$HERE/licenses/OpenBLAS-LICENSE.txt:OpenBLAS-LICENSE.txt")
+    # Accelerate is a system framework, so only the OpenBLAS builds bundle its license.
+    if [ "$LAPACK_FLAGS" = "-lcralapack" ]; then
+        sources+=("$HERE/licenses/OpenBLAS-LICENSE.txt:OpenBLAS-LICENSE.txt")
+    fi
     local src
     for src in "${sources[@]}"
     do
