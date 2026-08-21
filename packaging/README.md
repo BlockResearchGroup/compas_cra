@@ -30,6 +30,7 @@ platform serves every supported Python version**:
 | `check_binary.sh` | runs the binary and asserts it has no non-system dynamic dependencies |
 | `build_wheel.sh <tag>` | builds the wheel and forces the `py3-none-<tag>` tag |
 | `test_wheel.sh [python]` | installs the wheel into a clean venv and runs the test suite there |
+| `check_release.py [dist]` | refuses a release missing a platform wheel, or missing a solver |
 
 ## What goes into the binary
 
@@ -69,3 +70,20 @@ On Windows the build runs in an MSYS2 UCRT64 shell; on macOS it needs `gfortran`
 
 `.github/workflows/wheels.yml` builds and tests all five wheels plus an sdist on every
 push, and publishes them to PyPI with trusted publishing when a `v*` tag is pushed.
+
+`invoke release <patch|minor|major>` is the way to cut one: it runs the tests, bumps the
+version, tags it and pushes. It uploads nothing itself - the tag is what triggers the
+publish, and the wheels are built on the runners, never locally. The ipopt binaries are
+not in git (see `.gitignore`), so nothing platform-specific travels through the push.
+
+Before uploading, the publish job runs `check_release.py`, which refuses to publish
+unless every platform wheel is present and each one actually contains an ipopt
+executable. Run it on a set of downloaded artifacts any time:
+
+```bash
+python packaging/check_release.py dist
+```
+
+| script | what it does |
+| --- | --- |
+| `check_release.py` | refuses a release that is missing a platform, or a solver |
