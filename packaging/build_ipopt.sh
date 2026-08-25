@@ -202,8 +202,74 @@ fi
 # Pulls Ipopt itself plus ThirdParty/ASL and ThirdParty/Mumps, whose get.* scripts
 # download the ASL and MUMPS sources. ThirdParty/HSL is cloned too but coinbrew skips
 # building it because we never provide the (non-redistributable) HSL sources.
-if [ ! -d Ipopt ]; then
+#
+# Those get.* scripts fetch their tarballs with a bare `curl -L -O` (or `wget`): no
+# integrity check and no retry, so a stalled transfer lands a short file and the script
+# gunzips it anyway. That is exactly how an aarch64 build failed - 54 kB of a 4.3 MB
+# tarball, then `gzip: MUMPS_5.8.2.tar.gz: not in gzip format`. The download is not ours
+# to patch, so it is defended from the outside, twice over.
+
+# 1. curl and wget both read a config file whose location comes from the environment.
+#    Give them one that abandons a stalled transfer and retries rather than truncating.
+#    Only long-standing options are used here; the manylinux images carry an old curl.
+NET_CONFIG_DIR="$WORK_DIR/net-config"
+mkdir -p "$NET_CONFIG_DIR"
+cat > "$NET_CONFIG_DIR/.curlrc" <<'EOF'
+fail
+location
+retry = 5
+retry-delay = 5
+speed-limit = 1024
+speed-time = 30
+EOF
+cat > "$NET_CONFIG_DIR/wgetrc" <<'EOF'
+tries = 5
+timeout = 30
+retry_connrefused = on
+EOF
+export CURL_HOME="$NET_CONFIG_DIR"
+export WGETRC="$NET_CONFIG_DIR/wgetrc"
+
+# 2. and a check that the sources actually landed, because a get.* script that fails
+#    still exits 0 often enough to reach the build, where the error is far less obvious.
+sources_present() {
+    [ -d Ipopt ] && [ -d ThirdParty/ASL/solvers ] && [ -d ThirdParty/Mumps/MUMPS ]
+}
+
+refetch_third_party() {
+    # `coinbrew fetch` only runs get.<proj> when the clone's revision changed, so
+    # repeating the fetch over an already-cloned ThirdParty tree does nothing at all.
+    # Re-run the script that did not produce its sources, directly.
+    local proj dir sources
+    for proj in ASL Mumps; do
+        dir="ThirdParty/$proj"
+        case "$proj" in
+            ASL)   sources="solvers" ;;
+            Mumps) sources="MUMPS" ;;
+        esac
+        [ -d "$dir/$sources" ] && continue
+        [ -f "$dir/get.$proj" ] || continue
+        echo "  re-running $dir/get.$proj"
+        ( cd "$dir" && "$BASH_BIN" "./get.$proj" ) || true
+    done
+}
+
+if ! sources_present; then
     "$BASH_BIN" ./coinbrew fetch "Ipopt@releases/$IPOPT_VERSION" --no-prompt --skip-update
+fi
+
+for attempt in 1 2 3; do
+    sources_present && break
+    echo "  incomplete source tree, retrying the third-party downloads ($attempt/3)" >&2
+    sleep $((attempt * 10))
+    refetch_third_party
+done
+
+if ! sources_present; then
+    echo "ERROR: Ipopt sources still incomplete after 3 attempts" >&2
+    [ -d ThirdParty/ASL/solvers ] || echo "  missing ThirdParty/ASL/solvers" >&2
+    [ -d ThirdParty/Mumps/MUMPS ] || echo "  missing ThirdParty/Mumps/MUMPS" >&2
+    exit 1
 fi
 
 # ------------------------------------------------------------------------------
