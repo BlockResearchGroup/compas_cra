@@ -1,15 +1,11 @@
 name: release
 
-# A release is the same pipeline every push runs (see pipeline.yml), plus publishing.
-#
-# The publish job cannot live in pipeline.yml: PyPI mints a trusted-publishing token
-# against the workflow that contains the job, and reusable workflows are not accepted
-# as trusted publishers (pypi/warehouse#11096). So the pipeline builds and this
-# workflow — a normal, non-reusable one — publishes what the pipeline left as run
-# artifacts.
+# A release is the same pipeline every push runs, plus publishing. See pipeline.yml.
 #
 # On PyPI, compas_cra needs a trusted publisher for this repository with `release.yml`
-# as the workflow and `pypi` as the environment.
+# as the workflow and `pypi` as the environment. The publish job itself lives in the
+# reusable pipeline, but PyPI matches the calling workflow - this file. (Verified
+# against compas_sandbox's own PyPI provenance, which has the same layout.)
 
 on:
   push:
@@ -19,61 +15,8 @@ on:
 jobs:
   pipeline:
     uses: ./.github/workflows/pipeline.yml
-
-  publish:
-    name: publish compas_cra to PyPI
-    needs: pipeline
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
+    with:
+      publish: true
     permissions:
       id-token: write  # trusted publishing
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: wheels-*
-          path: dist
-          merge-multiple: true
-      - uses: actions/download-artifact@v4
-        with:
-          name: sdist
-          path: dist
-      - run: ls -lh dist
-      - uses: pypa/gh-action-pypi-publish@release/v1
-
-  github-release:
-    name: create GitHub release
-    needs: publish
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      # the packages only; the built docs go to gh-pages, not onto the release
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: wheels-*
-          path: dist
-          merge-multiple: true
-      - uses: actions/download-artifact@v4
-        with:
-          name: sdist
-          path: dist
-      - uses: softprops/action-gh-release@v2
-        with:
-          files: dist/*
-
-  deploy-docs:
-    name: deploy docs
-    needs: publish
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write  # deploying pushes the built site to the gh-pages branch
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: docs-site
-          path: docs-site
-      - uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs-site
+      contents: write  # gh-pages + GitHub release

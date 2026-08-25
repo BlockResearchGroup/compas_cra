@@ -1,18 +1,18 @@
 name: pipeline
 
-# The single build pipeline, called by build.yml (every push) and by release.yml
-# (v* tags). Always the full chain: IPOPT compiled from source, a compas_cra wheel
-# for every platform and CPython with the solver built into it, each smoke-tested,
-# the full test suite run against one of those wheels, and the docs built.
-# Everything it produces is left as run artifacts: `wheels-*`, `sdist` and
-# `docs-site`.
-#
-# It deliberately publishes nothing. PyPI's trusted publishing refuses tokens minted
-# inside a reusable workflow (pypi/warehouse#11096), so the publish jobs live in
-# release.yml, which is not reusable, and consume these artifacts.
+# The single build pipeline, used by build.yml (every push, publish: false) and
+# release.yml (v* tags, publish: true). Always the full chain: IPOPT compiled from
+# source, a compas_cra wheel for every platform and CPython with the solver built
+# into it, each smoke-tested, the full test suite run against one of those wheels,
+# and the docs built. With publish: true it then refuses anything that is not a
+# complete release, uploads to PyPI, creates the GitHub release and deploys the docs.
 
 on:
   workflow_call:
+    inputs:
+      publish:
+        type: boolean
+        default: false
 
 # The cibuildwheel settings live in pyproject.toml ([tool.cibuildwheel]); only what
 # depends on the runner is set here.
@@ -181,10 +181,67 @@ jobs:
           venv-test/bin/pip install -q wheelhouse/compas_cra-*-cp312-*.whl pytest
           cd /tmp && "$GITHUB_WORKSPACE/venv-test/bin/python" -m pytest "$GITHUB_WORKSPACE/tests" -v
 
+  publish:
+    name: publish compas_cra to PyPI
+    needs: [wheels-linux, wheels-macos, wheels-windows, sdist, test]
+    if: inputs.publish
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+    permissions:
+      id-token: write  # trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          path: dist
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: sdist
+          path: dist
+      - run: ls -lh dist
+
+      # A green build is not enough: a renamed job or a dropped artifact would publish
+      # a partial release, and a pure py3-none-any wheel would install everywhere and
+      # then fail at the first solve. Neither is visible without looking inside.
+      - name: Verify every platform is present and every wheel carries a solver
+        run: python packaging/check_release.py dist
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    name: create GitHub release
+    needs: publish
+    if: inputs.publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # the packages only; the built docs go to gh-pages, not onto the release
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          path: dist
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: sdist
+          path: dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+
   docs:
     name: docs
     needs: wheels-linux
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # deploying pushes the built site to the gh-pages branch
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -205,7 +262,9 @@ jobs:
         run: |
           invoke docs
           test -f dist/docs/index.html
-      - uses: actions/upload-artifact@v4
+      - name: Deploy docs
+        if: inputs.publish
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          name: docs-site
-          path: dist/docs
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/docs

@@ -16,12 +16,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * One package again: the IPOPT binding is built into `compas_cra` itself as `compas_cra._native`, and `compas_cra` ships as platform wheels for CPython 3.9-3.13 on Windows, macOS (Apple Silicon and Intel) and manylinux (x86_64 and aarch64). `pip install compas_cra` installs exactly one distribution, solver included.
 * The build backend is scikit-build-core, which drives the CMake project at the repository root. It reads no `requirements.txt`, so the dependencies now live in `pyproject.toml`.
 * The cibuildwheel settings live in `[tool.cibuildwheel]` in `pyproject.toml` rather than in workflow environment variables, so `cibuildwheel` reproduces the CI wheel locally with no environment set. Only the runner-dependent parts (workspace paths, the macOS deployment target, the MSYS2 location) stay in `pipeline.yml`.
-* Publishing moved out of the reusable `pipeline.yml` and into `release.yml`. PyPI refuses trusted-publishing tokens minted inside a reusable workflow ([warehouse#11096](https://github.com/pypi/warehouse/issues/11096)), so the pipeline only builds, leaving the wheels, the sdist and the docs site as run artifacts, and `release.yml` — a normal workflow — publishes them.
+* One CI pipeline for every push and every release: `build.yml` (pushes and PRs to main) and `release.yml` (`v*` tags) both call the reusable `pipeline.yml`, which differs only by its `publish` input. A release therefore runs the exact chain that was already green on main — IPOPT from source, all five platforms, the smoke tests, the test suite against a built wheel and the docs — and then publishes it. `wheels.yml` and `docs.yml` are gone, folded into that pipeline.
+* `packaging/check_release.py` now checks for the `compas_cra._native._core` extension rather than a vendored `ipopt` executable, which the statically linked build no longer ships, and additionally requires every supported CPython on every platform. Verified against the artifacts of the PR build: it passes the complete set and rejects a partial one.
+* `invoke release` is defined in `tasks.py` instead of coming from `compas_invocations2`, without its local `python -m build` step: building a wheel here needs a staged IPOPT tree, and the published artifacts are built by CI on all five platforms regardless.
 
 ### Removed
 
 * Removed the separate `compas_cra_native` distribution and its `native/pyproject.toml`; the binding source stays in `native/`, built by the root `CMakeLists.txt`. An install from source (`pip install .`, editable included) now compiles the extension and needs `packaging/build_ipopt.sh` to have run first.
 * Removed `requirements.txt`, `requirements-dev.txt` and `requirements-viz.txt`; `pip install -e ".[dev]"` replaces `pip install -r requirements-dev.txt`.
+* Removed the `build_ghuser_components` task and its `ghuser` configuration from `tasks.py`; the paths pointed at `src/compas_notebook`, and compas_cra ships no Grasshopper components.
 
 ## [0.7.2] 2026-08-23
 

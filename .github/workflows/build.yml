@@ -27,3 +27,10 @@ jobs:
 
   pipeline:
     uses: ./.github/workflows/pipeline.yml
+    with:
+      publish: false
+    # ceiling only: the publish/deploy jobs are skipped on publish: false, but a
+    # called workflow may not request more permissions than the caller grants
+    permissions:
+      id-token: write
+      contents: write

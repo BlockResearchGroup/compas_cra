@@ -11,6 +11,7 @@ CPython 3.9–3.13 with cibuildwheel.
 | script | what it does |
 | --- | --- |
 | `build_ipopt.sh` | builds IPOPT + MUMPS from source and stages libraries and headers into `build/ipopt/stage` |
+| `check_release.py` | refuses a release that is missing a platform, a CPython or a solver; run by the publish job before the upload |
 
 ## What goes into the stage tree
 
@@ -52,10 +53,26 @@ On Windows the build runs in an MSYS2 UCRT64 shell; on macOS it needs `gfortran`
 
 `.github/workflows/pipeline.yml` is the one build pipeline: it compiles IPOPT, builds
 and smoke-tests a `compas_cra` wheel for every platform and CPython, runs the test
-suite against one of them, and builds the docs — leaving everything as run artifacts.
-`build.yml` runs it on every push. `release.yml` runs it on a `v*` tag and then
-publishes those artifacts to PyPI with trusted publishing.
+suite against one of them, and builds the docs. `build.yml` calls it with
+`publish: false` on every push and PR to main; `release.yml` calls it with
+`publish: true` on a `v*` tag. A release is therefore the same chain that was already
+green on main, plus four steps that only run with `publish: true`: the release check,
+the PyPI upload, the GitHub release and the gh-pages deploy.
 
-`invoke release <patch|minor|major>` is the way to cut one: it runs the tests, bumps
-the version, tags it and pushes. It uploads nothing itself — the tag is what triggers
-the publish, and the wheels are built on the runners, never locally.
+A green build is not by itself enough to publish. A renamed job or a dropped artifact
+would upload a partial release, and a pure `py3-none-any` wheel would install
+everywhere and then fail at the first solve — neither is visible without looking inside
+the files about to be uploaded. So `check_release.py` runs in the publish job before
+the upload and rejects the release unless there is a wheel for every platform and every
+supported CPython, an sdist, a single version, no pure wheel, and a
+`compas_cra/_native/_core*` extension of a plausible size inside each wheel.
+
+`invoke release <patch|minor|major>` is the way to cut one: it formats, runs the tests,
+bumps the version, tags it as `v{version}` and pushes. It builds and uploads nothing
+itself — the tag is what triggers the publish, and the wheels are built on the runners,
+never locally (a local wheel would need the stage tree, and would be thrown away).
+
+Publishing uses PyPI trusted publishing. The publisher to register for `compas_cra` is
+this repository with **`release.yml`** as the workflow and `pypi` as the environment:
+the publish job lives in the reusable `pipeline.yml`, but PyPI matches the calling
+workflow.
