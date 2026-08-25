@@ -1,6 +1,9 @@
 [build-system]
-requires = ["setuptools>=66.0"]
-build-backend = "setuptools.build_meta"
+# The IPOPT binding is built as part of the package itself, so the build backend has to
+# be able to drive CMake. nanobind 3.x dropped Python 3.9, which Rhino 8 still ships —
+# stay on 2.x.
+requires = ["scikit-build-core>=0.10", "nanobind>=2.2,<3"]
+build-backend = "scikit_build_core.build"
 
 # ============================================================================
 # project info
@@ -13,13 +16,14 @@ keywords = []
 authors = [{ name = "Gene Ting-Chun Kao", email = "kao@arch.ethz.ch" }]
 license = { file = "LICENSE" }
 readme = "README.md"
-requires-python = ">=3.10"
-dynamic = ['dependencies', 'optional-dependencies', 'version']
+requires-python = ">=3.9"
+dynamic = ["version"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Topic :: Scientific/Engineering",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -29,40 +33,88 @@ classifiers = [
     "Operating System :: MacOS",
 ]
 
-# The platform wheels bundle an ipopt executable (see packaging/build_ipopt.sh), which
-# is what makes `pip install compas_cra` enough to actually solve something. The command
-# is deliberately not called `ipopt`: pip would install it over a conda environment's own
-# bin/ipopt, and compas_cra would then find its own wrapper instead of a real solver.
-[project.scripts]
-compas-cra-ipopt = "compas_cra._ipopt.__main__:main"
+# scikit-build-core reads no requirements.txt, so the dependencies live here.
+dependencies = [
+    "compas>=2.4",
+    "compas_assembly>=0.7.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "shapely>=2.0",
+]
+
+[project.optional-dependencies]
+viz = ["compas_viewer", "matplotlib"]
+dev = [
+    "attrs>=17.4",
+    "black>=22.12.0",
+    "build",
+    "bump-my-version",
+    "compas_invocations2",
+    "compas_viewer",
+    "invoke>=0.14",
+    "ruff",
+    "sphinx_compas2_theme",
+    "twine",
+    "wheel",
+]
 
 [project.urls]
-Homepage = "https://blockresearchgroup.github.io/compas_cra"
-Documentation = "https://blockresearchgroup.github.io/compas_cra"
-Repository = "https://github.com/blockresearchgroup/compas_cra.git"
-Changelog = "https://github.com/blockresearchgroup/compas_cra/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/petrasvestartas/compas_cra"
+Documentation = "https://github.com/petrasvestartas/compas_cra"
+Repository = "https://github.com/petrasvestartas/compas_cra.git"
+Changelog = "https://github.com/petrasvestartas/compas_cra/blob/main/CHANGELOG.md"
 
 # ============================================================================
-# setuptools config
+# scikit-build-core config
 # ============================================================================
 
-[tool.setuptools]
-package-dir = { "" = "src" }
-include-package-data = true
-zip-safe = false
+[tool.scikit-build]
+minimum-version = "0.10"
+# the pure Python half of the package; CMake installs the _native/_core extension
+# alongside it (see CMakeLists.txt)
+wheel.packages = ["src/compas_cra"]
+# stripping would invalidate the macOS ad-hoc code signature; arm64 kills unsigned code
+install.strip = false
+sdist.exclude = [".github", "data/rhino-models", "docs/_images", "temp"]
 
-[tool.setuptools.dynamic]
-version = { attr = "compas_cra.__version__" }
-dependencies = { file = "requirements.txt" }
-optional-dependencies = { dev = { file = "requirements-dev.txt" }, viz = { file = "requirements-viz.txt" } }
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "src/compas_cra/__init__.py"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+# ============================================================================
+# cibuildwheel config
+# ============================================================================
+# Everything here is platform-independent, so `cibuildwheel` reproduces the CI
+# build locally with no environment variables at all. Only the settings that
+# depend on the runner (workspace paths, the macOS deployment target, the MSYS2
+# install location) are left in .github/workflows/pipeline.yml.
 
-[tool.setuptools.package-data]
-"compas_cra._ipopt" = ["bin/*", "licenses/*"]
-# data/ is not a package, so it needs an explicit glob to end up in the wheel
-"compas_cra" = ["data/samples/*.json"]
+[tool.cibuildwheel]
+# cp39 is Rhino 8's CPython; nanobind 2.x is kept for exactly that reason
+build = "cp39-* cp310-* cp311-* cp312-* cp313-*"
+skip = ["*-musllinux_*", "*_i686", "*-win32", "pp*"]
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
+# numpy is all the smoke test needs; the wheel's own dependencies come with it
+test-requires = ["numpy"]
+test-command = "python {project}/native/smoke.py"
+
+# IPOPT is compiled from source inside the manylinux container, once per
+# container, before any wheel is built. On macOS and Windows the same script
+# runs on the runner itself (and is cached there), because the build does not
+# happen in a container.
+[tool.cibuildwheel.linux]
+before-all = """\
+dnf install -y --enablerepo=powertools \
+    glibc-static libstdc++-static openblas-static openblas-devel && \
+env CFLAGS="-O2 -fPIC" CXXFLAGS="-O2 -fPIC" FFLAGS="-O2 -fPIC" FCFLAGS="-O2 -fPIC" \
+    {project}/packaging/build_ipopt.sh"""
+environment = { IPOPT_PREFIX = "/project/build/ipopt/stage" }
+
+[tool.cibuildwheel.windows]
+before-build = "pip install delvewheel"
+# grafts the MSYS2 runtime DLLs (libgfortran, OpenBLAS, ...) into the wheel
+repair-wheel-command = "delvewheel repair --add-path D:\\msys64\\ucrt64\\bin -w {dest_dir} {wheel}"
 
 # ============================================================================
 # replace pytest.ini
@@ -86,7 +138,7 @@ doctest_optionflags = [
 # ============================================================================
 
 [tool.bumpversion]
-current_version = "0.5.0"
+current_version = "0.7.2"
 message = "Bump version to {new_version}"
 commit = true
 tag = true

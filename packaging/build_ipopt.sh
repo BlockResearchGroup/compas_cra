@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 #
-# Build a self-contained `ipopt` executable for the current platform and stage it
-# into src/compas_cra/_ipopt/bin/.
-#
-# COMPAS CRA reaches IPOPT exclusively through `pyomo.SolverFactory("ipopt")`, which
-# shells out to the IPOPT command line executable (the AMPL/.nl interface). So all we
-# need to ship is that one executable - no Python bindings, no CPython ABI involved.
+# Build IPOPT for the current platform as static libraries and stage them, with their
+# headers, into build/ipopt/stage. That stage tree is what the compas_cra._native
+# extension (built from native/src by the CMake project at the repository root) links
+# against; nothing is copied into the source tree.
 #
 # The build uses coinbrew with:
 #   - ThirdParty-ASL    (mandatory: the `ipopt` executable only exists with ASL)
@@ -13,11 +11,12 @@
 #   - the platform's own static BLAS/LAPACK (see LAPACK_FLAGS below)
 #   - no HSL            (not redistributable)
 #
-# Everything is linked statically so the resulting wheel is a single self-contained
-# file: no rpath surgery, no bundled runtime DLLs, no auditwheel/delocate pass.
+# IPOPT and MUMPS are linked statically into the extension; the remaining runtimes
+# (Fortran runtime, OpenBLAS) stay dynamic and are grafted into the wheels by the
+# platform repair tools (auditwheel / delocate / delvewheel).
 #
 # Usage:  packaging/build_ipopt.sh
-# Env:    IPOPT_VERSION, WORK_DIR, DEST_DIR, JOBS
+# Env:    IPOPT_VERSION, WORK_DIR, JOBS
 #
 set -euo pipefail
 
@@ -27,7 +26,6 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$HERE/.." && pwd)"
 WORK_DIR="${WORK_DIR:-$REPO_ROOT/build/ipopt}"
 STAGE_DIR="$WORK_DIR/stage"
-DEST_DIR="${DEST_DIR:-$REPO_ROOT/src/compas_cra/_ipopt/bin}"
 JOBS="${JOBS:-$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2)}"
 
 case "$(uname -s)" in
@@ -90,7 +88,7 @@ make_lapack_shim() {
 #                                        libquadmath.a forces those to link statically
 #
 # What remains dynamic is the platform's own C library and friends (libc, libm, libdl,
-# libpthread, libz), which exist everywhere. check_binary.sh enforces exactly that.
+# libpthread, libz), which exist everywhere.
 
 # -static-libgcc/-static-libstdc++ are gcc options. On macOS the C compiler is clang,
 # which rejects them outright - and does not need them: libc++ is a system library
@@ -278,29 +276,13 @@ EOF
 BUILT="$STAGE_DIR/bin/$EXE_NAME"
 [ -f "$BUILT" ] || { echo "ERROR: $BUILT was not produced" >&2; exit 1; }
 
-mkdir -p "$DEST_DIR"
-cp "$BUILT" "$DEST_DIR/$EXE_NAME"
-chmod +x "$DEST_DIR/$EXE_NAME"
+# The product of this script is the static stage tree that the compas_cra._native
+# extension links against; verify it is complete.
+for artifact in lib/libipopt.a lib/libcoinmumps.a include/coin-or/IpTNLP.hpp; do
+    [ -f "$STAGE_DIR/$artifact" ] || { echo "ERROR: $STAGE_DIR/$artifact was not produced" >&2; exit 1; }
+done
 
-# An unstripped ipopt is ~50 MB, most of it debug symbols nobody can act on from a
-# wheel. Stripping takes it to a few MB, which matters when it ships in every wheel.
-echo "  size before strip: $(du -h "$DEST_DIR/$EXE_NAME" | cut -f1)"
-if [ "$PLATFORM" = "macos" ]; then
-    strip -x "$DEST_DIR/$EXE_NAME"
-else
-    strip "$DEST_DIR/$EXE_NAME"
-fi
-echo "  size after strip:  $(du -h "$DEST_DIR/$EXE_NAME" | cut -f1)"
-
-# The linker ad-hoc signs arm64 Mach-O binaries automatically, but a `cp` across
-# filesystems has been known to strip it; re-signing is cheap and idempotent.
-if [ "$PLATFORM" = "macos" ]; then
-    codesign --force --sign - "$DEST_DIR/$EXE_NAME" || true
-fi
-
-collect_licenses "$(dirname "$DEST_DIR")/licenses"
-
-"$HERE/check_binary.sh" "$DEST_DIR/$EXE_NAME"
+collect_licenses "$STAGE_DIR/licenses"
 
 echo
-echo "staged $DEST_DIR/$EXE_NAME"
+echo "staged static IPOPT tree in $STAGE_DIR"

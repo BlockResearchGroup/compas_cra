@@ -9,7 +9,7 @@ import sphinx_compas2_theme
 project = "COMPAS CRA"
 copyright = "ETH Zurich - Block Research Group"
 package = "compas_cra"
-organization = "blockresearchgroup"
+organization = "petrasvestartas"
 
 master_doc = "index"
 source_suffix = {".rst": "restructuredtext", ".md": "markdown"}

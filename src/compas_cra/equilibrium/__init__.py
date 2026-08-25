@@ -1,6 +1,9 @@
-from .cra_pyomo import cra_solve
-from .cra_penalty_pyomo import cra_penalty_solve
-from .rbe_pyomo import rbe_solve
+from .cra_native import cra_solve_native
+from .cra_native import cra_penalty_solve_native
+from .cra_native import rbe_solve_native
+from .cra_nlp import cra_problem
+from .cra_nlp import cra_penalty_problem
+from .cra_nlp import rbe_problem
 from .cra_helper import (
     equilibrium_setup,
     friction_setup,
@@ -13,20 +16,23 @@ from .cra_helper import (
     num_free,
     free_nodes,
 )
-from .pyomo_helper import (
-    initialisations,
-    bounds,
-    objectives,
-    constraints,
-    static_equilibrium_constraints,
-    pyomo_result_check,
-    pyomo_result_assembly,
-)
+
+# The solvers run on the in-process IPOPT binding (compas_cra._native); the
+# historical names are kept as the canonical API.
+cra_solve = cra_solve_native
+cra_penalty_solve = cra_penalty_solve_native
+rbe_solve = rbe_solve_native
 
 __all__ = [
     "cra_solve",
     "cra_penalty_solve",
     "rbe_solve",
+    "cra_solve_native",
+    "cra_penalty_solve_native",
+    "rbe_solve_native",
+    "cra_problem",
+    "cra_penalty_problem",
+    "rbe_problem",
     "equilibrium_setup",
     "friction_setup",
     "external_force_setup",
@@ -37,11 +43,4 @@ __all__ = [
     "num_vertices",
     "num_free",
     "free_nodes",
-    "initialisations",
-    "bounds",
-    "objectives",
-    "constraints",
-    "static_equilibrium_constraints",
-    "pyomo_result_check",
-    "pyomo_result_assembly",
 ]

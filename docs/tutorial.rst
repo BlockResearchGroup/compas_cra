@@ -102,7 +102,7 @@ Then we identify planar interfaces between blocks automatically.
     :class: figure-img img-fluid
 
 The complete tutorial script can be downloaded from
-`scripts/tutorial_cubes.py <https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/tutorial_cubes.py>`_
+`scripts/tutorial_cubes.py <https://github.com/petrasvestartas/compas_cra/blob/main/scripts/tutorial_cubes.py>`_
 
 To reproduce our `paper <https://doi.org/10.1016/j.cad.2022.103216>`_'s examples
 or to see more how to construct assembly and solve equilibrium,
@@ -119,7 +119,7 @@ Here we use Rhino as an example.
 Export mesh blocks as Assembly json file
 ----------------------------------------
 
-Use this script at `scripts/mesh_to_assembly_json.py <https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_json.py>`_
+Use this script at `scripts/mesh_to_assembly_json.py <https://github.com/petrasvestartas/compas_cra/blob/main/scripts/mesh_to_assembly_json.py>`_
 to select Rhino mesh blocks and export to assembly data structure as a ``.json`` file.
 
 .. literalinclude:: ../scripts/mesh_to_assembly_json.py
@@ -150,7 +150,7 @@ Export mesh blocks and interfaces as Assembly json file
 Currently, we do not implement automatic interface detection algorithm for blocks with curve/free-form interfaces,
 so they have to be discretised manually as planar faces or triangles.
 
-Use this script at `scripts/mesh_to_assembly_interfaces_json.py <https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_interfaces_json.py>`_
+Use this script at `scripts/mesh_to_assembly_interfaces_json.py <https://github.com/petrasvestartas/compas_cra/blob/main/scripts/mesh_to_assembly_interfaces_json.py>`_
 to select mesh blocks with interfaces and export to assembly data structure and store it as json file.
 
 .. literalinclude:: ../scripts/mesh_to_assembly_interfaces_json.py
@@ -170,7 +170,7 @@ to select mesh blocks with interfaces and export to assembly data structure and 
      - .. image:: /_images/tutorial_interface2.png
           :width: 100 %
 
-More Rhino files and precomputed :code:`.json` files are located at `data <https://github.com/BlockResearchGroup/compas_cra/blob/main/data>`_ folder.
+More Rhino files and precomputed :code:`.json` files are located at `data <https://github.com/petrasvestartas/compas_cra/blob/main/data>`_ folder.
 
 **Note**:
 

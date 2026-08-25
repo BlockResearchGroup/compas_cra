@@ -38,17 +38,15 @@ Equilibrium Helper Functions
     num_free
     free_nodes
 
-Pyomo Helper Functions
-======================
+Problem Builders
+================
+
+The optimisation problems themselves, as solver-agnostic sparse NLPs.
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    initialisations
-    bounds
-    objectives
-    constraints
-    static_equilibrium_constraints
-    pyomo_result_check
-    pyomo_result_assembly
+    cra_problem
+    cra_penalty_problem
+    rbe_problem

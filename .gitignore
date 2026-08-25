@@ -122,9 +122,5 @@ conda.recipe/
 
 *.gz
 
-# ipopt binaries are built by packaging/build_ipopt.sh, never committed
-src/compas_cra/_ipopt/bin/*
-!src/compas_cra/_ipopt/bin/.gitkeep
-src/compas_cra/_ipopt/licenses/*
-!src/compas_cra/_ipopt/licenses/.gitkeep
+# the ipopt stage tree built by packaging/build_ipopt.sh, never committed
 build/

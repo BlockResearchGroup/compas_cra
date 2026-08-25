@@ -4,8 +4,8 @@ authors:
   - family-names: "Kao"
     given-names: "Gene Ting-Chun"
     orcid: https://orcid.org/0000-0002-4275-1246
-title: "BlockResearchGroup/compas_cra: Release v0.2.0"
+title: "petrasvestartas/compas_cra: Release v0.2.0"
 version: v0.2.0
 doi: 10.5281/zenodo.7043136 
 date-released: 2022-09-02
-url: "https://github.com/blockresearchgroup/compas_cra"
+url: "https://github.com/petrasvestartas/compas_cra"

@@ -12,33 +12,42 @@ Code contributions
 We accept code contributions through pull requests.
 In short, this is how that works.
 
-1. Fork `the repository <https://github.com/BlockResearchGroup/compas_cra>`_ and clone the fork.
+1. Fork `the repository <https://github.com/petrasvestartas/compas_cra>`_ and clone the fork.
 2. Create a virtual environment using your tool of choice (e.g. ``virtualenv``, ``conda``, etc).
-3. Install development dependencies:
+3. Build the solver once — it is compiled into the package, so an install from source
+   needs a staged IPOPT tree. See :ref:`Installation` for the compilers and libraries
+   this needs on your platform, and for the Docker route if you would rather not
+   install them:
 
 ::
 
-    $ pip install -r requirements-dev.txt
+    $ packaging/build_ipopt.sh
+
+4. Install the package and its development dependencies:
+
+::
+
+    $ pip install -e ".[dev]"
 
 
-4. Make sure all tests pass:
+5. Make sure all tests pass:
 
 ::
 
     $ invoke test
 
 
-5. Start making your changes to the **main** branch (or branch off of it).
-6. Make sure all tests still pass:
+6. Start making your changes to the **main** branch (or branch off of it).
+7. Make sure all tests still pass:
 
 ::
 
     $ invoke test
 
 
-7. Add yourself **Contributors** section to ``AUTHORS.md``.
-8. Commit your changes and push your branch to GitHub.
-9. Create a `pull request <https://help.github.com/articles/about-pull-requests/>`_ through the GitHub website.
+8. Add yourself **Contributors** section to ``AUTHORS.md``.
+9. Commit your changes and push your branch to GitHub.
+10. Create a `pull request <https://help.github.com/articles/about-pull-requests/>`_ through the GitHub website.
 
 During development, use `pyinvoke <http://docs.pyinvoke.org/>`_ tasks on the
 command line to ease recurring operations:
@@ -55,7 +64,7 @@ For setting up Black in your editor, please refer to their documentation `Editor
 Bug reports
 ===========
 
-When `reporting a bug <https://github.com/BlockResearchGroup/compas_cra/issues>`_
+When `reporting a bug <https://github.com/petrasvestartas/compas_cra/issues>`_
 please include:
 
 * Operating system name and version.
@@ -67,7 +76,7 @@ Feature requests and feedback
 =============================
 
 The best way to send feedback is to file an issue on
-`Github <https://github.com/BlockResearchGroup/compas_cra/issues>`_.
+`Github <https://github.com/petrasvestartas/compas_cra/issues>`_.
 If you are proposing a feature:
 
 * Explain in detail how it would work.

@@ -9,7 +9,125 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Added a bundled, statically linked IPOPT executable to the platform wheels, so `pip install compas_cra` no longer needs conda, homebrew or a manually downloaded solver. Wheels are built for Windows, macOS (Apple Silicon and Intel) and manylinux (x86_64 and aarch64) by `.github/workflows/wheels.yml`.
+* Local development instructions in the installation docs: the compilers and libraries `packaging/build_ipopt.sh` needs on Linux, macOS and Windows, and the Docker/cibuildwheel route for building a wheel without installing any of them.
+
+### Changed
+
+* One package again: the IPOPT binding is built into `compas_cra` itself as `compas_cra._native`, and `compas_cra` ships as platform wheels for CPython 3.9-3.13 on Windows, macOS (Apple Silicon and Intel) and manylinux (x86_64 and aarch64). `pip install compas_cra` installs exactly one distribution, solver included.
+* The build backend is scikit-build-core, which drives the CMake project at the repository root. It reads no `requirements.txt`, so the dependencies now live in `pyproject.toml`.
+* The cibuildwheel settings live in `[tool.cibuildwheel]` in `pyproject.toml` rather than in workflow environment variables, so `cibuildwheel` reproduces the CI wheel locally with no environment set. Only the runner-dependent parts (workspace paths, the macOS deployment target, the MSYS2 location) stay in `pipeline.yml`.
+* Publishing moved out of the reusable `pipeline.yml` and into `release.yml`. PyPI refuses trusted-publishing tokens minted inside a reusable workflow ([warehouse#11096](https://github.com/pypi/warehouse/issues/11096)), so the pipeline only builds, leaving the wheels, the sdist and the docs site as run artifacts, and `release.yml` — a normal workflow — publishes them.
+
+### Removed
+
+* Removed the separate `compas_cra_native` distribution and its `native/pyproject.toml`; the binding source stays in `native/`, built by the root `CMakeLists.txt`. An install from source (`pip install .`, editable included) now compiles the extension and needs `packaging/build_ipopt.sh` to have run first.
+* Removed `requirements.txt`, `requirements-dev.txt` and `requirements-viz.txt`; `pip install -e ".[dev]"` replaces `pip install -r requirements-dev.txt`.
+
+## [0.7.2] 2026-08-23
+
+### Added
+
+### Changed
+
+* One ordered release pipeline in `release.yml`: native wheels build first (IPOPT compiled from source), the pure package is tested against the just-built native wheel, then publish native → publish cra → GitHub release → docs. `native.yml` is build-only push CI; `docs.yml` builds on main pushes only; the lint job runs without installing the package.
+
+### Removed
+
+## [0.7.1] 2026-08-23
+
+### Added
+
+### Changed
+
+* `compas_cra_native` 0.1.1: the audit-hardened binding (sparsity index range checks, transient-callback-exception recovery, automatic quasi-Newton fallback, wall-time status) actually ships to PyPI — 0.1.0 predated those fixes and `skip-existing` had kept re-uploads out.
+* Rhino scripts pin `compas_cra>=0.7.0` so cached ScriptEditor environments upgrade off the removed executable path.
+
+### Removed
+
+## [0.7.0] 2026-08-23
+
+### Added
+
+* Added `cra_penalty_problem` and `rbe_problem` NLP formulations with exact analytic derivatives, and the matching native solvers `cra_penalty_solve_native` and `rbe_solve_native`, validated against the pyomo implementations before those were removed (max force difference 1.9e-14 for RBE, 7.1e-9 for the penalty formulation).
+
+### Changed
+
+* `cra_solve`, `cra_penalty_solve` and `rbe_solve` are now the in-process native solvers. `compas_cra` is a pure Python package again — one universal wheel — with the compiled solver coming from the `compas_cra_native` dependency.
+* The native wheel workflow builds the Linux wheels with cibuildwheel inside the manylinux containers, in the style of compas_cgal.
+
+### Removed
+
+* Removed the bundled IPOPT executable, the pyomo formulations and the pyomo dependency. There is no solver executable anywhere anymore: solving happens in-process through the nanobind extension, which also removes the Windows antivirus false-positive problem structurally.
+
+## [0.6.6] 2026-08-23
+
+### Added
+
+### Changed
+
+* `compas_cra_native` is now a dependency of `compas_cra` (on Python < 3.14), so `pip install compas_cra` — or a single `# r: compas_cra` line in Rhino — brings the in-process solver along automatically.
+
+### Removed
+
+## [0.6.5] 2026-08-23
+
+### Added
+
+### Changed
+
+* Hardened the native binding after a three-stage independent audit: sparsity index range checks (out-of-range values from Python now raise instead of crashing), a solve that converges despite a transient callback exception keeps its solution, `hessian_approximation=limited-memory` is set automatically when no Hessian callback is given, and `Maximum_WallTime_Exceeded` is reported by name.
+* The native backend no longer accepts iteration-capped points; only near-converged endings (`Restoration_Failed`, `Search_Direction_Becomes_Too_Small`) qualify for the feasible-point acceptance check, matching the executable path's failure behavior.
+* The Rhino example scripts solve with `cra_solve_native` (in-process, no executable involved).
+* macOS arm64 native wheels are built on macOS 14, so they install on macOS 14+.
+
+### Removed
+
+## [0.6.4] 2026-08-23
+
+### Added
+
+* Added `compas_cra.nlp`, a solver-agnostic sparse NLP layer, and `compas_cra.equilibrium.cra_problem`, the CRA optimisation problem formulated directly in numpy/scipy with exact analytic gradient, Jacobian and Lagrangian Hessian (no pyomo involved).
+* Added `compas_cra_native` (in `native/`): IPOPT + MUMPS compiled into a Python extension module with nanobind, so CRA problems solve in-process — no bundled executable, no subprocess, no `.nl` files. Results match the pyomo + executable path on the test suite (bit-identical on the cube fixtures, < 1e-5 relative force difference on the arch).
+* Added `cra_solve_native`, a drop-in alternative to `cra_solve` using the binding.
+
+### Changed
+
+### Removed
+
+## [0.6.3] 2026-08-23
+
+### Added
+
+* Added the `COMPAS_CRA_IPOPT` environment variable to override the solver location, for machines where antivirus or application-control policies block the bundled binary.
+* The Windows `ipopt.exe` now carries a version resource (product, publisher, version, license), and the release workflow supports Authenticode signing via Azure Trusted Signing when the signing secrets are configured.
+
+### Changed
+
+### Removed
+
+## [0.6.2] 2026-08-23
+
+### Added
+
+### Changed
+
+* Lowered `requires-python` to `>= 3.9` so the package installs into Rhino 8's bundled CPython 3.9.
+
+### Removed
+
+## [0.6.1] 2026-08-23
+
+### Added
+
+### Changed
+
+### Removed
+
+## [0.6.0] 2026-08-23
+
+### Added
+
+* Added a bundled, statically linked IPOPT executable to the platform wheels, so `pip install compas_cra` no longer needs conda, homebrew or a manually downloaded solver. Wheels are built for Windows, macOS (Apple Silicon and Intel) and manylinux (x86_64 and aarch64) by `.github/workflows/release.yml`.
 * Added `packaging/` with the scripts that build IPOPT 3.14.19 from source with coinbrew (MUMPS linear solver, no HSL), pack the platform wheels and test them in a clean environment.
 * Added `compas_cra._ipopt` to locate the solver, and a `compas-cra-ipopt` console script to check which solver will be used.
 * Added the `viz` optional dependencies (`pip install compas_cra[viz]`).
