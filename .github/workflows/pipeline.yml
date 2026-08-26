@@ -4,8 +4,11 @@ name: pipeline
 # release.yml (v* tags, publish: true). Always the full chain: IPOPT compiled from
 # source, a compas_cra wheel for every platform and CPython with the solver built
 # into it, each smoke-tested, the full test suite run against one of those wheels,
-# and the docs built. With publish: true it then refuses anything that is not a
-# complete release, uploads to PyPI, creates the GitHub release and deploys the docs.
+# and the docs built. With publish: true it also deploys the docs.
+#
+# The release guard, the PyPI upload and the GitHub release are in release.yml, not
+# here: trusted publishing cannot match a job that lives in a reusable workflow, so it
+# has to run in the calling workflow - see the note at the top of release.yml.
 
 on:
   workflow_call:
@@ -18,6 +21,11 @@ on:
 # depends on the runner is set here.
 env:
   IPOPT_VERSION: "3.14.19"
+  # Serial IPOPT build: MUMPS races under parallel make and dies linking
+  # libcoinmumps, intermittently and with no error output at all. macOS and Windows
+  # run the build script on the runner, so this reaches them; Linux builds inside a
+  # container and sets JOBS on the before-all command in pyproject.toml instead.
+  JOBS: 1
 
 jobs:
   wheels-linux:
@@ -180,61 +188,6 @@ jobs:
           python -m venv venv-test
           venv-test/bin/pip install -q wheelhouse/compas_cra-*-cp312-*.whl pytest
           cd /tmp && "$GITHUB_WORKSPACE/venv-test/bin/python" -m pytest "$GITHUB_WORKSPACE/tests" -v
-
-  publish:
-    name: publish compas_cra to PyPI
-    needs: [wheels-linux, wheels-macos, wheels-windows, sdist, test]
-    if: inputs.publish
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-    permissions:
-      id-token: write  # trusted publishing
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: wheels-*
-          path: dist
-          merge-multiple: true
-      - uses: actions/download-artifact@v4
-        with:
-          name: sdist
-          path: dist
-      - run: ls -lh dist
-
-      # A green build is not enough: a renamed job or a dropped artifact would publish
-      # a partial release, and a pure py3-none-any wheel would install everywhere and
-      # then fail at the first solve. Neither is visible without looking inside.
-      - name: Verify every platform is present and every wheel carries a solver
-        run: python packaging/check_release.py dist
-
-      - uses: pypa/gh-action-pypi-publish@release/v1
-
-  github-release:
-    name: create GitHub release
-    needs: publish
-    if: inputs.publish
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      # the packages only; the built docs go to gh-pages, not onto the release
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: wheels-*
-          path: dist
-          merge-multiple: true
-      - uses: actions/download-artifact@v4
-        with:
-          name: sdist
-          path: dist
-      - uses: softprops/action-gh-release@v2
-        with:
-          files: dist/*
 
   docs:
     name: docs

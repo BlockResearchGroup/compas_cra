@@ -104,22 +104,41 @@ def test_cra_snake():
     assert max(resultants) > 0
 
 
-def test_cra_arch():
-    """The 20-block arch: a degenerate benchmark whose convergence is platform
-    sensitive (BLAS/numpy rounding steers the interior-point path); the historical
-    executable path stalled on some platforms the same way. A stall is skipped, a
-    convergence must reproduce the reference values."""
+def arch_assembly(num_blocks=20):
     from compas_cra.geometry import Arch
 
-    assembly = Arch(height=5.0, span=10.0, thickness=0.5, depth=0.5, num_blocks=20).assembly()
+    assembly = Arch(height=5.0, span=10.0, thickness=0.5, depth=0.5, num_blocks=num_blocks).assembly()
     assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
-    try:
-        cra_solve(assembly, mu=0.7)
-    except ValueError as e:
-        if "Maximum_Iterations_Exceeded" in str(e) or "Restoration_Failed" in str(e):
-            pytest.skip("arch benchmark stalled on this platform: {}".format(e))
-        raise
+    return assembly
+
+
+def test_cra_arch():
+    """The 20-block arch: a degenerate benchmark that used to be allowed to stall.
+
+    Its convergence is steered by BLAS rounding, and with the monotone barrier update it
+    took 1964 of the 3000 permitted iterations while running out of them altogether on
+    the macOS wheels, which link Accelerate rather than OpenBLAS -- reported as
+    ``solve failed: failed (Maximum_Iterations_Exceeded)``. The adaptive barrier update
+    needs a third of the iterations, which is margin enough that the rounding no longer
+    decides the outcome, so a stall is now a regression rather than a skip."""
+    assembly = arch_assembly()
+    cra_solve(assembly, mu=0.7)
     resultants = interface_resultants(assembly)
     assert len(resultants) == 19
     assert max(resultants) == pytest.approx(1.96, abs=0.05)
     assert min(resultants) > 0  # a standing arch is all compression
+
+
+def test_cra_arch_has_iteration_headroom():
+    """Guard the margin, not just the answer.
+
+    The arch failed on macOS by exhausting IPOPT's 3000-iteration cap, and a solve that
+    creeps back towards it is one rounding difference away from doing so again on some
+    other wheel. Assert it finishes with room to spare: it takes ~670 iterations."""
+    from compas_cra.equilibrium.cra_native import _CRA_OPTIONS
+    from compas_cra.nlp import solve_nlp
+
+    problem, _ = cra_problem(arch_assembly(), mu=0.7, density=1.0, d_bnd=1e-3, eps=1e-4)
+    result = solve_nlp(problem, backend="native", options=_CRA_OPTIONS)
+    assert result.success, result.status_message
+    assert result.iterations < 1500, "lost iteration headroom: {} iterations".format(result.iterations)

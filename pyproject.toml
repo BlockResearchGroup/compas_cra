@@ -104,10 +104,15 @@ test-command = "python {project}/native/smoke.py"
 # runs on the runner itself (and is cached there), because the build does not
 # happen in a container.
 [tool.cibuildwheel.linux]
+# JOBS=1: MUMPS' makefiles are missing dependencies, so a parallel build races and
+# dies linking libcoinmumps -- always just after dtype3_root.F, and coinbrew reports
+# nothing but "Build failed, see error output above" with no error above it. It is
+# intermittent: it failed three of six runs in compas_sandbox before being pinned
+# down. The container does not inherit the workflow env, so JOBS is set here.
 before-all = """\
 dnf install -y --enablerepo=powertools \
     glibc-static libstdc++-static openblas-static openblas-devel && \
-env CFLAGS="-O2 -fPIC" CXXFLAGS="-O2 -fPIC" FFLAGS="-O2 -fPIC" FCFLAGS="-O2 -fPIC" \
+env JOBS=1 CFLAGS="-O2 -fPIC" CXXFLAGS="-O2 -fPIC" FFLAGS="-O2 -fPIC" FCFLAGS="-O2 -fPIC" \
     {project}/packaging/build_ipopt.sh"""
 environment = { IPOPT_PREFIX = "/project/build/ipopt/stage" }
 

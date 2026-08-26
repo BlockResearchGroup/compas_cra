@@ -2,10 +2,29 @@ name: release
 
 # A release is the same pipeline every push runs, plus publishing. See pipeline.yml.
 #
+# The upload lives HERE rather than in the reusable pipeline. PyPI's trusted publishing
+# matches the job_workflow_ref claim, and for a job defined inside a reusable workflow
+# that claim names the reusable file - so uploading from pipeline.yml presents
+# pipeline.yml, not this file, and a publisher configured for release.yml never matches.
+# Reusable workflows are not supported by trusted publishing at all.
+#
+# This is not theoretical. compas_sandbox published fine while its upload sat in
+# release.yml, was refactored to a reusable pipeline, and the first release that
+# actually reached the upload afterwards failed with
+#
+#     invalid-publisher: valid token, but no corresponding publisher
+#
+# and claims showing workflow_ref=release.yml, job_workflow_ref=pipeline.yml. Moving the
+# upload back into the calling workflow fixed it. The earlier note here - that PyPI
+# matches the calling workflow, verified against compas_sandbox's provenance - was
+# wrong: that provenance predates the reusable-workflow refactor, so it showed the
+# layout this file now has again.
+#
 # On PyPI, compas_cra needs a trusted publisher for this repository with `release.yml`
-# as the workflow and `pypi` as the environment. The publish job itself lives in the
-# reusable pipeline, but PyPI matches the calling workflow - this file. (Verified
-# against compas_sandbox's own PyPI provenance, which has the same layout.)
+# as the workflow and `pypi` as the environment.
+#
+# Artifacts cross the boundary fine: a reusable workflow's jobs belong to the same run,
+# so the jobs below can download whatever pipeline.yml built.
 
 on:
   push:
@@ -20,3 +39,56 @@ jobs:
     permissions:
       id-token: write  # trusted publishing
       contents: write  # gh-pages + GitHub release
+
+  publish:
+    name: publish compas_cra to PyPI
+    needs: pipeline
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+    permissions:
+      id-token: write  # trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          path: dist
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: sdist
+          path: dist
+      - run: ls -lh dist
+
+      # A green build is not enough: a renamed job or a dropped artifact would publish
+      # a partial release, and a pure py3-none-any wheel would install everywhere and
+      # then fail at the first solve. Neither is visible without looking inside.
+      - name: Verify every platform is present and every wheel carries a solver
+        run: python packaging/check_release.py dist
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    name: create GitHub release
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # the packages only; the built docs go to gh-pages, not onto the release
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          path: dist
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: sdist
+          path: dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*

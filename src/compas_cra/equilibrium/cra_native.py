@@ -18,7 +18,12 @@ from .cra_nlp import rbe_problem
 
 __all__ = ["cra_solve_native", "cra_penalty_solve_native", "rbe_solve_native"]
 
-# the tolerances the CRA solver has always used
+# the tolerances the CRA solver has always used. They look brutally tight for double
+# precision, and they are, but they are load bearing: the solve reaches its answer
+# through IPOPT's restoration phase, and relaxing them keeps it out of restoration
+# without getting it any closer to convergence. Measured on the 20-block arch,
+# tol=1e-8 / constr_viol_tol=1e-9 turns a solve that stops at a feasible point into
+# Maximum_Iterations_Exceeded at the 3000-iteration cap.
 _CRA_OPTIONS = {
     "tol": 1e-10,
     "constr_viol_tol": 1e-12,
@@ -26,6 +31,14 @@ _CRA_OPTIONS = {
     "acceptable_tol": 1e-8,
     "acceptable_constr_viol_tol": 1e-8,
     "acceptable_compl_inf_tol": 1e-8,
+    # CRA's complementarity constraints are degenerate, and the monotone barrier update
+    # crawls on them: the 20-block arch takes 1964 of its 3000 permitted iterations,
+    # which leaves almost no headroom before a wheel that rounds slightly differently
+    # runs out of iterations instead -- which is exactly what users on macOS hit, where
+    # the wheel links Accelerate rather than OpenBLAS. The adaptive update finishes the
+    # same solve in 668 iterations, on the same answer: interface resultants agree to
+    # 1e-10, and a 40-block arch goes from 2757 iterations to 307.
+    "mu_strategy": "adaptive",
 }
 
 # the tolerances the CRA penalty solver has always used
