@@ -59,11 +59,9 @@ dev = [
 # the docs are mkdocs-material + mkdocstrings, same stack as compas_model
 docs = [
     "markdown-callouts>=0.4",
-    "markdown-exec>=1.8",
     "mkdocs>=1.6",
     "mkdocs-autorefs>=1.4",
     "mkdocs-material>=9.5",
-    "mkdocs-section-index>=0.3",
     "mkdocstrings[python]",
 ]
 
