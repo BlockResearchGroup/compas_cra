@@ -140,8 +140,9 @@ as json file.
       interface from** to **assign interface to**. For example, in Figure 1, **assign
       interface from: 1** and **assign interface to: 0** for the interface from 1 to 0.
 
-<div class="grid" markdown>
+<div class="side-by-side" markdown>
 ![Interface direction, block 1](assets/images/tutorial_interface1.png)
+
 ![Interface direction, block 0](assets/images/tutorial_interface2.png)
 </div>
 

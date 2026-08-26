@@ -10,6 +10,9 @@ copyright: Copyright &copy; 2020 - 2026, ETH Zurich - Block Research Group
 extra:
   homepage: https://petrasvestartas.github.io/compas_cra/
 
+extra_css:
+  - css/extra.css
+
 theme:
   name: material
   palette:
