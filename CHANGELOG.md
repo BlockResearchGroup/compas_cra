@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Local development instructions in the installation docs: the compilers and libraries `packaging/build_ipopt.sh` needs on Linux, macOS and Windows, and the Docker/cibuildwheel route for building a wheel without installing any of them.
+* `cra_solve`, `cra_penalty_solve` and `rbe_solve` appear in the API reference. They were assignments (`cra_solve = cra_solve_native`) rather than imports, so the documentation generator saw untyped attributes and rendered nothing for the three names that are the package's primary entry points. They are import aliases now, which changes nothing at runtime — each name is still the same function object as its `_native` counterpart.
+* `invoke docs-serve` serves the documentation locally with live reload.
 
 ### Changed
 
@@ -24,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * One CI pipeline for every push and every release: `build.yml` (pushes and PRs to main) and `release.yml` (`v*` tags) both call the reusable `pipeline.yml`, which differs only by its `publish` input. A release therefore runs the exact chain that was already green on main — IPOPT from source, all five platforms, the smoke tests, the test suite against a built wheel and the docs — and then publishes it. `wheels.yml` and `docs.yml` are gone, folded into that pipeline.
 * `packaging/check_release.py` now checks for the `compas_cra._native._core` extension rather than a vendored `ipopt` executable, which the statically linked build no longer ships, and additionally requires every supported CPython on every platform. Verified against the artifacts of the PR build: it passes the complete set and rejects a partial one.
 * `invoke release` is defined in `tasks.py` instead of coming from `compas_invocations2`, without its local `python -m build` step: building a wheel here needs a staged IPOPT tree, and the published artifacts are built by CI on all five platforms regardless.
+* The documentation is built with mkdocs (mkdocs-material + mkdocstrings) instead of sphinx, following `compas_model`. Every page is markdown: the API reference is five one-line `::: compas_cra.<module>` pages instead of six hand-maintained `.rst` files plus 80 checked-in `autosummary` stubs, and the changelog and licence pages include the repository's own files rather than duplicating them. The docs dependencies are a `docs` extra in `pyproject.toml`; `invoke docs` and the CI docs job both run `mkdocs build --strict`, so a broken link or a missing page now fails the build.
+* Two docstrings that documented parameters the functions do not take: `CRA_Assembly.add_to_interfaces` described a `type` argument it never had, and `Arch` documented `n` instead of `num_blocks` and omitted `extra_support`.
 * `packaging/build_ipopt.sh` no longer trusts the third-party source downloads. The `get.ASL` and `get.Mumps` scripts fetch their tarballs with a bare `curl -L -O`, with no integrity check and no retry, so a stalled transfer lands a short file that is then gunzipped anyway — which is how an aarch64 build failed with `gzip: MUMPS_5.8.2.tar.gz: not in gzip format` after receiving 54 kB of a 4.3 MB tarball. The script now points `CURL_HOME`/`WGETRC` at a config that abandons and retries a stalled transfer, and checks that `ThirdParty/ASL/solvers` and `ThirdParty/Mumps/MUMPS` actually exist, re-running the `get.*` script that came up empty (a second `coinbrew fetch` will not: it only runs `get.*` when the clone's revision changed).
 
 ### Removed
@@ -31,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Removed the separate `compas_cra_native` distribution and its `native/pyproject.toml`; the binding source stays in `native/`, built by the root `CMakeLists.txt`. An install from source (`pip install .`, editable included) now compiles the extension and needs `packaging/build_ipopt.sh` to have run first.
 * Removed `requirements.txt`, `requirements-dev.txt` and `requirements-viz.txt`; `pip install -e ".[dev]"` replaces `pip install -r requirements-dev.txt`.
 * Removed the `build_ghuser_components` task and its `ghuser` configuration from `tasks.py`; the paths pointed at `src/compas_notebook`, and compas_cra ships no Grasshopper components.
+* Removed `docs/conf.py`, every `.rst` page, the generated `docs/api/` tree and the `sphinx_compas2_theme` dependency.
 
 ## [0.7.2] 2026-08-23
 

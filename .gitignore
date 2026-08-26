@@ -61,9 +61,6 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
-docs/_build/
-
 # PyBuilder
 target/
 
@@ -96,6 +93,7 @@ ENV/
 
 # mkdocs documentation
 /site
+dist/docs/
 
 # mypy
 .mypy_cache/
@@ -115,8 +113,6 @@ temp/**
 
 .vscode
 .idea
-
-docs/api/generated/
 
 conda.recipe/
 

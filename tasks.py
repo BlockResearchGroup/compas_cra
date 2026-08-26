@@ -4,7 +4,6 @@ import os
 
 import invoke
 from compas_invocations2 import build
-from compas_invocations2 import docs
 from compas_invocations2 import style
 from compas_invocations2 import tests
 from compas_invocations2.console import confirm
@@ -46,13 +45,24 @@ def release(ctx, release_type):
         raise invoke.Exit("You need to manually revert the tag/commits created.")
 
 
+@invoke.task(help={"strict": "Fail the build on a broken reference or a missing page."})
+def docs(ctx, strict=True):
+    """Build the documentation with mkdocs into dist/docs."""
+    ctx.run("mkdocs build --site-dir dist/docs" + (" --strict" if strict else ""))
+
+
+@invoke.task(help={"port": "Port to serve on. Defaults to 8000."})
+def docs_serve(ctx, port=8000):
+    """Serve the documentation locally, rebuilding on every change."""
+    ctx.run("mkdocs serve --dev-addr localhost:%s" % port)
+
+
 ns = Collection(
-    docs.help,
     style.check,
     style.lint,
     style.format,
-    docs.docs,
-    docs.linkcheck,
+    docs,
+    docs_serve,
     tests.test,
     tests.testdocs,
     build.prepare_changelog,

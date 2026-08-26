@@ -53,14 +53,23 @@ dev = [
     "compas_viewer",
     "invoke>=0.14",
     "ruff",
-    "sphinx_compas2_theme",
     "twine",
     "wheel",
 ]
+# the docs are mkdocs-material + mkdocstrings, same stack as compas_model
+docs = [
+    "markdown-callouts>=0.4",
+    "markdown-exec>=1.8",
+    "mkdocs>=1.6",
+    "mkdocs-autorefs>=1.4",
+    "mkdocs-material>=9.5",
+    "mkdocs-section-index>=0.3",
+    "mkdocstrings[python]",
+]
 
 [project.urls]
-Homepage = "https://github.com/petrasvestartas/compas_cra"
-Documentation = "https://github.com/petrasvestartas/compas_cra"
+Homepage = "https://petrasvestartas.github.io/compas_cra"
+Documentation = "https://petrasvestartas.github.io/compas_cra"
 Repository = "https://github.com/petrasvestartas/compas_cra.git"
 Changelog = "https://github.com/petrasvestartas/compas_cra/blob/main/CHANGELOG.md"
 
@@ -75,7 +84,7 @@ minimum-version = "0.10"
 wheel.packages = ["src/compas_cra"]
 # stripping would invalidate the macOS ad-hoc code signature; arm64 kills unsigned code
 install.strip = false
-sdist.exclude = [".github", "data/rhino-models", "docs/_images", "temp"]
+sdist.exclude = [".github", "data/rhino-models", "docs/assets", "temp"]
 
 [tool.scikit-build.metadata.version]
 provider = "scikit_build_core.metadata.regex"

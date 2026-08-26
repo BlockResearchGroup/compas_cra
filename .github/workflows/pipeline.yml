@@ -210,10 +210,10 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq libegl1 libgl1
           python -m pip install -q --upgrade pip
-          python -m pip install -q "$(ls wheelhouse/compas_cra-*-cp312-*.whl)[dev]"
+          python -m pip install -q "$(ls wheelhouse/compas_cra-*-cp312-*.whl)[dev,docs]"
       - name: Build docs
         run: |
-          invoke docs
+          mkdocs build --strict --site-dir dist/docs
           test -f dist/docs/index.html
       - name: Deploy docs
         if: inputs.publish
