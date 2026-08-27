@@ -15,6 +15,7 @@ from compas.geometry import Vector
 from compas.geometry import is_coplanar
 from compas_viewer import Viewer
 from compas_viewer.config import Config
+from compas_viewer.scene import Collection
 
 
 class Arrow:
@@ -66,7 +67,7 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.0):
                 blockedges.append(Line(*block.edge_coordinates(edge)))
     if len(blocks) != 0:
         viewer.scene.add(
-            blocks,
+            Collection(blocks),
             show_faces=True,
             show_lines=False,
             opacity=0.6,
@@ -74,16 +75,16 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.0):
         )
     if len(supports) != 0:
         viewer.scene.add(
-            supports,
+            Collection(supports),
             show_faces=True,
             show_lines=False,
             opacity=0.5,
             facecolor=Color.from_hex("#f79d84"),
         )
     if len(blockedges) != 0:
-        viewer.scene.add(blockedges, linewidth=1.5)
+        viewer.scene.add(Collection(blockedges), linewidth=1.5)
     if len(supportedges) != 0:
-        viewer.scene.add(supportedges, linecolor=Color.from_hex("#f79d84"), linewidth=4)
+        viewer.scene.add(Collection(supportedges), linecolor=Color.from_hex("#f79d84"), linewidth=4)
 
 
 def draw_interfaces(assembly, viewer):
@@ -110,14 +111,14 @@ def draw_interfaces(assembly, viewer):
 
     if len(interfaces) != 0:
         viewer.scene.add(
-            interfaces,
+            Collection(interfaces),
             show_lines=False,
             show_points=False,
             facecolor=(0.8, 0.8, 0.8),
         )
     if len(faces) != 0:
         viewer.scene.add(
-            faces,
+            Collection(faces),
             linecolor=Color.from_hex("#fac05e"),
             linewidth=10,
             pointsize=10,
@@ -178,17 +179,17 @@ def draw_forces(assembly, viewer, scale=1.0, resultant=True, nodal=False):
             else:
                 res_nn.append(Line(p1, p2))
     if len(locs) != 0:
-        viewer.scene.add(locs, size=12, color=Color.from_hex("#386641"))
+        viewer.scene.add(Collection(locs), pointsize=12, pointcolor=Color.from_hex("#386641"))
     if len(res_np) != 0:
-        viewer.scene.add(res_np, linewidth=8, linecolor=Color(0, 0.3, 0))
+        viewer.scene.add(Collection(res_np), linewidth=8, linecolor=Color(0, 0.3, 0))
     if len(res_nn) != 0:
-        viewer.scene.add(res_nn, linewidth=8, linecolor=Color(0.8, 0, 0))
+        viewer.scene.add(Collection(res_nn), linewidth=8, linecolor=Color(0.8, 0, 0))
     if len(fnn) != 0:
-        viewer.scene.add(fnn, linewidth=5, linecolor=Color.from_hex("#00468b"))
+        viewer.scene.add(Collection(fnn), linewidth=5, linecolor=Color.from_hex("#00468b"))
     if len(fnp) != 0:
-        viewer.scene.add(fnp, linewidth=5, linecolor=Color(1, 0, 0))
+        viewer.scene.add(Collection(fnp), linewidth=5, linecolor=Color(1, 0, 0))
     if len(ft) != 0:
-        viewer.scene.add(ft, linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
+        viewer.scene.add(Collection(ft), linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
 
 
 def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
@@ -256,17 +257,17 @@ def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 else:
                     res_nn.append(Line(p1, p2))
     if len(locs) != 0:
-        viewer.scene.add(locs, pointsize=12, pointcolor=Color.from_hex("#386641"))
+        viewer.scene.add(Collection(locs), pointsize=12, pointcolor=Color.from_hex("#386641"))
     if len(res_np) != 0:
-        viewer.scene.add(res_np, linewidth=8, linecolor=Color(0, 0.3, 0))
+        viewer.scene.add(Collection(res_np), linewidth=8, linecolor=Color(0, 0.3, 0))
     if len(res_nn) != 0:
-        viewer.scene.add(res_nn, linewidth=8, linecolor=Color(0.8, 0, 0))
+        viewer.scene.add(Collection(res_nn), linewidth=8, linecolor=Color(0.8, 0, 0))
     if len(fnn) != 0:
-        viewer.scene.add(fnn, linewidth=5, linecolor=Color.from_hex("#00468b"))
+        viewer.scene.add(Collection(fnn), linewidth=5, linecolor=Color.from_hex("#00468b"))
     if len(fnp) != 0:
-        viewer.scene.add(fnp, linewidth=5, linecolor=Color(1, 0, 0))
+        viewer.scene.add(Collection(fnp), linewidth=5, linecolor=Color(1, 0, 0))
     if len(ft) != 0:
-        viewer.scene.add(ft, linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
+        viewer.scene.add(Collection(ft), linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
     # print("total reaction: ", total_reaction)
 
 
@@ -362,7 +363,7 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 else:
                     res_nn.append(f)
     if len(locs) != 0:
-        viewer.scene.add(locs, size=12, color=Color.from_hex("#386641"))
+        viewer.scene.add(Collection(locs), pointsize=12, pointcolor=Color.from_hex("#386641"))
     if len(res_np) != 0:
         for arrow in res_np:
             arrow.add_to_scene(viewer, facecolor=Color.from_hex("#386641"))
@@ -412,9 +413,9 @@ def draw_displacements(assembly, viewer, dispscale=1.0, tol=0.0):
                     continue
             blocks.append(Line(*new_block.edge_coordinates(edge)))
     if len(blocks) != 0:
-        viewer.scene.add(blocks, linewidth=1, linecolor=Color(0.7, 0.7, 0.7))
+        viewer.scene.add(Collection(blocks), linewidth=1, linecolor=Color(0.7, 0.7, 0.7))
     if len(nodes) != 0:
-        viewer.scene.add(nodes, pointcolor=Color(0.7, 0.7, 0.7))
+        viewer.scene.add(Collection(nodes), pointcolor=Color(0.7, 0.7, 0.7))
 
 
 def draw_weights(assembly, viewer, scale=1.0, density=1.0):
@@ -442,9 +443,9 @@ def draw_weights(assembly, viewer, scale=1.0, density=1.0):
     # print("total self-weight: ", total_weights)
 
     if len(supports) != 0:
-        viewer.scene.add(supports, pointsize=20, pointcolor=Color.from_hex("#ee6352"))
+        viewer.scene.add(Collection(supports), pointsize=20, pointcolor=Color.from_hex("#ee6352"))
     if len(blocks) != 0:
-        viewer.scene.add(blocks, pointsize=30, pointcolor=Color.from_hex("#3284a0"))
+        viewer.scene.add(Collection(blocks), pointsize=30, pointcolor=Color.from_hex("#3284a0"))
     if len(weights) != 0:
         for weight in weights:
             weight.add_to_scene(viewer, facecolor=Color.from_hex("#59cd90"))

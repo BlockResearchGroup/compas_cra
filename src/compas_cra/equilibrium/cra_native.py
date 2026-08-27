@@ -28,9 +28,14 @@ _CRA_OPTIONS = {
     "tol": 1e-10,
     "constr_viol_tol": 1e-12,
     "compl_inf_tol": 1e-12,
-    "acceptable_tol": 1e-8,
-    "acceptable_constr_viol_tol": 1e-8,
-    "acceptable_compl_inf_tol": 1e-8,
+    # acceptable at 1e-6, not 1e-8: several examples (the wedge, the three curved
+    # blocks) converge to ~1e-8 violation and then cannot reach the hard tolerances -
+    # at 1e-8 acceptance they died a hair above the line (Restoration_Failed at 4.6e-8,
+    # Maximum_Iterations_Exceeded hovering at 1.6e-8). Relaxing acceptance only adds a
+    # stopping opportunity; the hard tolerances above are what the solver aims for.
+    "acceptable_tol": 1e-6,
+    "acceptable_constr_viol_tol": 1e-6,
+    "acceptable_compl_inf_tol": 1e-6,
     # CRA's complementarity constraints are degenerate, and the monotone barrier update
     # crawls on them: the 20-block arch takes 1964 of its 3000 permitted iterations,
     # which leaves almost no headroom before a wheel that rounds slightly differently
@@ -47,6 +52,10 @@ _CRA_PENALTY_OPTIONS = {
     "constr_viol_tol": 1e-7,
     "acceptable_tol": 1e-6,
     "acceptable_constr_viol_tol": 1e-5,
+    # same degenerate complementarity constraints as the CRA solver, same crawl under
+    # the monotone update: the 20-block arch exhausted the 3000-iteration cap at 5e-2
+    # violation. See _CRA_OPTIONS.
+    "mu_strategy": "adaptive",
 }
 
 

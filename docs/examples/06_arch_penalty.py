@@ -22,7 +22,10 @@ assembly = Arch(
 
 assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
 
-cra_penalty_solve(assembly, mu=0.7, verbose=True, timer=True)
+# d_bnd=1e-2: with the default 1e-3 displacement bound this solve exhausts the
+# iteration cap; at 1e-2 it converges in ~65 iterations, on resultants that agree
+# with cra_solve to 1e-3 on the standard arch
+cra_penalty_solve(assembly, mu=0.7, d_bnd=1e-2, verbose=True, timer=True)
 cra_view(
     assembly,
     resultant=True,
