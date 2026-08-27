@@ -87,18 +87,65 @@ with `IPOPT_PREFIX` pointed at the resulting `build/ipopt/stage`.
 
 ### Building
 
+[uv](https://docs.astral.sh/uv) manages the environment.
+
 ```bash
-git clone https://github.com/petrasvestartas/compas_cra.git
+git clone https://github.com/BlockResearchGroup/compas_cra.git
 cd compas_cra
+
+uv venv --python 3.12
+source .venv/Scripts/activate   # .venv/bin/activate on macOS and Linux
+
 packaging/build_ipopt.sh
-pip install -e ".[dev]"
+uv pip install -e ".[dev]"
 invoke test
 ```
+
+`uv pip install -e ".[dev]"` is the only install step: `[dev]` pulls in `[docs]` as
+well, so `invoke docs` works straight afterwards without a second command. `.venv` is
+git-ignored.
 
 `build_ipopt.sh` takes about fifteen minutes and is a one-off: it stages IPOPT into
 `build/ipopt/stage`, which every later install reuses. Rebuild it only when the script
 or the IPOPT version changes. Set `IPOPT_PREFIX` to use a stage tree from elsewhere,
 `IPOPT_EXTRA_LINK` and `EXTRA_LINK_DIRS` for extra link flags and directories.
+
+There is no packaged IPOPT that can stand in for that step. conda-forge, for instance,
+ships IPOPT as shared libraries resolved against a separate `mumps-seq` package, while
+`CMakeLists.txt` links `libipopt` and `libcoinmumps` as *static* archives — that is what
+makes the extension self-contained, and it is what the stage tree provides.
+
+### Tasks
+
+`tasks.py` is the entry point for everything else, via
+[invoke](https://www.pyinvoke.org). The same tasks run in CI, so a green run locally
+means a green run there.
+
+| Command | What it does |
+| --- | --- |
+| `invoke docs` | Build the site into `dist/docs`, failing on a broken reference |
+| `invoke docs-serve` | Serve the site locally with live reload |
+| `invoke lint` | `ruff check --fix src tests` |
+| `invoke format` | `ruff format src tests` |
+| `invoke test` | Run the test suite |
+| `invoke release <major\|minor\|patch>` | Bump, tag and push, which triggers the release |
+
+Only `invoke test` and `invoke release` need the compiled solver. The documentation is
+generated from the sources in `src/` rather than from an imported package, so
+`invoke docs` and `invoke lint` work in an environment where `pip install -e .` has
+never run, which is the quick way in when the change is to the documentation or to
+Python code only:
+
+```bash
+uv venv --python 3.12
+source .venv/Scripts/activate
+uv pip install compas invoke compas_invocations2 ruff
+uv pip install markdown-callouts mkdocs mkdocs-autorefs mkdocs-material mkdocstrings[python] pymdown-extensions
+invoke docs
+```
+
+`invoke release` pushes a `v*` tag, and that tag is what `.github/workflows/release.yml`
+triggers on; it needs push access to the repository.
 
 ### Without a local toolchain
 

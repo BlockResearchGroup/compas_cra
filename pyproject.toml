@@ -49,6 +49,9 @@ dev = [
     "black>=22.12.0",
     "build",
     "bump-my-version",
+    # the documentation stack too, so `pip install -e ".[dev]"` is the only install step a
+    # contributor needs: `invoke docs` is unusable without it, and `docs` alone has no invoke
+    "compas_cra[docs]",
     "compas_invocations2",
     "compas_viewer",
     "invoke>=0.14",
@@ -63,6 +66,9 @@ docs = [
     "mkdocs-autorefs>=1.4",
     "mkdocs-material>=9.5",
     "mkdocstrings[python]",
+    # mkdocs.yml configures pymdownx.* directly, so it is a direct dependency; it happens to
+    # arrive with mkdocs-material today, which is not something to rely on
+    "pymdown-extensions>=10",
 ]
 
 [project.urls]
