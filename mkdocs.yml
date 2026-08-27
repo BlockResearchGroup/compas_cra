@@ -51,6 +51,7 @@ theme:
     - navigation.footer
     - navigation.indexes
     - navigation.sections
+    - navigation.tabs
     - navigation.top
     - search.highlight
     - search.suggest
@@ -139,9 +140,11 @@ plugins:
             unwrap_annotated: true
 
 nav:
-  - Introduction: index.md
-  - Installation: installation.md
-  - Tutorial: tutorial.md
+  - Getting Started:
+      - Introduction: index.md
+      - Installation: installation.md
+      - Tutorial: tutorial.md
+      - Known issues: knownissues.md
   - Examples:
       - examples/index.md
       - Simplest cube: examples/00_simple_cube.md
@@ -161,15 +164,14 @@ nav:
       - Short curved cube: examples/14_cube-curve-short.md
       - Tall curved cube: examples/15_cube-curve-tall.md
       - Model HA: examples/16_ha.md
-  - Reference:
-      - algorithms: reference/compas_cra.algorithms.md
-      - datastructures: reference/compas_cra.datastructures.md
-      - equilibrium: reference/compas_cra.equilibrium.md
-      - geometry: reference/compas_cra.geometry.md
-      - viewers: reference/compas_cra.viewers.md
-  - Other:
-      - knownissues.md
-      - contributions.md
-      - cite.md
-      - changelog.md
-      - license.md
+  - API Reference:
+      - compas_cra.algorithms: reference/compas_cra.algorithms.md
+      - compas_cra.datastructures: reference/compas_cra.datastructures.md
+      - compas_cra.equilibrium: reference/compas_cra.equilibrium.md
+      - compas_cra.geometry: reference/compas_cra.geometry.md
+      - compas_cra.viewers: reference/compas_cra.viewers.md
+  - About:
+      - Contributing: contributions.md
+      - Citing: cite.md
+      - Changelog: changelog.md
+      - License: license.md
