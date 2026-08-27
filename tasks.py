@@ -116,7 +116,10 @@ def _native_build_env():
         "CMAKE_ARGS": (
             "-DCMAKE_C_COMPILER={0}/bin/gcc.exe "
             "-DCMAKE_CXX_COMPILER={0}/bin/g++.exe "
-            "-DFORTRAN_COMPILER={0}/bin/gfortran.exe".format(ucrt)
+            "-DFORTRAN_COMPILER={0}/bin/gfortran.exe "
+            # bundle the MinGW runtime DLLs next to the module, so the environment is
+            # self-contained; the CI wheels get the same treatment from delvewheel
+            "-DBUNDLE_RUNTIME_DLLS=ON".format(ucrt)
         ),
     }
 

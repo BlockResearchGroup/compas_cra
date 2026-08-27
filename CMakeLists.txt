@@ -107,3 +107,28 @@ if(APPLE)
 endif()
 
 install(TARGETS _core LIBRARY DESTINATION compas_cra/_native)
+
+# Local (editable) installs on Windows: put the MinGW runtime DLLs next to the module,
+# so the environment is self-contained - the same thing delvewheel does to the wheels
+# in CI, done at install time. OFF by default: the CI wheels get delvewheel's repair
+# and must not carry a second, unmangled copy. `invoke setup` turns it on.
+option(BUNDLE_RUNTIME_DLLS "Install the MinGW runtime DLLs next to the extension" OFF)
+if(WIN32 AND BUNDLE_RUNTIME_DLLS)
+    get_filename_component(_toolchain_bin "${FORTRAN_COMPILER}" DIRECTORY)
+    # the dependency closure of _core outside the system DLLs, computed with objdump;
+    # openblas pulls in gomp, gfortran pulls in quadmath
+    set(_runtime_dlls
+        libgcc_s_seh-1.dll
+        libgfortran-5.dll
+        libgomp-1.dll
+        libopenblas.dll
+        libquadmath-0.dll
+        libstdc++-6.dll
+        libwinpthread-1.dll)
+    foreach(_dll IN LISTS _runtime_dlls)
+        if(NOT EXISTS "${_toolchain_bin}/${_dll}")
+            message(FATAL_ERROR "BUNDLE_RUNTIME_DLLS: ${_dll} not found in ${_toolchain_bin}")
+        endif()
+        install(FILES "${_toolchain_bin}/${_dll}" DESTINATION compas_cra/_native)
+    endforeach()
+endif()
