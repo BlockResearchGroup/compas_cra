@@ -39,33 +39,32 @@ __all__ = ["cra_solve_native", "cra_penalty_solve_native", "rbe_solve_native"]
 # the binary.
 #
 # mu_target restores the published behavior as an explicit setting rather than an
-# accident of an old binary: the barrier stops at mu = 5e-6 instead of 0, which is the
-# interior point the paper's figures show. Calibrated against IPOPT 3.14.9 on the
-# curved examples (cube-curve-short: max/median resultant 0.00057/0.00050 vs the era's
-# 0.00066/0.00041; cube-curve-tall: 0.00191/0.00050 vs 0.00179/0.00058; all 72 faces
-# loaded in every case). Equilibrium stays exact - constr_viol_tol keeps the force
-# balance at 1e-8 - only the force *distribution* on statically indeterminate contacts
-# is selected. The tolerances sit just above the barrier target, which mu_target
-# requires, and they are load-bearing: the degenerate examples are knife-edged in both
-# mu_target and tol (curve-3-blocks solves at this pair and exhausts even 9000
-# iterations one small step away), so change them together or not at all. The arch
-# converges to the same resultants as before (1.9570 / 0.8430) with iteration headroom
-# intact (810 of 9000).
+# accident of an old binary: the barrier stops at mu = 1e-5 instead of 0, an interior
+# point where every contact face carries force. Calibrated against the published
+# figures themselves, not against a rebuilt era binary: a from-source 3.14.11 stops at
+# a lower effective mu than Gene's 2022 conda/macOS build did (the old square-problem
+# shortcut stopped wherever the check happened to trip, so its level was platform
+# luck), and the figures show near-uniform arrows - which 1e-5 reproduces
+# (cube-curve-tall max/median 1.11, cube-curve-short 1.20, all 72 faces loaded).
+# Equilibrium stays exact: constr_viol_tol holds the force balance at 1e-8; only the
+# force *distribution* on statically indeterminate contacts is selected. The contact
+# complementarity products sit at the mu level by construction, so solves legitimately
+# end as acceptable-level or feasible-restoration points at ~1e-7 violation -
+# acceptable_constr_viol_tol at 1e-6 is what admits them, and the degenerate examples
+# are knife-edged in this option set (13_curve-3-blocks needs thousands of iterations
+# and fails outright one small step away in mu_target or tol), so change these
+# together or not at all. The arch keeps its resultants (1.9571/0.8437, vs 1.9570
+# under strict optimization) with iteration headroom intact (270 of 9000).
 _CRA_OPTIONS = {
-    "tol": 1e-5,
-    "dual_inf_tol": 1e-5,
-    "compl_inf_tol": 1e-5,
+    "tol": 1e-4,
+    "dual_inf_tol": 1e-4,
+    "compl_inf_tol": 1e-4,
     "constr_viol_tol": 1e-8,
-    "acceptable_tol": 1e-4,
-    "acceptable_constr_viol_tol": 1e-7,
-    "acceptable_compl_inf_tol": 1e-4,
-    # CRA's complementarity constraints are degenerate, and the monotone barrier update
-    # crawls on them; the adaptive update reaches the same points in a fraction of the
-    # iterations. See the note above for why mu_target is the load-distribution knob.
+    "acceptable_tol": 1e-3,
+    "acceptable_constr_viol_tol": 1e-6,
+    "acceptable_compl_inf_tol": 1e-3,
     "mu_strategy": "adaptive",
-    "mu_target": 5e-6,
-    # the degenerate curved examples legitimately need a few thousand iterations in
-    # this regime; the default 3000 cap is calibrated for strict optimization
+    "mu_target": 1e-5,
     "max_iter": 9000,
 }
 
