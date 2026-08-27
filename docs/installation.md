@@ -78,9 +78,13 @@ uv venv --python 3.12
 source .venv/Scripts/activate
 uv pip install -r requirements.txt
 
-invoke docs         # build the site into dist/docs — open dist/docs/index.html
-invoke docs-serve   # or serve it live at http://localhost:8000
+invoke docs         # build the site into dist/docs — the artifact CI deploys
+invoke docs-serve   # browse it at http://localhost:8000, rebuilt live on every edit
 ```
+
+Browse with `docs-serve`, not by opening `dist/docs` from disk: mkdocs links pages by
+directory (`examples/`), which only a web server resolves to the page inside — from
+`file://` those links show folder listings.
 
 ## Tasks
 
