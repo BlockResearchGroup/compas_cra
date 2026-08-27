@@ -4,7 +4,7 @@ name: pipeline
 # release.yml (v* tags, publish: true). Always the full chain: IPOPT compiled from
 # source, a compas_cra wheel for every platform and CPython with the solver built
 # into it, each smoke-tested, the full test suite run against one of those wheels,
-# and the docs built. With publish: true it also deploys the docs.
+# and the docs built. The docs are deployed from every push to main, and from a release.
 #
 # The release guard, the PyPI upload and the GitHub release are in release.yml, not
 # here: trusted publishing cannot match a job that lives in a reusable workflow, so it
@@ -145,7 +145,7 @@ jobs:
             IPOPT_PREFIX='${{ github.workspace }}\build\ipopt\stage'
             EXTRA_LINK_DIRS='D:\msys64\ucrt64\lib'
             CMAKE_GENERATOR=Ninja
-            CMAKE_ARGS='-DCMAKE_C_COMPILER=D:/msys64/ucrt64/bin/gcc.exe -DCMAKE_CXX_COMPILER=D:/msys64/ucrt64/bin/g++.exe -DFORTRAN_COMPILER=D:/msys64/ucrt64/bin/gfortran.exe'
+            CMAKE_ARGS='-DCMAKE_C_COMPILER=D:/msys64/ucrt64/bin/gcc.exe -DCMAKE_CXX_COMPILER=D:/msys64/ucrt64/bin/g++.exe -DFORTRAN_COMPILER=D:/msys64/ucrt64/bin/gfortran.exe -DBUNDLE_RUNTIME_DLLS=OFF'
         run: |
           python -m pip install -q cibuildwheel
           python -m cibuildwheel --output-dir dist
@@ -211,12 +211,19 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq libegl1 libgl1
           python -m pip install -q --upgrade pip
           python -m pip install -q "$(ls wheelhouse/compas_cra-*-cp312-*.whl)[dev,docs]"
+      # `invoke docs`, not a second copy of the mkdocs command: the task in tasks.py is the
+      # one contributors run, and CI diverging from it is how a green local build turns red
+      # here (or worse, the reverse)
       - name: Build docs
         run: |
-          mkdocs build --strict --site-dir dist/docs
+          invoke docs --no-serve
           test -f dist/docs/index.html
+      # every push to main, not releases only: the site is the documentation of what is on
+      # main, and a docs fix that only ships with the next tag is a docs fix nobody reads.
+      # This costs no extra CI - build.yml already runs this whole pipeline on every push
+      # to main, so the wheel the docs are built against exists either way.
       - name: Deploy docs
-        if: inputs.publish
+        if: inputs.publish || github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

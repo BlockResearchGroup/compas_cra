@@ -16,7 +16,7 @@
 # platform repair tools (auditwheel / delocate / delvewheel).
 #
 # Usage:  packaging/build_ipopt.sh
-# Env:    IPOPT_VERSION, WORK_DIR, JOBS
+# Env:    IPOPT_VERSION, WORK_DIR, JOBS, VERBOSITY (coinbrew 1-4, default 1)
 #
 set -euo pipefail
 
@@ -278,6 +278,9 @@ fi
 COMMON_CONFIG=(
     --no-prompt
     --skip-update
+    # 1 = section headers only (the CI default); invoke setup passes 2 so an
+    # interactive build streams the compile lines instead of sitting silent
+    --verbosity="${VERBOSITY:-1}"
     --prefix="$STAGE_DIR"
     --parallel-jobs="$JOBS"
     --tests=none

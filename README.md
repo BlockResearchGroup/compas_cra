@@ -1,7 +1,7 @@
 # COMPAS CRA
 
-![build](https://github.com/petrasvestartas/compas_cra/workflows/build/badge.svg)
-[![GitHub - License](https://img.shields.io/github/license/petrasvestartas/compas_cra.svg)](./LICENSE)
+![build](https://github.com/BlockResearchGroup/compas_cra/workflows/build/badge.svg)
+[![GitHub - License](https://img.shields.io/github/license/BlockResearchGroup/compas_cra.svg)](./LICENSE)
 [![pip downloads](https://img.shields.io/pypi/dm/compas_cra)](https://pypi.python.org/project/compas_cra)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/compas_cra.svg)](https://pypi.python.org/project/compas_cra)
 [![PyPI - Latest Release](https://img.shields.io/pypi/v/compas_cra.svg)](https://pypi.python.org/project/compas_cra)
@@ -32,20 +32,23 @@ The solver is compiled into the package, so an install from source builds it, an
 needs IPOPT staged first:
 
 ```bash
-git clone https://github.com/petrasvestartas/compas_cra.git
+git clone https://github.com/BlockResearchGroup/compas_cra.git
 cd compas_cra
-packaging/build_ipopt.sh          # ~15 minutes, once
-pip install -e ".[dev]"
+
+uv venv --python 3.12
+source .venv/Scripts/activate     # .venv/bin/activate on macOS and Linux
+
+uv pip install invoke compas_invocations2
+invoke setup                      # toolchain + IPOPT (~15 minutes, once) + editable install
 invoke test
 ```
 
-`build_ipopt.sh` needs a Fortran compiler and a static BLAS/LAPACK — on Debian/Ubuntu
-`sudo apt install build-essential gfortran libopenblas-dev git curl make patch pkg-config`,
-on macOS `brew install gcc bash`, on Windows an [MSYS2](https://www.msys2.org) UCRT64
-shell. Without a local toolchain, `CIBW_BUILD="cp312-*" cibuildwheel` builds the wheel
-inside the manylinux container instead — the build is configured in `pyproject.toml`,
-so that one command reproduces CI. Full instructions, per platform, are in
-[the installation docs](./docs/installation.rst).
+`invoke setup` handles the platform differences — MSYS2 packages on Windows, Homebrew
+on macOS, and on Linux it prints the `apt`/`dnf` line to run first. Without a local
+toolchain, `CIBW_BUILD="cp312-*" cibuildwheel` builds the wheel inside the manylinux
+container instead — the build is configured in `pyproject.toml`, so that one command
+reproduces CI. Full instructions, per platform, are in
+[the installation docs](./docs/installation.md).
 
 ### Rhino 8
 
@@ -91,7 +94,7 @@ To find out more about CRA, please refer to our paper in the CAD Computer-Aided 
 
 ## Coupled Rigid-Block Analysis: Stability-Aware Design of Complex Discrete-Element Assemblies
 
-![image](https://github.com/petrasvestartas/compas_cra/blob/main/docs/_images/cra_bridge.png?raw=true)
+![image](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/assets/images/cra_bridge.png?raw=true)
 
 ### Abstract
 
@@ -147,8 +150,8 @@ by designing complex and scaffolding-free physical models.
 
 ### Read the docs
 
-[https://github.com/petrasvestartas/compas_cra](https://github.com/petrasvestartas/compas_cra)
+[https://github.com/BlockResearchGroup/compas_cra](https://github.com/BlockResearchGroup/compas_cra)
 
 ### Examples to reproduce our paper results
 
-See examples in [docs](https://github.com/petrasvestartas/compas_cra/latest/examples.html) or try them in [docs/examples](https://github.com/petrasvestartas/compas_cra/blob/main/docs/examples).
+See examples in [docs](https://blockresearchgroup.github.io/compas_cra/examples/) or try them in [docs/examples](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/examples).

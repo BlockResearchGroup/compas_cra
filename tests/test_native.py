@@ -104,10 +104,12 @@ def test_cra_snake():
     assert max(resultants) > 0
 
 
-def arch_assembly(num_blocks=20):
+def arch_assembly(num_blocks=20, extra_support=False):
     from compas_cra.geometry import Arch
 
-    assembly = Arch(height=5.0, span=10.0, thickness=0.5, depth=0.5, num_blocks=num_blocks).assembly()
+    assembly = Arch(
+        height=5.0, span=10.0, thickness=0.5, depth=0.5, num_blocks=num_blocks, extra_support=extra_support
+    ).assembly()
     assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
     return assembly
 
@@ -142,3 +144,32 @@ def test_cra_arch_has_iteration_headroom():
     result = solve_nlp(problem, backend="native", options=_CRA_OPTIONS)
     assert result.success, result.status_message
     assert result.iterations < 1500, "lost iteration headroom: {} iterations".format(result.iterations)
+
+
+def test_cra_penalty_arch():
+    """The penalty solver on the arch, both variants of docs/examples/06_arch_penalty.py.
+
+    With the default d_bnd=1e-3 this problem exhausts a 9000-iteration cap under both
+    barrier strategies; at d_bnd=1e-2 it converges in ~65 iterations. On the standard
+    arch - all compression, penalties inactive - the penalty solution must agree with
+    cra_solve, which pins the parameter change to the same physics. The extra-support
+    arch is infeasible for cra_solve (that instability is what the penalty formulation
+    is for), so there it must simply converge with nonzero displacements."""
+    from compas_cra.equilibrium import cra_penalty_solve
+
+    standard = arch_assembly()
+    cra_penalty_solve(standard, mu=0.7, d_bnd=1e-2)
+    resultants = sorted(interface_resultants(standard))
+    assert len(resultants) == 19
+    assert resultants[-1] == pytest.approx(1.96, abs=0.05)
+    assert resultants[0] > 0
+
+    extra = arch_assembly(extra_support=True)
+    cra_penalty_solve(extra, mu=0.7, d_bnd=1e-2)
+    assert len(interface_resultants(extra)) == 21
+    displacements = [
+        extra.graph.node_attribute(n, "displacement")
+        for n in extra.graph.nodes()
+        if not extra.graph.node_attribute(n, "is_support")
+    ]
+    assert max(max(abs(x) for x in d) for d in displacements if d) > 1e-3

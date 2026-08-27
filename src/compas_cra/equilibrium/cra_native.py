@@ -22,23 +22,50 @@ __all__ = ["cra_solve_native", "cra_penalty_solve_native", "rbe_solve_native"]
 # precision, and they are, but they are load bearing: the solve reaches its answer
 # through IPOPT's restoration phase, and relaxing them keeps it out of restoration
 # without getting it any closer to convergence. Measured on the 20-block arch,
-# tol=1e-8 / constr_viol_tol=1e-9 turns a solve that stops at a feasible point into
-# Maximum_Iterations_Exceeded at the 3000-iteration cap.
+# The CRA system is square (as many equations as unknowns), and that made IPOPT's
+# version the hidden variable of this solver's history. Until IPOPT 3.14.11, square
+# problems were special-cased: the convergence check ignored dual feasibility and bound
+# complementarity, so IPOPT stopped at the first primal-feasible point of the barrier
+# path - an interior point, where every contact face still carries force. Every result
+# in the CRA paper (Kao et al. 2022, doi:10.1016/j.cad.2022.103216) and every published
+# example screenshot is such a point: on the curved-interface examples the load spreads
+# over all 72 sub-faces. IPOPT 3.14.12 removed the special case, and from there the
+# solver drives complementarity to zero and lands on a degenerate vertex instead - the
+# same examples concentrate the whole load on 8 faces and zero the rest. Verified by
+# building IPOPT 3.14.9, 3.14.11 and 3.14.14 from source against the same MUMPS 5.9:
+# 3.14.11 still spreads, 3.14.14 concentrates - the flip is exactly at 3.14.12, per
+# its changelog; not MUMPS, and not this repository - every code generation from the
+# screenshot-day commit (15e5edc) to today produces both solutions depending only on
+# the binary.
+#
+# mu_target restores the published behavior as an explicit setting rather than an
+# accident of an old binary: the barrier stops at mu = 1e-5 instead of 0, an interior
+# point where every contact face carries force. Calibrated against the published
+# figures themselves, not against a rebuilt era binary: a from-source 3.14.11 stops at
+# a lower effective mu than Gene's 2022 conda/macOS build did (the old square-problem
+# shortcut stopped wherever the check happened to trip, so its level was platform
+# luck), and the figures show near-uniform arrows - which 1e-5 reproduces
+# (cube-curve-tall max/median 1.11, cube-curve-short 1.20, all 72 faces loaded).
+# Equilibrium stays exact: constr_viol_tol holds the force balance at 1e-8; only the
+# force *distribution* on statically indeterminate contacts is selected. The contact
+# complementarity products sit at the mu level by construction, so solves legitimately
+# end as acceptable-level or feasible-restoration points at ~1e-7 violation -
+# acceptable_constr_viol_tol at 1e-6 is what admits them, and the degenerate examples
+# are knife-edged in this option set (13_curve-3-blocks needs thousands of iterations
+# and fails outright one small step away in mu_target or tol), so change these
+# together or not at all. The arch keeps its resultants (1.9571/0.8437, vs 1.9570
+# under strict optimization) with iteration headroom intact (270 of 9000).
 _CRA_OPTIONS = {
-    "tol": 1e-10,
-    "constr_viol_tol": 1e-12,
-    "compl_inf_tol": 1e-12,
-    "acceptable_tol": 1e-8,
-    "acceptable_constr_viol_tol": 1e-8,
-    "acceptable_compl_inf_tol": 1e-8,
-    # CRA's complementarity constraints are degenerate, and the monotone barrier update
-    # crawls on them: the 20-block arch takes 1964 of its 3000 permitted iterations,
-    # which leaves almost no headroom before a wheel that rounds slightly differently
-    # runs out of iterations instead -- which is exactly what users on macOS hit, where
-    # the wheel links Accelerate rather than OpenBLAS. The adaptive update finishes the
-    # same solve in 668 iterations, on the same answer: interface resultants agree to
-    # 1e-10, and a 40-block arch goes from 2757 iterations to 307.
+    "tol": 1e-4,
+    "dual_inf_tol": 1e-4,
+    "compl_inf_tol": 1e-4,
+    "constr_viol_tol": 1e-8,
+    "acceptable_tol": 1e-3,
+    "acceptable_constr_viol_tol": 1e-6,
+    "acceptable_compl_inf_tol": 1e-3,
     "mu_strategy": "adaptive",
+    "mu_target": 1e-5,
+    "max_iter": 9000,
 }
 
 # the tolerances the CRA penalty solver has always used
@@ -47,6 +74,10 @@ _CRA_PENALTY_OPTIONS = {
     "constr_viol_tol": 1e-7,
     "acceptable_tol": 1e-6,
     "acceptable_constr_viol_tol": 1e-5,
+    # same degenerate complementarity constraints as the CRA solver, same crawl under
+    # the monotone update: the 20-block arch exhausted the 3000-iteration cap at 5e-2
+    # violation. See _CRA_OPTIONS.
+    "mu_strategy": "adaptive",
 }
 
 

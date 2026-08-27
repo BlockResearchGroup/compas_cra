@@ -9,7 +9,11 @@ from compas_cra.datastructures import CRA_Assembly
 from compas_cra.equilibrium import cra_solve
 from compas_cra.viewers import cra_view
 
-density = 1
+# The published screenshot's original parameters. They only solve in the barrier-
+# interior regime the solver now runs in (mu_target - see cra_native.py); under strict
+# optimization they exhaust the iteration cap on every IPOPT generation, which is why
+# the author had switched to density=1 as a workaround days after the screenshot.
+density = 0.1
 
 FILE_I = os.path.join(compas_cra.SAMPLE, "curve-3-blocks.json")
 
@@ -25,6 +29,6 @@ cra_view(
     grid=True,
     displacements=True,
     dispscale=0,
-    scale=1,
+    scale=5,
     density=density,
 )

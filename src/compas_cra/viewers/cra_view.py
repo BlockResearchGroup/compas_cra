@@ -5,7 +5,11 @@ from math import sqrt
 import numpy as np
 from compas.colors import Color
 from compas.datastructures import Mesh
+from compas.geometry import Cone
+from compas.geometry import Cylinder
+from compas.geometry import Frame
 from compas.geometry import Line
+from compas.geometry import Plane
 from compas.geometry import Point
 from compas.geometry import Polygon
 from compas.geometry import Polyline
@@ -15,25 +19,59 @@ from compas.geometry import Vector
 from compas.geometry import is_coplanar
 from compas_viewer import Viewer
 from compas_viewer.config import Config
+from compas_viewer.scene import Collection
 
 
 class Arrow:
-    def __init__(self, position=[0, 0, 0], direction=[0, 0, 1], linewidth=0.02):
+    """A force arrow as a mesh: cylinder shaft, conical head.
+
+    This is the compas_view2 ``Arrow`` shape the original visualization used, with its
+    parameters: the widths are world units, the head takes ``head_portion`` of the
+    length. The compas_viewer ``VectorObject`` is no substitute - it draws a fixed
+    pixel-width line with a four-sided pyramid head that degenerates to a sliver for
+    axis-parallel directions.
+    """
+
+    def __init__(self, position=[0, 0, 0], direction=[0, 0, 1], head_portion=0.2, head_width=0.07, body_width=0.02):
         super().__init__()
         self.position = Vector(*position)
         self.direction = Vector(*direction)
-        self.linewidth = linewidth
+        self.head_portion = head_portion
+        self.head_width = head_width
+        self.body_width = body_width
 
-    def add_to_scene(self, viewer, facecolor: Color, opacity=1):
-        viewer.scene.add(
-            Vector(*self.direction),
-            anchor=Point(*self.position),
-            facecolor=facecolor,
-            linecolor=facecolor,
-            linewidth=self.linewidth,
-            show_lines=True,
-            opacity=opacity,
+    def mesh(self):
+        length = self.direction.length
+        if length == 0:
+            return None
+        zaxis = self.direction.unitized()
+        body_length = length * (1 - self.head_portion)
+        # widths scale with the length, exactly as the compas_view2 Arrow scaled its
+        # unit shape by the direction vector: a short force renders as a thin pin, a
+        # long one as a bold arrow, and relative proportions stay comparable
+        shaft = Cylinder(
+            radius=self.body_width * length,
+            height=body_length,
+            frame=Frame.from_plane(Plane(self.position + zaxis * (body_length / 2), zaxis)),
         )
+        head = Cone(
+            radius=self.head_width * length,
+            height=length * self.head_portion,
+            frame=Frame.from_plane(Plane(self.position + zaxis * body_length, zaxis)),
+        )
+        mesh = Mesh.from_shape(shaft, u=32)
+        mesh.join(Mesh.from_shape(head, u=32))
+        return mesh
+
+    def add_to_scene(self, viewer, facecolor: Color, opacity=0.999):
+        mesh = self.mesh()
+        if mesh is None:
+            return
+        # opacity just under 1 on purpose: it moves the arrow into the renderer's
+        # transparency pass, which draws after the semi-transparent block faces - so an
+        # arrow inside a block stays bold, as it was in compas_view2, instead of being
+        # washed out by the faces compositing over it
+        viewer.scene.add(mesh, facecolor=facecolor, show_lines=False, opacity=min(opacity, 0.999))
 
 
 def draw_blocks(assembly, viewer, edge=True, tol=0.0):
@@ -66,7 +104,7 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.0):
                 blockedges.append(Line(*block.edge_coordinates(edge)))
     if len(blocks) != 0:
         viewer.scene.add(
-            blocks,
+            Collection(blocks),
             show_faces=True,
             show_lines=False,
             opacity=0.6,
@@ -74,16 +112,18 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.0):
         )
     if len(supports) != 0:
         viewer.scene.add(
-            supports,
+            Collection(supports),
             show_faces=True,
             show_lines=False,
             opacity=0.5,
             facecolor=Color.from_hex("#f79d84"),
         )
+    # edges share one thickness; each set takes the color of the meshes it outlines:
+    # dark gray on the light gray blocks, salmon on the salmon supports
     if len(blockedges) != 0:
-        viewer.scene.add(blockedges, linewidth=1.5)
+        viewer.scene.add(Collection(blockedges), linecolor=Color(0.3, 0.3, 0.3), linewidth=1.5)
     if len(supportedges) != 0:
-        viewer.scene.add(supportedges, linecolor=Color.from_hex("#f79d84"), linewidth=4)
+        viewer.scene.add(Collection(supportedges), linecolor=Color.from_hex("#f79d84"), linewidth=1.5)
 
 
 def draw_interfaces(assembly, viewer):
@@ -110,14 +150,14 @@ def draw_interfaces(assembly, viewer):
 
     if len(interfaces) != 0:
         viewer.scene.add(
-            interfaces,
+            Collection(interfaces),
             show_lines=False,
             show_points=False,
             facecolor=(0.8, 0.8, 0.8),
         )
     if len(faces) != 0:
         viewer.scene.add(
-            faces,
+            Collection(faces),
             linecolor=Color.from_hex("#fac05e"),
             linewidth=10,
             pointsize=10,
@@ -178,17 +218,17 @@ def draw_forces(assembly, viewer, scale=1.0, resultant=True, nodal=False):
             else:
                 res_nn.append(Line(p1, p2))
     if len(locs) != 0:
-        viewer.scene.add(locs, size=12, color=Color.from_hex("#386641"))
+        viewer.scene.add(Collection(locs), pointsize=12, pointcolor=Color.from_hex("#386641"))
     if len(res_np) != 0:
-        viewer.scene.add(res_np, linewidth=8, linecolor=Color(0, 0.3, 0))
+        viewer.scene.add(Collection(res_np), linewidth=8, linecolor=Color(0, 0.3, 0))
     if len(res_nn) != 0:
-        viewer.scene.add(res_nn, linewidth=8, linecolor=Color(0.8, 0, 0))
+        viewer.scene.add(Collection(res_nn), linewidth=8, linecolor=Color(0.8, 0, 0))
     if len(fnn) != 0:
-        viewer.scene.add(fnn, linewidth=5, linecolor=Color.from_hex("#00468b"))
+        viewer.scene.add(Collection(fnn), linewidth=5, linecolor=Color.from_hex("#00468b"))
     if len(fnp) != 0:
-        viewer.scene.add(fnp, linewidth=5, linecolor=Color(1, 0, 0))
+        viewer.scene.add(Collection(fnp), linewidth=5, linecolor=Color(1, 0, 0))
     if len(ft) != 0:
-        viewer.scene.add(ft, linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
+        viewer.scene.add(Collection(ft), linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
 
 
 def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
@@ -222,12 +262,13 @@ def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                     p2 = pt - ft_uv
                     ft.append(Line(p1, p2))
             if resultant:
-                is_tension = False
-                for force in forces:
-                    if force["c_np"] - force["c_nn"] <= -1e-5:
-                        is_tension = True
-
                 sum_n = sum(force["c_np"] - force["c_nn"] for force in forces)
+                # tension when the NET normal force is tensile - see the comment in
+                # draw_forcesdirect: per-vertex tests false-positive on the solver's
+                # relaxed-complementarity noise (vertex forces negative by ~1e-3 on
+                # compressed interfaces), while the net sign colors the resultant by
+                # what it actually depicts
+                is_tension = sum_n < 0
                 sum_u = sum(force["c_u"] for force in forces)
                 sum_v = sum(force["c_v"] for force in forces)
                 if sum_n == 0:
@@ -256,17 +297,17 @@ def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 else:
                     res_nn.append(Line(p1, p2))
     if len(locs) != 0:
-        viewer.scene.add(locs, pointsize=12, pointcolor=Color.from_hex("#386641"))
+        viewer.scene.add(Collection(locs), pointsize=12, pointcolor=Color.from_hex("#386641"))
     if len(res_np) != 0:
-        viewer.scene.add(res_np, linewidth=8, linecolor=Color(0, 0.3, 0))
+        viewer.scene.add(Collection(res_np), linewidth=8, linecolor=Color(0, 0.3, 0))
     if len(res_nn) != 0:
-        viewer.scene.add(res_nn, linewidth=8, linecolor=Color(0.8, 0, 0))
+        viewer.scene.add(Collection(res_nn), linewidth=8, linecolor=Color(0.8, 0, 0))
     if len(fnn) != 0:
-        viewer.scene.add(fnn, linewidth=5, linecolor=Color.from_hex("#00468b"))
+        viewer.scene.add(Collection(fnn), linewidth=5, linecolor=Color.from_hex("#00468b"))
     if len(fnp) != 0:
-        viewer.scene.add(fnp, linewidth=5, linecolor=Color(1, 0, 0))
+        viewer.scene.add(Collection(fnp), linewidth=5, linecolor=Color(1, 0, 0))
     if len(ft) != 0:
-        viewer.scene.add(ft, linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
+        viewer.scene.add(Collection(ft), linewidth=5, linecolor=Color(1.0, 0.5, 0.0))
     # print("total reaction: ", total_reaction)
 
 
@@ -301,9 +342,9 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                     if (w * force * scale).length == 0:
                         continue
                     if flip:
-                        f = Arrow(pt, w * force * scale * -1, linewidth=10)
+                        f = Arrow(pt, w * force * scale * -1)
                     else:
-                        f = Arrow(pt, w * force * scale, linewidth=10)
+                        f = Arrow(pt, w * force * scale)
                     if force >= 0:
                         fnp.append(f)
                     else:
@@ -312,26 +353,25 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                     if ft_uv.length == 0:
                         continue
                     if flip:
-                        f = Arrow(
-                            pt,
-                            ft_uv * -1,
-                            linewidth=10,
-                        )
+                        f = Arrow(pt, ft_uv * -1)
                     else:
-                        f = Arrow(
-                            pt,
-                            ft_uv,
-                            linewidth=10,
-                        )
+                        f = Arrow(pt, ft_uv)
                     ft.append(f)
             if resultant:
-                is_tension = False
-
-                for force in forces:
-                    if force["c_np"] - force["c_nn"] <= -1e-5:
-                        is_tension = True
-
                 sum_n = sum(force["c_np"] - force["c_nn"] for force in forces)
+                # The resultant arrow depicts the NET interface force, so its color
+                # follows the sign of the net normal component: tensile (negative)
+                # renders red, compressive renders green - the same rule draw_forces
+                # uses. The old test flagged the interface red as soon as ANY vertex
+                # was more than 1e-5 in tension, but the solver relaxes
+                # complementarity (f_n (d_n + eps) = 0 with eps ~ 1e-4) and stops at
+                # IPOPT's "acceptable" tolerance, so vertex normal forces routinely
+                # come out negative by up to ~1e-3 on interfaces that are in overall
+                # compression - a false positive (the shelf example rendered red
+                # although its published screenshot is green). Genuine tension - a
+                # hanging or peeling interface - makes the net normal force itself
+                # negative and still renders red.
+                is_tension = sum_n < 0
                 sum_u = sum(force["c_u"] for force in forces)
                 sum_v = sum(force["c_v"] for force in forces)
                 if abs(sum_n) <= thres:
@@ -352,9 +392,9 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 if resultant_f.length >= thres:
                     locs.append(Point(*resultant_pos))
                 if flip:
-                    f = Arrow(resultant_pos, resultant_f * -1, linewidth=10)
+                    f = Arrow(resultant_pos, resultant_f * -1)
                 else:
-                    f = Arrow(resultant_pos, resultant_f, linewidth=10)
+                    f = Arrow(resultant_pos, resultant_f)
                 if friction:
                     f.add_to_scene(viewer, facecolor=(1.0, 0.5, 0.0))
                 if not is_tension:
@@ -362,7 +402,7 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 else:
                     res_nn.append(f)
     if len(locs) != 0:
-        viewer.scene.add(locs, size=12, color=Color.from_hex("#386641"))
+        viewer.scene.add(Collection(locs), pointsize=12, pointcolor=Color.from_hex("#386641"))
     if len(res_np) != 0:
         for arrow in res_np:
             arrow.add_to_scene(viewer, facecolor=Color.from_hex("#386641"))
@@ -412,9 +452,9 @@ def draw_displacements(assembly, viewer, dispscale=1.0, tol=0.0):
                     continue
             blocks.append(Line(*new_block.edge_coordinates(edge)))
     if len(blocks) != 0:
-        viewer.scene.add(blocks, linewidth=1, linecolor=Color(0.7, 0.7, 0.7))
+        viewer.scene.add(Collection(blocks), linewidth=1, linecolor=Color(0.7, 0.7, 0.7))
     if len(nodes) != 0:
-        viewer.scene.add(nodes, pointcolor=Color(0.7, 0.7, 0.7))
+        viewer.scene.add(Collection(nodes), pointcolor=Color(0.7, 0.7, 0.7))
 
 
 def draw_weights(assembly, viewer, scale=1.0, density=1.0):
@@ -432,7 +472,6 @@ def draw_weights(assembly, viewer, scale=1.0, density=1.0):
             Arrow(
                 block.center(),
                 [0, 0, -block.volume() * d * scale],
-                linewidth=0.02,
             )
         )
         # print("self-weight", -block.volume() * density)
@@ -442,9 +481,9 @@ def draw_weights(assembly, viewer, scale=1.0, density=1.0):
     # print("total self-weight: ", total_weights)
 
     if len(supports) != 0:
-        viewer.scene.add(supports, pointsize=20, pointcolor=Color.from_hex("#ee6352"))
+        viewer.scene.add(Collection(supports), pointsize=20, pointcolor=Color.from_hex("#ee6352"))
     if len(blocks) != 0:
-        viewer.scene.add(blocks, pointsize=30, pointcolor=Color.from_hex("#3284a0"))
+        viewer.scene.add(Collection(blocks), pointsize=30, pointcolor=Color.from_hex("#3284a0"))
     if len(weights) != 0:
         for weight in weights:
             weight.add_to_scene(viewer, facecolor=Color.from_hex("#59cd90"))

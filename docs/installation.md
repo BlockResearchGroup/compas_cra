@@ -1,32 +1,21 @@
 # Installation
 
-## Stable
+## Install
 
 ```bash
 pip install compas_cra
 ```
 
-That is all that is needed, on Windows, macOS (Apple Silicon and Intel) and Linux.
-The [IPOPT](https://coin-or.github.io/Ipopt/) solver is compiled into the package
-itself as an extension module, so solving happens in-process: no conda environment, no
-homebrew and no solver executables are involved. The wheels cover CPython 3.9 to 3.13.
-
-To also install the viewers:
+Windows, macOS and Linux, CPython 3.9-3.13. The [IPOPT](https://coin-or.github.io/Ipopt/)
+solver is compiled into the package.
 
 ```bash
-pip install compas_cra[viz]
+pip install compas_cra[viz]                                              # with viewers
+python -c "from compas_cra import _native; print(_native.IPOPT_VERSION)" # verify
 ```
 
-Verify the solver is available with:
-
-```bash
-python -c "from compas_cra import _native; print(_native.IPOPT_VERSION)"
-```
-
-## Rhino 8
-
-Start a Python 3 script in the ScriptEditor with this header and run it — Rhino
-installs everything on the first run:
+In Rhino 8, run a script with this header — Rhino installs everything on the first run
+(examples in `scripts/`):
 
 ```python
 #! python3
@@ -34,89 +23,99 @@ installs everything on the first run:
 # r: compas_cra
 ```
 
-Ready-to-run examples are in the repository under `scripts/`.
-
 ## Development
 
-Working on `compas_cra` itself means building the solver, because the solver is part
-of the package: `pip install .` and `pip install -e .` both compile the
-`compas_cra._native` extension, and that links against a static IPOPT tree produced
-by `packaging/build_ipopt.sh`. Without such a tree the install stops with
-`No IPOPT build at IPOPT_PREFIX=...`.
-
-### Prerequisites
-
-The IPOPT build needs a Fortran compiler (its MUMPS linear solver is Fortran), a static
-BLAS/LAPACK, a C/C++ toolchain, and `git`, `curl`, `make`, `patch` and
-`pkg-config` for coinbrew. CMake and Ninja are *not* needed up front — the build
-backend brings its own.
-
-Debian / Ubuntu:
+### Windows
 
 ```bash
-sudo apt install build-essential gfortran libopenblas-dev git curl make patch pkg-config
-```
-
-Fedora / RHEL / AlmaLinux:
-
-```bash
-sudo dnf install gcc gcc-c++ gcc-gfortran openblas-devel openblas-static \
-    glibc-static libstdc++-static git curl make patch pkgconf
-```
-
-macOS:
-
-```bash
-brew install gcc bash
-```
-
-`gfortran` comes with the `gcc` formula, and BLAS/LAPACK is the system Accelerate
-framework, so nothing else is needed. The `bash` formula is: coinbrew refuses to run
-under bash 3, which is still what macOS ships.
-
-Windows: the IPOPT build runs in an [MSYS2](https://www.msys2.org) UCRT64 shell.
-
-```bash
-pacman -S git patch make diffutils pkgconf \
-    mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gcc-fortran \
-    mingw-w64-ucrt-x86_64-openblas
-```
-
-Run `packaging/build_ipopt.sh` from that shell, then `pip` from your normal Python
-with `IPOPT_PREFIX` pointed at the resulting `build/ipopt/stage`.
-
-### Building
-
-```bash
-git clone https://github.com/petrasvestartas/compas_cra.git
+git clone https://github.com/BlockResearchGroup/compas_cra.git
 cd compas_cra
-packaging/build_ipopt.sh
-pip install -e ".[dev]"
+
+uv venv --python 3.12
+source .venv/Scripts/activate
+
+uv pip install invoke compas_invocations2
+invoke setup
 invoke test
 ```
 
-`build_ipopt.sh` takes about fifteen minutes and is a one-off: it stages IPOPT into
-`build/ipopt/stage`, which every later install reuses. Rebuild it only when the script
-or the IPOPT version changes. Set `IPOPT_PREFIX` to use a stage tree from elsewhere,
-`IPOPT_EXTRA_LINK` and `EXTRA_LINK_DIRS` for extra link flags and directories.
+### macOS
+
+Nothing has to be installed first. If Homebrew is not on the machine, `invoke setup`
+installs it, along with `bash` and `gcc` — macOS asks for your password once, because
+the Homebrew installer creates its prefix as root. The account has to be an
+administrator, which is the default for the first account on a Mac.
+
+Run it as yourself. **Not** `sudo invoke setup`: Homebrew refuses to install as root,
+and the venv, `build/` and the staged IPOPT tree would all come out root-owned. The task
+asks for the password at the single point it needs one.
+
+Set `COMPAS_CRA_NO_BREW_INSTALL=1` to refuse the bootstrap and be told to install
+Homebrew yourself instead.
+
+A checkout path containing a space (`Desktop/untitled folder/…`) is fine: IPOPT is
+autotools, which cannot build under such a path, so `invoke setup` builds and stages it
+in `~/.compas_cra/ipopt` instead and points the extension build there.
+
+```bash
+git clone https://github.com/BlockResearchGroup/compas_cra.git
+cd compas_cra
+
+uv venv --python 3.12
+source .venv/bin/activate
+
+uv pip install invoke compas_invocations2
+invoke setup
+invoke test
+```
+
+### Linux
+
+```bash
+sudo apt install build-essential gfortran libopenblas-dev git curl make patch pkg-config
+
+git clone https://github.com/BlockResearchGroup/compas_cra.git
+cd compas_cra
+
+uv venv --python 3.12
+source .venv/bin/activate
+
+uv pip install invoke compas_invocations2
+invoke setup
+invoke test
+```
+
+### After the first build
+
+```bash
+uv pip install -e .   # rebuild after C++ changes; Python changes need no reinstall
+```
+
+### Documentation only
+
+```bash
+uv venv --python 3.12
+source .venv/Scripts/activate
+uv pip install -r requirements.txt
+invoke docs
+```
+
+### Tasks
+
+| Command | What it does |
+| --- | --- |
+| `invoke setup` | Build the solver and install the package, on any platform |
+| `invoke docs` | Serve the site at `localhost:8000` with live reload; `--no-serve` builds `dist/docs` |
+| `invoke lint` | `ruff check --fix src tests` |
+| `invoke format` | `ruff format src tests` |
+| `invoke test` | Run the test suite |
+| `invoke release <major\|minor\|patch>` | Bump, tag and push, which triggers the release |
 
 ### Without a local toolchain
 
-On Linux with Docker, `cibuildwheel` builds exactly what CI builds — IPOPT and all —
-inside the manylinux container, so nothing has to be installed on the host:
-
 ```bash
 pip install cibuildwheel
-CIBW_BUILD="cp312-*" cibuildwheel --output-dir dist
+CIBW_BUILD="cp312-*" cibuildwheel --output-dir dist   # Linux/Docker; exactly what CI runs
 ```
 
-Everything else — the manylinux image, the `dnf` line that installs gfortran and
-OpenBLAS in the container, the IPOPT build itself and the smoke test — comes from
-`[tool.cibuildwheel]` in `pyproject.toml`, so this is exactly what CI runs.
-`CIBW_BUILD` is only there to limit the run to one CPython; drop it to build all five.
-
-That takes about five minutes and leaves an installable wheel in `dist/`. It is also
-the quickest way to get a working solver into a local environment when you only want to
-change Python code.
-
-See `native/README.md` and `packaging/README.md` for what is being built and why.
+For building IPOPT by hand, see `packaging/README.md`.

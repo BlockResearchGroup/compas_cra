@@ -49,27 +49,37 @@ dev = [
     "black>=22.12.0",
     "build",
     "bump-my-version",
+    # the documentation stack too, so `pip install -e ".[dev]"` is the only install step a
+    # contributor needs: `invoke docs` is unusable without it, and `docs` alone has no invoke
+    "compas_cra[docs]",
     "compas_invocations2",
     "compas_viewer",
     "invoke>=0.14",
+    # invoke test is unusable without it; CI happened to install it separately
+    "pytest",
     "ruff",
     "twine",
     "wheel",
 ]
 # the docs are mkdocs-material + mkdocstrings, same stack as compas_model
+# mirrored by requirements.txt, which installs this stack without building the
+# package - the documentation never needs the compiled solver
 docs = [
     "markdown-callouts>=0.4",
-    "mkdocs>=1.6",
+    "mkdocs>=1.6,<2",  # Material is incompatible with the MkDocs 2.0 rewrite, per its own banner
     "mkdocs-autorefs>=1.4",
     "mkdocs-material>=9.5",
     "mkdocstrings[python]",
+    # mkdocs.yml configures pymdownx.* directly, so it is a direct dependency; it happens to
+    # arrive with mkdocs-material today, which is not something to rely on
+    "pymdown-extensions>=10",
 ]
 
 [project.urls]
-Homepage = "https://petrasvestartas.github.io/compas_cra"
-Documentation = "https://petrasvestartas.github.io/compas_cra"
-Repository = "https://github.com/petrasvestartas/compas_cra.git"
-Changelog = "https://github.com/petrasvestartas/compas_cra/blob/main/CHANGELOG.md"
+Homepage = "https://blockresearchgroup.github.io/compas_cra"
+Documentation = "https://blockresearchgroup.github.io/compas_cra"
+Repository = "https://github.com/BlockResearchGroup/compas_cra.git"
+Changelog = "https://github.com/BlockResearchGroup/compas_cra/blob/main/CHANGELOG.md"
 
 # ============================================================================
 # scikit-build-core config
