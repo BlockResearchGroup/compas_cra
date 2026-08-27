@@ -31,16 +31,21 @@ density_setup(assembly, density)
 
 assembly_interfaces_numpy(assembly, amin=1e-6, tmax=1e-4)
 
-# cra_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)
-cra_penalty_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)
+# the published screenshot was made with cra_solve; the penalty variant stays one
+# uncomment away, as it was in 2022
+cra_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)
+# cra_penalty_solve(assembly, verbose=True, density=d, d_bnd=dispbnd, eps=overlap, mu=mu)
 cra_view(
     assembly,
     resultant=True,
     nodal=False,
     grid=True,
     weights=True,
-    forcesdirect=False,
-    forcesline=True,
+    # the published screenshot shows cone-headed resultant arrows (forcesdirect), even
+    # though the 2022 file said forcesline - the image was made with uncommitted flags;
+    # the image is the contract
+    forcesdirect=True,
+    forcesline=False,
     displacements=True,
     dispscale=1,
     scale=0.5 / d,

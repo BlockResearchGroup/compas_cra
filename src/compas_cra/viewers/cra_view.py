@@ -118,10 +118,12 @@ def draw_blocks(assembly, viewer, edge=True, tol=0.0):
             opacity=0.5,
             facecolor=Color.from_hex("#f79d84"),
         )
+    # edges share one thickness; each set takes the color of the meshes it outlines:
+    # dark gray on the light gray blocks, salmon on the salmon supports
     if len(blockedges) != 0:
-        viewer.scene.add(Collection(blockedges), linewidth=1.5)
+        viewer.scene.add(Collection(blockedges), linecolor=Color(0.3, 0.3, 0.3), linewidth=1.5)
     if len(supportedges) != 0:
-        viewer.scene.add(Collection(supportedges), linecolor=Color.from_hex("#f79d84"), linewidth=4)
+        viewer.scene.add(Collection(supportedges), linecolor=Color.from_hex("#f79d84"), linewidth=1.5)
 
 
 def draw_interfaces(assembly, viewer):
@@ -260,12 +262,13 @@ def draw_forcesline(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                     p2 = pt - ft_uv
                     ft.append(Line(p1, p2))
             if resultant:
-                is_tension = False
-                for force in forces:
-                    if force["c_np"] - force["c_nn"] <= -1e-5:
-                        is_tension = True
-
                 sum_n = sum(force["c_np"] - force["c_nn"] for force in forces)
+                # tension when the NET normal force is tensile - see the comment in
+                # draw_forcesdirect: per-vertex tests false-positive on the solver's
+                # relaxed-complementarity noise (vertex forces negative by ~1e-3 on
+                # compressed interfaces), while the net sign colors the resultant by
+                # what it actually depicts
+                is_tension = sum_n < 0
                 sum_u = sum(force["c_u"] for force in forces)
                 sum_v = sum(force["c_v"] for force in forces)
                 if sum_n == 0:
@@ -355,13 +358,20 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                         f = Arrow(pt, ft_uv)
                     ft.append(f)
             if resultant:
-                is_tension = False
-
-                for force in forces:
-                    if force["c_np"] - force["c_nn"] <= -1e-5:
-                        is_tension = True
-
                 sum_n = sum(force["c_np"] - force["c_nn"] for force in forces)
+                # The resultant arrow depicts the NET interface force, so its color
+                # follows the sign of the net normal component: tensile (negative)
+                # renders red, compressive renders green - the same rule draw_forces
+                # uses. The old test flagged the interface red as soon as ANY vertex
+                # was more than 1e-5 in tension, but the solver relaxes
+                # complementarity (f_n (d_n + eps) = 0 with eps ~ 1e-4) and stops at
+                # IPOPT's "acceptable" tolerance, so vertex normal forces routinely
+                # come out negative by up to ~1e-3 on interfaces that are in overall
+                # compression - a false positive (the shelf example rendered red
+                # although its published screenshot is green). Genuine tension - a
+                # hanging or peeling interface - makes the net normal force itself
+                # negative and still renders red.
+                is_tension = sum_n < 0
                 sum_u = sum(force["c_u"] for force in forces)
                 sum_v = sum(force["c_v"] for force in forces)
                 if abs(sum_n) <= thres:

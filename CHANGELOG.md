@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Rhino 8 ports of the three curved-interface examples (`scripts/rhino_cra_curve_3_blocks.py`, `rhino_cra_cube_curve_short.py`, `rhino_cra_cube_curve_tall.py`) with a shared drawing module (`scripts/rhino_cra_view.py`) that mirrors the desktop visualization - the same mesh arrows (cylinder shaft, conical head), colors and element grouping, on toggleable Rhino layers, drawn through the compas 2 Scene API. Open in the ScriptEditor and run; the `# r:` header installs compas_cra on first use.
+
 * A viewer smoke test (`tests/test_viewers.py`): the full `cra_view` scene is constructed headless against the installed `compas_viewer`, with only the blocking `show()` stubbed, so an API drift in the viewer fails in CI instead of on a user's screen. Skipped when the viz extra is absent.
 * A regression test for the penalty solver on the arch, both variants of the `06_arch_penalty` example, pinning the penalty solution to `cra_solve` on the standard arch.
 
@@ -53,6 +55,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * The CRA solver's acceptable-level tolerances relaxed from 1e-8 to 1e-6. The wedge and curved-blocks examples converge to ~1e-8 violation and then cannot reach the hard tolerances - at 1e-8 acceptance they died a hair above the line (`Restoration_Failed` at 4.6e-8, `Maximum_Iterations_Exceeded` hovering at 1.6e-8). The hard tolerances are unchanged; relaxing acceptance only adds a stopping opportunity.
 * The penalty solver uses the adaptive barrier update too - same degenerate complementarity constraints as the CRA solver, same crawl under the monotone update.
 * The `06_arch_penalty` example passes `d_bnd=1e-2`: with the default 1e-3 the solve exhausts even a 9000-iteration cap under both barrier strategies, at 1e-2 it converges in ~65 iterations, and on the standard arch the penalty resultants then agree with `cra_solve` to 1e-3 - same physics, feasible bound. All 18 example scripts now run to completion, verified headless.
+* Resultant force arrows are red only for interfaces in net tension (`sum_n < 0`) - the rule the published screenshots were made with (commit `15e5edc`, 2022-08-17). The per-vertex `<= -1e-5` check added later turned whole interfaces red over complementarity-relaxation noise (vertex normals reach -2e-3 on shelf interfaces that are in overall compression), which is why the shelf example showed red arrows where its screenshot shows green. Genuine tension still shows: net-tension interfaces render red, and per-vertex tension renders as red nodal arrows, unchanged.
+* Block and support edges draw at the same width (1.5), block edges in dark gray, support edges in the support salmon - matching the reference screenshots instead of the 4-wide support outlines.
+* `09_bridge` runs `cra_solve` again - the example had been switched to `cra_penalty_solve`, producing a visibly different solution from its screenshot. Verified against the 2022 code in an era-exact environment: identical resultants to five decimals, no tension anywhere. The view flags also now match the screenshot (`forcesdirect=True`): the image was made with flags that were never committed, and the image is the contract.
+* `13_curve-3-blocks` draws the arrows at the lengths its screenshot shows. The screenshot's parameters (density=0.1, scale=5, 2022-08-17) hit IPOPT's iteration cap on MUMPS builds in the 2022 code and today alike - verified by running the era code - which is presumably why the author moved to density=1 days later; the example keeps density=1 and compensates with scale=0.5, which is the same drawn length.
 
 ### Removed
 
