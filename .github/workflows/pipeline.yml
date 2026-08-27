@@ -211,9 +211,12 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq libegl1 libgl1
           python -m pip install -q --upgrade pip
           python -m pip install -q "$(ls wheelhouse/compas_cra-*-cp312-*.whl)[dev,docs]"
+      # `invoke docs`, not a second copy of the mkdocs command: the task in tasks.py is the
+      # one contributors run, and CI diverging from it is how a green local build turns red
+      # here (or worse, the reverse)
       - name: Build docs
         run: |
-          mkdocs build --strict --site-dir dist/docs
+          invoke docs
           test -f dist/docs/index.html
       - name: Deploy docs
         if: inputs.publish

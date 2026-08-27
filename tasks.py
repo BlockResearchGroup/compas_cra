@@ -33,7 +33,11 @@ def release(ctx, release_type):
     ctx.run("bump-my-version bump %s --verbose" % release_type)
 
     build.prepare_changelog(ctx)
-    build.clean(ctx)
+    # builds=False: the default `clean` removes build/, which here holds the staged IPOPT
+    # tree packaging/build_ipopt.sh spends about fifteen minutes producing. CMakeLists.txt
+    # defaults IPOPT_PREFIX to build/ipopt/stage, so removing it makes the next
+    # `pip install -e .` fail with `No IPOPT build at IPOPT_PREFIX=...`.
+    build.clean(ctx, builds=False)
 
     if confirm(
         "Everything is ready. You are about to push to git, which will build every wheel "
