@@ -106,6 +106,11 @@ def _native_build_env():
     root = _msys2_root()
     ucrt = root.replace("\\", "/") + "/ucrt64"
     return {
+        # ucrt64\bin on PATH is not optional: g++ spawns cc1plus.exe from ucrt64\lib,
+        # and cc1plus finds its DLLs (gmp, mpfr, isl, zstd) in ucrt64\bin. Without it
+        # the compiler dies instantly with exit 1 and no output at all, and CMake
+        # reports the C++ compiler as "broken".
+        "PATH": os.path.join(root, "ucrt64", "bin") + os.pathsep + os.environ.get("PATH", ""),
         "EXTRA_LINK_DIRS": os.path.join(root, "ucrt64", "lib"),
         "CMAKE_GENERATOR": "Ninja",
         "CMAKE_ARGS": (
@@ -142,6 +147,17 @@ def _install_toolchain(ctx):
         raise invoke.Exit(LINUX_HINT)
 
 
+def _verbosity():
+    """coinbrew verbosity for interactive builds: stream the compile lines.
+
+    An interactive fifteen-minute build with no output is indistinguishable from a hung
+    one, so `invoke setup` defaults to 2 (make output shown). CI calls build_ipopt.sh
+    directly and keeps the script's own quiet default. VERBOSITY in the environment
+    still wins, in either direction.
+    """
+    return os.environ.get("VERBOSITY", "2")
+
+
 def _build_ipopt(ctx, jobs):
     """Stage IPOPT into build/ipopt/stage, unless it is already there."""
     if os.path.isfile(os.path.join(ctx.base_folder, IPOPT_MARKER)):
@@ -160,10 +176,10 @@ def _build_ipopt(ctx, jobs):
         # base_folder courtesy of the chdir in `setup`), and build_ipopt.sh reads JOBS.
         ctx.run(
             '"{0}" -lc "packaging/build_ipopt.sh"'.format(bash),
-            env={"MSYSTEM": "UCRT64", "CHERE_INVOKING": "1", "JOBS": str(jobs)},
+            env={"MSYSTEM": "UCRT64", "CHERE_INVOKING": "1", "JOBS": str(jobs), "VERBOSITY": _verbosity()},
         )
     else:
-        ctx.run("packaging/build_ipopt.sh", env={"JOBS": str(jobs)})
+        ctx.run("packaging/build_ipopt.sh", env={"JOBS": str(jobs), "VERBOSITY": _verbosity()})
 
 
 @invoke.task(
