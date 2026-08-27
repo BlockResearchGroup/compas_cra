@@ -104,24 +104,55 @@ def _native_build_env():
     if platform.system() != "Windows":
         return {}
     root = _msys2_root()
-    ucrt = root.replace("\\", "/") + "/ucrt64"
     return {
         # ucrt64\bin on PATH is not optional: g++ spawns cc1plus.exe from ucrt64\lib,
         # and cc1plus finds its DLLs (gmp, mpfr, isl, zstd) in ucrt64\bin. Without it
         # the compiler dies instantly with exit 1 and no output at all, and CMake
         # reports the C++ compiler as "broken".
         "PATH": os.path.join(root, "ucrt64", "bin") + os.pathsep + os.environ.get("PATH", ""),
-        "EXTRA_LINK_DIRS": os.path.join(root, "ucrt64", "lib"),
         "CMAKE_GENERATOR": "Ninja",
-        "CMAKE_ARGS": (
-            "-DCMAKE_C_COMPILER={0}/bin/gcc.exe "
-            "-DCMAKE_CXX_COMPILER={0}/bin/g++.exe "
-            "-DFORTRAN_COMPILER={0}/bin/gfortran.exe "
-            # bundle the MinGW runtime DLLs next to the module, so the environment is
-            # self-contained; the CI wheels get the same treatment from delvewheel
-            "-DBUNDLE_RUNTIME_DLLS=ON".format(ucrt)
-        ),
     }
+
+
+VENV_PATCH_MARK = "# compas_cra: MinGW toolchain for rebuilding the extension"
+
+
+def _patch_venv_activation():
+    """Write the build environment into the venv's activation scripts, once.
+
+    After this, a plain `uv pip install -e .` works in the activated venv with no
+    special environment: PATH provides the DLLs the compiler's own cc1plus needs, and
+    CMAKE_GENERATOR keeps CMake off the Visual Studio generator (MSVC cannot link the
+    GCC-built static archives; scikit-build-core also reads it to fetch ninja). The
+    compilers themselves are found by CMakeLists.txt. Venv-scoped on purpose - nothing
+    global is touched.
+    """
+    if platform.system() != "Windows":
+        return
+    scripts = os.path.join(".venv", "Scripts")
+    if not os.path.isdir(scripts):
+        print("no .venv to patch, skipping activation setup")
+        return
+    root = _msys2_root()
+    ucrt_win = os.path.join(root, "ucrt64", "bin")
+    # bash cannot hold C:\...-style entries in PATH (the colon is its separator)
+    ucrt_posix = "/" + root.replace(":", "").replace("\\", "/").lower() + "/ucrt64/bin"
+    patches = {
+        "activate": [VENV_PATCH_MARK, 'export PATH="%s:$PATH"' % ucrt_posix, "export CMAKE_GENERATOR=Ninja"],
+        "activate.bat": ["rem " + VENV_PATCH_MARK[2:], 'set "PATH=%s;%%PATH%%"' % ucrt_win, 'set "CMAKE_GENERATOR=Ninja"'],
+        "activate.ps1": [VENV_PATCH_MARK, '$env:PATH = "%s;" + $env:PATH' % ucrt_win, '$env:CMAKE_GENERATOR = "Ninja"'],
+    }
+    for name, lines in patches.items():
+        path = os.path.join(scripts, name)
+        if not os.path.isfile(path):
+            continue
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+        if "compas_cra: MinGW toolchain" in content:
+            continue
+        with open(path, "a", encoding="utf-8", newline="") as f:
+            f.write("\n" + "\n".join(lines) + "\n")
+        print("patched %s" % path)
 
 
 def _install_toolchain(ctx):
@@ -210,6 +241,8 @@ def setup(ctx, jobs=1, toolchain=True):
             _install_toolchain(ctx)
 
         _build_ipopt(ctx, jobs)
+
+        _patch_venv_activation()
 
         # uv where the contributor is using it, pip otherwise; both install into whatever
         # environment is active

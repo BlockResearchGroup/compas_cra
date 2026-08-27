@@ -57,6 +57,17 @@ invoke test
 On Linux the toolchain needs root, so `invoke setup` prints the `apt`/`dnf` line and
 stops — run it, then re-run `invoke setup`.
 
+After that, on all three platforms:
+
+- **Python edits need nothing** — the editable install serves `src/` directly.
+- **C++ edits, or any reinstall**: `uv pip install -e .` in the activated venv, plain.
+
+Nothing global is configured. The venv's own activation scripts carry the toolchain
+`PATH` (written once by `invoke setup`, Windows only), `CMakeLists.txt` finds the
+compilers itself, the staged IPOPT lives in the repository under `build/ipopt/stage`,
+and the runtime libraries are installed next to the extension — importing `compas_cra`
+needs no environment at all.
+
 ## Documentation only
 
 No solver build needed — the docs are generated from `src/`, not from an imported

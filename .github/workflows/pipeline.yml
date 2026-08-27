@@ -145,7 +145,7 @@ jobs:
             IPOPT_PREFIX='${{ github.workspace }}\build\ipopt\stage'
             EXTRA_LINK_DIRS='D:\msys64\ucrt64\lib'
             CMAKE_GENERATOR=Ninja
-            CMAKE_ARGS='-DCMAKE_C_COMPILER=D:/msys64/ucrt64/bin/gcc.exe -DCMAKE_CXX_COMPILER=D:/msys64/ucrt64/bin/g++.exe -DFORTRAN_COMPILER=D:/msys64/ucrt64/bin/gfortran.exe'
+            CMAKE_ARGS='-DCMAKE_C_COMPILER=D:/msys64/ucrt64/bin/gcc.exe -DCMAKE_CXX_COMPILER=D:/msys64/ucrt64/bin/g++.exe -DFORTRAN_COMPILER=D:/msys64/ucrt64/bin/gfortran.exe -DBUNDLE_RUNTIME_DLLS=OFF'
         run: |
           python -m pip install -q cibuildwheel
           python -m cibuildwheel --output-dir dist
