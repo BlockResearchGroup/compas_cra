@@ -25,31 +25,57 @@ In Rhino 8, run a script with this header — Rhino installs everything on the f
 
 ## Development
 
+### Windows
+
 ```bash
 git clone https://github.com/BlockResearchGroup/compas_cra.git
 cd compas_cra
 
 uv venv --python 3.12
-source .venv/Scripts/activate   # .venv/bin/activate on macOS and Linux
+source .venv/Scripts/activate
 
 uv pip install invoke compas_invocations2
-invoke setup                    # toolchain + IPOPT (~15 minutes, once) + editable install
+invoke setup
 invoke test
 ```
 
-On Linux the toolchain needs root: `invoke setup` prints the `apt`/`dnf` line — run it,
-re-run `invoke setup`. After that, on all platforms:
+### macOS
 
-- **Python edits need nothing** — the editable install serves `src/` directly.
-- **C++ edits, or any reinstall**: `uv pip install -e .`, plain.
+```bash
+git clone https://github.com/BlockResearchGroup/compas_cra.git
+cd compas_cra
 
-Nothing global is configured: the venv's activation scripts carry the toolchain `PATH`
-(Windows), `CMakeLists.txt` finds the compilers, IPOPT lives in `build/ipopt/stage`,
-and the runtime libraries are installed next to the extension.
+uv venv --python 3.12
+source .venv/bin/activate
+
+uv pip install invoke compas_invocations2
+invoke setup
+invoke test
+```
+
+### Linux
+
+```bash
+sudo apt install build-essential gfortran libopenblas-dev git curl make patch pkg-config
+
+git clone https://github.com/BlockResearchGroup/compas_cra.git
+cd compas_cra
+
+uv venv --python 3.12
+source .venv/bin/activate
+
+uv pip install invoke compas_invocations2
+invoke setup
+invoke test
+```
+
+### After the first build
+
+```bash
+uv pip install -e .   # rebuild after C++ changes; Python changes need no reinstall
+```
 
 ### Documentation only
-
-No solver build needed — the docs are generated from `src/`:
 
 ```bash
 uv venv --python 3.12
@@ -69,47 +95,24 @@ invoke docs
 | `invoke test` | Run the test suite |
 | `invoke release <major\|minor\|patch>` | Bump, tag and push, which triggers the release |
 
-Only `test` and `release` need the compiled solver; `release` needs push access to the
-repository.
-
 ### Manual build
-
-What `invoke setup` runs. Prerequisites — Fortran + C/C++ compilers, static
-BLAS/LAPACK, and `git curl make patch pkg-config` for coinbrew:
-
-```bash
-# Debian / Ubuntu
-sudo apt install build-essential gfortran libopenblas-dev git curl make patch pkg-config
-
-# Fedora / RHEL / AlmaLinux
-sudo dnf install gcc gcc-c++ gcc-gfortran openblas-devel openblas-static     glibc-static libstdc++-static git curl make patch pkgconf
-
-# macOS
-brew install gcc bash
-
-# Windows, in an MSYS2 UCRT64 shell (https://www.msys2.org)
-pacman -S git patch make diffutils pkgconf     mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gcc-fortran     mingw-w64-ucrt-x86_64-openblas
-```
 
 ```bash
 JOBS=1 packaging/build_ipopt.sh   # stages build/ipopt/stage; keep JOBS=1 - MUMPS races
 pip install -e ".[dev]"
 ```
 
-`IPOPT_PREFIX` points at a stage tree elsewhere; `EXTRA_LINK_DIRS` and
-`IPOPT_EXTRA_LINK` add link directories and flags. Packaged IPOPTs (conda-forge etc.)
-do not work: they are shared builds, and the extension links `libipopt` and
-`libcoinmumps` statically.
+On Windows run `build_ipopt.sh` in an MSYS2 UCRT64 shell after
+`pacman -S git patch make diffutils pkgconf mingw-w64-ucrt-x86_64-gcc
+mingw-w64-ucrt-x86_64-gcc-fortran mingw-w64-ucrt-x86_64-openblas`; on Fedora use
+`dnf install gcc gcc-c++ gcc-gfortran openblas-devel openblas-static glibc-static
+libstdc++-static git curl make patch pkgconf`; on macOS `brew install gcc bash`.
+`IPOPT_PREFIX` points at a stage tree elsewhere. Packaged IPOPTs (conda-forge etc.)
+are shared builds and do not work - the extension links statically.
 
 ### Without a local toolchain
 
-On Linux with Docker, `cibuildwheel` builds exactly what CI builds, IPOPT included:
-
 ```bash
 pip install cibuildwheel
-CIBW_BUILD="cp312-*" cibuildwheel --output-dir dist
+CIBW_BUILD="cp312-*" cibuildwheel --output-dir dist   # Linux/Docker; exactly what CI runs
 ```
-
-Everything comes from `[tool.cibuildwheel]` in `pyproject.toml`; drop `CIBW_BUILD` to
-build all five CPythons. See `native/README.md` and `packaging/README.md` for what is
-built and why.
