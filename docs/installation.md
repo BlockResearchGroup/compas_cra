@@ -38,58 +38,9 @@ Ready-to-run examples are in the repository under `scripts/`.
 
 ## Development
 
-Working on `compas_cra` itself means building the solver, because the solver is part
-of the package: `pip install .` and `pip install -e .` both compile the
-`compas_cra._native` extension, and that links against a static IPOPT tree produced
-by `packaging/build_ipopt.sh`. Without such a tree the install stops with
-`No IPOPT build at IPOPT_PREFIX=...`.
-
-### Prerequisites
-
-`invoke setup` installs these wherever that is possible without root — MSYS2 packages
-on Windows, Homebrew formulae on macOS — so on those two platforms this section is
-background rather than something to work through. On Linux the packages need root, so
-`invoke setup` prints the line below and stops rather than running it.
-
-The IPOPT build needs a Fortran compiler (its MUMPS linear solver is Fortran), a static
-BLAS/LAPACK, a C/C++ toolchain, and `git`, `curl`, `make`, `patch` and
-`pkg-config` for coinbrew. CMake and Ninja are *not* needed up front — the build
-backend brings its own.
-
-Debian / Ubuntu:
-
-```bash
-sudo apt install build-essential gfortran libopenblas-dev git curl make patch pkg-config
-```
-
-Fedora / RHEL / AlmaLinux:
-
-```bash
-sudo dnf install gcc gcc-c++ gcc-gfortran openblas-devel openblas-static \
-    glibc-static libstdc++-static git curl make patch pkgconf
-```
-
-macOS:
-
-```bash
-brew install gcc bash
-```
-
-`gfortran` comes with the `gcc` formula, and BLAS/LAPACK is the system Accelerate
-framework, so nothing else is needed. The `bash` formula is: coinbrew refuses to run
-under bash 3, which is still what macOS ships.
-
-Windows: the IPOPT build runs in an [MSYS2](https://www.msys2.org) UCRT64 shell.
-
-```bash
-pacman -S git patch make diffutils pkgconf \
-    mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gcc-fortran \
-    mingw-w64-ucrt-x86_64-openblas
-```
-
-### Building
-
-[uv](https://docs.astral.sh/uv) manages the environment.
+The solver is part of the package: `pip install -e .` compiles the `compas_cra._native`
+extension against a static IPOPT tree. `invoke setup` does everything — toolchain,
+IPOPT, editable install — on Windows, macOS and Linux.
 
 ```bash
 git clone https://github.com/BlockResearchGroup/compas_cra.git
@@ -99,44 +50,28 @@ uv venv --python 3.12
 source .venv/Scripts/activate   # .venv/bin/activate on macOS and Linux
 
 uv pip install invoke compas_invocations2
-invoke setup
+invoke setup                    # ~15 minutes the first time, seconds after that
 invoke test
 ```
 
-`invoke setup` is the whole build, on Windows, macOS and Linux alike: it installs the
-toolchain where that can be done without root, stages IPOPT if it is not staged
-already, and installs the package editable with the compilers and link directories the
-extension needs — on Windows that means running `build_ipopt.sh` inside the MSYS2
-UCRT64 shell and pointing CMake at its `gcc`, `g++` and `gfortran`, which is the part
-that is tedious to get right by hand.
+On Linux the toolchain needs root, so `invoke setup` prints the `apt`/`dnf` line and
+stops — run it, then re-run `invoke setup`.
 
-It takes about fifteen minutes the first time, almost all of it IPOPT. It is
-idempotent: run it again and it reinstalls the package and leaves the staged IPOPT tree
-alone. `invoke setup --jobs=N` raises the IPOPT build parallelism, but see the warning
-in `--help` first — MUMPS races and dies under a parallel build.
+## Documentation only
 
-It installs with `[dev]`, which pulls in `[docs]` as well, so `invoke docs` works
-straight afterwards without a second command. `.venv` is git-ignored.
+No solver build needed — the docs are generated from `src/`, not from an imported
+package.
 
-Doing it by hand instead: run `packaging/build_ipopt.sh` from the shell your platform
-needs, then `pip install -e ".[dev]"` with `IPOPT_PREFIX` pointed at the resulting
-`build/ipopt/stage`.
+```bash
+uv venv --python 3.12
+source .venv/Scripts/activate
+uv pip install -r requirements.txt
 
-`build_ipopt.sh` takes about fifteen minutes and is a one-off: it stages IPOPT into
-`build/ipopt/stage`, which every later install reuses. Rebuild it only when the script
-or the IPOPT version changes. Set `IPOPT_PREFIX` to use a stage tree from elsewhere,
-`IPOPT_EXTRA_LINK` and `EXTRA_LINK_DIRS` for extra link flags and directories.
+invoke docs         # build the site into dist/docs — open dist/docs/index.html
+invoke docs-serve   # or serve it live at http://localhost:8000
+```
 
-There is no packaged IPOPT that can stand in for that step. conda-forge, for instance,
-ships IPOPT as shared libraries resolved against a separate `mumps-seq` package, while
-`CMakeLists.txt` links `libipopt` and `libcoinmumps` as *static* archives — that is what
-makes the extension self-contained, and it is what the stage tree provides.
-
-### Tasks
-
-`tasks.py` is the entry point for everything else, via
-[invoke](https://www.pyinvoke.org). The same tasks run in CI, so a green run locally
-means a green run there.
+## Tasks
 
 | Command | What it does |
 | --- | --- |
@@ -148,39 +83,58 @@ means a green run there.
 | `invoke test` | Run the test suite |
 | `invoke release <major\|minor\|patch>` | Bump, tag and push, which triggers the release |
 
-Only `invoke test` and `invoke release` need the compiled solver. The documentation is
-generated from the sources in `src/` rather than from an imported package, so
-`invoke docs` and `invoke lint` work in an environment where `pip install -e .` has
-never run, which is the quick way in when the change is to the documentation or to
-Python code only:
+Only `invoke test` and `invoke release` need the compiled solver. `invoke release`
+pushes a `v*` tag — that is what triggers `.github/workflows/release.yml` — and needs
+push access to the repository.
+
+## Manual build
+
+What `invoke setup` runs, step by step.
+
+Prerequisites — a Fortran compiler, a static BLAS/LAPACK, a C/C++ toolchain, and
+`git`, `curl`, `make`, `patch`, `pkg-config` for coinbrew:
 
 ```bash
-uv venv --python 3.12
-source .venv/Scripts/activate
-uv pip install -r requirements.txt
-invoke docs
+# Debian / Ubuntu
+sudo apt install build-essential gfortran libopenblas-dev git curl make patch pkg-config
+
+# Fedora / RHEL / AlmaLinux
+sudo dnf install gcc gcc-c++ gcc-gfortran openblas-devel openblas-static     glibc-static libstdc++-static git curl make patch pkgconf
+
+# macOS (gfortran comes with gcc; bash because coinbrew refuses to run under bash 3)
+brew install gcc bash
+
+# Windows, in an MSYS2 UCRT64 shell (https://www.msys2.org)
+pacman -S git patch make diffutils pkgconf     mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gcc-fortran     mingw-w64-ucrt-x86_64-openblas
 ```
 
-`invoke release` pushes a `v*` tag, and that tag is what `.github/workflows/release.yml`
-triggers on; it needs push access to the repository.
+Build IPOPT, then install:
 
-### Without a local toolchain
+```bash
+JOBS=1 packaging/build_ipopt.sh   # stages into build/ipopt/stage; ~15 minutes, once
+pip install -e ".[dev]"
+```
+
+Keep `JOBS=1`: MUMPS races under a parallel build. On Windows run `build_ipopt.sh`
+from the MSYS2 shell and point `CMAKE_ARGS` at its `gcc`/`g++`/`gfortran` for the
+install — or just use `invoke setup`, which does exactly that. Set `IPOPT_PREFIX` to
+use a stage tree from elsewhere, `IPOPT_EXTRA_LINK` and `EXTRA_LINK_DIRS` for extra
+link flags and directories. Packaged IPOPTs (conda-forge etc.) do not work here: they
+are shared builds, and `CMakeLists.txt` links `libipopt` and `libcoinmumps` statically —
+that is what makes the extension self-contained.
+
+## Without a local toolchain
 
 On Linux with Docker, `cibuildwheel` builds exactly what CI builds — IPOPT and all —
-inside the manylinux container, so nothing has to be installed on the host:
+inside the manylinux container:
 
 ```bash
 pip install cibuildwheel
 CIBW_BUILD="cp312-*" cibuildwheel --output-dir dist
 ```
 
-Everything else — the manylinux image, the `dnf` line that installs gfortran and
-OpenBLAS in the container, the IPOPT build itself and the smoke test — comes from
-`[tool.cibuildwheel]` in `pyproject.toml`, so this is exactly what CI runs.
-`CIBW_BUILD` is only there to limit the run to one CPython; drop it to build all five.
-
-That takes about five minutes and leaves an installable wheel in `dist/`. It is also
-the quickest way to get a working solver into a local environment when you only want to
-change Python code.
+About five minutes, and everything — the image, the container `dnf` line, the IPOPT
+build, the smoke test — comes from `[tool.cibuildwheel]` in `pyproject.toml`, so this
+is exactly what CI runs. Drop `CIBW_BUILD` to build all five CPythons.
 
 See `native/README.md` and `packaging/README.md` for what is being built and why.

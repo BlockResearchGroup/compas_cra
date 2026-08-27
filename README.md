@@ -34,18 +34,21 @@ needs IPOPT staged first:
 ```bash
 git clone https://github.com/BlockResearchGroup/compas_cra.git
 cd compas_cra
-packaging/build_ipopt.sh          # ~15 minutes, once
-pip install -e ".[dev]"
+
+uv venv --python 3.12
+source .venv/Scripts/activate     # .venv/bin/activate on macOS and Linux
+
+uv pip install invoke compas_invocations2
+invoke setup                      # toolchain + IPOPT (~15 minutes, once) + editable install
 invoke test
 ```
 
-`build_ipopt.sh` needs a Fortran compiler and a static BLAS/LAPACK — on Debian/Ubuntu
-`sudo apt install build-essential gfortran libopenblas-dev git curl make patch pkg-config`,
-on macOS `brew install gcc bash`, on Windows an [MSYS2](https://www.msys2.org) UCRT64
-shell. Without a local toolchain, `CIBW_BUILD="cp312-*" cibuildwheel` builds the wheel
-inside the manylinux container instead — the build is configured in `pyproject.toml`,
-so that one command reproduces CI. Full instructions, per platform, are in
-[the installation docs](./docs/installation.rst).
+`invoke setup` handles the platform differences — MSYS2 packages on Windows, Homebrew
+on macOS, and on Linux it prints the `apt`/`dnf` line to run first. Without a local
+toolchain, `CIBW_BUILD="cp312-*" cibuildwheel` builds the wheel inside the manylinux
+container instead — the build is configured in `pyproject.toml`, so that one command
+reproduces CI. Full instructions, per platform, are in
+[the installation docs](./docs/installation.md).
 
 ### Rhino 8
 

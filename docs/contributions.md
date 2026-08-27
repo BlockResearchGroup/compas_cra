@@ -8,38 +8,37 @@ We accept code contributions through pull requests.
 In short, this is how that works.
 
 1. Fork [the repository](https://github.com/BlockResearchGroup/compas_cra) and clone the fork.
-2. Create a virtual environment using your tool of choice (e.g. `virtualenv`, `conda`, etc).
-3. Build the solver once — it is compiled into the package, so an install from source
-   needs a staged IPOPT tree. See [Installation](installation.md) for the compilers and
-   libraries this needs on your platform, and for the Docker route if you would rather
-   not install them:
+2. Create an environment with [uv](https://docs.astral.sh/uv) and build the solver —
+   it is compiled into the package, so an install from source needs a staged IPOPT
+   tree, and `invoke setup` takes care of the whole sequence
+   (see [Installation](installation.md) for the details, and for the Docker route):
 
     ```bash
-    packaging/build_ipopt.sh
+    uv venv --python 3.12
+    source .venv/Scripts/activate   # .venv/bin/activate on macOS and Linux
+    uv pip install invoke compas_invocations2
+    invoke setup
     ```
 
-4. Install the package and its development dependencies:
+    Only working on the documentation or on Python code? `uv pip install -r requirements.txt`
+    is enough for `invoke docs` and `invoke lint` — no solver build needed.
 
-    ```bash
-    pip install -e ".[dev]"
-    ```
 
-5. Make sure all tests pass:
-
-    ```bash
-    invoke test
-    ```
-
-6. Start making your changes to the **main** branch (or branch off of it).
-7. Make sure all tests still pass:
+3. Make sure all tests pass:
 
     ```bash
     invoke test
     ```
 
-8. Add yourself to the **Contributors** section in `AUTHORS.md`.
-9. Commit your changes and push your branch to GitHub.
-10. Create a [pull request](https://help.github.com/articles/about-pull-requests/) through the GitHub website.
+4. Start making your changes to the **main** branch (or branch off of it).
+5. Make sure all tests still pass:
+
+    ```bash
+    invoke test
+    ```
+
+6. Commit your changes and push your branch to GitHub.
+7. Create a [pull request](https://help.github.com/articles/about-pull-requests/) through the GitHub website.
 
 During development, use [pyinvoke](http://docs.pyinvoke.org/) tasks on the
 command line to ease recurring operations:
