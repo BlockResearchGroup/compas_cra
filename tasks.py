@@ -152,15 +152,15 @@ def _build_ipopt(ctx, jobs):
 
     if platform.system() == "Windows":
         bash = os.path.join(_msys2_root(), "usr", "bin", "bash.exe")
-        # cygpath rather than string surgery on the drive letter: MSYS2 can be mounted
-        # with a prefix other than /c, and only it knows
-        unix_path = ctx.run(
-            '"{0}" -c \'cygpath -u "{1}"\''.format(bash, ctx.base_folder), hide=True
-        ).stdout.strip()
-        # MSYSTEM=UCRT64 with a login shell is what puts the ucrt64 toolchain on PATH
+        # No `cd`, no `&&`, no inline JOBS=: invoke runs this through cmd.exe, which
+        # splits on && before bash ever sees the line (single quotes do not protect in
+        # cmd). Everything those provided comes through the environment instead:
+        # MSYSTEM=UCRT64 with a login shell puts the ucrt64 toolchain on PATH,
+        # CHERE_INVOKING keeps the login shell in the invoking directory (we are in
+        # base_folder courtesy of the chdir in `setup`), and build_ipopt.sh reads JOBS.
         ctx.run(
-            '"{0}" -lc \'cd "{1}" && JOBS={2} packaging/build_ipopt.sh\''.format(bash, unix_path, jobs),
-            env={"MSYSTEM": "UCRT64", "CHERE_INVOKING": "1"},
+            '"{0}" -lc "packaging/build_ipopt.sh"'.format(bash),
+            env={"MSYSTEM": "UCRT64", "CHERE_INVOKING": "1", "JOBS": str(jobs)},
         )
     else:
         ctx.run("packaging/build_ipopt.sh", env={"JOBS": str(jobs)})
