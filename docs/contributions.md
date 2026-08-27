@@ -46,7 +46,7 @@ command line to ease recurring operations:
 * `invoke clean`: Clean all generated artifacts.
 * `invoke check`: Run various code and documentation style checks.
 * `invoke docs`: Build the documentation.
-* `invoke docs-serve`: Serve the documentation locally with live reload.
+* `invoke docs`: Serve the documentation at `localhost:8000` with live reload.
 * `invoke test`: Run all tests and checks in one swift command.
 * `invoke`: Show available tasks.
 

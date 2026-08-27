@@ -216,7 +216,7 @@ jobs:
       # here (or worse, the reverse)
       - name: Build docs
         run: |
-          invoke docs
+          invoke docs --no-serve
           test -f dist/docs/index.html
       # every push to main, not releases only: the site is the documentation of what is on
       # main, and a docs fix that only ships with the next tag is a docs fix nobody reads.

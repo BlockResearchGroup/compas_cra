@@ -255,16 +255,26 @@ def setup(ctx, jobs=1, toolchain=True):
     print("\nDone. `invoke test` should now pass.")
 
 
-@invoke.task(help={"strict": "Fail the build on a broken reference or a missing page."})
-def docs(ctx, strict=True):
-    """Build the documentation with mkdocs into dist/docs."""
-    ctx.run("mkdocs build --site-dir dist/docs" + (" --strict" if strict else ""))
+@invoke.task(
+    help={
+        "serve": "Serve at localhost with live reload (the default). --no-serve builds into dist/docs instead - the artifact CI deploys.",
+        "port": "Port to serve on. Defaults to 8000.",
+        "strict": "Fail on a broken reference or a missing page.",
+    }
+)
+def docs(ctx, serve=True, port=8000, strict=True):
+    """Serve the documentation at http://localhost:8000, rebuilding on every edit.
 
-
-@invoke.task(help={"port": "Port to serve on. Defaults to 8000."})
-def docs_serve(ctx, port=8000):
-    """Serve the documentation locally, rebuilding on every change."""
-    ctx.run("mkdocs serve --dev-addr localhost:%s" % port)
+    Serving is the default because it is the only way the site is browsable locally:
+    mkdocs links pages by directory (`examples/`), which only a web server resolves to
+    the page inside - opened from file:// every click shows a folder listing. CI runs
+    `invoke docs --no-serve` for the deployable build.
+    """
+    flag = " --strict" if strict else ""
+    if serve:
+        ctx.run("mkdocs serve --dev-addr localhost:%s%s" % (port, flag))
+    else:
+        ctx.run("mkdocs build --site-dir dist/docs" + flag)
 
 
 ns = Collection(
@@ -272,7 +282,6 @@ ns = Collection(
     style.lint,
     style.format,
     docs,
-    docs_serve,
     tests.test,
     tests.testdocs,
     build.prepare_changelog,

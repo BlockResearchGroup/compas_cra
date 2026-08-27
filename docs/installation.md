@@ -78,21 +78,21 @@ uv venv --python 3.12
 source .venv/Scripts/activate
 uv pip install -r requirements.txt
 
-invoke docs         # build the site into dist/docs — the artifact CI deploys
-invoke docs-serve   # browse it at http://localhost:8000, rebuilt live on every edit
+invoke docs             # browse at http://localhost:8000, rebuilt live on every edit
+invoke docs --no-serve  # build into dist/docs instead — the artifact CI deploys
 ```
 
-Browse with `docs-serve`, not by opening `dist/docs` from disk: mkdocs links pages by
-directory (`examples/`), which only a web server resolves to the page inside — from
-`file://` those links show folder listings.
+`invoke docs` serves rather than just building because that is the only way the site
+is browsable locally: mkdocs links pages by directory (`examples/`), which only a web
+server resolves to the page inside — opened from disk every click shows a folder
+listing.
 
 ## Tasks
 
 | Command | What it does |
 | --- | --- |
 | `invoke setup` | Build the solver and install the package, on any platform |
-| `invoke docs` | Build the site into `dist/docs`, failing on a broken reference |
-| `invoke docs-serve` | Serve the site locally with live reload |
+| `invoke docs` | Serve the site at `localhost:8000` with live reload; `--no-serve` builds `dist/docs` |
 | `invoke lint` | `ruff check --fix src tests` |
 | `invoke format` | `ruff format src tests` |
 | `invoke test` | Run the test suite |

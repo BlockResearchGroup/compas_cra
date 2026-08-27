@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Local development instructions in the installation docs: the compilers and libraries `packaging/build_ipopt.sh` needs on Linux, macOS and Windows, and the Docker/cibuildwheel route for building a wheel without installing any of them.
 * `cra_solve`, `cra_penalty_solve` and `rbe_solve` appear in the API reference. They were assignments (`cra_solve = cra_solve_native`) rather than imports, so the documentation generator saw untyped attributes and rendered nothing for the three names that are the package's primary entry points. They are import aliases now, which changes nothing at runtime — each name is still the same function object as its `_native` counterpart.
-* `invoke docs-serve` serves the documentation locally with live reload.
+* `invoke docs` serves the documentation at `localhost:8000` with live reload - serving is the default because mkdocs links pages by directory, which only a web server resolves, so a site opened from disk shows folder listings on every click. `invoke docs --no-serve` builds into `dist/docs` instead, which is what CI deploys.
 
 ### Changed
 
