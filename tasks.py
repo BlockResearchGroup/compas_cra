@@ -98,10 +98,16 @@ def _msys2_root():
 def _native_build_env():
     """Environment `pip install -e .` needs to find the compilers and the runtimes.
 
-    Only Windows needs anything: elsewhere the toolchain is on PATH and CMakeLists.txt
-    defaults IPOPT_PREFIX to the stage tree by itself.
+    Windows needs the most: the MSYS2 toolchain paths. macOS needs one thing - the
+    same deployment target CI builds IPOPT with (pipeline.yml pins 11.0), on arm64 and
+    intel alike; without it the static libs can refuse to link into an extension
+    targeting the Python build's older default. Linux needs nothing: the toolchain is
+    on PATH and CMakeLists.txt defaults IPOPT_PREFIX to the stage tree by itself.
     """
-    if platform.system() != "Windows":
+    system = platform.system()
+    if system == "Darwin":
+        return {"MACOSX_DEPLOYMENT_TARGET": os.environ.get("MACOSX_DEPLOYMENT_TARGET", "11.0")}
+    if system != "Windows":
         return {}
     root = _msys2_root()
     return {
@@ -137,10 +143,27 @@ def _patch_venv_activation():
     ucrt_win = os.path.join(root, "ucrt64", "bin")
     # bash cannot hold C:\...-style entries in PATH (the colon is its separator)
     ucrt_posix = "/" + root.replace(":", "").replace("\\", "/").lower() + "/ucrt64/bin"
+    # the venv's own Scripts dir is re-prepended after the toolchain: ucrt64in
+    # carries a python.exe of its own, and it must never shadow the venv's
     patches = {
-        "activate": [VENV_PATCH_MARK, 'export PATH="%s:$PATH"' % ucrt_posix, "export CMAKE_GENERATOR=Ninja"],
-        "activate.bat": ["rem " + VENV_PATCH_MARK[2:], 'set "PATH=%s;%%PATH%%"' % ucrt_win, 'set "CMAKE_GENERATOR=Ninja"'],
-        "activate.ps1": [VENV_PATCH_MARK, '$env:PATH = "%s;" + $env:PATH' % ucrt_win, '$env:CMAKE_GENERATOR = "Ninja"'],
+        "activate": [
+            VENV_PATCH_MARK,
+            'export PATH="%s:$PATH"' % ucrt_posix,
+            'export PATH="$VIRTUAL_ENV/Scripts:$PATH"',
+            "export CMAKE_GENERATOR=Ninja",
+        ],
+        "activate.bat": [
+            "rem " + VENV_PATCH_MARK[2:],
+            'set "PATH=%s;%%PATH%%"' % ucrt_win,
+            'set "PATH=%%VIRTUAL_ENV%%\Scripts;%%PATH%%"',
+            'set "CMAKE_GENERATOR=Ninja"',
+        ],
+        "activate.ps1": [
+            VENV_PATCH_MARK,
+            '$env:PATH = "%s;" + $env:PATH' % ucrt_win,
+            '$env:PATH = "$env:VIRTUAL_ENV\Scripts;" + $env:PATH',
+            '$env:CMAKE_GENERATOR = "Ninja"',
+        ],
     }
     for name, lines in patches.items():
         path = os.path.join(scripts, name)
@@ -167,6 +190,10 @@ def _install_toolchain(ctx):
     elif system == "Darwin":
         if not shutil.which("brew"):
             raise invoke.Exit("Homebrew is required on macOS: https://brew.sh")
+        # build_ipopt.sh resolves Accelerate through xcrun; fail here with a clear
+        # message rather than fifteen minutes into the build
+        if not shutil.which("xcrun"):
+            raise invoke.Exit("Xcode Command Line Tools are required: xcode-select --install")
         # coinbrew refuses to run under bash 3, which is what macOS still ships
         ctx.run("brew list bash >/dev/null 2>&1 || brew install bash")
         ctx.run("brew list gcc >/dev/null 2>&1 || brew install gcc")
@@ -216,7 +243,11 @@ def _build_ipopt(ctx, jobs):
             env={"MSYSTEM": "UCRT64", "CHERE_INVOKING": "1", "JOBS": str(jobs), "VERBOSITY": _verbosity()},
         )
     else:
-        ctx.run("packaging/build_ipopt.sh", env={"JOBS": str(jobs), "VERBOSITY": _verbosity()})
+        env = {"JOBS": str(jobs), "VERBOSITY": _verbosity()}
+        if platform.system() == "Darwin":
+            # same deployment target the CI IPOPT step pins, for arm64 and intel alike
+            env["MACOSX_DEPLOYMENT_TARGET"] = os.environ.get("MACOSX_DEPLOYMENT_TARGET", "11.0")
+        ctx.run("packaging/build_ipopt.sh", env=env)
 
 
 @invoke.task(
