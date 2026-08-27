@@ -1,0 +1,39 @@
+"""Parametric Arch showing penalty solve"""
+
+from compas_cra.algorithms import assembly_interfaces_numpy
+from compas_cra.equilibrium import cra_penalty_solve
+from compas_cra.geometry import Arch
+from compas_cra.viewers import cra_view
+
+height = 5
+span = 10
+thickness = 0.5
+depth = 0.5
+num_blocks = 20
+
+assembly = Arch(
+    height=height,
+    span=span,
+    thickness=thickness,
+    depth=depth,
+    num_blocks=num_blocks,
+    extra_support=True,
+).assembly()
+
+assembly_interfaces_numpy(assembly, nmax=10, amin=1e-2, tmax=1e-2)
+
+# d_bnd=1e-2: with the default 1e-3 displacement bound this solve exhausts the
+# iteration cap; at 1e-2 it converges in ~65 iterations, on resultants that agree
+# with cra_solve to 1e-3 on the standard arch
+cra_penalty_solve(assembly, mu=0.7, d_bnd=1e-2, verbose=True, timer=True)
+cra_view(
+    assembly,
+    resultant=True,
+    nodal=False,
+    grid=True,
+    forcesdirect=False,
+    forcesline=True,
+    displacements=True,
+    dispscale=10,
+    scale=0.5,
+)

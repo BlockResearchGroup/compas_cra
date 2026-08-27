@@ -1,0 +1,18 @@
+/* Two figures that belong together, side by side on anything but a phone.
+   Material's own .grid wraps to one column here: the screenshots are wider
+   than its 16rem minimum track. */
+.md-typeset .side-by-side {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.md-typeset .side-by-side img {
+  width: 100%;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .side-by-side {
+    grid-template-columns: 1fr;
+  }
+}

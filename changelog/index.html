@@ -1,0 +1,3638 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Coupled Rigid-Block Analysis (CRA) for the COMPAS framework">
+      
+      
+      
+        <link rel="canonical" href="https://blockresearchgroup.github.io/compas_cra/changelog/">
+      
+      
+        <link rel="prev" href="../cite/">
+      
+      
+        <link rel="next" href="../license/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../public/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Changelog - COMPAS CRA</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#changelog" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://blockresearchgroup.github.io/compas_cra/" title="COMPAS CRA" class="md-header__button md-logo" aria-label="COMPAS CRA" data-md-component="logo">
+      
+  <img src="../assets/images/compas_icon_white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            COMPAS CRA
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Changelog
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/BlockResearchGroup/compas_cra/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    BlockResearchGroup/compas_cra
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href=".." class="md-tabs__link">
+          
+  
+  
+    
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../examples/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Examples
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../reference/compas_cra.algorithms/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../contributions/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  About
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://blockresearchgroup.github.io/compas_cra/" title="COMPAS CRA" class="md-nav__button md-logo" aria-label="COMPAS CRA" data-md-component="logo">
+      
+  <img src="../assets/images/compas_icon_white.png" alt="logo">
+
+    </a>
+    COMPAS CRA
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/BlockResearchGroup/compas_cra/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    BlockResearchGroup/compas_cra
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href=".." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../knownissues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Known issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../examples/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Examples
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/00_simple_cube/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simplest cube
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/01_cubes_rbe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Two cubes with RBE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/02_cubes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Two cubes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/03_cubes_penalty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Two cubes with penalty
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/04_stacks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stacks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/05_wedge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wedge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/06_arch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/07_shelf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shelf
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/08_snake/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Snake
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/09_bridge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bridge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/10_armadillo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Armadillo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/11_concave-short/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Short concave joint
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/12_concave-long/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Long concave joint
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/13_curve-3-blocks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Curved three blocks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/14_cube-curve-short/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Short curved cube
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/15_cube-curve-tall/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tall curved cube
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/16_ha/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model HA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/compas_cra.algorithms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compas_cra.algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/compas_cra.datastructures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compas_cra.datastructures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/compas_cra.equilibrium/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compas_cra.equilibrium
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/compas_cra.geometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compas_cra.geometry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/compas_cra.viewers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    compas_cra.viewers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Citing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unreleased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unreleased
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unreleased">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#072-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.7.2] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.7.2] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#071-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.7.1] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.7.1] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#070-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.7.0] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.7.0] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#066-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.6] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.6] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#065-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.5] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.5] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#064-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.4] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.4] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#063-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.3] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.3] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#062-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.2] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.2] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#061-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.1] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.1] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#060-2026-08-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.0] 2026-08-26
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.0] 2026-08-26">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#050-2024-10-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.5.0] 2024-10-21
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.5.0] 2024-10-21">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#040-2024-03-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.4.0] 2024-03-02
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.4.0] 2024-03-02">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#030-2022-11-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.3.0] 2022-11-06
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.3.0] 2022-11-06">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#022-2022-09-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.2.2] 2022-09-29
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.2.2] 2022-09-29">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#021-2022-09-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.2.1] 2022-09-02
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.2.1] 2022-09-02">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#020-2022-09-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.2.0] 2022-09-02
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.2.0] 2022-09-02">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unreleased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unreleased
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unreleased">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#072-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.7.2] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.7.2] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#071-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.7.1] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.7.1] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#070-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.7.0] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.7.0] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#066-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.6] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.6] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#065-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.5] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.5] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#064-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.4] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.4] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#063-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.3] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.3] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#062-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.2] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.2] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#061-2026-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.1] 2026-08-23
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.1] 2026-08-23">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#060-2026-08-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.0] 2026-08-26
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.0] 2026-08-26">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#050-2024-10-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.5.0] 2024-10-21
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.5.0] 2024-10-21">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#040-2024-03-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.4.0] 2024-03-02
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.4.0] 2024-03-02">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#030-2022-11-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.3.0] 2022-11-06
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.3.0] 2022-11-06">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#022-2022-09-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.2.2] 2022-09-29
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.2.2] 2022-09-29">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#021-2022-09-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.2.1] 2022-09-02
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.2.1] 2022-09-02">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#020-2022-09-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.2.0] 2022-09-02
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.2.0] 2022-09-02">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removed_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">¤</a></h1>
+<p>All notable changes to this project will be documented in this file.</p>
+<p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
+and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">¤</a></h2>
+<h3 id="added">Added<a class="headerlink" href="#added" title="Permanent link">¤</a></h3>
+<ul>
+<li>
+<p>Platform-logic tests for the invoke tasks (<code>tests/test_tasks.py</code>): the macOS and Linux environment construction of <code>invoke setup</code> is pure logic, pinned per-OS with mocks so a refactor cannot silently break a platform nobody is sitting at. Skipped where the dev tooling is not installed.</p>
+</li>
+<li>
+<p>Rhino 8 ports of the three curved-interface examples (<code>scripts/rhino_cra_curve_3_blocks.py</code>, <code>rhino_cra_cube_curve_short.py</code>, <code>rhino_cra_cube_curve_tall.py</code>) with a shared drawing module (<code>scripts/rhino_cra_view.py</code>) that mirrors the desktop visualization - the same mesh arrows (cylinder shaft, conical head), colors and element grouping, on toggleable Rhino layers, drawn through the compas 2 Scene API. Open in the ScriptEditor and run; the <code># r:</code> header installs compas_cra on first use.</p>
+</li>
+<li>
+<p>A viewer smoke test (<code>tests/test_viewers.py</code>): the full <code>cra_view</code> scene is constructed headless against the installed <code>compas_viewer</code>, with only the blocking <code>show()</code> stubbed, so an API drift in the viewer fails in CI instead of on a user's screen. Skipped when the viz extra is absent.</p>
+</li>
+<li>
+<p>A regression test for the penalty solver on the arch, both variants of the <code>06_arch_penalty</code> example, pinning the penalty solution to <code>cra_solve</code> on the standard arch.</p>
+</li>
+<li>
+<p><code>invoke setup</code> builds the solver and installs the package in one command, on Windows, macOS and Linux. It installs the toolchain where that is possible without root (MSYS2 packages via pacman, Homebrew formulae including the <code>gfortran</code> symlink the <code>gcc</code> formula does not create; on Linux it prints the <code>apt</code>/<code>dnf</code> line, which needs root, and stops), stages IPOPT unless <code>build/ipopt/stage</code> already holds it, and installs editable with the right environment - on Windows that means running <code>build_ipopt.sh</code> inside the MSYS2 UCRT64 shell and pointing <code>CMAKE_ARGS</code> and <code>EXTRA_LINK_DIRS</code> at its toolchain, which was four exports to get right by hand. It is idempotent, and defaults to <code>JOBS=1</code> because MUMPS races under a parallel build.</p>
+</li>
+<li>
+<p>Local development instructions in the installation docs: the compilers and libraries <code>packaging/build_ipopt.sh</code> needs on Linux, macOS and Windows, and the Docker/cibuildwheel route for building a wheel without installing any of them.</p>
+</li>
+<li><code>cra_solve</code>, <code>cra_penalty_solve</code> and <code>rbe_solve</code> appear in the API reference. They were assignments (<code>cra_solve = cra_solve_native</code>) rather than imports, so the documentation generator saw untyped attributes and rendered nothing for the three names that are the package's primary entry points. They are import aliases now, which changes nothing at runtime — each name is still the same function object as its <code>_native</code> counterpart.</li>
+<li><code>invoke docs</code> serves the documentation at <code>localhost:8000</code> with live reload - serving is the default because mkdocs links pages by directory, which only a web server resolves, so a site opened from disk shows folder listings on every click. <code>invoke docs --no-serve</code> builds into <code>dist/docs</code> instead, which is what CI deploys.</li>
+</ul>
+<h3 id="changed">Changed<a class="headerlink" href="#changed" title="Permanent link">¤</a></h3>
+<ul>
+<li>The documentation navigation is grouped into sections that Material renders as tabs in the header bar (<code>navigation.tabs</code>), the way <code>compas_cgal</code> does it: Getting Started, Examples, API Reference and About. The nav was a flat list before, so every page sat in the sidebar at the same level. The entries under the old <code>Other</code> section had no titles and were rendering as bare file names, and the reference entries are spelled with their full module names. No page moved or was renamed.</li>
+<li>The CRA solvers use IPOPT's adaptive barrier update (<code>mu_strategy="adaptive"</code>). CRA's complementarity constraints are degenerate and the monotone update crawls on them: the 20-block arch needed 1964 of IPOPT's 3000 permitted iterations, leaving almost no margin, and on macOS — where the wheel links Accelerate rather than OpenBLAS, and the arithmetic differs slightly — it ran out of iterations altogether and raised <code>solve failed: failed (Maximum_Iterations_Exceeded)</code>. The adaptive update reaches the same answer in 668 iterations (interface resultants agree to 1e-10), and 307 rather than 2757 on a 40-block arch. The tolerances are deliberately left alone: relaxing them makes it worse, turning a solve that stops at a feasible point into a solve that exhausts the cap.</li>
+<li><code>test_cra_arch</code> no longer skips itself when the arch stalls, and a companion test asserts the solve keeps its iteration headroom. That skip is what let the macOS failure reach users while CI stayed green.</li>
+<li>IPOPT is built serially (<code>JOBS=1</code>). MUMPS' makefiles are missing dependencies, so a parallel build races and dies linking <code>libcoinmumps</code> — always just after <code>dtype3_root.F</code>, and with coinbrew reporting nothing but <code>Build failed, see error output above</code> and no error above it. It is intermittent, and it failed three of six pipeline runs in compas_sandbox before being pinned down.</li>
+<li>The PyPI upload and the GitHub release moved from <code>pipeline.yml</code> into <code>release.yml</code>. Trusted publishing matches the <code>job_workflow_ref</code> claim, which for a job defined inside a reusable workflow names the reusable file, so uploading from <code>pipeline.yml</code> presents <code>pipeline.yml</code> to a publisher configured for <code>release.yml</code> and fails with <code>invalid-publisher</code>. This is measured, not theoretical: compas_sandbox hit exactly that on the first release that reached the upload after the same refactor.</li>
+<li><strong>What the wheels actually bundle.</strong> IPOPT 3.14.19 is compiled from source by <code>packaging/build_ipopt.sh</code> (via coinbrew) as <em>static</em> libraries, and <code>libipopt</code> and <code>libcoinmumps</code> are linked into the <code>compas_cra._native._core</code> extension. There is no <code>ipopt</code> executable, no <code>.nl</code> files and no subprocess: a solve is a function call. MUMPS is the linear solver, which is what CRA relies on; HSL is deliberately absent because it is not redistributable. BLAS/LAPACK is the one piece that differs by platform — a static OpenBLAS on Linux and Windows, Apple's Accelerate on macOS — and that difference is exactly why the arch stalled on Mac and not elsewhere. The remaining runtimes (the Fortran runtime, OpenBLAS where it is dynamic) stay shared and are grafted into the wheel by the platform repair tools: auditwheel on Linux, delocate on macOS, delvewheel on Windows. Licences travel with the binaries: IPOPT is EPL-2.0, MUMPS and the ASL are permissive, OpenBLAS is BSD-3-Clause, and the statically linked libgfortran/libgcc are covered by the GCC Runtime Library Exception.</li>
+<li>One package again: the IPOPT binding is built into <code>compas_cra</code> itself as <code>compas_cra._native</code>, and <code>compas_cra</code> ships as platform wheels for CPython 3.9-3.13 on Windows, macOS (Apple Silicon and Intel) and manylinux (x86_64 and aarch64). <code>pip install compas_cra</code> installs exactly one distribution, solver included.</li>
+<li>The build backend is scikit-build-core, which drives the CMake project at the repository root. It reads no <code>requirements.txt</code>, so the dependencies now live in <code>pyproject.toml</code>.</li>
+<li>The cibuildwheel settings live in <code>[tool.cibuildwheel]</code> in <code>pyproject.toml</code> rather than in workflow environment variables, so <code>cibuildwheel</code> reproduces the CI wheel locally with no environment set. Only the runner-dependent parts (workspace paths, the macOS deployment target, the MSYS2 location) stay in <code>pipeline.yml</code>.</li>
+<li>One CI pipeline for every push and every release: <code>build.yml</code> (pushes and PRs to main) and <code>release.yml</code> (<code>v*</code> tags) both call the reusable <code>pipeline.yml</code>, which differs only by its <code>publish</code> input. A release therefore runs the exact chain that was already green on main — IPOPT from source, all five platforms, the smoke tests, the test suite against a built wheel and the docs — and then publishes it. <code>wheels.yml</code> and <code>docs.yml</code> are gone, folded into that pipeline.</li>
+<li><code>packaging/check_release.py</code> now checks for the <code>compas_cra._native._core</code> extension rather than a vendored <code>ipopt</code> executable, which the statically linked build no longer ships, and additionally requires every supported CPython on every platform. Verified against the artifacts of the PR build: it passes the complete set and rejects a partial one.</li>
+<li><code>invoke release</code> is defined in <code>tasks.py</code> instead of coming from <code>compas_invocations2</code>, without its local <code>python -m build</code> step: building a wheel here needs a staged IPOPT tree, and the published artifacts are built by CI on all five platforms regardless.</li>
+<li>The documentation is built with mkdocs (mkdocs-material + mkdocstrings) instead of sphinx, following <code>compas_model</code>. Every page is markdown: the API reference is five one-line <code>compas_cra.&lt;module&gt;</code> pages instead of six hand-maintained <code>.rst</code> files plus 80 checked-in <code>autosummary</code> stubs, and the changelog and licence pages include the repository's own files rather than duplicating them. The docs dependencies are a <code>docs</code> extra in <code>pyproject.toml</code>; <code>invoke docs</code> and the CI docs job both run <code>mkdocs build --strict</code>, so a broken link or a missing page now fails the build.</li>
+<li>Two docstrings that documented parameters the functions do not take: <code>CRA_Assembly.add_to_interfaces</code> described a <code>type</code> argument it never had, and <code>Arch</code> documented <code>n</code> instead of <code>num_blocks</code> and omitted <code>extra_support</code>.</li>
+<li><code>packaging/build_ipopt.sh</code> no longer trusts the third-party source downloads. The <code>get.ASL</code> and <code>get.Mumps</code> scripts fetch their tarballs with a bare <code>curl -L -O</code>, with no integrity check and no retry, so a stalled transfer lands a short file that is then gunzipped anyway — which is how an aarch64 build failed with <code>gzip: MUMPS_5.8.2.tar.gz: not in gzip format</code> after receiving 54 kB of a 4.3 MB tarball. The script now points <code>CURL_HOME</code>/<code>WGETRC</code> at a config that abandons and retries a stalled transfer, and checks that <code>ThirdParty/ASL/solvers</code> and <code>ThirdParty/Mumps/MUMPS</code> actually exist, re-running the <code>get.*</code> script that came up empty (a second <code>coinbrew fetch</code> will not: it only runs <code>get.*</code> when the clone's revision changed).</li>
+<li><code>invoke release</code> no longer deletes the staged IPOPT tree. It called <code>compas_invocations2.build.clean</code>, whose default removes <code>build/</code> - which in this repository is where <code>packaging/build_ipopt.sh</code> stages IPOPT, and what <code>CMakeLists.txt</code> defaults <code>IPOPT_PREFIX</code> to. Every release therefore threw away about fifteen minutes of build and left the next <code>pip install -e .</code> failing with <code>No IPOPT build at IPOPT_PREFIX=...</code>. It is called with <code>builds=False</code> now, so <code>dist/</code> and the egg-info still go and the stage tree stays.</li>
+<li><code>pip install -e ".[dev]"</code> installs the documentation stack too, because <code>[dev]</code> now includes <code>[docs]</code>. Neither extra could run <code>invoke docs</code> on its own - <code>[dev]</code> has no mkdocs and <code>[docs]</code> has no invoke - so the command the installation instructions gave produced an environment the documented task did not run in.</li>
+<li><code>pymdown-extensions</code> is declared in the <code>docs</code> extra. <code>mkdocs.yml</code> configures <code>pymdownx.*</code> directly, so it is a direct dependency; it arrived only as a transitive dependency of <code>mkdocs-material</code>.</li>
+<li>CI builds the documentation with <code>invoke docs</code> rather than its own copy of the <code>mkdocs build</code> command line, so the local task and the pipeline cannot drift apart.</li>
+<li>The development instructions start from a <code>uv</code> environment and state that <code>pip install -e ".[dev]"</code> is the only install step, list the <code>invoke</code> tasks and which of them need the compiled solver (only <code>test</code> and <code>release</code> - the documentation is generated from <code>src/</code>, not from an imported package), and note that <code>conda install ipopt</code> cannot stand in for <code>build_ipopt.sh</code> because conda-forge builds IPOPT shared against a separate <code>mumps-seq</code> while <code>CMakeLists.txt</code> links it statically.</li>
+<li>The documentation is deployed on every push to <code>main</code>, not only from a release tag. The deploy step was gated on <code>inputs.publish</code>, which only <code>release.yml</code> sets, so merging a documentation fix built the site and threw it away and the published site tracked the last tag rather than <code>main</code>. It costs no extra CI: <code>build.yml</code> already runs the whole pipeline on every push to <code>main</code>, so the wheel the docs are built against exists either way.</li>
+<li>Every URL points at <code>BlockResearchGroup/compas_cra</code>. <code>site_url</code>, <code>repo_url</code>, the <code>[project.urls]</code> block, the README badges, <code>CITATION.cff</code> and the links in the tutorial and contribution pages all named the <code>petrasvestartas</code> fork, so the published site advertised a canonical URL that is not where it is served from - GitHub Pages serves it at <code>blockresearchgroup.github.io/compas_cra</code>.</li>
+<li><code>requirements.txt</code> installs the documentation and linting toolchain in one command, without building the package. An extra cannot do this: installing <code>compas_cra[docs]</code> builds <code>compas_cra</code>, which compiles the solver. The documentation never needs it.</li>
+<li>Two links in the README that were broken independently of the rename: the banner image pointed into <code>docs/_images</code>, which has not existed since the mkdocs migration moved it to <code>docs/assets/images</code>, and the examples link pointed at a <code>latest/examples.html</code> path on github.com rather than at the documentation site.</li>
+<li>An editable install is self-contained on Windows, the way a repaired wheel is. The extension links MSYS2's shared runtimes (libgfortran, libopenblas, libstdc++), and Python does not search PATH for extension DLLs, so importing <code>compas_cra._native</code> died with <code>DLL load failed</code> anywhere delvewheel had not vendored them - which is every editable install. The CMake install now copies the runtime DLL closure next to the module when <code>BUNDLE_RUNTIME_DLLS=ON</code>, which <code>invoke setup</code> passes; the package code does not know MSYS2 exists, and the CI wheels keep delvewheel's repair (the option defaults to OFF, so they never carry a second copy).</li>
+<li><code>pytest</code> is part of the <code>dev</code> extra. <code>invoke test</code> was unusable from the documented install - CI happened to install pytest separately.</li>
+<li>After <code>invoke setup</code>, a plain <code>uv pip install -e .</code> rebuilds the extension with no special environment, and nothing is configured globally. <code>CMakeLists.txt</code> finds the MinGW toolchain itself on Windows (and refuses MSVC with an explanation - the GCC-built static archives cannot be linked by it, and CMake's Visual Studio default produced a LNK1181 ten minutes in), the venv's activation scripts carry the toolchain PATH and the Ninja generator (written once by <code>invoke setup</code>, venv-scoped), and the runtime DLL bundling defaults to on for Windows builds - the CI wheels pass <code>-DBUNDLE_RUNTIME_DLLS=OFF</code> and keep delvewheel's repair. Python edits need no reinstall at all: the editable install serves <code>src/</code> directly.</li>
+<li>The viewers work with compas_viewer 2.x again. <code>cra_view</code> passed plain Python lists to <code>viewer.scene.add</code>, which raised <code>SceneObjectNotRegisteredError: &lt;class 'list'&gt;</code> on the first example anyone ran with a viewer; every list is wrapped in <code>Collection</code> now, and two stale <code>size=</code>/<code>color=</code> kwargs became <code>pointsize=</code>/<code>pointcolor=</code>.</li>
+<li>Force and weight arrows are meshes again - cylinder shaft, conical head, widths scaling with length - restoring the compas_view2 <code>Arrow</code> shape and its <code>head_portion=0.2, head_width=0.07, body_width=0.02</code> parameters, verified against the documentation screenshots. The port had replaced them with compas_viewer's <code>VectorObject</code>, which draws a fixed pixel-width line with a four-sided pyramid head that degenerates to a sliver for axis-parallel directions - the weight arrows, drawn at the old world-unit width as a pixel width, rendered as disembodied heads. Arrows are added at opacity 0.999 on purpose: the transparency pass draws after the semi-transparent block faces, so an arrow inside a block stays bold as it did in compas_view2.</li>
+<li>The uneven interface resultants on the curved examples are the solver's true optimum, not an artifact: the fully converged solution (<code>tol=1e-8</code>, status optimal, 356 iterations) matches the fast acceptable-level solution to 1.7e-6 across all 72 sub-interface resultants, and their sum equals the supported weight. The visual difference against the old screenshots was the absolute-width arrow heads exaggerating small forces.</li>
+<li>The CRA solver's acceptable-level tolerances relaxed from 1e-8 to 1e-6. The wedge and curved-blocks examples converge to ~1e-8 violation and then cannot reach the hard tolerances - at 1e-8 acceptance they died a hair above the line (<code>Restoration_Failed</code> at 4.6e-8, <code>Maximum_Iterations_Exceeded</code> hovering at 1.6e-8). The hard tolerances are unchanged; relaxing acceptance only adds a stopping opportunity.</li>
+<li>The penalty solver uses the adaptive barrier update too - same degenerate complementarity constraints as the CRA solver, same crawl under the monotone update.</li>
+<li>The <code>06_arch_penalty</code> example passes <code>d_bnd=1e-2</code>: with the default 1e-3 the solve exhausts even a 9000-iteration cap under both barrier strategies, at 1e-2 it converges in ~65 iterations, and on the standard arch the penalty resultants then agree with <code>cra_solve</code> to 1e-3 - same physics, feasible bound. All 18 example scripts now run to completion, verified headless.</li>
+<li>Resultant force arrows are red only for interfaces in net tension (<code>sum_n &lt; 0</code>) - the rule the published screenshots were made with (commit <code>15e5edc</code>, 2022-08-17). The per-vertex <code>&lt;= -1e-5</code> check added later turned whole interfaces red over complementarity-relaxation noise (vertex normals reach -2e-3 on shelf interfaces that are in overall compression), which is why the shelf example showed red arrows where its screenshot shows green. Genuine tension still shows: net-tension interfaces render red, and per-vertex tension renders as red nodal arrows, unchanged.</li>
+<li>Block and support edges draw at the same width (1.5), block edges in dark gray, support edges in the support salmon - matching the reference screenshots instead of the 4-wide support outlines.</li>
+<li><code>09_bridge</code> runs <code>cra_solve</code> again - the example had been switched to <code>cra_penalty_solve</code>, producing a visibly different solution from its screenshot. Verified against the 2022 code in an era-exact environment: identical resultants to five decimals, no tension anywhere. The view flags also now match the screenshot (<code>forcesdirect=True</code>): the image was made with flags that were never committed, and the image is the contract.</li>
+<li>The solver restores the published force distributions. The CRA system is square, and until IPOPT 3.14.11 square problems were special-cased: the convergence check ignored dual feasibility and bound complementarity, so IPOPT stopped at the first primal-feasible point of the barrier path - an interior point where every contact face carries force. Every figure in the paper (Kao et al. 2022, doi:10.1016/j.cad.2022.103216) and the docs is such a point. IPOPT 3.14.12 removed the special case, and the same problems then converge to a degenerate vertex - on the curved-interface examples the whole load lands on 8 of 72 sub-faces and the rest go to zero, which is what this package has shipped since the bundled IPOPT became newer than that. Root-caused by building IPOPT 3.14.9, 3.14.11 and 3.14.14 from source against the same MUMPS 5.9: 3.14.11 still spreads (identically to 3.14.9), 3.14.14 concentrates - the flip is exactly at 3.14.12, the release whose changelog documents the square-problem change; not MUMPS, and not this repository - every code generation from the screenshot-day commit to today produces both solutions depending only on the binary. The fix sets <code>mu_target=1e-5</code> (with tolerances to match and a raised iteration cap): the barrier stops at the interior point deliberately instead of by accident of an old binary. Calibrated against the published figures themselves rather than a rebuilt era binary - the old square-problem shortcut stopped wherever its check happened to trip, so a from-source 3.14.11 stops at a lower barrier level (force staircase of 4.5x) than the author's 2022 conda/macOS build, whose figures show near-uniform arrows. 1e-5 reproduces the figures: cube-curve-tall max/median 1.11, cube-curve-short 1.20, all 72 faces loaded. Equilibrium stays exact at 1e-8, and the arch reaches the same resultants (1.9571/0.8437) in 270 iterations. Pinning the old IPOPT was evaluated and rejected: correctly built it links and runs fine, but its stopping level is platform luck - the very thing that made the published results irreproducible in the first place.</li>
+<li><code>13_curve-3-blocks</code> runs its original published parameters again (density=0.1, scale=5). They only solve in the barrier-interior regime; under strict optimization they exhaust the iteration cap on every IPOPT generation, which is why the author had switched to density=1 as a workaround days after the screenshot.</li>
+<li><code>invoke setup</code> carries <code>MACOSX_DEPLOYMENT_TARGET=11.0</code> through the IPOPT build and the editable install on macOS - the same value CI pins, for Apple Silicon and Intel alike - so the static libraries and the extension agree on a target instead of failing to link against the Python build's older default. It also checks for the Xcode Command Line Tools up front (build_ipopt.sh needs xcrun for the Accelerate stub) rather than failing fifteen minutes into the build.</li>
+<li>The venv activation patch re-prepends the venv's own Scripts directory after the MSYS2 toolchain path: ucrt64in carries a python.exe of its own, and it was shadowing the venv's - a bare <code>python</code> in an activated shell ran the wrong interpreter.</li>
+</ul>
+<h3 id="removed">Removed<a class="headerlink" href="#removed" title="Permanent link">¤</a></h3>
+<ul>
+<li>Removed the separate <code>compas_cra_native</code> distribution and its <code>native/pyproject.toml</code>; the binding source stays in <code>native/</code>, built by the root <code>CMakeLists.txt</code>. An install from source (<code>pip install .</code>, editable included) now compiles the extension and needs <code>packaging/build_ipopt.sh</code> to have run first.</li>
+<li>Removed <code>requirements.txt</code>, <code>requirements-dev.txt</code> and <code>requirements-viz.txt</code>; <code>pip install -e ".[dev]"</code> replaces <code>pip install -r requirements-dev.txt</code>.</li>
+<li>Removed the <code>build_ghuser_components</code> task and its <code>ghuser</code> configuration from <code>tasks.py</code>; the paths pointed at <code>src/compas_notebook</code>, and compas_cra ships no Grasshopper components.</li>
+<li>Removed <code>docs/conf.py</code>, every <code>.rst</code> page, the generated <code>docs/api/</code> tree and the <code>sphinx_compas2_theme</code> dependency.</li>
+</ul>
+<h2 id="072-2026-08-23">[0.7.2] 2026-08-23<a class="headerlink" href="#072-2026-08-23" title="Permanent link">¤</a></h2>
+<h3 id="added_1">Added<a class="headerlink" href="#added_1" title="Permanent link">¤</a></h3>
+<h3 id="changed_1">Changed<a class="headerlink" href="#changed_1" title="Permanent link">¤</a></h3>
+<ul>
+<li>One ordered release pipeline in <code>release.yml</code>: native wheels build first (IPOPT compiled from source), the pure package is tested against the just-built native wheel, then publish native → publish cra → GitHub release → docs. <code>native.yml</code> is build-only push CI; <code>docs.yml</code> builds on main pushes only; the lint job runs without installing the package.</li>
+</ul>
+<h3 id="removed_1">Removed<a class="headerlink" href="#removed_1" title="Permanent link">¤</a></h3>
+<h2 id="071-2026-08-23">[0.7.1] 2026-08-23<a class="headerlink" href="#071-2026-08-23" title="Permanent link">¤</a></h2>
+<h3 id="added_2">Added<a class="headerlink" href="#added_2" title="Permanent link">¤</a></h3>
+<h3 id="changed_2">Changed<a class="headerlink" href="#changed_2" title="Permanent link">¤</a></h3>
+<ul>
+<li><code>compas_cra_native</code> 0.1.1: the audit-hardened binding (sparsity index range checks, transient-callback-exception recovery, automatic quasi-Newton fallback, wall-time status) actually ships to PyPI — 0.1.0 predated those fixes and <code>skip-existing</code> had kept re-uploads out.</li>
+<li>Rhino scripts pin <code>compas_cra&gt;=0.7.0</code> so cached ScriptEditor environments upgrade off the removed executable path.</li>
+</ul>
+<h3 id="removed_2">Removed<a class="headerlink" href="#removed_2" title="Permanent link">¤</a></h3>
+<h2 id="070-2026-08-23">[0.7.0] 2026-08-23<a class="headerlink" href="#070-2026-08-23" title="Permanent link">¤</a></h2>
+<h3 id="added_3">Added<a class="headerlink" href="#added_3" title="Permanent link">¤</a></h3>
+<ul>
+<li>Added <code>cra_penalty_problem</code> and <code>rbe_problem</code> NLP formulations with exact analytic derivatives, and the matching native solvers <code>cra_penalty_solve_native</code> and <code>rbe_solve_native</code>, validated against the pyomo implementations before those were removed (max force difference 1.9e-14 for RBE, 7.1e-9 for the penalty formulation).</li>
+</ul>
+<h3 id="changed_3">Changed<a class="headerlink" href="#changed_3" title="Permanent link">¤</a></h3>
+<ul>
+<li><code>cra_solve</code>, <code>cra_penalty_solve</code> and <code>rbe_solve</code> are now the in-process native solvers. <code>compas_cra</code> is a pure Python package again — one universal wheel — with the compiled solver coming from the <code>compas_cra_native</code> dependency.</li>
+<li>The native wheel workflow builds the Linux wheels with cibuildwheel inside the manylinux containers, in the style of compas_cgal.</li>
+</ul>
+<h3 id="removed_3">Removed<a class="headerlink" href="#removed_3" title="Permanent link">¤</a></h3>
+<ul>
+<li>Removed the bundled IPOPT executable, the pyomo formulations and the pyomo dependency. There is no solver executable anywhere anymore: solving happens in-process through the nanobind extension, which also removes the Windows antivirus false-positive problem structurally.</li>
+</ul>
+<h2 id="066-2026-08-23">[0.6.6] 2026-08-23<a class="headerlink" href="#066-2026-08-23" title="Permanent link">¤</a></h2>
+<h3 id="added_4">Added<a class="headerlink" href="#added_4" title="Permanent link">¤</a></h3>
+<h3 id="changed_4">Changed<a class="headerlink" href="#changed_4" title="Permanent link">¤</a></h3>
+<ul>
+<li><code>compas_cra_native</code> is now a dependency of <code>compas_cra</code> (on Python &lt; 3.14), so <code>pip install compas_cra</code> — or a single <code># r: compas_cra</code> line in Rhino — brings the in-process solver along automatically.</li>
+</ul>
+<h3 id="removed_4">Removed<a class="headerlink" href="#removed_4" title="Permanent link">¤</a></h3>
+<h2 id="065-2026-08-23">[0.6.5] 2026-08-23<a class="headerlink" href="#065-2026-08-23" title="Permanent link">¤</a></h2>
+<h3 id="added_5">Added<a class="headerlink" href="#added_5" title="Permanent link">¤</a></h3>
+<h3 id="changed_5">Changed<a class="headerlink" href="#changed_5" title="Permanent link">¤</a></h3>
+<ul>
+<li>Hardened the native binding after a three-stage independent audit: sparsity index range checks (out-of-range values from Python now raise instead of crashing), a solve that converges despite a transient callback exception keeps its solution, <code>hessian_approximation=limited-memory</code> is set automatically when no Hessian callback is given, and <code>Maximum_WallTime_Exceeded</code> is reported by name.</li>
+<li>The native backend no longer accepts iteration-capped points; only near-converged endings (<code>Restoration_Failed</code>, <code>Search_Direction_Becomes_Too_Small</code>) qualify for the feasible-point acceptance check, matching the executable path's failure behavior.</li>
+<li>The Rhino example scripts solve with <code>cra_solve_native</code> (in-process, no executable involved).</li>
+<li>macOS arm64 native wheels are built on macOS 14, so they install on macOS 14+.</li>
+</ul>
+<h3 id="removed_5">Removed<a class="headerlink" href="#removed_5" title="Permanent link">¤</a></h3>
+<h2 id="064-2026-08-23">[0.6.4] 2026-08-23<a class="headerlink" href="#064-2026-08-23" title="Permanent link">¤</a></h2>
+<h3 id="added_6">Added<a class="headerlink" href="#added_6" title="Permanent link">¤</a></h3>
+<ul>
+<li>Added <code>compas_cra.nlp</code>, a solver-agnostic sparse NLP layer, and <code>compas_cra.equilibrium.cra_problem</code>, the CRA optimisation problem formulated directly in numpy/scipy with exact analytic gradient, Jacobian and Lagrangian Hessian (no pyomo involved).</li>
+<li>Added <code>compas_cra_native</code> (in <code>native/</code>): IPOPT + MUMPS compiled into a Python extension module with nanobind, so CRA problems solve in-process — no bundled executable, no subprocess, no <code>.nl</code> files. Results match the pyomo + executable path on the test suite (bit-identical on the cube fixtures, &lt; 1e-5 relative force difference on the arch).</li>
+<li>Added <code>cra_solve_native</code>, a drop-in alternative to <code>cra_solve</code> using the binding.</li>
+</ul>
+<h3 id="changed_6">Changed<a class="headerlink" href="#changed_6" title="Permanent link">¤</a></h3>
+<h3 id="removed_6">Removed<a class="headerlink" href="#removed_6" title="Permanent link">¤</a></h3>
+<h2 id="063-2026-08-23">[0.6.3] 2026-08-23<a class="headerlink" href="#063-2026-08-23" title="Permanent link">¤</a></h2>
+<h3 id="added_7">Added<a class="headerlink" href="#added_7" title="Permanent link">¤</a></h3>
+<ul>
+<li>Added the <code>COMPAS_CRA_IPOPT</code> environment variable to override the solver location, for machines where antivirus or application-control policies block the bundled binary.</li>
+<li>The Windows <code>ipopt.exe</code> now carries a version resource (product, publisher, version, license), and the release workflow supports Authenticode signing via Azure Trusted Signing when the signing secrets are configured.</li>
+</ul>
+<h3 id="changed_7">Changed<a class="headerlink" href="#changed_7" title="Permanent link">¤</a></h3>
+<h3 id="removed_7">Removed<a class="headerlink" href="#removed_7" title="Permanent link">¤</a></h3>
+<h2 id="062-2026-08-23">[0.6.2] 2026-08-23<a class="headerlink" href="#062-2026-08-23" title="Permanent link">¤</a></h2>
+<h3 id="added_8">Added<a class="headerlink" href="#added_8" title="Permanent link">¤</a></h3>
+<h3 id="changed_8">Changed<a class="headerlink" href="#changed_8" title="Permanent link">¤</a></h3>
+<ul>
+<li>Lowered <code>requires-python</code> to <code>&gt;= 3.9</code> so the package installs into Rhino 8's bundled CPython 3.9.</li>
+</ul>
+<h3 id="removed_8">Removed<a class="headerlink" href="#removed_8" title="Permanent link">¤</a></h3>
+<h2 id="061-2026-08-23">[0.6.1] 2026-08-23<a class="headerlink" href="#061-2026-08-23" title="Permanent link">¤</a></h2>
+<h3 id="added_9">Added<a class="headerlink" href="#added_9" title="Permanent link">¤</a></h3>
+<h3 id="changed_9">Changed<a class="headerlink" href="#changed_9" title="Permanent link">¤</a></h3>
+<h3 id="removed_9">Removed<a class="headerlink" href="#removed_9" title="Permanent link">¤</a></h3>
+<h2 id="060-2026-08-26">[0.6.0] 2026-08-26<a class="headerlink" href="#060-2026-08-26" title="Permanent link">¤</a></h2>
+<h3 id="added_10">Added<a class="headerlink" href="#added_10" title="Permanent link">¤</a></h3>
+<ul>
+<li>Added a bundled, statically linked IPOPT executable to the platform wheels, so <code>pip install compas_cra</code> no longer needs conda, homebrew or a manually downloaded solver. Wheels are built for Windows, macOS (Apple Silicon and Intel) and manylinux (x86_64 and aarch64) by <code>.github/workflows/release.yml</code>.</li>
+<li>Added <code>packaging/</code> with the scripts that build IPOPT 3.14.19 from source with coinbrew (MUMPS linear solver, no HSL), pack the platform wheels and test them in a clean environment.</li>
+<li>Added <code>compas_cra._ipopt</code> to locate the solver, and a <code>compas-cra-ipopt</code> console script to check which solver will be used.</li>
+<li>Added the <code>viz</code> optional dependencies (<code>pip install compas_cra[viz]</code>).</li>
+<li>Added <code>packaging/check_release.py</code>, run by the publish job before uploading: a release is rejected unless it carries a wheel for every supported platform and each wheel actually contains an ipopt executable.</li>
+</ul>
+<h3 id="changed_10">Changed<a class="headerlink" href="#changed_10" title="Permanent link">¤</a></h3>
+<ul>
+<li>Declared the runtime dependencies (<code>compas</code>, <code>compas_assembly</code>, <code>numpy</code>, <code>pyomo</code>, <code>scipy</code>, <code>shapely</code>) in <code>requirements.txt</code>, which was empty.</li>
+<li><code>cra_solve</code>, <code>cra_penalty_solve</code> and <code>rbe_solve</code> now build their solver with <code>compas_cra.equilibrium._solver.ipopt_solver</code>, which points pyomo at the bundled executable. Solver options and tolerances are unchanged.</li>
+<li>
+<p>Rewrote the installation instructions around pip; the manual Windows workaround for missing ipopt binaries is no longer needed.</p>
+</li>
+<li>
+<p>Replaced kernel-layer <code>MatrixConstraint</code> with standard <code>pyo.Constraint</code> rules in <code>static_equilibrium_constraints</code> for compatibility with recent Pyomo versions.</p>
+</li>
+<li>Pinned Python to <code>&lt; 3.14</code> for viewer compatibility.</li>
+</ul>
+<h3 id="removed_10">Removed<a class="headerlink" href="#removed_10" title="Permanent link">¤</a></h3>
+<h2 id="050-2024-10-21">[0.5.0] 2024-10-21<a class="headerlink" href="#050-2024-10-21" title="Permanent link">¤</a></h2>
+<h3 id="added_11">Added<a class="headerlink" href="#added_11" title="Permanent link">¤</a></h3>
+<h3 id="changed_11">Changed<a class="headerlink" href="#changed_11" title="Permanent link">¤</a></h3>
+<ul>
+<li>Changed compas_view2 to compas_viewer.</li>
+<li>Changed sample files to COMPAS 2 format.</li>
+<li>Fixed bug in temp viewer arrow solution.</li>
+</ul>
+<h3 id="removed_11">Removed<a class="headerlink" href="#removed_11" title="Permanent link">¤</a></h3>
+<ul>
+<li>Removed <code>matplotlib</code> from env files.</li>
+<li>Removed <code>pip</code> requirements.</li>
+<li>Removed incompatible interface info.</li>
+</ul>
+<h2 id="040-2024-03-02">[0.4.0] 2024-03-02<a class="headerlink" href="#040-2024-03-02" title="Permanent link">¤</a></h2>
+<h3 id="added_12">Added<a class="headerlink" href="#added_12" title="Permanent link">¤</a></h3>
+<ul>
+<li>Add delete block and blocks methods in CRA_Assembly class. </li>
+<li>A script to export mesh to json in Rhino. </li>
+</ul>
+<h3 id="changed_12">Changed<a class="headerlink" href="#changed_12" title="Permanent link">¤</a></h3>
+<h3 id="removed_12">Removed<a class="headerlink" href="#removed_12" title="Permanent link">¤</a></h3>
+<h2 id="030-2022-11-06">[0.3.0] 2022-11-06<a class="headerlink" href="#030-2022-11-06" title="Permanent link">¤</a></h2>
+<h3 id="added_13">Added<a class="headerlink" href="#added_13" title="Permanent link">¤</a></h3>
+<h3 id="changed_13">Changed<a class="headerlink" href="#changed_13" title="Permanent link">¤</a></h3>
+<h3 id="removed_13">Removed<a class="headerlink" href="#removed_13" title="Permanent link">¤</a></h3>
+<h2 id="022-2022-09-29">[0.2.2] 2022-09-29<a class="headerlink" href="#022-2022-09-29" title="Permanent link">¤</a></h2>
+<h3 id="added_14">Added<a class="headerlink" href="#added_14" title="Permanent link">¤</a></h3>
+<ul>
+<li>Add example folder directory to tutorial docs for easy access. </li>
+</ul>
+<h3 id="changed_14">Changed<a class="headerlink" href="#changed_14" title="Permanent link">¤</a></h3>
+<ul>
+<li>Fix some typos and wrong url links. </li>
+<li>Change ipopt installation guide using conda.</li>
+</ul>
+<h3 id="removed_14">Removed<a class="headerlink" href="#removed_14" title="Permanent link">¤</a></h3>
+<h2 id="021-2022-09-02">[0.2.1] 2022-09-02<a class="headerlink" href="#021-2022-09-02" title="Permanent link">¤</a></h2>
+<h3 id="added_15">Added<a class="headerlink" href="#added_15" title="Permanent link">¤</a></h3>
+<h3 id="changed_15">Changed<a class="headerlink" href="#changed_15" title="Permanent link">¤</a></h3>
+<h3 id="removed_15">Removed<a class="headerlink" href="#removed_15" title="Permanent link">¤</a></h3>
+<h2 id="020-2022-09-02">[0.2.0] 2022-09-02<a class="headerlink" href="#020-2022-09-02" title="Permanent link">¤</a></h2>
+<h3 id="added_16">Added<a class="headerlink" href="#added_16" title="Permanent link">¤</a></h3>
+<h3 id="changed_16">Changed<a class="headerlink" href="#changed_16" title="Permanent link">¤</a></h3>
+<h3 id="removed_16">Removed<a class="headerlink" href="#removed_16" title="Permanent link">¤</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../cite/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Citing">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Citing
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../license/" class="md-footer__link md-footer__link--next" aria-label="Next: License">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                License
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2020 - 2026, ETH Zurich - Block Research Group
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.footnote.tooltips", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.suggest", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
