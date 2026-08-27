@@ -41,6 +41,22 @@ invoke test
 
 ### macOS
 
+Nothing has to be installed first. If Homebrew is not on the machine, `invoke setup`
+installs it, along with `bash` and `gcc` — macOS asks for your password once, because
+the Homebrew installer creates its prefix as root. The account has to be an
+administrator, which is the default for the first account on a Mac.
+
+Run it as yourself. **Not** `sudo invoke setup`: Homebrew refuses to install as root,
+and the venv, `build/` and the staged IPOPT tree would all come out root-owned. The task
+asks for the password at the single point it needs one.
+
+Set `COMPAS_CRA_NO_BREW_INSTALL=1` to refuse the bootstrap and be told to install
+Homebrew yourself instead.
+
+A checkout path containing a space (`Desktop/untitled folder/…`) is fine: IPOPT is
+autotools, which cannot build under such a path, so `invoke setup` builds and stages it
+in `~/.compas_cra/ipopt` instead and points the extension build there.
+
 ```bash
 git clone https://github.com/BlockResearchGroup/compas_cra.git
 cd compas_cra
