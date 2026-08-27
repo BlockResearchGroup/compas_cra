@@ -55,6 +55,8 @@ dev = [
     "compas_invocations2",
     "compas_viewer",
     "invoke>=0.14",
+    # invoke test is unusable without it; CI happened to install it separately
+    "pytest",
     "ruff",
     "twine",
     "wheel",

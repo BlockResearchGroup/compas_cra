@@ -41,6 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Every URL points at `BlockResearchGroup/compas_cra`. `site_url`, `repo_url`, the `[project.urls]` block, the README badges, `CITATION.cff` and the links in the tutorial and contribution pages all named the `petrasvestartas` fork, so the published site advertised a canonical URL that is not where it is served from - GitHub Pages serves it at `blockresearchgroup.github.io/compas_cra`.
 * `requirements.txt` installs the documentation and linting toolchain in one command, without building the package. An extra cannot do this: installing `compas_cra[docs]` builds `compas_cra`, which compiles the solver. The documentation never needs it.
 * Two links in the README that were broken independently of the rename: the banner image pointed into `docs/_images`, which has not existed since the mkdocs migration moved it to `docs/assets/images`, and the examples link pointed at a `latest/examples.html` path on github.com rather than at the documentation site.
+* An editable install loads the solver on Windows without an MSYS2 shell. The extension links MSYS2's shared runtimes (libgfortran, libopenblas, libstdc++) out of `ucrt64in`, and Python does not search PATH for extension DLLs, so the import died with `DLL load failed` anywhere delvewheel had not vendored them - which is every editable install. `compas_cra._native` now adds the MSYS2 directory to the DLL search path when the first import fails; platform wheels never reach that path.
+* `pytest` is part of the `dev` extra. `invoke test` was unusable from the documented install - CI happened to install pytest separately.
 
 ### Removed
 
