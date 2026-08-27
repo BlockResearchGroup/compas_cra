@@ -158,7 +158,9 @@ def _brew():
     if found:
         return found
     for prefix in HOMEBREW_PREFIXES:
-        candidate = os.path.join(prefix, "bin", "brew")
+        # these are macOS paths by definition; os.path.join would backslash them on a
+        # Windows machine running the test suite
+        candidate = prefix + "/bin/brew"
         if os.access(candidate, os.X_OK):
             return candidate
     return None
