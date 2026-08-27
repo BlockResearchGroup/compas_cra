@@ -32,8 +32,9 @@ __all__ = ["cra_solve_native", "cra_penalty_solve_native", "rbe_solve_native"]
 # over all 72 sub-faces. IPOPT 3.14.12 removed the special case, and from there the
 # solver drives complementarity to zero and lands on a degenerate vertex instead - the
 # same examples concentrate the whole load on 8 faces and zero the rest. Verified by
-# building IPOPT 3.14.9 and 3.14.14 from source against the same MUMPS 5.9: the flip is
-# IPOPT's, not MUMPS', and not this repository's - every code generation from the
+# building IPOPT 3.14.9, 3.14.11 and 3.14.14 from source against the same MUMPS 5.9:
+# 3.14.11 still spreads, 3.14.14 concentrates - the flip is exactly at 3.14.12, per
+# its changelog; not MUMPS, and not this repository - every code generation from the
 # screenshot-day commit (15e5edc) to today produces both solutions depending only on
 # the binary.
 #
