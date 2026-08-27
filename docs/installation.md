@@ -127,8 +127,8 @@ pip install -e ".[dev]"
 ```
 
 Keep `JOBS=1`: MUMPS races under a parallel build. On Windows run `build_ipopt.sh`
-from the MSYS2 shell and point `CMAKE_ARGS` at its `gcc`/`g++`/`gfortran` for the
-install — or just use `invoke setup`, which does exactly that. Set `IPOPT_PREFIX` to
+from the MSYS2 UCRT64 shell; the install itself needs no compiler flags —
+`CMakeLists.txt` finds the MinGW toolchain on its own. Set `IPOPT_PREFIX` to
 use a stage tree from elsewhere, `IPOPT_EXTRA_LINK` and `EXTRA_LINK_DIRS` for extra
 link flags and directories. Packaged IPOPTs (conda-forge etc.) do not work here: they
 are shared builds, and `CMakeLists.txt` links `libipopt` and `libcoinmumps` statically —
