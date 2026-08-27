@@ -85,8 +85,11 @@ def _ipopt_work_dir(base_folder):
             "autotools, which cannot build under either. Move the repository to a path "
             "without spaces, or set WORK_DIR to one." % fallback
         )
-    print("NOTE: the repository path contains a space, which autotools cannot build under.")
-    print("      IPOPT will be built and staged in %s instead." % fallback)
+    # the helper runs once for the staged-check and once for the build; say it once
+    if not getattr(_ipopt_work_dir, "noted", False):
+        _ipopt_work_dir.noted = True
+        print("NOTE: the repository path contains a space, which autotools cannot build under.")
+        print("      IPOPT will be built and staged in %s instead." % fallback)
     return fallback
 
 
