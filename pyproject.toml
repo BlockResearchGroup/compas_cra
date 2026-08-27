@@ -66,7 +66,7 @@ dev = [
 # package - the documentation never needs the compiled solver
 docs = [
     "markdown-callouts>=0.4",
-    "mkdocs>=1.6",
+    "mkdocs>=1.6,<2",  # Material is incompatible with the MkDocs 2.0 rewrite, per its own banner
     "mkdocs-autorefs>=1.4",
     "mkdocs-material>=9.5",
     "mkdocstrings[python]",
