@@ -185,11 +185,14 @@ def _verbosity():
     """coinbrew verbosity for interactive builds: stream the compile lines.
 
     An interactive fifteen-minute build with no output is indistinguishable from a hung
-    one, so `invoke setup` defaults to 2 (make output shown). CI calls build_ipopt.sh
-    directly and keeps the script's own quiet default. VERBOSITY in the environment
-    still wins, in either direction.
+    one, so `invoke setup` defaults to 3. Not 2: coinbrew demotes ThirdParty projects
+    one level (`invoke_make $((verbosity-1))`), and ASL and MUMPS - almost the whole
+    build - are ThirdParty, so at 2 their make output still goes to /dev/null. At 3
+    they stream; only their short autoconf configures stay quiet (those need 4). CI
+    calls build_ipopt.sh directly and keeps the script's own quiet default. VERBOSITY
+    in the environment still wins, in either direction.
     """
-    return os.environ.get("VERBOSITY", "2")
+    return os.environ.get("VERBOSITY", "3")
 
 
 def _build_ipopt(ctx, jobs):
