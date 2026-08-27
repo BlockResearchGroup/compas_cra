@@ -5,7 +5,11 @@ from math import sqrt
 import numpy as np
 from compas.colors import Color
 from compas.datastructures import Mesh
+from compas.geometry import Cone
+from compas.geometry import Cylinder
+from compas.geometry import Frame
 from compas.geometry import Line
+from compas.geometry import Plane
 from compas.geometry import Point
 from compas.geometry import Polygon
 from compas.geometry import Polyline
@@ -19,22 +23,55 @@ from compas_viewer.scene import Collection
 
 
 class Arrow:
-    def __init__(self, position=[0, 0, 0], direction=[0, 0, 1], linewidth=0.02):
+    """A force arrow as a mesh: cylinder shaft, conical head.
+
+    This is the compas_view2 ``Arrow`` shape the original visualization used, with its
+    parameters: the widths are world units, the head takes ``head_portion`` of the
+    length. The compas_viewer ``VectorObject`` is no substitute - it draws a fixed
+    pixel-width line with a four-sided pyramid head that degenerates to a sliver for
+    axis-parallel directions.
+    """
+
+    def __init__(self, position=[0, 0, 0], direction=[0, 0, 1], head_portion=0.2, head_width=0.07, body_width=0.02):
         super().__init__()
         self.position = Vector(*position)
         self.direction = Vector(*direction)
-        self.linewidth = linewidth
+        self.head_portion = head_portion
+        self.head_width = head_width
+        self.body_width = body_width
 
-    def add_to_scene(self, viewer, facecolor: Color, opacity=1):
-        viewer.scene.add(
-            Vector(*self.direction),
-            anchor=Point(*self.position),
-            facecolor=facecolor,
-            linecolor=facecolor,
-            linewidth=self.linewidth,
-            show_lines=True,
-            opacity=opacity,
+    def mesh(self):
+        length = self.direction.length
+        if length == 0:
+            return None
+        zaxis = self.direction.unitized()
+        body_length = length * (1 - self.head_portion)
+        # widths scale with the length, exactly as the compas_view2 Arrow scaled its
+        # unit shape by the direction vector: a short force renders as a thin pin, a
+        # long one as a bold arrow, and relative proportions stay comparable
+        shaft = Cylinder(
+            radius=self.body_width * length,
+            height=body_length,
+            frame=Frame.from_plane(Plane(self.position + zaxis * (body_length / 2), zaxis)),
         )
+        head = Cone(
+            radius=self.head_width * length,
+            height=length * self.head_portion,
+            frame=Frame.from_plane(Plane(self.position + zaxis * body_length, zaxis)),
+        )
+        mesh = Mesh.from_shape(shaft, u=32)
+        mesh.join(Mesh.from_shape(head, u=32))
+        return mesh
+
+    def add_to_scene(self, viewer, facecolor: Color, opacity=0.999):
+        mesh = self.mesh()
+        if mesh is None:
+            return
+        # opacity just under 1 on purpose: it moves the arrow into the renderer's
+        # transparency pass, which draws after the semi-transparent block faces - so an
+        # arrow inside a block stays bold, as it was in compas_view2, instead of being
+        # washed out by the faces compositing over it
+        viewer.scene.add(mesh, facecolor=facecolor, show_lines=False, opacity=min(opacity, 0.999))
 
 
 def draw_blocks(assembly, viewer, edge=True, tol=0.0):
@@ -302,9 +339,9 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                     if (w * force * scale).length == 0:
                         continue
                     if flip:
-                        f = Arrow(pt, w * force * scale * -1, linewidth=10)
+                        f = Arrow(pt, w * force * scale * -1)
                     else:
-                        f = Arrow(pt, w * force * scale, linewidth=10)
+                        f = Arrow(pt, w * force * scale)
                     if force >= 0:
                         fnp.append(f)
                     else:
@@ -313,17 +350,9 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                     if ft_uv.length == 0:
                         continue
                     if flip:
-                        f = Arrow(
-                            pt,
-                            ft_uv * -1,
-                            linewidth=10,
-                        )
+                        f = Arrow(pt, ft_uv * -1)
                     else:
-                        f = Arrow(
-                            pt,
-                            ft_uv,
-                            linewidth=10,
-                        )
+                        f = Arrow(pt, ft_uv)
                     ft.append(f)
             if resultant:
                 is_tension = False
@@ -353,9 +382,9 @@ def draw_forcesdirect(assembly, viewer, scale=1.0, resultant=True, nodal=False):
                 if resultant_f.length >= thres:
                     locs.append(Point(*resultant_pos))
                 if flip:
-                    f = Arrow(resultant_pos, resultant_f * -1, linewidth=10)
+                    f = Arrow(resultant_pos, resultant_f * -1)
                 else:
-                    f = Arrow(resultant_pos, resultant_f, linewidth=10)
+                    f = Arrow(resultant_pos, resultant_f)
                 if friction:
                     f.add_to_scene(viewer, facecolor=(1.0, 0.5, 0.0))
                 if not is_tension:
@@ -433,7 +462,6 @@ def draw_weights(assembly, viewer, scale=1.0, density=1.0):
             Arrow(
                 block.center(),
                 [0, 0, -block.volume() * d * scale],
-                linewidth=0.02,
             )
         )
         # print("self-weight", -block.volume() * density)
