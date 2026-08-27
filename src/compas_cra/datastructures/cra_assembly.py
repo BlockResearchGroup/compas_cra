@@ -49,8 +49,6 @@ class CRA_Assembly(Assembly):
             block_j id.
         v : int
             block_k id.
-        type : str
-            Interface type.
         size : float
             Interface area.
         points : int

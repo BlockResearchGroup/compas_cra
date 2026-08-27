@@ -24,8 +24,10 @@ class Arch(object):
         The distance between intrados and extrados.
     depth : float
         The depth of the arch.
-    n : int
-        Number of blocks
+    num_blocks : int, optional
+        Number of blocks.
+    extra_support : bool, optional
+        Add an extra support block at each end of the arch.
     """
 
     def __init__(self, height, span, thickness, depth, num_blocks=None, extra_support=False):

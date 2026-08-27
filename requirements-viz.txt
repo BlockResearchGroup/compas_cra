@@ -1,2 +1,0 @@
-compas_viewer
-matplotlib

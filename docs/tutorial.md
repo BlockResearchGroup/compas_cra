@@ -1,0 +1,159 @@
+# Tutorial
+
+## How to use CRA for your analysis
+
+### 1. Creating geometries
+
+We create two blocks: one as support and another one as free block.
+
+```python
+from compas.geometry import Box, Frame, Translation
+
+support = Box(Frame.worldXY(), 4, 2, 1)  # supporting block
+free1 = Box(
+    Frame.worldXY().transformed(
+        Translation.from_vector([0, 0, 1])
+        * Rotation.from_axis_and_angle([0, 0, 1], 0.2)
+    ), 1, 3, 1
+)  # block to analyse
+```
+
+### 2. CRA Assembly data structure
+
+Add them to assembly data structure.
+
+```python
+from compas_assembly.datastructures import Block
+from compas_cra.datastructures import CRA_Assembly
+
+assembly = CRA_Assembly()
+assembly.add_block(Block.from_shape(support), node=0)
+assembly.add_block(Block.from_shape(free1), node=1)
+```
+
+![Two blocks in an assembly](assets/images/tutorial_cubes_1.png)
+
+### 3. Boundary conditions
+
+Set boundary conditions.
+
+```python
+assembly.set_boundary_conditions([0])
+```
+
+![Boundary conditions](assets/images/tutorial_cubes_2.png)
+
+### 4. Identifying interfaces
+
+Then we identify planar interfaces between blocks automatically.
+
+```python
+from compas_cra.algorithms import assembly_interfaces_numpy
+assembly_interfaces_numpy(assembly)
+```
+
+![Identified interfaces](assets/images/tutorial_cubes_3.png)
+
+### 5. Solving equilibrium
+
+`compas_cra` provides three solvers:
+
+- RBE Solve: [`compas_cra.equilibrium.rbe_solve`][].
+- CRA Solve: [`compas_cra.equilibrium.cra_solve`][].
+- CRA Penalty Solve: [`compas_cra.equilibrium.cra_penalty_solve`][].
+
+```python
+from compas_cra.equilibrium import cra_solve
+cra_solve(assembly, verbose=True, timer=True)
+```
+
+### 6. Visualisation
+
+```python
+from compas_cra.viewers import cra_view
+cra_view(assembly, resultant=False, nodal=True, grid=True)
+```
+
+![Visualised result](assets/images/tutorial_cubes_4.png)
+
+The complete tutorial script can be downloaded from
+[scripts/tutorial_cubes.py](https://github.com/petrasvestartas/compas_cra/blob/main/scripts/tutorial_cubes.py).
+
+To reproduce our [paper](https://doi.org/10.1016/j.cad.2022.103216)'s examples
+or to see more how to construct assembly and solve equilibrium,
+please check the [Examples](examples/index.md).
+
+## Optional: Export geometry from CAD software (Rhino)
+
+For the step [Creating geometries](#1-creating-geometries), we can also input geometry
+from CAD software. Here we use Rhino as an example.
+
+### Export mesh blocks as Assembly json file
+
+Use this script at [scripts/mesh_to_assembly_json.py](https://github.com/petrasvestartas/compas_cra/blob/main/scripts/mesh_to_assembly_json.py)
+to select Rhino mesh blocks and export to assembly data structure as a `.json` file.
+
+```python
+--8<-- "scripts/mesh_to_assembly_json.py"
+```
+
+!!! note
+
+    The selection sequence is important because it represents the node indices.
+
+Then we can load the `.json` file from local path.
+
+```python
+import os
+import compas
+import compas_cra
+
+from compas_cra.datastructures import CRA_Assembly
+
+FILE_I = os.path.join(compas_cra.DATA, "XXX.json")  # or your own path
+assembly = compas.json_load(FILE_I)
+assembly = assembly.copy(cls=CRA_Assembly)
+```
+
+After loading the `.json` file and converting it to
+[`compas_cra.datastructures.CRA_Assembly`][], we can follow the previous step
+[Boundary conditions](#3-boundary-conditions) for the analysis.
+
+### Export mesh blocks and interfaces as Assembly json file
+
+Currently, we do not implement automatic interface detection algorithm for blocks with
+curve/free-form interfaces, so they have to be discretised manually as planar faces or
+triangles.
+
+Use this script at [scripts/mesh_to_assembly_interfaces_json.py](https://github.com/petrasvestartas/compas_cra/blob/main/scripts/mesh_to_assembly_interfaces_json.py)
+to select mesh blocks with interfaces and export to assembly data structure and store it
+as json file.
+
+```python
+--8<-- "scripts/mesh_to_assembly_interfaces_json.py"
+```
+
+!!! note
+
+    - The selection sequence is important because it represents the node indices.
+    - The interface normal directions are important, it must point from **assign
+      interface from** to **assign interface to**. For example, in Figure 1, **assign
+      interface from: 1** and **assign interface to: 0** for the interface from 1 to 0.
+
+<div class="side-by-side" markdown>
+![Interface direction, block 1](assets/images/tutorial_interface1.png)
+
+![Interface direction, block 0](assets/images/tutorial_interface2.png)
+</div>
+
+/// caption
+Figure 1
+///
+
+More Rhino files and precomputed `.json` files are located in the
+[data](https://github.com/petrasvestartas/compas_cra/blob/main/data) folder.
+
+!!! note
+
+    Every time a new file is opened in Rhino, be sure to restart Rhino or reset the
+    Python Script Engine before running scripts.
