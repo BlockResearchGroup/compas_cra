@@ -39,14 +39,18 @@ __all__ = ["cra_solve_native", "cra_penalty_solve_native", "rbe_solve_native"]
 # the binary.
 #
 # mu_target restores the published behavior as an explicit setting rather than an
-# accident of an old binary: the barrier stops at mu = 2e-6 instead of 0, which is the
+# accident of an old binary: the barrier stops at mu = 5e-6 instead of 0, which is the
 # interior point the paper's figures show. Calibrated against IPOPT 3.14.9 on the
-# curved examples (cube-curve-short: max resultant 0.00057 vs the era's 0.00066, all
-# 72 faces loaded in both; cube-curve-tall: 72/72 in both). Equilibrium stays exact -
-# constr_viol_tol keeps the force balance at 1e-8 - only the force *distribution* on
-# statically indeterminate contacts is selected, and the tolerances are set just above
-# the barrier target, which mu_target requires. The arch converges to the same
-# resultants as before (1.9570 / 0.8430) in fewer iterations (247 vs 668).
+# curved examples (cube-curve-short: max/median resultant 0.00057/0.00050 vs the era's
+# 0.00066/0.00041; cube-curve-tall: 0.00191/0.00050 vs 0.00179/0.00058; all 72 faces
+# loaded in every case). Equilibrium stays exact - constr_viol_tol keeps the force
+# balance at 1e-8 - only the force *distribution* on statically indeterminate contacts
+# is selected. The tolerances sit just above the barrier target, which mu_target
+# requires, and they are load-bearing: the degenerate examples are knife-edged in both
+# mu_target and tol (curve-3-blocks solves at this pair and exhausts even 9000
+# iterations one small step away), so change them together or not at all. The arch
+# converges to the same resultants as before (1.9570 / 0.8430) with iteration headroom
+# intact (810 of 9000).
 _CRA_OPTIONS = {
     "tol": 1e-5,
     "dual_inf_tol": 1e-5,
@@ -59,7 +63,10 @@ _CRA_OPTIONS = {
     # crawls on them; the adaptive update reaches the same points in a fraction of the
     # iterations. See the note above for why mu_target is the load-distribution knob.
     "mu_strategy": "adaptive",
-    "mu_target": 2e-6,
+    "mu_target": 5e-6,
+    # the degenerate curved examples legitimately need a few thousand iterations in
+    # this regime; the default 3000 cap is calibrated for strict optimization
+    "max_iter": 9000,
 }
 
 # the tolerances the CRA penalty solver has always used
