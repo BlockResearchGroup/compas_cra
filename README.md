@@ -1,7 +1,7 @@
 # COMPAS CRA
 
-![build](https://github.com/petrasvestartas/compas_cra/workflows/build/badge.svg)
-[![GitHub - License](https://img.shields.io/github/license/petrasvestartas/compas_cra.svg)](./LICENSE)
+![build](https://github.com/BlockResearchGroup/compas_cra/workflows/build/badge.svg)
+[![GitHub - License](https://img.shields.io/github/license/BlockResearchGroup/compas_cra.svg)](./LICENSE)
 [![pip downloads](https://img.shields.io/pypi/dm/compas_cra)](https://pypi.python.org/project/compas_cra)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/compas_cra.svg)](https://pypi.python.org/project/compas_cra)
 [![PyPI - Latest Release](https://img.shields.io/pypi/v/compas_cra.svg)](https://pypi.python.org/project/compas_cra)
@@ -32,7 +32,7 @@ The solver is compiled into the package, so an install from source builds it, an
 needs IPOPT staged first:
 
 ```bash
-git clone https://github.com/petrasvestartas/compas_cra.git
+git clone https://github.com/BlockResearchGroup/compas_cra.git
 cd compas_cra
 packaging/build_ipopt.sh          # ~15 minutes, once
 pip install -e ".[dev]"
@@ -91,7 +91,7 @@ To find out more about CRA, please refer to our paper in the CAD Computer-Aided 
 
 ## Coupled Rigid-Block Analysis: Stability-Aware Design of Complex Discrete-Element Assemblies
 
-![image](https://github.com/petrasvestartas/compas_cra/blob/main/docs/_images/cra_bridge.png?raw=true)
+![image](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/assets/images/cra_bridge.png?raw=true)
 
 ### Abstract
 
@@ -147,8 +147,8 @@ by designing complex and scaffolding-free physical models.
 
 ### Read the docs
 
-[https://github.com/petrasvestartas/compas_cra](https://github.com/petrasvestartas/compas_cra)
+[https://github.com/BlockResearchGroup/compas_cra](https://github.com/BlockResearchGroup/compas_cra)
 
 ### Examples to reproduce our paper results
 
-See examples in [docs](https://github.com/petrasvestartas/compas_cra/latest/examples.html) or try them in [docs/examples](https://github.com/petrasvestartas/compas_cra/blob/main/docs/examples).
+See examples in [docs](https://blockresearchgroup.github.io/compas_cra/examples/) or try them in [docs/examples](https://github.com/BlockResearchGroup/compas_cra/blob/main/docs/examples).

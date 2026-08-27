@@ -46,6 +46,11 @@ by `packaging/build_ipopt.sh`. Without such a tree the install stops with
 
 ### Prerequisites
 
+`invoke setup` installs these wherever that is possible without root — MSYS2 packages
+on Windows, Homebrew formulae on macOS — so on those two platforms this section is
+background rather than something to work through. On Linux the packages need root, so
+`invoke setup` prints the line below and stops rather than running it.
+
 The IPOPT build needs a Fortran compiler (its MUMPS linear solver is Fortran), a static
 BLAS/LAPACK, a C/C++ toolchain, and `git`, `curl`, `make`, `patch` and
 `pkg-config` for coinbrew. CMake and Ninja are *not* needed up front — the build
@@ -82,9 +87,6 @@ pacman -S git patch make diffutils pkgconf \
     mingw-w64-ucrt-x86_64-openblas
 ```
 
-Run `packaging/build_ipopt.sh` from that shell, then `pip` from your normal Python
-with `IPOPT_PREFIX` pointed at the resulting `build/ipopt/stage`.
-
 ### Building
 
 [uv](https://docs.astral.sh/uv) manages the environment.
@@ -96,14 +98,29 @@ cd compas_cra
 uv venv --python 3.12
 source .venv/Scripts/activate   # .venv/bin/activate on macOS and Linux
 
-packaging/build_ipopt.sh
-uv pip install -e ".[dev]"
+uv pip install invoke compas_invocations2
+invoke setup
 invoke test
 ```
 
-`uv pip install -e ".[dev]"` is the only install step: `[dev]` pulls in `[docs]` as
-well, so `invoke docs` works straight afterwards without a second command. `.venv` is
-git-ignored.
+`invoke setup` is the whole build, on Windows, macOS and Linux alike: it installs the
+toolchain where that can be done without root, stages IPOPT if it is not staged
+already, and installs the package editable with the compilers and link directories the
+extension needs — on Windows that means running `build_ipopt.sh` inside the MSYS2
+UCRT64 shell and pointing CMake at its `gcc`, `g++` and `gfortran`, which is the part
+that is tedious to get right by hand.
+
+It takes about fifteen minutes the first time, almost all of it IPOPT. It is
+idempotent: run it again and it reinstalls the package and leaves the staged IPOPT tree
+alone. `invoke setup --jobs=N` raises the IPOPT build parallelism, but see the warning
+in `--help` first — MUMPS races and dies under a parallel build.
+
+It installs with `[dev]`, which pulls in `[docs]` as well, so `invoke docs` works
+straight afterwards without a second command. `.venv` is git-ignored.
+
+Doing it by hand instead: run `packaging/build_ipopt.sh` from the shell your platform
+needs, then `pip install -e ".[dev]"` with `IPOPT_PREFIX` pointed at the resulting
+`build/ipopt/stage`.
 
 `build_ipopt.sh` takes about fifteen minutes and is a one-off: it stages IPOPT into
 `build/ipopt/stage`, which every later install reuses. Rebuild it only when the script
@@ -123,6 +140,7 @@ means a green run there.
 
 | Command | What it does |
 | --- | --- |
+| `invoke setup` | Build the solver and install the package, on any platform |
 | `invoke docs` | Build the site into `dist/docs`, failing on a broken reference |
 | `invoke docs-serve` | Serve the site locally with live reload |
 | `invoke lint` | `ruff check --fix src tests` |
@@ -139,8 +157,7 @@ Python code only:
 ```bash
 uv venv --python 3.12
 source .venv/Scripts/activate
-uv pip install compas invoke compas_invocations2 ruff
-uv pip install markdown-callouts mkdocs mkdocs-autorefs mkdocs-material mkdocstrings[python] pymdown-extensions
+uv pip install -r requirements-docs.txt
 invoke docs
 ```
 

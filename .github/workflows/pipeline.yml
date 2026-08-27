@@ -4,7 +4,7 @@ name: pipeline
 # release.yml (v* tags, publish: true). Always the full chain: IPOPT compiled from
 # source, a compas_cra wheel for every platform and CPython with the solver built
 # into it, each smoke-tested, the full test suite run against one of those wheels,
-# and the docs built. With publish: true it also deploys the docs.
+# and the docs built. The docs are deployed from every push to main, and from a release.
 #
 # The release guard, the PyPI upload and the GitHub release are in release.yml, not
 # here: trusted publishing cannot match a job that lives in a reusable workflow, so it
@@ -218,8 +218,12 @@ jobs:
         run: |
           invoke docs
           test -f dist/docs/index.html
+      # every push to main, not releases only: the site is the documentation of what is on
+      # main, and a docs fix that only ships with the next tag is a docs fix nobody reads.
+      # This costs no extra CI - build.yml already runs this whole pipeline on every push
+      # to main, so the wheel the docs are built against exists either way.
       - name: Deploy docs
-        if: inputs.publish
+        if: inputs.publish || github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

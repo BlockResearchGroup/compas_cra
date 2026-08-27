@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* `invoke setup` builds the solver and installs the package in one command, on Windows, macOS and Linux. It installs the toolchain where that is possible without root (MSYS2 packages via pacman, Homebrew formulae including the `gfortran` symlink the `gcc` formula does not create; on Linux it prints the `apt`/`dnf` line, which needs root, and stops), stages IPOPT unless `build/ipopt/stage` already holds it, and installs editable with the right environment - on Windows that means running `build_ipopt.sh` inside the MSYS2 UCRT64 shell and pointing `CMAKE_ARGS` and `EXTRA_LINK_DIRS` at its toolchain, which was four exports to get right by hand. It is idempotent, and defaults to `JOBS=1` because MUMPS races under a parallel build.
+
 * Local development instructions in the installation docs: the compilers and libraries `packaging/build_ipopt.sh` needs on Linux, macOS and Windows, and the Docker/cibuildwheel route for building a wheel without installing any of them.
 * `cra_solve`, `cra_penalty_solve` and `rbe_solve` appear in the API reference. They were assignments (`cra_solve = cra_solve_native`) rather than imports, so the documentation generator saw untyped attributes and rendered nothing for the three names that are the package's primary entry points. They are import aliases now, which changes nothing at runtime — each name is still the same function object as its `_native` counterpart.
 * `invoke docs-serve` serves the documentation locally with live reload.
@@ -35,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `pymdown-extensions` is declared in the `docs` extra. `mkdocs.yml` configures `pymdownx.*` directly, so it is a direct dependency; it arrived only as a transitive dependency of `mkdocs-material`.
 * CI builds the documentation with `invoke docs` rather than its own copy of the `mkdocs build` command line, so the local task and the pipeline cannot drift apart.
 * The development instructions start from a `uv` environment and state that `pip install -e ".[dev]"` is the only install step, list the `invoke` tasks and which of them need the compiled solver (only `test` and `release` - the documentation is generated from `src/`, not from an imported package), and note that `conda install ipopt` cannot stand in for `build_ipopt.sh` because conda-forge builds IPOPT shared against a separate `mumps-seq` while `CMakeLists.txt` links it statically.
+* The documentation is deployed on every push to `main`, not only from a release tag. The deploy step was gated on `inputs.publish`, which only `release.yml` sets, so merging a documentation fix built the site and threw it away and the published site tracked the last tag rather than `main`. It costs no extra CI: `build.yml` already runs the whole pipeline on every push to `main`, so the wheel the docs are built against exists either way.
+* Every URL points at `BlockResearchGroup/compas_cra`. `site_url`, `repo_url`, the `[project.urls]` block, the README badges, `CITATION.cff` and the links in the tutorial and contribution pages all named the `petrasvestartas` fork, so the published site advertised a canonical URL that is not where it is served from - GitHub Pages serves it at `blockresearchgroup.github.io/compas_cra`.
+* `requirements-docs.txt` installs the documentation and linting toolchain in one command, without building the package. An extra cannot do this: installing `compas_cra[docs]` builds `compas_cra`, which compiles the solver. The documentation never needs it.
+* Two links in the README that were broken independently of the rename: the banner image pointed into `docs/_images`, which has not existed since the mkdocs migration moved it to `docs/assets/images`, and the examples link pointed at a `latest/examples.html` path on github.com rather than at the documentation site.
 
 ### Removed
 

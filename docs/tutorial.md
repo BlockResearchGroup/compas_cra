@@ -77,7 +77,7 @@ cra_view(assembly, resultant=False, nodal=True, grid=True)
 ![Visualised result](assets/images/tutorial_cubes_4.png)
 
 The complete tutorial script can be downloaded from
-[scripts/tutorial_cubes.py](https://github.com/petrasvestartas/compas_cra/blob/main/scripts/tutorial_cubes.py).
+[scripts/tutorial_cubes.py](https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/tutorial_cubes.py).
 
 To reproduce our [paper](https://doi.org/10.1016/j.cad.2022.103216)'s examples
 or to see more how to construct assembly and solve equilibrium,
@@ -90,7 +90,7 @@ from CAD software. Here we use Rhino as an example.
 
 ### Export mesh blocks as Assembly json file
 
-Use this script at [scripts/mesh_to_assembly_json.py](https://github.com/petrasvestartas/compas_cra/blob/main/scripts/mesh_to_assembly_json.py)
+Use this script at [scripts/mesh_to_assembly_json.py](https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_json.py)
 to select Rhino mesh blocks and export to assembly data structure as a `.json` file.
 
 ```python
@@ -125,7 +125,7 @@ Currently, we do not implement automatic interface detection algorithm for block
 curve/free-form interfaces, so they have to be discretised manually as planar faces or
 triangles.
 
-Use this script at [scripts/mesh_to_assembly_interfaces_json.py](https://github.com/petrasvestartas/compas_cra/blob/main/scripts/mesh_to_assembly_interfaces_json.py)
+Use this script at [scripts/mesh_to_assembly_interfaces_json.py](https://github.com/BlockResearchGroup/compas_cra/blob/main/scripts/mesh_to_assembly_interfaces_json.py)
 to select mesh blocks with interfaces and export to assembly data structure and store it
 as json file.
 
@@ -151,7 +151,7 @@ Figure 1
 ///
 
 More Rhino files and precomputed `.json` files are located in the
-[data](https://github.com/petrasvestartas/compas_cra/blob/main/data) folder.
+[data](https://github.com/BlockResearchGroup/compas_cra/blob/main/data) folder.
 
 !!! note
 

@@ -1,14 +1,14 @@
 site_name: COMPAS CRA
 site_description: Coupled Rigid-Block Analysis (CRA) for the COMPAS framework
-site_url: https://petrasvestartas.github.io/compas_cra/
+site_url: https://blockresearchgroup.github.io/compas_cra/
 
-repo_name: petrasvestartas/compas_cra
-repo_url: https://github.com/petrasvestartas/compas_cra/
+repo_name: BlockResearchGroup/compas_cra
+repo_url: https://github.com/BlockResearchGroup/compas_cra/
 
 copyright: Copyright &copy; 2020 - 2026, ETH Zurich - Block Research Group
 
 extra:
-  homepage: https://petrasvestartas.github.io/compas_cra/
+  homepage: https://blockresearchgroup.github.io/compas_cra/
 
 extra_css:
   - css/extra.css

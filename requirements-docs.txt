@@ -1,0 +1,22 @@
+# The documentation and linting toolchain, installable without building the package.
+#
+# `pip install -e ".[dev]"` is the normal route and covers everything in here, but it
+# compiles the IPOPT extension, which needs a staged IPOPT tree and about fifteen
+# minutes (see docs/installation.md). The documentation does not need the compiled
+# solver at all - mkdocstrings reads the sources in src/ rather than an imported
+# package - so this file exists for the docs-and-lint path, where that build would be
+# pure overhead.
+#
+# Mirrors the `docs` extra in pyproject.toml, plus the tools tasks.py drives.
+
+compas
+invoke >=0.14
+compas_invocations2
+ruff
+
+markdown-callouts >=0.4
+mkdocs >=1.6
+mkdocs-autorefs >=1.4
+mkdocs-material >=9.5
+mkdocstrings[python]
+pymdown-extensions >=10

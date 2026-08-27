@@ -60,6 +60,8 @@ dev = [
     "wheel",
 ]
 # the docs are mkdocs-material + mkdocstrings, same stack as compas_model
+# mirrored by requirements-docs.txt, which installs this stack without building the
+# package - the documentation never needs the compiled solver
 docs = [
     "markdown-callouts>=0.4",
     "mkdocs>=1.6",
@@ -72,10 +74,10 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://petrasvestartas.github.io/compas_cra"
-Documentation = "https://petrasvestartas.github.io/compas_cra"
-Repository = "https://github.com/petrasvestartas/compas_cra.git"
-Changelog = "https://github.com/petrasvestartas/compas_cra/blob/main/CHANGELOG.md"
+Homepage = "https://blockresearchgroup.github.io/compas_cra"
+Documentation = "https://blockresearchgroup.github.io/compas_cra"
+Repository = "https://github.com/BlockResearchGroup/compas_cra.git"
+Changelog = "https://github.com/BlockResearchGroup/compas_cra/blob/main/CHANGELOG.md"
 
 # ============================================================================
 # scikit-build-core config
