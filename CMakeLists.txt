@@ -21,7 +21,7 @@ if(NOT DEFINED IPOPT_PREFIX)
     endif()
 endif()
 if(NOT EXISTS "${IPOPT_PREFIX}/include/coin-or/IpTNLP.hpp")
-    message(FATAL_ERROR "No IPOPT build at IPOPT_PREFIX=${IPOPT_PREFIX}; run packaging/build_ipopt.sh first")
+    message(FATAL_ERROR "No IPOPT build at IPOPT_PREFIX=${IPOPT_PREFIX}; run `invoke setup` (or packaging/build_ipopt.sh) first")
 endif()
 message(STATUS "IPOPT_PREFIX: ${IPOPT_PREFIX}")
 

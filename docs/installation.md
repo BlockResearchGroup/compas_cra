@@ -157,7 +157,7 @@ Python code only:
 ```bash
 uv venv --python 3.12
 source .venv/Scripts/activate
-uv pip install -r requirements-docs.txt
+uv pip install -r requirements.txt
 invoke docs
 ```
 

@@ -60,7 +60,7 @@ dev = [
     "wheel",
 ]
 # the docs are mkdocs-material + mkdocstrings, same stack as compas_model
-# mirrored by requirements-docs.txt, which installs this stack without building the
+# mirrored by requirements.txt, which installs this stack without building the
 # package - the documentation never needs the compiled solver
 docs = [
     "markdown-callouts>=0.4",

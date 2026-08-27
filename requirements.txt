@@ -1,4 +1,6 @@
-# The documentation and linting toolchain, installable without building the package.
+# The one requirements file: the documentation and linting toolchain, installable
+# without building the package. Runtime dependencies live in pyproject.toml and
+# come with `pip install -e .`.
 #
 # `pip install -e ".[dev]"` is the normal route and covers everything in here, but it
 # compiles the IPOPT extension, which needs a staged IPOPT tree and about fifteen
