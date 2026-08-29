@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import glob
 import os
 import platform
@@ -7,16 +5,17 @@ import re
 import shutil
 import sysconfig
 
-import invoke
+from invoke.exceptions import Exit
+from invoke.tasks import task
 from compas_invocations2 import build
 from compas_invocations2 import style
 from compas_invocations2 import tests
 from compas_invocations2.console import chdir
 from compas_invocations2.console import confirm
-from invoke import Collection
+from invoke.collection import Collection
 
 
-@invoke.task(
+@task(
     help={"release_type": "Type of release follows semver rules. Must be one of: major, minor, patch, pre_l, pre_n."}
 )
 def release(ctx, release_type):
@@ -29,7 +28,7 @@ def release(ctx, release_type):
     on all five platforms anyway, so a local wheel would only be thrown away.
     """
     if release_type not in ("patch", "minor", "major", "pre_l", "pre_n"):
-        raise invoke.Exit("The release type parameter is invalid.\nMust be one of: major, minor, patch.")
+        raise Exit("The release type parameter is invalid.\nMust be one of: major, minor, patch.")
 
     ctx.run("invoke format")
     ctx.run("invoke test")
@@ -52,7 +51,7 @@ def release(ctx, release_type):
     ):
         ctx.run("git push --tags && git push")
     else:
-        raise invoke.Exit("You need to manually revert the tag/commits created.")
+        raise Exit("You need to manually revert the tag/commits created.")
 
 
 # ============================================================================
@@ -80,14 +79,14 @@ def _ipopt_work_dir(base_folder):
         return default
     fallback = os.path.join(os.path.expanduser("~"), ".compas_cra", "ipopt")
     if re.search(r"\s", fallback):
-        raise invoke.Exit(
+        raise Exit(
             "Both the repository path and %s contain whitespace, and the IPOPT build is "
             "autotools, which cannot build under either. Move the repository to a path "
             "without spaces, or set WORK_DIR to one." % fallback
         )
     # the helper runs once for the staged-check and once for the build; say it once
     if not getattr(_ipopt_work_dir, "noted", False):
-        _ipopt_work_dir.noted = True
+        setattr(_ipopt_work_dir, "noted", True)
         print("NOTE: the repository path contains a space, which autotools cannot build under.")
         print("      IPOPT will be built and staged in %s instead." % fallback)
     return fallback
@@ -148,7 +147,7 @@ def _msys2_root():
     for root in candidates:
         if root and os.path.isfile(os.path.join(root, "usr", "bin", "bash.exe")):
             return root
-    raise invoke.Exit(
+    raise Exit(
         "No MSYS2 installation found. The Windows IPOPT build runs in an MSYS2 UCRT64 "
         "shell; install it from https://www.msys2.org, or set MSYS2_ROOT if it lives "
         r"somewhere other than C:\msys64 or D:\msys64."
@@ -194,7 +193,7 @@ def _refuse_root():
     """
     # no geteuid on Windows, where there is nothing equivalent to guard against
     if hasattr(os, "geteuid") and os.geteuid() == 0:
-        raise invoke.Exit(
+        raise Exit(
             "Do not run `invoke setup` with sudo. Homebrew refuses to install as root, and "
             "the IPOPT build, the venv and build/ would end up owned by root. Run it as "
             "yourself - it asks for your password at the one point it needs it."
@@ -210,7 +209,7 @@ def _install_homebrew(ctx):
     separate thing to go and do by hand. pty=True so that prompt is actually visible.
     """
     if os.environ.get("COMPAS_CRA_NO_BREW_INSTALL"):
-        raise invoke.Exit(
+        raise Exit(
             "Homebrew is required on macOS and COMPAS_CRA_NO_BREW_INSTALL is set. "
             "Install it from https://brew.sh and re-run `invoke setup`."
         )
@@ -229,7 +228,7 @@ def _install_homebrew(ctx):
         ctx.run(installer, pty=True, warn=True)
     brew = _brew()
     if not brew:
-        raise invoke.Exit(
+        raise Exit(
             "The Homebrew installer finished but no brew turned up at %s. "
             "Install it manually from https://brew.sh and re-run `invoke setup`." % " or ".join(HOMEBREW_PREFIXES)
         )
@@ -394,7 +393,7 @@ def _install_toolchain(ctx):
         # the Command Line Tools in itself, so by here this should hold; it is checked
         # anyway rather than failing fifteen minutes into the build.
         if not shutil.which("xcrun"):
-            raise invoke.Exit("Xcode Command Line Tools are required: xcode-select --install")
+            raise Exit("Xcode Command Line Tools are required: xcode-select --install")
         # coinbrew refuses to run under bash 3, which is what macOS still ships
         ctx.run('"{0}" list bash >/dev/null 2>&1 || "{0}" install bash'.format(brew))
         ctx.run('"{0}" list gcc >/dev/null 2>&1 || "{0}" install gcc'.format(brew))
@@ -410,7 +409,7 @@ def _install_toolchain(ctx):
         )
 
     elif not shutil.which("gfortran"):
-        raise invoke.Exit(LINUX_HINT)
+        raise Exit(LINUX_HINT)
 
 
 def _codesign_extension(ctx):
@@ -489,7 +488,7 @@ def _build_ipopt(ctx, jobs):
         ctx.run("packaging/build_ipopt.sh", env=env)
 
 
-@invoke.task(
+@task(
     help={
         "jobs": (
             "Parallel jobs for the IPOPT build. Defaults to 1, and should stay there: "
@@ -535,7 +534,7 @@ def setup(ctx, jobs=1, toolchain=True):
     print("\nDone. `invoke test` should now pass.")
 
 
-@invoke.task(
+@task(
     help={
         "serve": (
             "Serve at localhost with live reload (the default). --no-serve builds "
