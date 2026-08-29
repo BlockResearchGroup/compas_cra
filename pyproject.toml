@@ -11,8 +11,14 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "compas_cra"
-description = ""
-keywords = []
+description = "The CRA method combines equilibrium and kinematics in a penalty formulation in a nonlinear programming problem, to measure structural infeasibility or to guide the design of stable discrete-element assemblies from unstable geometry."
+keywords = [
+    "discrete-element-models",
+    "rigid-block-equilibrium",
+    "rigid-block-kinematics",
+    "nonlinear-programming",
+    "stability-analysis",
+]
 authors = [{ name = "Gene Ting-Chun Kao", email = "kao@arch.ethz.ch" }]
 license = { file = "LICENSE" }
 readme = "README.md"
@@ -66,7 +72,7 @@ dev = [
 # package - the documentation never needs the compiled solver
 docs = [
     "markdown-callouts>=0.4",
-    "mkdocs>=1.6,<2",  # Material is incompatible with the MkDocs 2.0 rewrite, per its own banner
+    "mkdocs>=1.6,<2",         # Material is incompatible with the MkDocs 2.0 rewrite, per its own banner
     "mkdocs-autorefs>=1.4",
     "mkdocs-material>=9.5",
     "mkdocstrings[python]",
