@@ -84,7 +84,7 @@ def test_use_brew_prepends_once(monkeypatch):
 def test_install_homebrew_refused_by_env(monkeypatch):
     """The escape hatch fails instead of installing anything."""
     monkeypatch.setenv("COMPAS_CRA_NO_BREW_INSTALL", "1")
-    with pytest.raises(tasks.invoke.Exit):
+    with pytest.raises(tasks.Exit):
         tasks._install_homebrew(None)
 
 
@@ -129,7 +129,7 @@ def test_refuse_root_allows_a_normal_user(monkeypatch):
 
 def test_refuse_root_rejects_sudo(monkeypatch):
     monkeypatch.setattr(tasks.os, "geteuid", lambda: 0, raising=False)
-    with pytest.raises(tasks.invoke.Exit):
+    with pytest.raises(tasks.Exit):
         tasks._refuse_root()
 
 
@@ -158,7 +158,7 @@ def test_install_homebrew_retries_interactively(monkeypatch):
 def test_install_homebrew_exits_when_no_brew_appears(monkeypatch):
     monkeypatch.delenv("COMPAS_CRA_NO_BREW_INSTALL", raising=False)
     monkeypatch.setattr(tasks, "_brew", lambda: None)
-    with pytest.raises(tasks.invoke.Exit):
+    with pytest.raises(tasks.Exit):
         tasks._install_homebrew(_FakeCtx([False, False]))
 
 
@@ -182,7 +182,7 @@ def test_ipopt_work_dir_exits_when_home_is_spaced_too(monkeypatch):
         tasks.os.path, "expanduser", lambda p: p.replace("~", os.path.join(os.sep, "home", "spaced name"))
     )
     base = os.path.join(os.sep, "srv", "untitled folder", "compas_cra")
-    with pytest.raises(tasks.invoke.Exit):
+    with pytest.raises(tasks.Exit):
         tasks._ipopt_work_dir(base)
 
 
